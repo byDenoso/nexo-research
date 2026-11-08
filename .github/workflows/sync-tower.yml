@@ -42,7 +42,7 @@ jobs:
           git config user.name "nexo-research-sync"
           git config user.email "noreply@users.noreply.github.com"
           git checkout -B "$branch"
-          git add data/source/atlas-public.json
+          git add data/source/atlas-public.json public/atlas-public.json
           git commit -m "data: sync public Tower snapshot ($(cat sync.log))"
           git push --force-with-lease origin "$branch"
           gh pr create --base main --head "$branch" --title "data: sync public Tower snapshot" --body "$(cat sync.log). New records enter as CANDIDATE. Review before merging." || gh pr edit "$branch" --body "$(cat sync.log)"

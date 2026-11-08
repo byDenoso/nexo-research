@@ -7,6 +7,7 @@ import {towerPublic} from '../src/lib/schemas.ts';
 
 const URL_SOURCE = process.env.TOWER_PUBLIC_URL ?? 'https://nexoresearch.org/atlas-public.json';
 const TARGET = new URL('../data/source/atlas-public.json', import.meta.url);
+const PUBLIC_COPY = new URL('../public/atlas-public.json', import.meta.url);
 const MAX_BYTES = 8 * 1024 * 1024;
 const idOf = test => createHash('sha256').update(test.question.en).digest('hex').slice(0, 12);
 
@@ -29,5 +30,6 @@ if (bytes.equals(readFileSync(TARGET))) {
   console.log('no change');
 } else {
   writeFileSync(TARGET, bytes);
+  writeFileSync(PUBLIC_COPY, bytes);
   console.log(`snapshot updated: +${added} new, ${changed} changed, ${next.tests.length} total`);
 }
