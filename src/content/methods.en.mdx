@@ -1,0 +1,58 @@
+<h2 id="hypothesis">Hypothesis</h2>
+
+Tests start from a question with a numerical answer and a result that would refute it. The criterion is written before the calculation, so an unexpected value cannot be reinterpreted afterwards.
+
+<h2 id="data">Data</h2>
+
+Tests use public data sets (BAO, supernovae, cosmic chronometers, the CMB, astronomical catalogues). Each result names the data set, version and selection when the public record contains that information. Missing fields are shown as missing.
+
+<h2 id="model">Modelling</h2>
+
+The reference model is flat ΛCDM, with expansion
+
+<Tex display tex={String.raw`E^2(z)=\frac{H^2(z)}{H_0^2}=\Omega_m(1+z)^3+1-\Omega_m`} />
+
+and the most common extension for evolving dark energy, the CPL parametrisation,
+
+<Tex display tex={String.raw`w(a)=w_0+w_a(1-a),\qquad \frac{\rho_{\rm DE}(z)}{\rho_{\rm DE,0}}=(1+z)^{3(1+w_0+w_a)}\exp\!\left(-\frac{3w_a z}{1+z}\right)`} />
+
+Free parameters, fixed parameters and priors are declared in every test. A fixed calibration that absorbs part of the signal is treated as a model assumption and tested separately.
+
+<h2 id="tests">Tests</h2>
+
+The fit improvement of a model over the null hypothesis is measured by
+
+<Tex display tex={String.raw`\Delta\chi^2=\chi^2_{\Lambda{\rm CDM}}-\chi^2_{\rm model}`} />
+
+and, when nested sampling is used, by the Bayes factor
+
+<Tex display tex={String.raw`\ln B=\ln Z_{\rm model}-\ln Z_{\Lambda{\rm CDM}}`} />
+
+Partial evidences from different runs are not comparable with one another; the comparison holds only for completed runs on the same data, priors and likelihood. Tests include numerical checks (convergence, independent seeds, limiting cases) before the number is recorded.
+
+<h2 id="review">Review</h2>
+
+A second reading tries to refute the result: it looks for a hidden assumption, a missing baseline, a reversed causality or a numerical artefact. The result moves on only with an answer to each objection found.
+
+<h2 id="result">Result</h2>
+
+A result is described with its value, the test conditions and its scientific status. The five statuses are:
+
+- **Candidate:** internal result without independent validation yet.
+- **Testing:** under verification by additional tests.
+- **Validated:** reproduced and reviewed within the project criteria.
+- **Refuted:** contradicted by a later test.
+- **Published:** described in an authorised publication.
+
+Appearing in the Tower does not promote a result. A status change is an editorial decision recorded in the public approvals manifest, in this site's repository.
+
+<h2 id="publication">Publication</h2>
+
+Only what has been cleared for release becomes a paper, note or preprint, and each publication shows its real editorial state. DOI, arXiv identifier and references are added when they exist and are checked at the source.
+
+<h2 id="repro">Reproducibility</h2>
+
+- Result identifiers are derived from the text of the public question and stay stable while the question does not change.
+- The public Tower snapshot in use, with its SHA-256, is shown on the Data page.
+- If the Tower becomes unavailable, the site keeps showing the last validated snapshot.
+- Internal Tower records are neither read nor published by this site.

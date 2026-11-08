@@ -1,0 +1,58 @@
+<h2 id="hypothesis">Hipótese</h2>
+
+Os testes começam por uma pergunta que tem resposta numérica e por um resultado que a refutaria. O critério fica escrito antes do cálculo, de modo que um valor inesperado não possa ser reinterpretado depois.
+
+<h2 id="data">Dados</h2>
+
+Os testes usam conjuntos públicos (BAO, supernovas, cronômetros cósmicos, CMB, catálogos astronômicos). Cada resultado indica o conjunto, a versão e a seleção quando essa informação consta no registro público. Campos ausentes aparecem como ausentes.
+
+<h2 id="model">Modelagem</h2>
+
+O modelo de referência é o ΛCDM plano, com a expansão
+
+<Tex display tex={String.raw`E^2(z)=\frac{H^2(z)}{H_0^2}=\Omega_m(1+z)^3+1-\Omega_m`} />
+
+e a extensão mais usada para energia escura evolutiva, a parametrização CPL,
+
+<Tex display tex={String.raw`w(a)=w_0+w_a(1-a),\qquad \frac{\rho_{\rm DE}(z)}{\rho_{\rm DE,0}}=(1+z)^{3(1+w_0+w_a)}\exp\!\left(-\frac{3w_a z}{1+z}\right)`} />
+
+Parâmetros livres, parâmetros fixos e priors são declarados em cada teste. Uma calibração fixa que absorve parte do sinal é tratada como hipótese do modelo e testada à parte.
+
+<h2 id="tests">Testes</h2>
+
+A melhora do ajuste de um modelo sobre a hipótese nula é medida por
+
+<Tex display tex={String.raw`\Delta\chi^2=\chi^2_{\Lambda{\rm CDM}}-\chi^2_{\rm modelo}`} />
+
+e, quando há amostragem aninhada, pelo fator de Bayes
+
+<Tex display tex={String.raw`\ln B=\ln Z_{\rm modelo}-\ln Z_{\Lambda{\rm CDM}}`} />
+
+Evidências parciais de execuções diferentes não são comparáveis entre si; a comparação só vale para execuções concluídas sobre os mesmos dados, priors e verossimilhança. Os testes incluem verificações numéricas (convergência, sementes independentes, casos-limite) antes de o número ser registrado.
+
+<h2 id="review">Revisão</h2>
+
+Uma segunda leitura tenta refutar o resultado: procura uma suposição oculta, um baseline ausente, uma causalidade invertida ou um artefato numérico. O resultado só segue adiante com a resposta a cada objeção encontrada.
+
+<h2 id="result">Resultado</h2>
+
+O resultado é descrito com o valor, a condição do teste e o estado científico. Os cinco estados são:
+
+- **Candidato:** resultado interno ainda sem validação independente.
+- **Em teste:** em verificação por testes adicionais.
+- **Validado:** reproduzido e revisado dentro do critério do projeto.
+- **Refutado:** contrariado por um teste posterior.
+- **Publicado:** descrito em publicação autorizada.
+
+Aparecer na Tower não promove um resultado. A mudança de estado é uma decisão editorial registrada no manifesto público de aprovações, no repositório deste site.
+
+<h2 id="publication">Publicação</h2>
+
+Só o que foi autorizado para divulgação vira artigo, nota ou preprint, e cada publicação mostra o estado editorial real. DOI, identificador arXiv e referências entram quando existem e são conferidos na fonte.
+
+<h2 id="repro">Reprodutibilidade</h2>
+
+- Identificadores de resultado são derivados do texto da pergunta pública e permanecem estáveis enquanto a pergunta não muda.
+- O snapshot público da Tower em uso, com seu SHA-256, aparece na página de Dados.
+- Se a Tower ficar indisponível, o site continua mostrando o último snapshot validado.
+- Registros internos da Tower não são lidos nem publicados por este site.

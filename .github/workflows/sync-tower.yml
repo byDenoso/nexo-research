@@ -1,0 +1,48 @@
+name: sync-tower
+
+# Pulls the public Tower manifest into data/source and opens a pull request when it changed.
+# Nothing is published from here: a merge is a human decision, and synced records enter as CANDIDATE.
+on:
+  schedule:
+    - cron: '17 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Fetch and validate the public snapshot
+        id: sync
+        run: |
+          node scripts/sync-tower.mjs | tee sync.log
+          if grep -q "no change" sync.log; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Validate the new manifest
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          npm run data:build
+          npm test
+          npm run scan
+      - name: Open a pull request
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="data/tower-sync-$(date -u +%Y%m%d)"
+          git config user.name "nexo-research-sync"
+          git config user.email "noreply@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add data/source/atlas-public.json
+          git commit -m "data: sync public Tower snapshot ($(cat sync.log))"
+          git push --force-with-lease origin "$branch"
+          gh pr create --base main --head "$branch" --title "data: sync public Tower snapshot" --body "$(cat sync.log). New records enter as CANDIDATE. Review before merging." || gh pr edit "$branch" --body "$(cat sync.log)"
