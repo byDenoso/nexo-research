@@ -21,6 +21,15 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
     <>
       <PageHead kicker={tr(D.nav.data, locale)} title={tr(d.title, locale)} lead={tr(d.lead, locale)} />
       <div className="wrap mt-12 grid gap-10">
+        <section className="source-access-section motion-reveal" aria-labelledby="public-sources">
+          <div><p className="kicker">{locale === 'pt' ? 'Arquivos científicos' : 'Scientific archives'}</p><h2 id="public-sources">{locale === 'pt' ? 'Fontes de dados e software' : 'Data sources and software'}</h2><p>{locale === 'pt' ? 'Acesse os arquivos originais das colaborações e o código público do NEXO. Uma menção no manifesto não constitui prova de utilização de um release específico.' : 'Access original collaboration archives and NEXO public code. A mention in the manifest is not proof that a particular release was used.'}</p></div>
+          <ul>
+            <li><a href="https://data.desi.lbl.gov/doc/releases/" target="_blank" rel="noopener noreferrer">DESI · {locale === 'pt' ? 'Dados e documentação' : 'Data and documentation'} ↗</a></li>
+            <li><a href="https://github.com/PantheonPlusSH0ES/DataRelease" target="_blank" rel="noopener noreferrer">Pantheon+ · {locale === 'pt' ? 'Release público' : 'Public release'} ↗</a></li>
+            <li><a href="https://archive.stsci.edu/" target="_blank" rel="noopener noreferrer">MAST · {locale === 'pt' ? 'Arquivo espacial' : 'Space telescope archive'} ↗</a></li>
+            <li><a href="https://github.com/byDenoso/nexo-research" target="_blank" rel="noopener noreferrer">NEXO Research · {locale === 'pt' ? 'Código do portal' : 'Portal source code'} ↗</a></li>
+          </ul>
+        </section>
         <section aria-labelledby="snap" className="card motion-reveal p-6">
           <h2 id="snap" className="text-xl font-semibold">{tr(d.snapshot, locale)}</h2>
           <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-[max-content_minmax(0,1fr)] sm:gap-y-2 [&_dd]:mb-3 sm:[&_dd]:mb-0">

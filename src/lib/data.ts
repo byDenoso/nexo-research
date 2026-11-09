@@ -3,18 +3,18 @@ import {join} from 'node:path';
 import {manifest as manifestSchema, projects as projectsSchema, publications as publicationsSchema, type Manifest, type Project, type Publication, type Result} from './schemas.ts';
 import {z} from 'zod';
 
-const root = process.cwd();
-const json = (path: string): unknown => JSON.parse(readFileSync(join(root, path), 'utf8'));
+const dataRoot = join(process.cwd(), 'data');
+const json = (path: string): unknown => JSON.parse(readFileSync(join(dataRoot, path), 'utf8'));
 
 let cached: Manifest | undefined;
 export function getManifest(): Manifest {
-  cached ??= manifestSchema.parse(json('data/generated/manifest.json'));
+  cached ??= manifestSchema.parse(json('generated/manifest.json'));
   return cached;
 }
 export const getResults = (): Result[] => getManifest().results;
 export const getResult = (slug: string): Result | undefined => getResults().find(item => item.slug === slug);
-export const getProjects = (): Project[] => projectsSchema.parse(json('data/curated/projects.json'));
-export const getPublications = (): Publication[] => publicationsSchema.parse(json('data/curated/publications.json')).sort((a, b) => b.date.localeCompare(a.date));
+export const getProjects = (): Project[] => projectsSchema.parse(json('curated/projects.json'));
+export const getPublications = (): Publication[] => publicationsSchema.parse(json('curated/publications.json')).sort((a, b) => b.date.localeCompare(a.date));
 
 const profile = z.object({
   name: z.string(), affiliation: z.string(),
@@ -23,7 +23,7 @@ const profile = z.object({
   profileUrl: z.string().url().nullable(),
   repositories: z.array(z.object({label: z.string(), url: z.string().url(), description: z.string().optional()}))
 });
-export const getProfile = () => profile.parse(json('data/curated/profile.json'));
+export const getProfile = () => profile.parse(json('curated/profile.json'));
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nexoresearch.org';
 

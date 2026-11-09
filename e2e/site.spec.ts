@@ -15,8 +15,9 @@ test('institutional home keeps publications out of the main, compact and footer 
     await page.goto(`/${locale}`);
     await expect(page.locator('header a, footer a, main a').filter({hasText: /^(Publicações|Publications)$/})).toHaveCount(0);
     await expect(page.locator(`a[href="/${locale}/publications"]`)).toHaveCount(0);
-    const scope = page.getByRole('region', {name: locale === 'pt' ? 'A pesquisa em números' : 'Research in numbers'});
+    const scope = page.locator('.editorial-archive');
     await expect(scope).toBeVisible();
+    await expect(page.locator('.hero-observation img')).toHaveCount(1);
     await expect(scope.locator('dd')).toHaveCount(3);
     expect((await request.get(`/${locale}/publications`)).ok()).toBe(true);
   }
@@ -39,18 +40,18 @@ for (const locale of ['pt', 'en']) {
 
 test('results page filters, paginates and links to a detail page', async ({page}) => {
   await page.goto('/pt/results');
-  await expect(page.getByRole('status').filter({hasText: 'exibidos'})).toContainText('24 de 169');
+  await expect(page.getByRole('status').filter({hasText: 'exibidas'})).toContainText('24 de');
   await page.getByRole('button', {name: 'Mostrar mais'}).click();
-  await expect(page.getByRole('status').filter({hasText: 'exibidos'})).toContainText('48 de 169');
+  await expect(page.getByRole('status').filter({hasText: 'exibidas'})).toContainText('35 de 35');
   await page.getByLabel('Buscar').fill('DESI');
-  const shown = page.getByRole('status').filter({hasText: 'exibidos'});
-  await expect(shown).not.toContainText('de 169');
+  const shown = page.getByRole('status').filter({hasText: 'exibidas'});
+  await expect(shown).toContainText('registros de execução');
   await page.getByLabel('Buscar').fill('zzzz-no-match');
   await expect(page.getByText('Nenhum registro encontrado.')).toBeVisible();
   await page.getByRole('button', {name: 'Limpar filtros'}).click();
   await page.getByRole('heading', {level: 3}).first().getByRole('link').click();
-  await expect(page).toHaveURL(/\/pt\/results\/t-[0-9a-f]{12}$/);
-  await expect(page.getByText('Candidato').first()).toBeVisible();
+  await expect(page).toHaveURL(/\/pt\/results\/families\//);
+  await expect(page.getByText('Execuções e variações')).toBeVisible();
 });
 
 test.describe('initial results', () => {
@@ -59,7 +60,7 @@ test.describe('initial results', () => {
     await page.goto('/pt/results');
     const records = page.getByRole('main').getByRole('article');
     await expect(records).toHaveCount(24);
-    await expect(records.first().getByRole('link')).toHaveAttribute('href', /\/pt\/results\/t-[0-9a-f]{12}$/);
+    await expect(records.first().getByRole('link')).toHaveAttribute('href', /\/pt\/results\/families\//);
   });
 });
 
@@ -93,20 +94,16 @@ test('the methods index opens the existing test section by keyboard', async ({pa
   await expect(page.getByRole('heading', {name: 'Tests', exact: true})).toBeInViewport();
 });
 
-test('dataset labels and values in the home chart remain readable at 360 px', async ({page}) => {
-  await page.setViewportSize({width: 360, height: 800});
+test('home discloses source date without implying current research activity', async ({page}) => {
   await page.goto('/pt');
-  const chart = page.getByRole('list', {name: 'Conjuntos de dados nos resultados públicos'});
-  const firstRow = chart.getByRole('listitem').first();
-  await expect(firstRow).toBeVisible();
-  expect(await firstRow.evaluate(node => parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(12);
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  expect(overflow).toBe(0);
+  await expect(page.getByText('O arquivo público em contexto')).toBeVisible();
+  await expect(page.locator('.editorial-archive')).toContainText('última data do snapshot');
 });
 
-test('the DES-SN5YR interval result stays in the catalog without a home highlight', async ({page}) => {
+test('the DES-SN5YR interval result is clearly presented as exploratory', async ({page}) => {
   await page.goto('/pt');
-  await expect(page.locator('#results a[href="/pt/results/t-05ae703af393"]')).toHaveCount(0);
+  await expect(page.locator('.editorial-featured a[href="/pt/results/t-05ae703af393"]')).toHaveCount(1);
+  await expect(page.locator('.editorial-featured')).toContainText('sem validação independente');
   await page.goto('/pt/results/t-05ae703af393');
   await expect(page.getByRole('main')).toContainText('reduziu em cerca de 94%');
   await expect(page.getByText('Data do registro público', {exact: true})).toBeVisible();
@@ -127,7 +124,7 @@ test.describe('theme', () => {
 test('language switch keeps the page', async ({page}) => {
   await page.goto('/pt/methods');
   await page.getByRole('link', {name: /Idioma: EN/}).click();
-  await expect(page).toHaveURL(/\/en$/);
+  await expect(page).toHaveURL(/\/en\/methods$/);
 });
 
 test('security headers are present and no private routes are reachable', async ({request}) => {
@@ -137,10 +134,11 @@ test('security headers are present and no private routes are reachable', async (
   for (const path of ['/api/atlas-cockpit', '/api/atlas-session', '/cockpit']) expect((await request.get(path)).status()).not.toBe(200);
 });
 
-test('sitemap lists every localized result', async ({request}) => {
+test('sitemap lists localized scientific families', async ({request}) => {
   const body = await (await request.get('/sitemap.xml')).text();
   const locs = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1] ?? '');
-  expect(locs.filter(loc => loc.includes('/results/t-')).length).toBe(169 * 2);
+  expect(locs.filter(loc => loc.includes('/results/families/')).length).toBeGreaterThan(10);
+  expect(locs.filter(loc => /\/results\/t-[a-f0-9]+/.test(loc)).length).toBe(0);
 });
 
 test('keyboard users reach the main content through the skip link', async ({page}) => {
@@ -155,4 +153,37 @@ test('the private area is only a redirect to the existing Cockpit', async ({requ
     expect([307, 308]).toContain(response.status());
     expect(response.headers().location).toBe('https://nexo-one-two.vercel.app/cockpit');
   }
+});
+
+test('language switch preserves records and URL filters', async ({page}) => {
+  await page.goto('/pt/results?line=expansion&survey=DES-SN5YR&q=DESI');
+  await page.getByRole('link', {name: 'Idioma: EN'}).click();
+  await expect(page).toHaveURL(/\/en\/results\?/);
+  await expect(page.getByRole('searchbox', {name: 'Search'})).toHaveValue('DESI');
+  await page.goto('/pt/results/t-05ae703af393');
+  await page.getByRole('link', {name: 'Idioma: EN'}).click();
+  await expect(page).toHaveURL(/\/en\/results\/t-05ae703af393$/);
+});
+
+test('editorial homepage is responsive and shows real credited observations', async ({page}) => {
+  for (const width of [360,390,768,1440]) {
+    await page.setViewportSize({width,height:900});
+    await page.goto('/pt');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+    await expect(page.locator('main img')).toHaveCount(4);
+    for (const image of await page.locator('main img').all()) {
+      await expect.poll(async () => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    }
+    await expect(page.getByRole('heading',{level:1})).toHaveCount(1);
+  }
+});
+
+
+test('Open Graph image and favicon resolve without locale redirects', async ({request}) => {
+  const og = await request.get('/opengraph-image', {maxRedirects: 0});
+  expect(og.status()).toBe(200);
+  expect(og.headers()['content-type']).toContain('image/png');
+  const favicon = await request.get('/favicon.ico', {maxRedirects: 0});
+  expect(favicon.status()).toBe(200);
+  expect(favicon.headers()['content-type']).toMatch(/image|icon/);
 });

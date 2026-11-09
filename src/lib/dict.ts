@@ -33,9 +33,9 @@ export const D = {
   },
   institute: {
     scope: t('A pesquisa em números', 'Research in numbers'),
-    results: t('Resultados públicos', 'Public results'),
-    lines: t('Linhas de pesquisa', 'Research lines'),
-    datasets: t('Conjuntos de dados identificados nos resumos', 'Data sets identified in the summaries'),
+    families: t('Perguntas e famílias científicas', 'Scientific questions and families'),
+    executions: t('Registros de execução', 'Execution records'),
+    lines: t('Linhas com registros públicos', 'Research lines with records'),
     explore: t('Da hipótese aos dados', 'From hypothesis to data'),
     research: t('Explore as frentes científicas e os projetos em andamento.', 'Explore research areas and ongoing projects.'),
     methods: t('Veja como cada hipótese é testada, revisada e documentada.', 'See how each hypothesis is tested, reviewed and documented.'),
@@ -75,12 +75,12 @@ export const D = {
       reproducibility: {n: t('Reprodutibilidade', 'Reproducibility'), d: t('Métodos reexecutáveis e pesquisa assistida por agentes.', 'Re-runnable methods and agent-assisted research.')}
     } as Record<Line, {n: Pair; d: Pair}>,
     results: t('resultados públicos', 'public results'),
-    projects: t('projeto(s)', 'project(s)')
+    projects: t('projetos', 'projects')
   },
   results: {
     title: t('Resultados científicos', 'Scientific results'),
-    lead: t('Resumos públicos de testes, cada um com pergunta, método, resultado e estado. Um resultado só muda de estado por decisão editorial registrada.', 'Public summaries of tests, each with question, method, result and status. A result changes status only through a recorded editorial decision.'),
-    selected: t('Resultados selecionados', 'Selected results'),
+    lead: t('Perguntas científicas agrupadas por método e hipótese. Cada família preserva suas execuções, condições e estados originais.', 'Scientific questions grouped by method and hypothesis. Each family preserves its original runs, conditions and statuses.'),
+    selected: t('Perguntas em investigação', 'Questions under investigation'),
     question: t('Pergunta investigada', 'Question investigated'), answer: t('Interpretação física', 'Physical interpretation'),
     method: t('Condições do teste', 'Test conditions'), result: t('Resultado', 'Result'), limits: t('Limitações específicas', 'Specific limitations'),
     status: t('Estado científico', 'Scientific status'), id: t('Identificador', 'Identifier'), updated: t('Atualizado', 'Updated'), publicRecordDate: t('Data do registro público', 'Public record date'),

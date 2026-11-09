@@ -22,7 +22,6 @@ export function Footer({locale}: {locale: Locale}) {
       <div className="wrap footer-meta">
         <span>© {new Date().getUTCFullYear()} Dener Pereira</span>
         <Link href={href(locale, '/data')} prefetch={false} className="text-link">{tr(D.footer.data, locale)}</Link>
-        <a href={href(locale, '/privado')} rel="nofollow" className="text-link">{tr(D.footer.private, locale)}</a>
       </div>
     </footer>
   );

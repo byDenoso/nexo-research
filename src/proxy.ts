@@ -5,6 +5,7 @@ const LOCALES = ['pt', 'en'];
 // Unprefixed URLs go to the visitor's language; every canonical URL keeps its /pt or /en prefix.
 export function proxy(request: NextRequest) {
   const {pathname, search} = request.nextUrl;
+  if (pathname === '/opengraph-image') return NextResponse.next();
   if (LOCALES.some(code => pathname === `/${code}` || pathname.startsWith(`/${code}/`))) return NextResponse.next();
   const preferred = (request.headers.get('accept-language') ?? '').toLowerCase();
   const locale = /^(en|[a-z-]*,\s*en)/.test(preferred) && !preferred.startsWith('pt') ? 'en' : 'pt';

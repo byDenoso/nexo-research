@@ -1,6 +1,8 @@
 import {fmtDate, pick, type Locale} from './i18n.ts';
 import type {Result} from './schemas.ts';
-import type {Row} from '../components/ResultsBrowser.tsx';
+import type {FamilyRow} from '../components/ResultsBrowser.tsx';
+import type {Family} from './families.ts';
+import {DATASETS} from './data.ts';
 import type {ResultCardData} from '../components/ui.tsx';
 
 export function toResultCard(item: Result, locale: Locale): ResultCardData {
@@ -10,9 +12,20 @@ export function toResultCard(item: Result, locale: Locale): ResultCardData {
   };
 }
 
-export function toRows(results: Result[], locale: Locale): Row[] {
-  return results.map(item => ({
-    ...toResultCard(item, locale), lines: item.lines, year: item.updatedAt.slice(0, 4),
-    haystack: `${item.question['pt-BR']} ${item.question.en} ${item.result['pt-BR']} ${item.result.en} ${item.id}`.toLowerCase()
+
+export function toFamilyRows(families: Family[], locale: Locale): FamilyRow[] {
+  return families.map(family => ({
+    slug: family.slug,
+    title: pick(family.title, locale),
+    description: pick(family.description, locale),
+    recordCount: family.records.length,
+    updated: fmtDate(family.updatedAt, locale),
+    year: family.updatedAt.slice(0, 4),
+    lines: family.lines,
+    statuses: family.statuses,
+    surveys: DATASETS.filter(([, pattern]) => family.records.some(item => pattern.test(item.question.en+' '+item.method.en+' '+item.result.en))).map(([name]) => name),
+    haystack: family.records.map(item =>
+      [item.question['pt-BR'], item.question.en, item.result['pt-BR'], item.result.en, item.id].join(' ')
+    ).join(' ').toLocaleLowerCase(locale === 'pt' ? 'pt-BR' : 'en')
   }));
 }
