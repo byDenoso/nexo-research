@@ -8,14 +8,14 @@ export function Pipeline({locale}: {locale: Locale}) {
     <ol className="pipeline" role="list">
       {D.how.steps.map((step, index) => (
         <li key={step.k} className="pipeline-step">
-          <details name="research-pipeline">
+          <details name="research-pipeline" open={index === 0}>
             <summary>
               <span className="pipeline-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
               <span className="disclosure-label">{tr(step.n, locale)}</span>
             </summary>
             <div className="pipeline-copy">
               <p>{tr(step.d, locale)}</p>
-              <Link href={`${href(locale, '/methods')}#${step.k}`} className="text-link">{tr(D.how.evidence, locale)}</Link>
+              <Link href={`${href(locale, '/methods')}#${step.k}`} prefetch={false} className="text-link">{tr(D.how.evidence, locale)}</Link>
             </div>
           </details>
         </li>
