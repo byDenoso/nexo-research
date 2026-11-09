@@ -26,7 +26,7 @@ export default async function UpdatesPage({params}: {params: Promise<{locale: st
         <div className="mt-6 grid gap-8">
           {[...byDay.entries()].map(([day, items]) => (
             <section key={day} aria-label={fmtDate(`${day}T00:00:00Z`, locale)}>
-              <h2 className="font-mono text-sm text-accent">{fmtDate(`${day}T00:00:00Z`, locale)} · {items.length}</h2>
+              <h2 className="motion-reveal font-mono text-sm text-accent">{fmtDate(`${day}T00:00:00Z`, locale)} · {items.length}</h2>
               <ul className="card mt-3 divide-y divide-line">
                 {items.map(item => (
                   <li key={item.id} className="flex flex-wrap items-center gap-3 p-4">

@@ -74,7 +74,6 @@
   --motion-enter-ease: cubic-bezier(.2, .75, .25, 1);
   --motion-enter: var(--motion-enter-time) var(--motion-enter-ease);
   --motion-intro: 440ms var(--motion-enter-ease);
-  --motion-sweep: 520ms ease-out;
   --motion-stagger: 35ms;
 }
 
@@ -528,6 +527,7 @@ details[open] > summary .disclosure-label::after { transform: rotate(225deg); }
   color: var(--ink);
   font-size: 1rem;
 }
+.results-filters :is(input, select):focus-visible { border-color: var(--accent); }
 .results-count { margin-block: var(--space-5) var(--space-3); color: var(--muted); font: 400 var(--meta-size)/1.5 var(--font-mono); }
 .results-more { margin-block-start: var(--space-8); text-align: center; }
 @media (min-width: 35rem) { .results-filters .wide-filter { grid-column: auto; } }
@@ -631,14 +631,25 @@ details > summary::-webkit-details-marker { display: none; }
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
   html:has(.data-mention:target) { scroll-behavior: auto; }
-  :is(.home-intro .kicker, .home-actions, .page-head .kicker, .page-lead, .record-meta, .record-status-note, .mission-stats-grid dd) {
+  :is(
+    .home-intro .kicker, .home-intro h1, .home-actions,
+    .page-head .kicker, .page-head h1, .page-lead,
+    .record-meta, .record-head h1, .record-status-note, .mission-stats-grid dd, .not-found-copy
+  ) {
     animation: content-enter var(--motion-intro) both;
   }
-  :is(.home-actions, .page-lead, .record-status-note, .mission-stats-grid > :nth-child(2) dd) { animation-delay: var(--motion-stagger); }
-  .mission-stats-grid > :nth-child(3) dd { animation-delay: calc(2 * var(--motion-stagger)); }
+  :is(.home-intro h1, .page-head h1, .record-head h1, .mission-stats-grid > :nth-child(2) dd) {
+    animation-delay: var(--motion-stagger);
+  }
+  :is(.home-actions, .page-lead, .record-status-note, .mission-stats-grid > :nth-child(3) dd) {
+    animation-delay: calc(2 * var(--motion-stagger));
+  }
 
   :is(.btn, .result-card, .research-line-card, .pipeline-step details) {
     transition: border-color var(--motion), background-color var(--motion), transform var(--motion);
+  }
+  :is(a.card, .results-filters input, .results-filters select) {
+    transition: border-color var(--motion), background-color var(--motion);
   }
   .btn:active { transform: scale(.98); }
   :is(.primary-nav a, .arrow-link, .disclosure-label)::after { transition: transform var(--motion); }
@@ -650,7 +661,6 @@ details > summary::-webkit-details-marker { display: none; }
   }
   .arrow-link:is(:hover, :focus-visible)::after { transform: translateX(.16em) rotate(45deg); }
   .activity-track { transition: fill var(--motion), background-color var(--motion); }
-  .activity-sweep { animation: activity-sweep var(--motion-sweep) both; }
   .pipeline-step::before { transition: background-color var(--motion); }
   .pipeline-index { transition: background-color var(--motion), border-color var(--motion), color var(--motion); }
   details[open] > :is(.site-menu-panel, .activity-table, .pipeline-copy) { animation: disclosure-enter var(--motion-enter) both; }
@@ -686,28 +696,27 @@ details > summary::-webkit-details-marker { display: none; }
   }
 
   @supports (animation-timeline: view()) {
-    :is(.section-heading, .profile-strip, .result-grid > li, .research-panel, .methods-article h2, .record-block, .record-provenance, .site-footer .wordmark) {
+    :is(
+      .motion-reveal, .section-heading, .profile-strip,
+      .mission-links > li, .pipeline-step, .result-grid > li, .research-panel,
+      .prose-nx h2, .results-filters, .empty-state, .contact-card > div,
+      .record-block, .record-values > li, .record-provenance, .site-footer .wordmark
+    ) {
       animation: content-enter auto linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 65%;
     }
-  }
 
-  @media (width >= 64rem) {
-    .activity-rows > :nth-child(2) { --sweep-order: 1; }
-    .activity-rows > :nth-child(3) { --sweep-order: 2; }
-    .activity-rows > :nth-child(4) { --sweep-order: 3; }
-    .activity-rows > :nth-child(5) { --sweep-order: 4; }
-    .activity-rows > :nth-child(6) { --sweep-order: 5; }
-    .activity-rows > :nth-child(7) { --sweep-order: 6; }
-    .activity-rows > :nth-child(8) { --sweep-order: 7; }
-    .activity-sweep { animation-delay: calc(var(--sweep-order, 0) * var(--motion-stagger)); }
-  }
+    @media (min-width: 64rem) {
+      .pipeline-step:nth-child(n + 3) { animation-range: entry 18% entry 83%; }
+      .pipeline-step:nth-child(n + 5) { animation-range: entry 34% entry 99%; }
+    }
 
-  @media (width < 64rem) {
-    @supports (animation-timeline: view()) {
-      .activity-row { view-timeline: --activity-row block; }
-      .activity-sweep { animation-timeline: --activity-row; animation-range: entry; }
+    .activity-row { view-timeline: --activity-row block; }
+    .activity-sweep {
+      animation: activity-sweep auto linear both;
+      animation-timeline: --activity-row;
+      animation-range: entry;
     }
   }
 }
