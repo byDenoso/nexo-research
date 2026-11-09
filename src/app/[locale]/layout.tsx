@@ -45,7 +45,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
       <body className="min-h-dvh flex flex-col">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-accent-ink">{tr(D.skip, locale)}</a>
         <Header locale={locale} />
-        <main id="main" className="flex-1">{children}</main>
+        <main id="main" className="flex-1" tabIndex={-1}>{children}</main>
         <Footer locale={locale} />
       </body>
     </html>

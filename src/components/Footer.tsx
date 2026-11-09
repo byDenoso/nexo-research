@@ -5,21 +5,25 @@ import {href} from '@/lib/seo';
 
 export function Footer({locale}: {locale: Locale}) {
   return (
-    <footer className="mt-24 border-t border-line">
-      <div className="wrap grid gap-8 py-10 md:grid-cols-[1.3fr_2fr]">
+    <footer className="site-footer">
+      <div className="wrap footer-inner">
         <div>
-          <p className="font-mono">NEXO<span className="text-accent"> / Research</span></p>
-          <p className="mt-2 max-w-sm text-sm text-muted">{tr(D.footer.line, locale)}</p>
+          <Link href={href(locale)} prefetch={false} className="wordmark" aria-label={tr(D.site, locale)}>NEXO<span aria-hidden="true">/</span>Research</Link>
+          <p className="footer-summary">{tr(D.footer.line, locale)}</p>
         </div>
-        <nav aria-label="Rodapé">
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
+        <nav aria-label={tr(D.footer.navigation, locale)}>
+          <ul className="footer-links" role="list">
             {ROUTES.map(route => (
-              <li key={route}><Link href={href(locale, `/${route}`)} className="text-muted hover:text-ink">{tr(D.nav[route], locale)}</Link></li>
+              <li key={route}><Link href={href(locale, `/${route}`)} prefetch={false}>{tr(D.nav[route], locale)}</Link></li>
             ))}
           </ul>
         </nav>
       </div>
-      <div className="wrap border-t border-line py-4 text-xs text-muted">© {new Date().getUTCFullYear()} Dener Pereira · {tr(D.footer.data, locale)} · <a href={href(locale, '/privado')} rel="nofollow" className="hover:text-ink">{tr(D.footer.private, locale)}</a></div>
+      <div className="wrap footer-meta">
+        <span>© {new Date().getUTCFullYear()} Dener Pereira</span>
+        <Link href={href(locale, '/data')} prefetch={false} className="text-link">{tr(D.footer.data, locale)}</Link>
+        <a href={href(locale, '/privado')} rel="nofollow" className="text-link">{tr(D.footer.private, locale)}</a>
+      </div>
     </footer>
   );
 }

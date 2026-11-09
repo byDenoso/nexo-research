@@ -41,6 +41,16 @@ test('results page filters, paginates and links to a detail page', async ({page}
   await expect(page.getByText('Candidato').first()).toBeVisible();
 });
 
+test.describe('initial results', () => {
+  test.use({javaScriptEnabled: false});
+  test('the first page is readable before browser scripts run', async ({page}) => {
+    await page.goto('/pt/results');
+    const records = page.getByRole('main').getByRole('article');
+    await expect(records).toHaveCount(24);
+    await expect(records.first().getByRole('link')).toHaveAttribute('href', /\/pt\/results\/t-[0-9a-f]{12}$/);
+  });
+});
+
 test('line filter from the research page is honoured', async ({page}) => {
   await page.goto('/en/results?line=local-group');
   await expect(page.getByRole('status').filter({hasText: 'shown'})).toContainText('0 of 0');
@@ -50,6 +60,44 @@ test('methods page renders equations with KaTeX', async ({page}) => {
   await page.goto('/en/methods');
   await expect(page.locator('.katex').first()).toBeVisible();
   expect(await page.locator('.katex').count()).toBeGreaterThanOrEqual(4);
+});
+
+test('wide equations on mobile scroll with the keyboard', async ({page}) => {
+  await page.setViewportSize({width: 360, height: 800});
+  await page.goto('/en/methods');
+  const equation = page.getByRole('group', {name: 'Equation', exact: true}).nth(1);
+  await equation.focus();
+  await expect(equation).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(() => equation.evaluate(node => node.scrollLeft)).toBeGreaterThan(0);
+});
+
+test('the methods index opens the existing test section by keyboard', async ({page}) => {
+  await page.goto('/en/methods');
+  const link = page.getByRole('navigation', {name: 'On this page'}).getByRole('link', {name: 'Tests', exact: true});
+  await link.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/en\/methods#tests$/);
+  await expect(page.getByRole('heading', {name: 'Tests', exact: true})).toBeInViewport();
+});
+
+test('dataset labels and values in the home chart remain readable at 360 px', async ({page}) => {
+  await page.setViewportSize({width: 360, height: 800});
+  await page.goto('/pt');
+  const chart = page.getByRole('list', {name: 'Conjuntos de dados nos resultados públicos'});
+  const firstRow = chart.getByRole('listitem').first();
+  await expect(firstRow).toBeVisible();
+  expect(await firstRow.evaluate(node => parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(12);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBe(0);
+});
+
+test('the DES-SN5YR interval result stays in the catalog without a home highlight', async ({page}) => {
+  await page.goto('/pt');
+  await expect(page.locator('#results a[href="/pt/results/t-05ae703af393"]')).toHaveCount(0);
+  await page.goto('/pt/results/t-05ae703af393');
+  await expect(page.getByRole('main')).toContainText('reduziu em cerca de 94%');
+  await expect(page.getByText('Data do registro público', {exact: true})).toBeVisible();
 });
 
 test.describe('theme', () => {

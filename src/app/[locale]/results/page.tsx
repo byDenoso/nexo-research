@@ -1,10 +1,9 @@
 import {notFound} from 'next/navigation';
-import {Suspense} from 'react';
 import {PageHead} from '@/components/ui';
 import {ResultsBrowser} from '@/components/ResultsBrowser';
 import {getResults} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
-import {isLocale, type Locale} from '@/lib/i18n';
+import {isLocale} from '@/lib/i18n';
 import {toRows} from '@/lib/rows';
 import {pageMeta} from '@/lib/seo';
 
@@ -17,12 +16,12 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
 export default async function ResultsPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   if (!isLocale(locale)) notFound();
-  const rows = toRows(getResults(), locale as Locale);
+  const rows = toRows(getResults(), locale);
   return (
     <>
       <PageHead kicker={tr(D.nav.results, locale)} title={tr(D.results.title, locale)} lead={tr(D.results.lead, locale)} />
-      <div className="wrap mt-10">
-        <Suspense fallback={null}><ResultsBrowser rows={rows} locale={locale} /></Suspense>
+      <div className="wrap page-body">
+        <ResultsBrowser rows={rows} locale={locale} />
       </div>
     </>
   );
