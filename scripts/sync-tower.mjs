@@ -12,8 +12,12 @@ const MAX_BYTES = 8 * 1024 * 1024;
 const idOf = test => createHash('sha256').update(test.question.en).digest('hex').slice(0, 12);
 
 if (!URL_SOURCE.startsWith('https://')) throw new Error('TOWER_PUBLIC_URL must be https');
+const LOCAL_FILE = process.env.TOWER_PUBLIC_FILE;
 let response;
-try {
+if (LOCAL_FILE) {
+  // CI emits the snapshot from a Pantheon checkout and hands the file over here.
+  response = new Response(readFileSync(LOCAL_FILE), {status: 200});
+} else try {
   response = await fetch(URL_SOURCE, {redirect: 'error', signal: AbortSignal.timeout(30000), headers: {Accept: 'application/json'}});
 } catch (error) {
   console.log(`::warning::Tower public source unreachable (${error.message}); keeping the validated snapshot`);

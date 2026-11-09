@@ -52,7 +52,7 @@ npm run dev          # development server
 npm run check        # typecheck, unit tests, manifest build, private-material scan
 npm run build        # manifest + production build
 npm run test:e2e     # Playwright (use PW_CHANNEL=chrome to use an installed Chrome)
-npm run data:sync    # refresh the snapshot from the public Tower manifest
+npm run data:sync    # refresh the snapshot (CI builds it from the public Pantheon repository)
 ```
 
 ## Environment

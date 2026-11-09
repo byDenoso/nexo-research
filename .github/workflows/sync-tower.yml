@@ -1,6 +1,7 @@
 name: sync-tower
 
-# Pulls the public Tower manifest into data/source and opens a pull request when it changed.
+# Rebuilds the reviewed public snapshot from the public Pantheon repository and opens a pull request when it changed.
+# No credential is involved: only public code and reviewed public JSON are read.
 # Nothing is published from here: a merge is a human decision, and synced records enter as CANDIDATE.
 on:
   schedule:
@@ -14,17 +15,31 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: byDenoso/Pantheon
+          ref: main
+          path: pantheon
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - name: Fetch and validate the public snapshot
-        id: sync
+      - name: Build the public projection in Pantheon
+        working-directory: pantheon/nexo-atlas
         run: |
+          npm ci --no-audit --no-fund --ignore-scripts
+          npm run build
+      - name: Emit and validate the public snapshot
+        id: sync
+        env:
+          TOWER_PUBLIC_FILE: ${{ runner.temp }}/atlas-public.json
+        run: |
+          node scripts/emit-pantheon-public.mjs pantheon "$TOWER_PUBLIC_FILE"
           node scripts/sync-tower.mjs | tee sync.log
           if grep -q "no change" sync.log; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
       - name: Validate the new manifest
@@ -43,6 +58,6 @@ jobs:
           git config user.email "noreply@users.noreply.github.com"
           git checkout -B "$branch"
           git add data/source/atlas-public.json public/atlas-public.json
-          git commit -m "data: sync public Tower snapshot ($(cat sync.log))"
+          git commit -m "data: sync public snapshot ($(cat sync.log))"
           git push --force-with-lease origin "$branch"
-          gh pr create --base main --head "$branch" --title "data: sync public Tower snapshot" --body "$(cat sync.log). New records enter as CANDIDATE. Review before merging." || gh pr edit "$branch" --body "$(cat sync.log)"
+          gh pr create --base main --head "$branch" --title "data: sync public snapshot" --body "$(cat sync.log). New records enter as CANDIDATE. Review before merging." || gh pr edit "$branch" --body "$(cat sync.log)"
