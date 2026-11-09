@@ -38,6 +38,33 @@ test.describe('native research interactions', () => {
   });
 });
 
+test('the white and black themes share the blue research panel', async ({page}) => {
+  await page.setViewportSize({width: 360, height: 800});
+  await page.emulateMedia({colorScheme: 'light'});
+  await page.goto('/pt');
+
+  const panel = page.getByRole('region', {name: 'A pesquisa em números'});
+  await expect(panel).toHaveCSS('background-color', 'rgb(0, 51, 160)');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  await expect(page.locator('img[src*="cosmic-field"]')).toHaveCount(0);
+
+  await page.getByRole('button', {name: 'Alternar tema'}).click();
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+  await expect(panel).toHaveCSS('background-color', 'rgb(0, 51, 160)');
+});
+
+test('section motion works on internal pages and respects reduced motion', async ({page}) => {
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  await page.goto('/pt/methods');
+  const heading = page.locator('.methods-article h2').last();
+  const timeline = () => heading.evaluate(node => getComputedStyle(node).getPropertyValue('animation-timeline'));
+  await expect.poll(timeline).toBe('view()');
+
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await expect.poll(timeline).toBe('auto');
+  await expect(heading).toBeVisible();
+});
+
 for (const colorScheme of ['dark', 'light'] as const) {
   test(`motion respects the reduced-motion preference in the ${colorScheme} theme`, async ({page}) => {
     await page.setViewportSize({width: 360, height: 800});
