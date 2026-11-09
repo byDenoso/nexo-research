@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import {D, tr} from '@/lib/dict';
-import {LOCALES, ROUTES, type Locale} from '@/lib/i18n';
+import {LOCALES, NAV_ROUTES, type Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
 import {ThemeToggle} from './ThemeToggle';
 
-const primaryRoutes = ROUTES.slice(0, 5);
+const primaryRoutes = NAV_ROUTES.slice(0, 5);
 
 export function Header({locale}: {locale: Locale}) {
   const other = LOCALES.find(code => code !== locale) ?? 'en';
@@ -32,7 +32,7 @@ export function Header({locale}: {locale: Locale}) {
             </summary>
             <nav className="card site-menu-panel" aria-label={tr(D.moreNavigation, locale)}>
               <ul role="list">
-                {ROUTES.map(route => (
+                {NAV_ROUTES.map(route => (
                   <li key={route} className={primaryRoutes.includes(route) ? 'site-menu-primary' : undefined}>
                     <a href={href(locale, `/${route}`)}>{tr(D.nav[route], locale)}</a>
                   </li>

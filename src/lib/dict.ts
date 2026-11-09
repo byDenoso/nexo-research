@@ -22,13 +22,25 @@ export const D = {
   moreNavigation: t('Mais páginas', 'More pages'),
   theme: t('Alternar tema', 'Toggle theme'),
   language: t('Idioma', 'Language'),
-  cta: {results: t('Ver resultados', 'View results'), publications: t('Publicações', 'Publications'), projects: t('Projetos', 'Projects'), all: t('Ver todos', 'See all')},
+  cta: {results: t('Ver resultados', 'View results'), research: t('Explorar a pesquisa', 'Explore the research'), all: t('Ver todos', 'See all')},
   hero: {
     kicker: t('Portal científico', 'Scientific portal'),
+    headline: t('O Universo sob teste', 'Putting the universe to the test'),
+    illustration: t('Rede cósmica · ilustração conceitual', 'Cosmic web · conceptual illustration'),
     caption: t('Resumos públicos que citam cada conjunto de dados, contados por menção no texto. Fonte: manifesto público da Tower.', 'Public summaries naming each data set, counted by textual mention. Source: Tower public manifest.'),
     chartTitle: t('Conjuntos de dados nos resultados públicos', 'Data sets in the public results'),
     viewData: t('Ver dados', 'View data'),
     unit: t('resumos', 'summaries')
+  },
+  institute: {
+    scope: t('A pesquisa em números', 'Research in numbers'),
+    results: t('Resultados públicos', 'Public results'),
+    lines: t('Linhas de pesquisa', 'Research lines'),
+    datasets: t('Conjuntos de dados identificados nos resumos', 'Data sets identified in the summaries'),
+    explore: t('Da hipótese aos dados', 'From hypothesis to data'),
+    research: t('Explore as frentes científicas e os projetos em andamento.', 'Explore research areas and ongoing projects.'),
+    methods: t('Veja como cada hipótese é testada, revisada e documentada.', 'See how each hypothesis is tested, reviewed and documented.'),
+    data: t('Consulte as fontes, o manifesto público e suas versões.', 'Consult the sources, the public manifest and its versions.')
   },
   who: {
     kicker: t('Quem desenvolve', 'Who develops it'),
