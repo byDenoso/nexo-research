@@ -39,19 +39,15 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
               <Link href={href(locale, '/research')} prefetch={false} className="btn">{tr(D.cta.research, locale)}</Link>
             </div>
           </div>
-          <figure className="mission-field">
-            <img src="/cosmic-field.svg" width="960" height="620" fetchPriority="high" alt="" />
-            <figcaption>{tr(D.hero.illustration, locale)}</figcaption>
-          </figure>
+          <section className="mission-stats" aria-labelledby="mission-stats-title">
+            <h2 id="mission-stats-title" className="kicker">{tr(D.institute.scope, locale)}</h2>
+            <dl className="mission-stats-grid">
+              {([['results', results.length], ['lines', LINES.length], ['datasets', datasets.length]] as const).map(([key, count]) => (
+                <div key={key}><dt>{tr(D.institute[key], locale)}</dt><dd>{count}</dd></div>
+              ))}
+            </dl>
+          </section>
         </div>
-      </section>
-
-      <section className="mission-stats" aria-label={tr(D.institute.scope, locale)}>
-        <dl className="wrap mission-stats-grid">
-          {([['results', results.length], ['lines', LINES.length], ['datasets', datasets.length]] as const).map(([key, count]) => (
-            <div key={key}><dt>{tr(D.institute[key], locale)}</dt><dd>{count}</dd></div>
-          ))}
-        </dl>
       </section>
 
       <Section id="explore" title={tr(D.institute.explore, locale)}>

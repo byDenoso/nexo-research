@@ -26,7 +26,6 @@ export const D = {
   hero: {
     kicker: t('Portal científico', 'Scientific portal'),
     headline: t('O Universo sob teste', 'Putting the universe to the test'),
-    illustration: t('Rede cósmica · ilustração conceitual', 'Cosmic web · conceptual illustration'),
     caption: t('Resumos públicos que citam cada conjunto de dados, contados por menção no texto. Fonte: manifesto público da Tower.', 'Public summaries naming each data set, counted by textual mention. Source: Tower public manifest.'),
     chartTitle: t('Conjuntos de dados nos resultados públicos', 'Data sets in the public results'),
     viewData: t('Ver dados', 'View data'),

@@ -15,7 +15,7 @@ const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable
 
 export const dynamicParams = false;
 export const generateStaticParams = () => LOCALES.map(locale => ({locale}));
-export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#070b14'}, {media: '(prefers-color-scheme: light)', color: '#f6f8fc'}]};
+export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#000000'}, {media: '(prefers-color-scheme: light)', color: '#ffffff'}]};
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;

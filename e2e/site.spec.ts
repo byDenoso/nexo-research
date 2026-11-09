@@ -15,7 +15,9 @@ test('institutional home keeps publications out of the main, compact and footer 
     await page.goto(`/${locale}`);
     await expect(page.locator('header a, footer a, main a').filter({hasText: /^(Publicações|Publications)$/})).toHaveCount(0);
     await expect(page.locator(`a[href="/${locale}/publications"]`)).toHaveCount(0);
-    await expect(page.locator('.mission-field img')).toBeVisible();
+    const scope = page.getByRole('region', {name: locale === 'pt' ? 'A pesquisa em números' : 'Research in numbers'});
+    await expect(scope).toBeVisible();
+    await expect(scope.locator('dd')).toHaveCount(3);
     expect((await request.get(`/${locale}/publications`)).ok()).toBe(true);
   }
 });
