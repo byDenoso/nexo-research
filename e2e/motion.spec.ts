@@ -53,25 +53,41 @@ test('the white and black themes share the blue research panel', async ({page}) 
   await expect(panel).toHaveCSS('background-color', 'rgb(0, 51, 160)');
 });
 
-test('section motion works on internal pages and respects reduced motion', async ({page}) => {
-  await page.emulateMedia({reducedMotion: 'no-preference'});
-  await page.goto('/pt/methods');
-  const heading = page.locator('.methods-article h2').last();
-  const timeline = () => heading.evaluate(node => getComputedStyle(node).getPropertyValue('animation-timeline'));
-  await expect.poll(timeline).toBe('view()');
+const motionSections = [
+  ['/pt', '.pipeline-step'],
+  ['/en/research', '.research-panel'],
+  ['/en/results', '.results-filters'],
+  ['/pt/results/t-05ae703af393', '.record-values > li'],
+  ['/pt/methods', '.methods-article h2'],
+  ['/en/data', '#mentioned'],
+  ['/pt/projects', 'main .card'],
+  ['/en/about', '.prose-nx h2'],
+  ['/pt/code', 'main .card'],
+  ['/en/contact', '.contact-card > div'],
+  ['/pt/updates', 'main section h2'],
+  ['/en/publications', '.page-body .card']
+] as const;
 
-  await page.emulateMedia({reducedMotion: 'reduce'});
-  await expect.poll(timeline).toBe('auto');
-  await expect(heading).toBeVisible();
-});
+for (const [path, selector] of motionSections) {
+  test(`${path} reveals content on scroll and respects reduced motion`, async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    await page.goto(path);
+    const block = page.locator(selector).first();
+    await expect(block).toHaveCSS('animation-timeline', 'view()');
+
+    await page.emulateMedia({reducedMotion: 'reduce'});
+    await expect(block).toHaveCSS('animation-timeline', 'auto');
+    await expect(block).toBeVisible();
+  });
+}
 
 for (const colorScheme of ['dark', 'light'] as const) {
   test(`motion respects the reduced-motion preference in the ${colorScheme} theme`, async ({page}) => {
-    await page.setViewportSize({width: 360, height: 800});
     await page.emulateMedia({colorScheme, reducedMotion: 'no-preference'});
     await page.goto('/pt');
     await expect(page.locator('html')).toHaveAttribute('data-theme', colorScheme);
     const chart = page.getByRole('list', {name: 'Conjuntos de dados nos resultados públicos'});
+    await expect(chart.locator('.activity-sweep').first()).toHaveCSS('animation-timeline', '--activity-row');
     const animatedBars = () => chart.evaluate(node => node.getAnimations({subtree: true}).length);
     await expect.poll(animatedBars).toBeGreaterThan(0);
 
@@ -84,7 +100,7 @@ for (const colorScheme of ['dark', 'light'] as const) {
     await expect.poll(progress).toBe('none');
     await expect(chart.getByRole('link', {name: /Pantheon\+/})).toBeVisible();
     await expect(chart.locator('rect').first()).toHaveAttribute('width', '100');
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(360);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
   });
 }
 
