@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {D, tr} from '@/lib/dict';
-import {ROUTES, type Locale} from '@/lib/i18n';
+import {NAV_ROUTES, type Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
 
 export function Footer({locale}: {locale: Locale}) {
@@ -13,7 +13,7 @@ export function Footer({locale}: {locale: Locale}) {
         </div>
         <nav aria-label={tr(D.footer.navigation, locale)}>
           <ul className="footer-links" role="list">
-            {ROUTES.map(route => (
+            {NAV_ROUTES.map(route => (
               <li key={route}><Link href={href(locale, `/${route}`)} prefetch={false}>{tr(D.nav[route], locale)}</Link></li>
             ))}
           </ul>

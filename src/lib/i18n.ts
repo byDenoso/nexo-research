@@ -10,6 +10,7 @@ export const pick = (text: Localized, locale: Locale): string => (locale === 'pt
 
 export const ROUTES = ['research', 'results', 'publications', 'projects', 'methods', 'data', 'code', 'updates', 'about', 'contact'] as const;
 export type Route = (typeof ROUTES)[number];
+export const NAV_ROUTES = ROUTES.filter(route => route !== 'publications');
 
 export const fmtDate = (iso: string, locale: Locale): string =>
   new Intl.DateTimeFormat(locale === 'pt' ? 'pt-BR' : 'en-GB', {day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC'}).format(new Date(iso));

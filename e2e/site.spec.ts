@@ -10,6 +10,16 @@ test('root redirects to the visitor language', async ({request}) => {
   expect(en.headers().location).toMatch(/\/en$/);
 });
 
+test('institutional home keeps publications out of the main, compact and footer navigation', async ({page, request}) => {
+  for (const locale of ['pt', 'en']) {
+    await page.goto(`/${locale}`);
+    await expect(page.locator('header a, footer a, main a').filter({hasText: /^(Publicações|Publications)$/})).toHaveCount(0);
+    await expect(page.locator(`a[href="/${locale}/publications"]`)).toHaveCount(0);
+    await expect(page.locator('.mission-field img')).toBeVisible();
+    expect((await request.get(`/${locale}/publications`)).ok()).toBe(true);
+  }
+});
+
 for (const locale of ['pt', 'en']) {
   for (const route of ROUTES) {
     test(`${locale}${route || '/'} renders with one h1, canonical and alternates`, async ({page}) => {
