@@ -177,3 +177,13 @@ test('editorial homepage is responsive and shows real credited observations', as
     await expect(page.getByRole('heading',{level:1})).toHaveCount(1);
   }
 });
+
+
+test('Open Graph image and favicon resolve without locale redirects', async ({request}) => {
+  const og = await request.get('/opengraph-image', {maxRedirects: 0});
+  expect(og.status()).toBe(200);
+  expect(og.headers()['content-type']).toContain('image/png');
+  const favicon = await request.get('/favicon.ico', {maxRedirects: 0});
+  expect(favicon.status()).toBe(200);
+  expect(favicon.headers()['content-type']).toMatch(/image|icon/);
+});
