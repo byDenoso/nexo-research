@@ -3,6 +3,7 @@ import {HTML_LANG, LOCALES, OG_LOCALE, type Locale} from './i18n.ts';
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nexoresearch.org';
 export const href = (locale: Locale, path = ''): string => `/${locale}${path}`;
+export const datasetMentionId = (name: string): string => `dataset-${name.toLowerCase().replaceAll(' ', '-').replaceAll('+', '-plus')}`;
 
 export function pageMeta(locale: Locale, path: string, title: string, description: string): Metadata {
   const languages = Object.fromEntries(LOCALES.map(code => [HTML_LANG[code], `${SITE_URL}${href(code, path)}`]));

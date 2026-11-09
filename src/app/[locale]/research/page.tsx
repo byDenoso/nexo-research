@@ -25,7 +25,7 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
         {LINES.map(line => {
           const count = results.filter(item => item.lines.includes(line)).length;
           return (
-            <section key={line} id={line} className="card scroll-mt-24 p-6" aria-labelledby={`${line}-h`}>
+            <section key={line} id={line} className="card research-panel scroll-mt-24 p-6" aria-labelledby={`${line}-h`}>
               <h2 id={`${line}-h`} className="text-2xl font-semibold">{tr(D.lines.items[line].n, locale)}</h2>
               <p className="mt-2 max-w-3xl text-muted">{tr(D.lines.items[line].d, locale)}</p>
               <ul className="mt-5 grid gap-3 md:grid-cols-2">

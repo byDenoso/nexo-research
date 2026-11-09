@@ -1,5 +1,6 @@
 import {D, tr} from '@/lib/dict';
 import type {Locale} from '@/lib/i18n';
+import {datasetMentionId, href} from '@/lib/seo';
 
 type Bin = {name: string; count: number};
 
@@ -17,15 +18,21 @@ export function ActivityChart({bins, total, locale}: {bins: Bin[]; total: number
         <p>{tr(D.hero.caption, locale)}</p>
       </figcaption>
       <ul className="activity-rows" role="list" aria-label={title}>
-        {rows.map(row => (
-          <li key={row.name} className="activity-row">
-            <span>{row.name}</span>
-            <svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true" className="activity-track">
-              <rect width={row.count / max * 100} height="8" />
-            </svg>
-            <span className="activity-value">{row.count}</span>
-          </li>
-        ))}
+        {rows.map(row => {
+          const width = row.count / max * 100;
+          return (
+            <li key={row.name}>
+              <a className="activity-row" href={`${href(locale, '/data')}#${datasetMentionId(row.name)}`}>
+                <span className="activity-name">{row.name}</span>
+                <svg viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true" className="activity-track">
+                  <rect width={width} height="8" />
+                  <rect className="activity-sweep" width={width} height="8" />
+                </svg>
+                <span className="activity-value">{row.count}</span>
+              </a>
+            </li>
+          );
+        })}
       </ul>
       <details className="activity-disclosure">
         <summary>

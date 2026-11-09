@@ -3,7 +3,7 @@ import {PageHead} from '@/components/ui';
 import {datasetMentions, getManifest, getResults} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
 import {fmtDate, isLocale} from '@/lib/i18n';
-import {pageMeta} from '@/lib/seo';
+import {datasetMentionId, pageMeta} from '@/lib/seo';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -37,7 +37,12 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
           <table className="card mt-4 w-full text-left text-sm">
             <caption className="sr-only">{tr(d.mentioned, locale)}</caption>
             <thead><tr className="border-b border-line"><th scope="col" className="p-3 font-medium">Dataset</th><th scope="col" className="p-3 font-medium">{tr(d.count, locale)}</th></tr></thead>
-            <tbody>{mentions.map(entry => <tr key={entry.name} className="border-t border-line"><th scope="row" className="p-3 font-normal">{entry.name}</th><td className="p-3 font-mono">{entry.count}</td></tr>)}</tbody>
+            <tbody>{mentions.map(entry => (
+              <tr key={entry.name} id={datasetMentionId(entry.name)} tabIndex={-1} className="data-mention border-t border-line">
+                <th scope="row" className="p-3 font-normal"><span className="data-mention-name">{entry.name}</span></th>
+                <td className="p-3 font-mono">{entry.count}</td>
+              </tr>
+            ))}</tbody>
           </table>
           <p className="mt-3 text-sm text-muted">{tr(d.note, locale)}</p>
         </section>
