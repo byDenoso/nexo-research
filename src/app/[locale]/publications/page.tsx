@@ -1,10 +1,11 @@
+import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {BibtexButton} from '@/components/Bibtex';
-import {PageHead} from '@/components/ui';
+import {EmptyState, PageHead} from '@/components/ui';
 import {getPublications, toBibtex} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
 import {isLocale, pick} from '@/lib/i18n';
-import {SITE_URL, pageMeta} from '@/lib/seo';
+import {SITE_URL, href, pageMeta} from '@/lib/seo';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -24,8 +25,10 @@ export default async function PublicationsPage({params}: {params: Promise<{local
   return (
     <>
       <PageHead kicker={tr(D.nav.publications, locale)} title={tr(D.pubs.title, locale)} lead={tr(D.pubs.lead, locale)} />
-      <div className="wrap mt-12">
-        {publications.length === 0 ? <p className="card p-6 text-muted">{tr(D.pubs.empty, locale)}</p> : (
+      <div className="wrap page-body">
+        {publications.length === 0 ? (
+          <EmptyState message={tr(D.pubs.empty, locale)} action={<Link href={href(locale, '/results')} className="btn arrow-link">{tr(D.cta.results, locale)}</Link>} />
+        ) : (
           <ul className="grid gap-4">
             {publications.map(pub => (
               <li key={pub.id} id={pub.id} className="card scroll-mt-24 p-6">

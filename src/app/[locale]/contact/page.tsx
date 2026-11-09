@@ -19,15 +19,21 @@ export default async function ContactPage({params}: {params: Promise<{locale: st
   return (
     <>
       <PageHead kicker={tr(D.nav.contact, locale)} title={tr(D.contact.title, locale)} lead={tr(D.contact.lead, locale)} />
-      <div className="wrap mt-12 max-w-2xl">
-        <dl className="card grid grid-cols-1 gap-x-8 gap-y-1 p-6 sm:grid-cols-[max-content_minmax(0,1fr)] sm:gap-y-3 [&_dd]:mb-3 [&_dd]:break-words sm:[&_dd]:mb-0">
-          <dt className="text-muted">{profile.name}</dt><dd>{profile.affiliation}</dd>
-          <dt className="text-muted">E-mail</dt>
-          <dd>{profile.email ? <a className="text-accent underline underline-offset-4" href={`mailto:${profile.email}`}>{profile.email}</a> : <span className="text-muted">{pending}</span>}</dd>
-          <dt className="text-muted">ORCID</dt>
-          <dd>{profile.orcid ? <a className="font-mono text-accent underline underline-offset-4" href={`https://orcid.org/${profile.orcid}`} rel="noopener noreferrer">{profile.orcid}</a> : <span className="text-muted">{pending}</span>}</dd>
-          <dt className="text-muted">{tr(D.who.profile, locale)}</dt>
-          <dd>{profile.profileUrl ? <a className="text-accent underline underline-offset-4" href={profile.profileUrl} rel="noopener noreferrer">{profile.profileUrl}</a> : <span className="text-muted">{pending}</span>}</dd>
+      <div className="wrap page-body contact-panel">
+        <dl className="card contact-card">
+          <div><dt>{profile.name}</dt><dd>{profile.affiliation}</dd></div>
+          <div>
+            <dt>E-mail</dt>
+            <dd>{profile.email ? <a className="text-link" href={`mailto:${profile.email}`}>{profile.email}</a> : <span className="text-muted">{pending}</span>}</dd>
+          </div>
+          <div>
+            <dt>ORCID</dt>
+            <dd>{profile.orcid ? <a className="text-link font-mono" href={`https://orcid.org/${profile.orcid}`} rel="noopener noreferrer">{profile.orcid}</a> : <span className="text-muted">{pending}</span>}</dd>
+          </div>
+          <div>
+            <dt>{tr(D.who.profile, locale)}</dt>
+            <dd>{profile.profileUrl ? <a className="text-link" href={profile.profileUrl} rel="noopener noreferrer">{profile.profileUrl}</a> : <span className="text-muted">{pending}</span>}</dd>
+          </div>
         </dl>
         {!profile.email && <p className="mt-6 text-muted">{tr(D.contact.none, locale)}</p>}
       </div>
