@@ -1,114 +1,68 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {ActivityChart} from '@/components/ActivityChart';
 import {Pipeline} from '@/components/Pipeline';
-import {ResultCard, Section} from '@/components/ui';
-import {getProfile, getProjects, datasetMentions, getResults} from '@/lib/data';
-import {D, tr} from '@/lib/dict';
-import {fmtDate, isLocale, pick} from '@/lib/i18n';
-import {toResultCard} from '@/lib/rows';
-import {LINES} from '@/lib/schemas';
+import {StatusBadge} from '@/components/ui';
+import {getManifest, getResults} from '@/lib/data';
+import {getFamilies} from '@/lib/families';
+import {fmtDate, isLocale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
 
-const explore = ['research', 'methods', 'data'] as const;
+const topics = [
+  {image:'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2004/10/STScI-01EVVEVGZHJ2B294R1DTNZC08P.tif/jcr:content/renditions/cq5dam.web.1280.1280.jpeg', source:'https://science.nasa.gov/asset/hubble/visible-light-image-of-keplers-supernova-remnant/', credit:'NASA / ESA / R. Sankrit / W. Blair', title:{pt:'Expansão e energia escura',en:'Expansion and dark energy'}, desc:{pt:'O que muda ao variar supernovas, BAO e priors cosmológicos?',en:'What changes with supernova selection, BAO and cosmological priors?'}, caption:{pt:'Remanescente da supernova de Kepler · Hubble',en:'Kepler supernova remnant · Hubble'},anchor:'expansion'},
+  {image:'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2005/09/STScI-01EVVM9R75RVTEHV4R6SDT34D3.tif/jcr:content/renditions/cq5dam.web.1280.1280.jpeg', source:'https://science.nasa.gov/asset/hubble/hubble-ultra-deep-field/', credit:'NASA / ESA / S. Beckwith / HUDF Team / B. Mobasher (STScI)', title:{pt:'Universo primordial e galáxias',en:'Early universe and galaxies'}, desc:{pt:'Que propriedades físicas de objetos distantes resistem à seleção e à calibração?',en:'Which properties of distant sources survive selection and calibration effects?'}, caption:{pt:'Campo Ultraprofundo do Hubble',en:'Hubble Ultra Deep Field'},anchor:'galaxies'},
+  {image:'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2014/10/STScI-01EVT3178GPJ7BSGWHHVAKWMK0.tif/jcr:content/renditions/cq5dam.web.1280.1280.jpeg', source:'https://science.nasa.gov/asset/hubble/hubble-frontier-fields-image-of-abell-2744/', credit:'NASA / ESA / J. Lotz / M. Mountain / A. Koekemoer / HFF Team (STScI)', title:{pt:'Estruturas e consistência entre sondas',en:'Structure and cross-probe consistency'}, desc:{pt:'Quais hipóteses resistem às medidas de crescimento, lenteamento e CMB?',en:'Which hypotheses survive comparisons of growth, lensing and CMB?'}, caption:{pt:'Aglomerado Abell 2744 · Hubble',en:'Abell 2744 cluster · Hubble'},anchor:'probes'}
+] as const;
 
-export default async function Home({params}: {params: Promise<{locale: string}>}) {
-  const {locale} = await params;
-  if (!isLocale(locale)) notFound();
-  const results = getResults();
-  const profile = getProfile();
-  const projects = getProjects();
-  const datasets = datasetMentions(results);
-  // Keep the DES-SN5YR interval removal result in the catalog.
-  const homeSelection = results.filter(item => item.slug !== 't-05ae703af393');
-  const withFigure = homeSelection.filter(item => item.figure);
-  const selected = [...withFigure, ...homeSelection.filter(item => !item.figure)].slice(0, 6);
-  const counts = (line: (typeof LINES)[number]) => results.filter(item => item.lines.includes(line)).length;
+const highlights=[
+  {id:'T-05ae703af393',value:{pt:'≈ 94%',en:'≈ 94%'},label:{pt:'redução na melhora do ajuste',en:'reduction in fit improvement'},title:{pt:'O peso das supernovas próximas',en:'The leverage of nearby supernovae'},summary:{pt:'Numa configuração DES-SN5YR, excluir 0,01–0,15 reduziu em cerca de 94% a melhora do ajuste. O efeito não foi exclusivo dessa faixa.',en:'In one DES-SN5YR configuration, excluding 0.01–0.15 reduced the fit improvement by about 94%. The effect was not exclusive to that bin.'}},
+  {id:'T-0e94e9e2951b',value:{pt:'2,18σ → 0,35σ',en:'2.18σ → 0.35σ'},label:{pt:'significância nominal da inclinação',en:'nominal slope significance'},title:{pt:'Uma tendência sensível ao redshift',en:'A redshift-sensitive trend'},summary:{pt:'Excluir a faixa de maior redshift enfraqueceu a tendência S₈ em ajuste a resumos publicados de eROSITA.',en:'Excluding the highest-redshift bin weakened an S₈ trend in a fit to published eROSITA summaries.'}},
+  {id:'T-9cdf8dcdf082',value:{pt:'2,283 meV',en:'2.283 meV'},label:{pt:'escala derivada de observações',en:'observation-derived energy scale'},title:{pt:'Uma escala ainda sem previsão independente',en:'An energy scale without an independent prediction'},summary:{pt:'O valor usa H₀ e a densidade observada de energia escura. Nessa formulação, não é previsão autônoma.',en:'The value uses H₀ and observed dark-energy density. In this formulation it is not an independent prediction.'}}
+] as const;
 
-  return (
-    <>
-      <section className="home-hero" aria-labelledby="mission-title">
-        <div className="wrap home-hero-inner">
-          <div className="home-intro">
-            <p className="kicker">{tr(D.site, locale)} / {tr(D.hero.kicker, locale)}</p>
-            <h1 id="mission-title">{tr(D.hero.headline, locale)}</h1>
-            <p className="home-tagline">{tr(D.tagline, locale)}</p>
-            <p className="home-mission">{tr(D.mission, locale)}</p>
-            <div className="home-actions">
-              <Link href={href(locale, '/results')} prefetch={false} className="btn btn-primary arrow-link">{tr(D.cta.results, locale)}</Link>
-              <Link href={href(locale, '/research')} prefetch={false} className="btn">{tr(D.cta.research, locale)}</Link>
-            </div>
-          </div>
-          <section className="mission-stats" aria-labelledby="mission-stats-title">
-            <h2 id="mission-stats-title" className="kicker">{tr(D.institute.scope, locale)}</h2>
-            <dl className="mission-stats-grid">
-              {([['results', results.length], ['lines', LINES.length], ['datasets', datasets.length]] as const).map(([key, count]) => (
-                <div key={key}><dt>{tr(D.institute[key], locale)}</dt><dd>{count}</dd></div>
-              ))}
-            </dl>
-          </section>
-        </div>
-      </section>
+const archives=[
+  {name:'DESI',url:'https://data.desi.lbl.gov/doc/releases/',desc:{pt:'Documentação e releases espectroscópicos',en:'Spectroscopic documentation and releases'}},
+  {name:'Pantheon+',url:'https://github.com/PantheonPlusSH0ES/DataRelease',desc:{pt:'Dados públicos de supernovas',en:'Public supernova data'}},
+  {name:'MAST',url:'https://archive.stsci.edu/',desc:{pt:'Arquivo de observações Hubble e Webb',en:'Hubble and Webb observation archive'}}
+] as const;
 
-      <Section id="explore" title={tr(D.institute.explore, locale)}>
-        <div className="mission-explore">
-          <ul className="mission-links" role="list">
-            {explore.map((route, index) => (
-              <li key={route}>
-                <Link href={href(locale, `/${route}`)} prefetch={false} className="mission-link arrow-link">
-                  <span className="mission-link-index" aria-hidden="true">0{index + 1}</span>
-                  <div><h3>{tr(D.nav[route], locale)}</h3><p>{tr(D.institute[route], locale)}</p></div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <ActivityChart bins={datasets} total={results.length} locale={locale} />
-        </div>
-      </Section>
+export default async function Home({params}:{params:Promise<{locale:string}>}){
+  const {locale}=await params;
+  if(!isLocale(locale)) notFound();
+  const results=getResults(), families=getFamilies(results), snapshot=getManifest().generatedFrom;
+  const featured=highlights.flatMap(entry=>{const result=results.find(x=>x.id===entry.id);return result?[{entry,result}]:[];});
+  return <>
+    <section className="editorial-hero" aria-labelledby="editorial-title"><div className="wrap editorial-hero-grid">
+      <div className="editorial-intro">
+        <p className="kicker">{locale==='pt'?'Pesquisa independente em cosmologia':'Independent cosmology research'}</p>
+        <h1 id="editorial-title">{locale==='pt'?'A física de um Universo em evolução.':'Exploring the physics of the evolving universe.'}</h1>
+        <p className="editorial-lead">{locale==='pt'?'O NEXO investiga a expansão cósmica, a energia escura e a formação de estruturas por meio de análises computacionais de dados astronômicos públicos.':'NEXO investigates cosmic expansion, dark energy and the formation of structure through computational analysis of public astronomical data.'}</p>
+        <div className="home-actions"><Link className="btn btn-primary arrow-link" href={href(locale,'/research')}>{locale==='pt'?'Explorar a pesquisa':'Explore our research'}</Link><Link className="btn arrow-link" href={href(locale,'/results')}>{locale==='pt'?'Ver resultados':'View results'}</Link></div>
+        <p className="editorial-index">{locale==='pt'?'Hipóteses · Testes de sensibilidade · Rastreabilidade':'Hypotheses · Sensitivity tests · Traceability'}</p>
+      </div>
+      <figure className="hero-observation"><div className="hero-image-frame"><Image src="https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2022/07/STScI-01G8H15R2PGEXQD7TYYBFJ3FT4.png/jcr:content/renditions/cq5dam.web.1280.1280.png" alt={locale==='pt'?'Campo profundo SMACS 0723 observado pelo telescópio Webb':'Webb SMACS 0723 deep field showing galaxies and gravitational arcs'} fill sizes="(max-width: 900px) 100vw, 48vw" priority className="science-cover"/><span className="observation-label">JWST / NIRCam</span></div><figcaption>{locale==='pt'?'Campo profundo SMACS 0723. Imagem observacional externa, não produzida pelo NEXO.':'SMACS 0723 deep field. External observation, not produced by NEXO.'}<a href="https://science.nasa.gov/asset/webb/webbs-first-deep-field-unveiled-nircam-image/" target="_blank" rel="noopener noreferrer">NASA / ESA / CSA / STScI ↗</a></figcaption></figure>
+    </div></section>
 
-      <section className="wrap profile-strip" aria-labelledby="profile-heading">
-        <div>
-          <h2 id="profile-heading" className="kicker">{tr(D.who.kicker, locale)}</h2>
-          <p className="profile-name"><Link href={href(locale, '/about')} prefetch={false}>{profile.name}</Link></p>
-          <p className="profile-affiliation">{tr(D.who.role, locale)} · {tr(D.who.affiliation, locale)}</p>
-        </div>
-        <div className="profile-links">
-          <p className="profile-orcid">{tr(D.who.orcid, locale)} {profile.orcid ? <a className="text-link" href={`https://orcid.org/${profile.orcid}`} rel="noopener noreferrer">{profile.orcid}</a> : tr(D.who.pending, locale)}</p>
-          {profile.email ? <a className="btn profile-email" href={`mailto:${profile.email}`}>{profile.email}</a> : (
-            <Link href={href(locale, '/contact')} prefetch={false} className="btn arrow-link">{tr(D.who.contact, locale)}</Link>
-          )}
-        </div>
-      </section>
+    <section className="wrap question-section" aria-labelledby="questions-title">
+      <div className="editorial-section-intro"><p className="kicker">{locale==='pt'?'Perguntas científicas':'Scientific questions'}</p><h2 id="questions-title">{locale==='pt'?'O que os dados realmente permitem concluir?':'What can the evidence actually tell us?'}</h2><p>{locale==='pt'?'Confrontamos modelos e dados públicos, examinando escolhas de seleção, priors e explicações alternativas.':'We confront models with public observations, testing selection choices, priors and alternative explanations.'}</p></div>
+      <ol className="editorial-question-list"><li><span>01</span>{locale==='pt'?'A energia escura muda ao longo do tempo cósmico?':'Does dark energy evolve over cosmic time?'}</li><li><span>02</span>{locale==='pt'?'Quais medições sustentam ou enfraquecem essa hipótese?':'Which observations support or weaken that hypothesis?'}</li><li><span>03</span>{locale==='pt'?'Como surgem estruturas e galáxias no Universo jovem?':'How do structures and galaxies emerge in the early universe?'}</li></ol>
+    </section>
 
-      <Section id="how" title={tr(D.how.title, locale)} lead={tr(D.how.lead, locale)}><Pipeline locale={locale} /></Section>
+    <section className="visual-research" aria-labelledby="areas-title"><div className="wrap">
+      <div className="editorial-section-header"><div><p className="kicker">{locale==='pt'?'Linhas de investigação':'Research areas'}</p><h2 id="areas-title">{locale==='pt'?'Três frentes para estudar a evolução cósmica.':'Three directions in cosmic evolution.'}</h2></div><Link href={href(locale,'/research')} className="text-link arrow-link">{locale==='pt'?'Todas as linhas':'All research areas'}</Link></div>
+      <div className="research-photo-grid">{topics.map((area,i)=><article key={area.anchor} className="research-photo-card"><figure><div className="research-photo-frame"><Image src={area.image} alt={area.caption[locale]} fill sizes="(max-width: 700px) 100vw, (max-width: 1050px) 50vw, 33vw" className="science-cover"/></div><figcaption><a href={area.source} target="_blank" rel="noopener noreferrer">{area.caption[locale]} · {area.credit} ↗</a></figcaption></figure><div className="research-photo-copy"><p className="kicker">0{i+1} / {locale==='pt'?'Pesquisa':'Research'}</p><h3>{area.title[locale]}</h3><p>{area.desc[locale]}</p><Link href={href(locale,'/research')+'#'+area.anchor} className="text-link arrow-link">{locale==='pt'?'Explorar esta frente':'Explore this area'}</Link></div></article>)}</div>
+    </div></section>
 
-      <Section id="lines" title={tr(D.lines.title, locale)} lead={tr(D.lines.lead, locale)}>
-        <ul className="result-grid" role="list">
-          {LINES.map(line => (
-            <li key={line} className="card research-line-card">
-              <h3><Link href={`${href(locale, '/research')}#${line}`} prefetch={false}>{tr(D.lines.items[line].n, locale)}</Link></h3>
-              <p>{tr(D.lines.items[line].d, locale)}</p>
-              <p className="research-line-count">{counts(line)} {tr(D.lines.results, locale)} · {projects.filter(project => project.line === line).length} {tr(D.lines.projects, locale)}</p>
-            </li>
-          ))}
-        </ul>
-      </Section>
+    <section className="wrap editorial-featured" aria-labelledby="featured-title"><div className="editorial-section-header"><div><p className="kicker">{locale==='pt'?'Arquivo público · 09/10/2026':'Public archive · 9 Oct 2026'}</p><h2 id="featured-title">{locale==='pt'?'Análises em destaque':'Selected research analyses'}</h2><p>{locale==='pt'?'Testes exploratórios reais, com conclusões delimitadas. Estes destaques não representam artigos publicados.':'Real exploratory tests with qualified findings. These highlights are not published papers.'}</p></div><Link href={href(locale,'/results')} className="text-link arrow-link">{locale==='pt'?'Catálogo completo':'Full catalogue'}</Link></div>
+      <div className="editorial-featured-grid">{featured.map(({entry,result},i)=><article className="editorial-featured-card" key={result.id}><div className="editorial-featured-top"><span className="kicker">0{i+1} / {locale==='pt'?'Teste':'Test'}</span><StatusBadge locale={locale} status={result.status}/></div><h3>{entry.title[locale]}</h3><div className="editorial-figure"><strong>{entry.value[locale]}</strong><small>{entry.label[locale]}</small></div><p>{entry.summary[locale]}</p><p className="editorial-featured-caveat">{locale==='pt'?'Registro interno, sem validação independente nem significância global estabelecida.':'Internal record, without established independent validation or global significance.'}</p><Link href={href(locale,'/results/'+result.slug)} className="text-link arrow-link">{locale==='pt'?'Ver método e limites':'View methods and limits'}</Link></article>)}</div>
+    </section>
 
-      <Section id="results" title={tr(D.results.selected, locale)} lead={tr(D.results.lead, locale)}
-        action={<Link href={href(locale, '/results')} prefetch={false} className="btn">{tr(D.cta.all, locale)}</Link>}>
-        <ul className="result-grid" role="list">{selected.map(item => <li key={item.id}><ResultCard item={toResultCard(item, locale)} locale={locale} /></li>)}</ul>
-      </Section>
+    <section className="research-method-band" aria-labelledby="method-title"><div className="wrap research-method-grid"><div><p className="kicker">{locale==='pt'?'Método e rastreabilidade':'Method and traceability'}</p><h2 id="method-title">{locale==='pt'?'Do dado público ao teste reproduzível.':'From public data to reproducible tests.'}</h2><p>{locale==='pt'?'Hipóteses, condições de análise, testes de robustez e limites documentados acompanham cada registro, quando disponíveis.':'Hypotheses, analysis conditions, robustness checks and limitations accompany each record when available.'}</p><Link href={href(locale,'/methods')} className="btn arrow-link">{locale==='pt'?'Conhecer o método':'Explore the method'}</Link></div><div className="research-sources"><h3>{locale==='pt'?'Dados e software':'Data and software'}</h3><ul>{archives.map(source=><li key={source.name}><a href={source.url} rel="noopener noreferrer" target="_blank"><span><strong>{source.name}</strong><small>{source.desc[locale]}</small></span><b aria-hidden="true">↗</b></a></li>)}<li><Link href={href(locale,'/code')}><span><strong>{locale==='pt'?'Código do NEXO':'NEXO code'}</strong><small>{locale==='pt'?'Repositórios e artefatos públicos':'Public repositories and artefacts'}</small></span><b aria-hidden="true">→</b></Link></li></ul><p className="research-source-note">{locale==='pt'?'Os arquivos externos não representam afiliação ou endosso institucional.':'External archives do not imply institutional affiliation or endorsement.'}</p></div></div></section>
 
-      <Section id="updates" title={tr(D.updates.title, locale)} lead={tr(D.updates.lead, locale)} action={<Link href={href(locale, '/updates')} prefetch={false} className="btn">{tr(D.cta.all, locale)}</Link>}>
-        <ul className="card divide-y divide-line">
-          {results.slice(0, 5).map(item => (
-            <li key={item.id} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 p-4">
-              <time dateTime={item.updatedAt} className="font-mono text-xs text-muted">{fmtDate(item.updatedAt, locale)}</time>
-              <Link href={href(locale, `/results/${item.slug}`)} prefetch={false} className="hover:text-accent">{pick(item.title, locale)}</Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
-    </>
-  );
+    <section className="wrap editorial-archive" aria-labelledby="archive-title"><div className="editorial-archive-heading"><p className="kicker">{locale==='pt'?'Transparência documental':'Documentary transparency'}</p><h2 id="archive-title">{locale==='pt'?'O arquivo público em contexto':'The public archive in context'}</h2><p>{locale==='pt'?'Contagens descrevem perguntas e registros de teste, não artigos ou descobertas.':'Counts describe questions and test records, not papers or discoveries.'}</p></div><dl className="editorial-archive-metrics"><div><dd>{families.length}</dd><dt>{locale==='pt'?'famílias e perguntas':'families and questions'}</dt></div><div><dd>{results.length}</dd><dt>{locale==='pt'?'registros públicos de testes':'public test records'}</dt></div><div><dd>{fmtDate(snapshot.latestUpdate,locale)}</dd><dt>{locale==='pt'?'última data do snapshot':'latest snapshot record date'}</dt></div></dl><Link href={href(locale,'/data')} className="text-link arrow-link">{locale==='pt'?'Ver proveniência e SHA-256':'View provenance and SHA-256'}</Link></section>
+
+    <section className="wrap editorial-methods" aria-labelledby="methods-title"><div className="editorial-section-header"><div><p className="kicker">{locale==='pt'?'Critérios científicos':'Scientific criteria'}</p><h2 id="methods-title">{locale==='pt'?'Como uma hipótese é testada':'How a hypothesis is tested'}</h2></div><Link href={href(locale,'/methods')} className="text-link arrow-link">{locale==='pt'?'Métodos completos':'Full methods'}</Link></div><Pipeline locale={locale}/></section>
+
+    <section className="wrap editorial-closer" aria-labelledby="closer-title"><div><p className="kicker">{locale==='pt'?'Sobre o projeto':'About the project'}</p><h2 id="closer-title">{locale==='pt'?'Pesquisa independente. Evidência verificável.':'Independent research. Verifiable evidence.'}</h2><p>{locale==='pt'?'O NEXO é desenvolvido sob direção científica de Dener Pereira. As atualizações editoriais são distintas das atualizações do arquivo científico.':'NEXO is developed under the scientific direction of Dener Pereira. Editorial updates are distinct from scientific archive updates.'}</p></div><div className="editorial-closer-actions"><Link className="btn btn-primary arrow-link" href={href(locale,'/about')}>{locale==='pt'?'Conhecer o NEXO':'About NEXO'}</Link><Link className="btn arrow-link" href={href(locale,'/contact')}>{locale==='pt'?'Contato':'Contact'}</Link><Link className="text-link" href={href(locale,'/updates')}>{locale==='pt'?'Atualizações editoriais':'Editorial updates'}</Link></div></section>
+  </>;
 }

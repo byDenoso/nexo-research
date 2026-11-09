@@ -18,6 +18,7 @@ const config: NextConfig = {
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {remotePatterns: [{protocol: 'https', hostname: 'assets.science.nasa.gov', pathname: '/content/dam/science/**'}]},
   // The private area is the existing Cockpit (PIN login on its own project). This site only points to it.
   async redirects() {
     const cockpit = 'https://nexo-one-two.vercel.app/cockpit';

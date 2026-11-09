@@ -3,6 +3,8 @@ import {notFound} from 'next/navigation';
 import {LOCALES, fmtDate, isLocale, pick, type Locale} from '@/lib/i18n';
 import {StatusBadge} from '@/components/ui';
 import {getResult, getResults} from '@/lib/data';
+import {familyFor} from '@/lib/families';
+import {scientificText, sameText} from '@/lib/format';
 import {D, tr} from '@/lib/dict';
 import {href, pageMeta} from '@/lib/seo';
 import type {Result} from '@/lib/schemas';
@@ -44,12 +46,12 @@ function Figure({item, locale}: {item: Result; locale: Locale}) {
           <li key={index}>
             <p className="record-value">{fmt.format(point.y)}{unit}</p>
             {point.low !== undefined && point.high !== undefined && <p className="record-interval">[{fmt.format(point.low)}, {fmt.format(point.high)}]{unit}</p>}
-            <p className="record-point-label">{point.label}</p>
+            <p className="record-point-label">{scientificText(point.label, locale)}</p>
           </li>
         ))}
       </ul>
-      <p className="record-figure-caption">{pick(figure.caption, locale)}</p>
-      <p className="record-source">{tr(D.results.figureSource, locale)}: {pick(figure.source.label, locale)}</p>
+      <p className="record-figure-caption">{scientificText(pick(figure.caption, locale), locale)}</p>
+      <p className="record-source">{tr(D.results.figureSource, locale)}: <Link className="text-link" href={href(locale, '/data')}>{locale === 'pt' ? 'Snapshot público da Tower' : 'Tower public snapshot'}</Link></p>
     </figure>
   );
 }
@@ -60,39 +62,45 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
   if (!isLocale(locale) || !item) notFound();
   const R = D.results;
   const approval = item.approval;
-  const missing = <span className="text-muted">{tr(R.notInSummary, locale)}</span>;
+  const family = familyFor(getResults(), item);
+  const interpretation = pick(item.answer, locale);
+  const duplicated = sameText(interpretation, pick(item.result, locale)) ||
+    (item.figure?.limitations ?? []).some(limit => sameText(interpretation, pick(limit, locale)));
   const rows: Array<[string, React.ReactNode]> = [
-    [tr(R.dataset, locale), approval?.dataset ?? missing], [tr(R.dataVersion, locale), approval?.dataVersion ?? missing],
-    [tr(R.model, locale), approval?.model ?? missing], [tr(R.statMethod, locale), approval?.statMethod ?? missing],
-    [tr(R.publicRecordDate, locale), item.publishedAt ? <time dateTime={item.publishedAt}>{fmtDate(item.publishedAt, locale)}</time> : '—'],
+    ...(approval?.dataset ? [[tr(R.dataset, locale), approval.dataset] as [string, React.ReactNode]] : []),
+    ...(approval?.dataVersion ? [[tr(R.dataVersion, locale), approval.dataVersion] as [string, React.ReactNode]] : []),
+    ...(approval?.model ? [[tr(R.model, locale), approval.model] as [string, React.ReactNode]] : []),
+    ...(approval?.statMethod ? [[tr(R.statMethod, locale), approval.statMethod] as [string, React.ReactNode]] : []),
+    ...(item.publishedAt ? [[tr(R.publicRecordDate, locale), <time dateTime={item.publishedAt}>{fmtDate(item.publishedAt, locale)}</time>] as [string, React.ReactNode]] : []),
     [tr(R.updated, locale), <time dateTime={item.updatedAt}>{fmtDate(item.updatedAt, locale)}</time>]
   ];
   return (
     <article>
       <header className="record-head">
         <div className="wrap record-head-inner">
-          <Link href={href(locale, '/results')} prefetch={false} className="text-link record-back">← {tr(R.back, locale)}</Link>
+          <Link href={href(locale, family ? '/results/families/' + family.slug : '/results')} prefetch={false} className="text-link record-back">← {locale === 'pt' ? 'Voltar à pergunta científica' : 'Back to research question'}</Link>
           <div className="record-meta">
             <StatusBadge status={item.status} locale={locale} />
             <span>{item.id}</span>
           </div>
-          <h1>{pick(item.title, locale)}</h1>
+          <h1>{family && family.records.length > 1 ? pick(family.title, locale) : pick(item.question, locale)}</h1>
+          {family && family.records.length > 1 && <p className="family-subhead">{locale === 'pt' ? 'Execução individual' : 'Individual run'} · {item.id}</p>}
           <p className="record-status-note">{item.statusSource === 'default' ? tr(R.defaultNote, locale) : approval?.statusNote ? pick(approval.statusNote, locale) : tr(D.status[item.status].d, locale)}</p>
         </div>
       </header>
       <div className="wrap page-body record-layout">
         <div className="record-reading">
-          <Block title={tr(R.question, locale)}><p>{pick(item.question, locale)}</p></Block>
-          <Block title={tr(R.method, locale)}><p>{pick(item.method, locale)}</p></Block>
+          <Block title={tr(R.question, locale)}><p>{scientificText(pick(item.question, locale), locale)}</p></Block>
+          <Block title={tr(R.method, locale)}><p>{scientificText(pick(item.method, locale), locale)}</p></Block>
           <div className="card record-evidence">
-            <Block title={tr(R.result, locale)}><p>{pick(item.result, locale)}</p></Block>
+            <Block title={tr(R.result, locale)}><p>{scientificText(pick(item.result, locale), locale)}</p></Block>
             <Figure item={item} locale={locale} />
             {item.figure && item.figure.limitations.length > 0 && (
-              <Block className="record-limits" title={tr(R.limits, locale)}><ul>{item.figure.limitations.map((entry, index) => <li key={index}>{pick(entry, locale)}</li>)}</ul></Block>
+              <Block className="record-limits" title={tr(R.limits, locale)}><ul>{item.figure.limitations.map((entry, index) => <li key={index}>{scientificText(pick(entry, locale), locale)}</li>)}</ul></Block>
             )}
           </div>
-          <Block title={tr(R.answer, locale)}><p>{pick(item.answer, locale)}</p></Block>
-          {approval?.plain && <Block title={tr(R.plain, locale)}><p>{pick(approval.plain.summary, locale)}</p><p>{pick(approval.plain.why, locale)}</p></Block>}
+          {!duplicated && <Block title={tr(R.answer, locale)}><p>{scientificText(interpretation, locale)}</p></Block>}
+          {approval?.plain && <Block title={tr(R.plain, locale)}><p>{scientificText(pick(approval.plain.summary, locale), locale)}</p><p>{scientificText(pick(approval.plain.why, locale), locale)}</p></Block>}
           {approval?.references && approval.references.length > 0 && (
             <Block title={tr(R.refs, locale)}><ul>{approval.references.map(reference => <li key={reference.label}>{reference.url ? <a className="text-link" href={reference.url} rel="noopener noreferrer">{reference.label}</a> : reference.label}{reference.doi ? ` · doi:${reference.doi}` : ''}{reference.arxiv ? ` · arXiv:${reference.arxiv}` : ''}</li>)}</ul></Block>
           )}
@@ -106,9 +114,13 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
           {approval?.parameters && approval.parameters.length > 0 && (
             <>
               <h3>{tr(R.params, locale)}</h3>
-              <ul role="list">{approval.parameters.map(entry => <li key={entry.name}>{entry.name} = {entry.value}</li>)}</ul>
+              <ul role="list">{approval.parameters.map(entry => <li key={entry.name}>{entry.name} = {scientificText(entry.value, locale)}</li>)}</ul>
             </>
           )}
+          {(!approval?.dataset || !approval?.dataVersion || !approval?.model || !approval?.statMethod) &&
+            <p className="record-provenance-note">{locale === 'pt'
+              ? 'Os metadados técnicos não explicitados neste resumo ainda não possuem confirmação editorial neste catálogo. Consulte a pergunta, o método e a versão do snapshot; nenhum campo ausente foi inferido.'
+              : 'Technical metadata not explicit in this summary have not yet been editorially verified in this catalogue. Consult the question, method and snapshot version; missing fields have not been inferred.'}</p>}
           <Link href={href(locale, '/data')} prefetch={false} className="text-link arrow-link">{tr(D.data.title, locale)}</Link>
         </aside>
       </div>

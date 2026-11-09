@@ -73,3 +73,17 @@ export function ResultCard({item, locale}: {item: ResultCardData; locale: Locale
     </article>
   );
 }
+
+export function FamilyCard({item, locale}: {item: {slug: string; title: string; description: string; recordCount: number; updated: string}; locale: Locale}) {
+  return (
+    <article className="card result-card family-card">
+      <div className="result-card-meta">
+        <span className="family-tag">{locale === 'pt' ? 'Pergunta científica' : 'Scientific question'}</span>
+        <span>{item.recordCount} {locale === 'pt' ? (item.recordCount === 1 ? 'registro' : 'registros') : (item.recordCount === 1 ? 'record' : 'records')}</span>
+      </div>
+      <h3><Link href={href(locale, '/results/families/' + item.slug)} prefetch={false}>{item.title}</Link></h3>
+      <p className="result-card-excerpt line-clamp-4">{item.description}</p>
+      <p className="result-card-date">{locale === 'pt' ? 'Último registro' : 'Latest record'}: {item.updated}</p>
+    </article>
+  );
+}
