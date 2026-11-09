@@ -31,7 +31,7 @@ export default async function PublicationsPage({params}: {params: Promise<{local
         ) : (
           <ul className="grid gap-4">
             {publications.map(pub => (
-              <li key={pub.id} id={pub.id} className="card scroll-mt-24 p-6">
+              <li key={pub.id} id={pub.id} className="card motion-reveal scroll-mt-24 p-6">
                 <p className="font-mono text-xs text-muted">{tr(D.pubState[pub.state], locale)} · {pub.date}{pub.venue ? ` · ${pub.venue}` : ''}</p>
                 <h2 className="mt-2 text-xl font-semibold">{pub.title}</h2>
                 <p className="mt-1 text-sm text-muted">{pub.authors.join(', ')}</p>

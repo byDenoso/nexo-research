@@ -21,7 +21,7 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
     <>
       <PageHead kicker={tr(D.nav.data, locale)} title={tr(d.title, locale)} lead={tr(d.lead, locale)} />
       <div className="wrap mt-12 grid gap-10">
-        <section aria-labelledby="snap" className="card p-6">
+        <section aria-labelledby="snap" className="card motion-reveal p-6">
           <h2 id="snap" className="text-xl font-semibold">{tr(d.snapshot, locale)}</h2>
           <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-[max-content_minmax(0,1fr)] sm:gap-y-2 [&_dd]:mb-3 sm:[&_dd]:mb-0">
             <dt className="text-muted">{tr(d.contract, locale)}</dt><dd className="font-mono">{source.contract}</dd>
@@ -33,7 +33,7 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
           <p className="mt-4 text-sm text-muted">{tr(d.private, locale)}</p>
         </section>
         <section aria-labelledby="mentioned">
-          <h2 id="mentioned" className="text-xl font-semibold">{tr(d.mentioned, locale)}</h2>
+          <h2 id="mentioned" className="motion-reveal text-xl font-semibold">{tr(d.mentioned, locale)}</h2>
           <table className="card mt-4 w-full text-left text-sm">
             <caption className="sr-only">{tr(d.mentioned, locale)}</caption>
             <thead><tr className="border-b border-line"><th scope="col" className="p-3 font-medium">Dataset</th><th scope="col" className="p-3 font-medium">{tr(d.count, locale)}</th></tr></thead>
