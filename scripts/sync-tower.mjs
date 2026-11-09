@@ -5,15 +5,27 @@ import {readFileSync, writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {towerPublic} from '../src/lib/schemas.ts';
 
-const URL_SOURCE = process.env.TOWER_PUBLIC_URL ?? 'https://nexoresearch.org/atlas-public.json';
+const URL_SOURCE = process.env.TOWER_PUBLIC_URL ?? 'https://bydenoso.github.io/Pantheon/atlas-public.json';
 const TARGET = new URL('../data/source/atlas-public.json', import.meta.url);
 const PUBLIC_COPY = new URL('../public/atlas-public.json', import.meta.url);
 const MAX_BYTES = 8 * 1024 * 1024;
 const idOf = test => createHash('sha256').update(test.question.en).digest('hex').slice(0, 12);
 
 if (!URL_SOURCE.startsWith('https://')) throw new Error('TOWER_PUBLIC_URL must be https');
-const response = await fetch(URL_SOURCE, {redirect: 'error', signal: AbortSignal.timeout(30000), headers: {Accept: 'application/json'}});
-if (!response.ok) throw new Error(`Tower public source answered ${response.status}`);
+let response;
+try {
+  response = await fetch(URL_SOURCE, {redirect: 'error', signal: AbortSignal.timeout(30000), headers: {Accept: 'application/json'}});
+} catch (error) {
+  console.log(`::warning::Tower public source unreachable (${error.message}); keeping the validated snapshot`);
+  console.log('no change');
+  process.exit(0);
+}
+if (!response.ok) {
+  // An unavailable source is not a data error: the site keeps the last validated snapshot.
+  console.log(`::warning::Tower public source answered ${response.status}; keeping the validated snapshot`);
+  console.log('no change');
+  process.exit(0);
+}
 const bytes = Buffer.from(await response.arrayBuffer());
 if (bytes.length > MAX_BYTES) throw new Error('Tower public source is larger than 8 MB');
 const next = towerPublic.parse(JSON.parse(bytes.toString('utf8')));

@@ -60,6 +60,6 @@ npm run data:sync    # refresh the snapshot from the public Tower manifest
 | Variable | Use | Default |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | canonical URLs, sitemap, hreflang | `https://nexoresearch.org` |
-| `TOWER_PUBLIC_URL` | source for `data:sync` | `https://nexoresearch.org/atlas-public.json` |
+| `TOWER_PUBLIC_URL` | source for `data:sync` | `https://bydenoso.github.io/Pantheon/atlas-public.json` (unavailable until a new feed is set) |
 
 No secret is needed to build or run this site. See `docs/DEPLOY.md` and `docs/SECURITY.md`.
