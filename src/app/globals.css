@@ -72,6 +72,7 @@ body {
 .btn:hover { border-color: var(--accent); }
 .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .hero-glow { background: radial-gradient(60rem 28rem at 78% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 65%), radial-gradient(40rem 22rem at 5% 0%, color-mix(in srgb, var(--violet) 14%, transparent), transparent 70%); }
-.katex-display { overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+.tex-scroll { display: block; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; margin-bottom: 1.1em; }
+.tex-scroll .katex-display { overflow: visible; margin: 0; }
 details > summary { cursor: pointer; list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
