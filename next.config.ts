@@ -18,6 +18,14 @@ const config: NextConfig = {
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
   poweredByHeader: false,
   reactStrictMode: true,
+  // The private area is the existing Cockpit (PIN login on its own project). This site only points to it.
+  async redirects() {
+    const cockpit = 'https://nexo-one-two.vercel.app/cockpit';
+    return [
+      {source: '/privado', destination: cockpit, permanent: false},
+      {source: '/:locale(pt|en)/privado', destination: cockpit, permanent: false}
+    ];
+  },
   async headers() {
     return [{
       source: '/:path*',

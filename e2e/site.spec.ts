@@ -88,3 +88,11 @@ test('keyboard users reach the main content through the skip link', async ({page
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', {name: 'Skip to content'})).toBeFocused();
 });
+
+test('the private area is only a redirect to the existing Cockpit', async ({request}) => {
+  for (const path of ['/privado', '/pt/privado', '/en/privado']) {
+    const response = await request.get(path, {maxRedirects: 0});
+    expect([307, 308]).toContain(response.status());
+    expect(response.headers().location).toBe('https://nexo-one-two.vercel.app/cockpit');
+  }
+});

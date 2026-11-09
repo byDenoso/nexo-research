@@ -19,7 +19,7 @@ export function Footer({locale}: {locale: Locale}) {
           </ul>
         </nav>
       </div>
-      <div className="wrap border-t border-line py-4 text-xs text-muted">© {new Date().getUTCFullYear()} Dener Pereira · {tr(D.footer.data, locale)}</div>
+      <div className="wrap border-t border-line py-4 text-xs text-muted">© {new Date().getUTCFullYear()} Dener Pereira · {tr(D.footer.data, locale)} · <a href={href(locale, '/privado')} rel="nofollow" className="hover:text-ink">{tr(D.footer.private, locale)}</a></div>
     </footer>
   );
 }
