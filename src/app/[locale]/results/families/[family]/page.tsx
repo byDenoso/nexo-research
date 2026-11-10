@@ -52,7 +52,7 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
                 <p className="family-record-result">{pick(item.result, locale)}</p>
                 <div className="family-record-foot">
                   <time dateTime={item.updatedAt}>{fmtDate(item.updatedAt, locale)}</time>
-                  <Link className="text-link" href={href(locale, '/results/' + item.slug)}>{locale === 'pt' ? 'Método, limites e proveniência' : 'Method, limits and provenance'}</Link>
+                  <Link className="text-link" href={href(locale, '/results/' + item.slug)}>{locale === 'pt' ? 'Método, limites e proveniência' : 'Method, limits and provenance'}<span className="sr-only"> · {item.id}</span></Link>
                 </div>
               </li>
             ))}

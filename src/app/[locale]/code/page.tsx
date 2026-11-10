@@ -26,7 +26,9 @@ export default async function CodePage({params}: {params: Promise<{locale: strin
             <p className="mt-3 break-all font-mono text-sm text-accent">{repo.url}</p>
           </a>
         ))}
-        <p className="card motion-reveal p-6 text-muted">{tr(D.code.none, locale)}</p>
+        {repositories.length === 0
+          ? <p className="card motion-reveal p-6 text-muted">{tr(D.code.none, locale)}</p>
+          : <p className="text-muted">{tr(D.code.partial, locale)}</p>}
       </div>
     </>
   );
