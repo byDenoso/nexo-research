@@ -18,6 +18,7 @@ re-encoded; nothing else was changed. The credit is shown next to each image wit
 
 The social card reuses `jades-gs-z14-0-field.jpg` with a display crop and a dark overlay.
 The credit and source address appear on the card.
+The Research page reuses `jades-goods-south.jpg` with a landscape display crop and the original credit.
 
 ## Hubble
 
@@ -30,3 +31,12 @@ The credit and source address appear on the card.
 - The [orbital mark](../src/app/icon.svg) is an original NEXO Research asset. The navigation and
   footer use its silhouette in the surrounding text colour. The social card uses the paper-white
   variant. The legacy favicon is a raster export of the same mark on paper, at 16, 32, 48 and 64 px.
+
+## Original editorial diagrams
+
+| Diagram | Credit | Source |
+|---|---|---|
+| How a test proceeds | NEXO Research | [Methods and reproducibility](../src/content/methods.en.mdx) |
+| How the public archive reaches the portal | NEXO Research | [Documented data flow](../README.md#data-flow) |
+
+The diagrams use accessible HTML and CSS in [EditorialFigures.tsx](../src/components/EditorialFigures.tsx).
