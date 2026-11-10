@@ -714,12 +714,17 @@ details > summary::-webkit-details-marker { display: none; }
 .family-record-foot a { display: inline-flex; align-items: center; min-block-size: var(--control-size); }
 .family-figure { padding: var(--panel-pad); }
 .family-figure h2 { font-size: clamp(1.2rem, 2vw, 1.75rem); line-height: 1.3; font-weight: 600; }
-.family-figure figcaption p, .family-chart-note { margin-block-start: var(--space-2); color: var(--muted); font-size: var(--small-size); }
+.family-figure figcaption h2 + p, .family-chart-note { margin-block-start: var(--space-2); color: var(--muted); font-size: var(--small-size); }
 .family-chart-rows { display: grid; gap: var(--space-3); margin-block: var(--space-5); }
 .family-chart-rows li { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr) minmax(3.5rem, auto); align-items: center; gap: var(--space-3); }
 .family-chart-label { display: inline-flex; align-items: center; min-block-size: var(--control-size); color: var(--accent); font-size: var(--small-size); line-height: 1.3; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: .15em; }
-.family-chart-track { block-size: .55rem; background: var(--raised); border: 1px solid var(--line); }
-.family-chart-track span { display: block; block-size: 100%; background: var(--accent); }
+.family-chart-model { color: var(--muted); font-size: var(--meta-size); line-height: 1.4; }
+.family-chart-track { position: relative; block-size: .65rem; background: var(--raised); border: 1px solid var(--line); }
+.family-chart-track::before { content: ""; position: absolute; z-index: 1; inset-block: -.3rem; inset-inline-start: var(--family-zero); border-inline-start: 1px solid var(--control-line); }
+.family-chart-track span { position: absolute; inset-block: 0; background: var(--accent); transform-origin: left; }
+.family-chart-track span[data-negative] { transform-origin: right; }
+.family-chart-ticks { position: relative; grid-column: 2; block-size: 1.25rem; color: var(--muted); font: 400 var(--label-size)/1.5 var(--font-mono); }
+.family-chart-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
 .family-chart-value { text-align: end; font: 500 var(--meta-size)/1.5 var(--font-mono); white-space: nowrap; }
 .record-source a, .record-back { display: inline-flex; align-items: center; min-block-size: var(--control-size); }
 @media (max-width: 40rem) {
@@ -730,7 +735,8 @@ details > summary::-webkit-details-marker { display: none; }
   .site-menu-panel { inline-size: min(21rem, calc(100vw - 2 * var(--gutter))); }
   .footer-links a, .footer-meta a, .research-panel p a { display: inline-flex; align-items: center; min-block-size: var(--control-size); }
   .family-chart-rows li { grid-template-columns: minmax(0, 1fr) minmax(3.25rem, auto); gap: var(--space-1) var(--space-3); }
-  .family-chart-label { grid-column: 1 / -1; }
+  .family-chart-rows li > div:first-child:not(.family-chart-ticks) { grid-column: 1 / -1; }
+  .family-chart-ticks { grid-column: 1; }
   .family-chart-track { grid-column: 1; }
   .family-chart-value { grid-column: 2; }
 }
@@ -901,6 +907,17 @@ details > summary::-webkit-details-marker { display: none; }
 .sens-dot[data-series="1"] {background:var(--series-2)}
 .sens-dot:is(:hover,:focus-visible,[data-active]) {z-index:1;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink);outline:0}
 .sens-axis {padding-block:0;border-top-color:var(--control-line)}
+.sens-dot[data-featured]::before {content:"";position:absolute;inset:-4px;border:2px solid var(--ink);border-radius:50%;pointer-events:none}
+.sens-dot[data-featured][data-active]:not(:hover,:focus-visible) {box-shadow:0 0 0 2px var(--surface)}
+.sens-extent {padding-block:.45rem}
+.sens-extent-track {position:relative;grid-column:2;block-size:.65rem;margin-inline:8px 22px}
+.sens-extent-line {position:absolute;inset-block:0;border:1px solid var(--control-line);border-block-end:0;transform-origin:left center}
+.sens-story {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.65rem}
+.sens-story li {position:relative;padding-block-start:.55rem;border-block-start:1px solid var(--line)}
+.sens-story li::before {content:"";position:absolute;inset-block-start:-1px;inset-inline:0;border-block-start:2px solid var(--control-line);transform-origin:left center}
+.sens-story strong,.sens-story span {display:block}
+.sens-story strong {font:500 clamp(.95rem,2vw,1.32rem)/1.2 var(--font-mono);white-space:nowrap}
+.sens-story span {margin-block-start:.25rem;color:var(--muted);font-size:var(--meta-size);line-height:1.35}
 .sens-ticks {position:relative;height:1.5rem;margin-inline:8px 22px;color:var(--muted);font:400 var(--label-size)/1.5 var(--font-mono)}
 .sens-ticks span {position:absolute;top:.3rem;transform:translateX(-50%);white-space:nowrap}
 .sens-axis-title {margin-top:.2rem;color:var(--muted);font-size:var(--meta-size);text-align:end}
@@ -960,6 +977,7 @@ details > summary::-webkit-details-marker { display: none; }
  .story-pair {grid-template-columns:1fr}
  .sens-row {grid-template-columns:1fr;gap:.2rem;padding-block:.55rem}
  .sens-count {flex-basis:auto;padding-left:0}
+ .sens-extent-track {grid-column:1}
  .sens-readout a {margin-left:0}
 }
 
@@ -1016,13 +1034,27 @@ details > summary::-webkit-details-marker { display: none; }
   }
   .research-photo-frame {animation:wipe auto linear both;animation-timeline:view();animation-range:entry 0% entry 85%}
   .research-photo-frame img {animation:settle auto linear both;animation-timeline:view();animation-range:entry 0% cover 45%}
-  .family-chart-track span {transform-origin:left;animation:grow-x auto linear both;animation-timeline:view();animation-range:entry 0% entry 100%}
+  .family-chart-track span {animation:grow-x auto linear both;animation-timeline:view();animation-range:entry 0% entry 100%}
  }
 
  /* Figures assemble once, on a clock, so a dot never rests at a value it does not have. */
- html[data-js] .sens[data-inview=""] .sens-dot,
+ .sens {
+  --sens-stagger: 24ms;
+  --sens-data: var(--nx-motion-data, 900ms);
+  --sens-enter: var(--nx-motion-enter, 560ms);
+  --sens-ease: var(--nx-motion-ease, cubic-bezier(.22,1,.36,1));
+  --sens-focus-start: calc(var(--sens-data) + var(--sens-last-dot) * var(--sens-stagger));
+  --sens-extent-start: calc(var(--sens-focus-start) + var(--sens-enter));
+ }
+ html[data-js] .sens[data-inview=""] :is(.sens-dot,.sens-extent-line),
+ html[data-js] .sens[data-inview=""] .sens-story li::before,
  html[data-js] .pair[data-inview=""] :is(.pair-link,.pair-dot) {opacity:0}
- .sens[data-inview="in"] .sens-dot {animation:dot-fly 860ms var(--motion-enter-ease) both;animation-delay:calc(var(--i,0) * 24ms)}
+ .sens[data-inview="in"] .sens-dot {animation:dot-fly var(--sens-data) var(--sens-ease) both;animation-delay:calc(var(--i,0) * var(--sens-stagger))}
+ .sens[data-inview="in"] .sens-dot[data-featured]::before {animation:sens-focus-in var(--sens-enter) var(--sens-ease) var(--sens-focus-start) both}
+ .sens[data-inview="in"] .sens-extent-line {animation:sens-extent-in var(--sens-data) var(--sens-ease) var(--sens-extent-start) both}
+ .sens[data-inview="in"] .sens-story li::before {animation:sens-step-in var(--sens-enter) var(--sens-ease) both}
+ .sens[data-inview="in"] .sens-story li:nth-child(2)::before {animation-delay:var(--sens-focus-start)}
+ .sens[data-inview="in"] .sens-story li:nth-child(3)::before {animation-delay:var(--sens-extent-start)}
  .sens-readout strong {animation:pop 340ms var(--motion-enter-ease)}
  .pair[data-inview="in"] .pair-dot[data-step="0"] {animation:dot-pop 420ms var(--motion-enter-ease) both}
  .pair[data-inview="in"] .pair-link {transform-origin:left;animation:grow-x 900ms var(--motion-enter-ease) 280ms both}
@@ -1061,7 +1093,10 @@ details > summary::-webkit-details-marker { display: none; }
 @keyframes wipe {from {clip-path:inset(0 0 100% 0)} to {clip-path:inset(0)}}
 @keyframes settle {from {scale:calc(var(--zoom,1) * 1.18)}}
 @keyframes grow-x {from {transform:scaleX(0)}}
-@keyframes dot-fly {from {inset-inline-start:0%;opacity:0;scale:.3}}
+@keyframes dot-fly {from {opacity:0;scale:.3}}
+@keyframes sens-focus-in {from {opacity:0;scale:1.55}}
+@keyframes sens-extent-in {from {opacity:0;scale:0 1}}
+@keyframes sens-step-in {from {opacity:0;scale:0 1}}
 @keyframes dot-pop {from {opacity:0;scale:.2}}
 @keyframes pair-move {from {inset-inline-start:var(--from);opacity:0}}
 @keyframes pop {from {scale:1.22;color:var(--accent)}}

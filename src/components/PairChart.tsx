@@ -1,3 +1,4 @@
+import type {ReactNode} from 'react';
 import {CountUp} from '@/components/Motion';
 import {pick, type Locale} from '@/lib/i18n';
 import {scientificText} from '@/lib/format';
@@ -20,7 +21,7 @@ const niceMax = (value: number): number => {
   return Math.ceil(value / step) * step;
 };
 
-export function PairChart({item, locale, compact = false}: {item: Result; locale: Locale; compact?: boolean}) {
+export function PairChart({item, locale, compact = false, children}: {item: Result; locale: Locale; compact?: boolean; children?: ReactNode}) {
   const pair = pairOf(item);
   const figure = item.figure;
   if (!pair || !figure) return null;
@@ -53,6 +54,7 @@ export function PairChart({item, locale, compact = false}: {item: Result; locale
           </div>
         ))}
       </dl>
+      {children}
     </figure>
   );
 }
