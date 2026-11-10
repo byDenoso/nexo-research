@@ -4,6 +4,7 @@ import {D, tr} from '@/lib/dict';
 import type {Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
 import type {Status} from '@/lib/schemas';
+import {CatalogueTitle, catalogueTitleTransition} from './CatalogueTitle';
 
 export type ResultCardData = {
   slug: string;
@@ -81,7 +82,11 @@ export function FamilyCard({item, locale}: {item: {slug: string; title: string; 
         <span className="family-tag">{locale === 'pt' ? 'Pergunta científica' : 'Scientific question'}</span>
         <span>{item.recordCount} {locale === 'pt' ? (item.recordCount === 1 ? 'registro' : 'registros') : (item.recordCount === 1 ? 'record' : 'records')}</span>
       </div>
-      <h3><Link href={href(locale, '/results/families/' + item.slug)} prefetch={false}>{item.title}</Link></h3>
+      <h3>
+        <CatalogueTitle slug={item.slug}>
+          <Link href={href(locale, '/results/families/' + item.slug)} prefetch={false} transitionTypes={[catalogueTitleTransition]}>{item.title}</Link>
+        </CatalogueTitle>
+      </h3>
       <p className="result-card-excerpt line-clamp-4">{item.description}</p>
       <p className="result-card-date">{locale === 'pt' ? 'Último registro' : 'Latest record'}: {item.updated}</p>
     </article>

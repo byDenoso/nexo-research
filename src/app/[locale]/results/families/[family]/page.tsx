@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
+import {CatalogueHeading} from '@/components/CatalogueHeading';
+import {CatalogueTitle} from '@/components/CatalogueTitle';
 import {FamilyFigure} from '@/components/FamilyFigure';
 import {StatusBadge} from '@/components/ui';
 import {getResults} from '@/lib/data';
@@ -30,7 +32,7 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
         <div className="wrap record-head-inner">
           <Link className="text-link record-back" href={href(locale, '/results')}>← {locale === 'pt' ? 'Todas as perguntas' : 'All questions'}</Link>
           <p className="kicker">{locale === 'pt' ? 'Família de investigação' : 'Research family'}</p>
-          <h1>{pick(family.title, locale)}</h1>
+          <CatalogueTitle slug={family.slug}><CatalogueHeading title={pick(family.title, locale)} /></CatalogueTitle>
           <p className="record-status-note">{pick(family.description, locale)}</p>
           <p className="family-subhead">{family.records.length} {locale === 'pt' ?
             (family.records.length === 1 ? 'registro de execução' : 'registros de execução') :
