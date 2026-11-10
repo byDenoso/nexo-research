@@ -12,7 +12,7 @@ test.describe('native research interactions', () => {
       await link.focus();
       await page.keyboard.press('Enter');
       await expect(page).toHaveURL(new RegExp('/' + locale + '/data$'));
-      await expect(page.getByText('ATLAS_PUBLIC_V1')).toBeVisible();
+      await expect(page.locator('#snap + dl').getByText('ATLAS_PUBLIC_V1', {exact: true})).toBeVisible();
     });
   }
 
