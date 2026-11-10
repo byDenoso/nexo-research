@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
+import {ResearchObservation} from '@/components/EditorialFigures';
 import {PageHead} from '@/components/ui';
 import {getProjects, getResults, getPublications} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
@@ -23,6 +24,7 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
     <>
       <PageHead kicker={tr(D.nav.research, locale)} title={tr(D.research.title, locale)} lead={tr(D.research.lead, locale)} />
       <div className="wrap mt-12 grid gap-6">
+        <ResearchObservation locale={locale} />
         <p className="line-overlap-note">{locale === 'pt' ? 'As linhas abaixo se sobrepõem. Cada registro pode aparecer em mais de uma frente, portanto as contagens não devem ser somadas.' : 'These research lines overlap. Each record can belong to more than one area, so the counts must not be summed.'}</p>
         {LINES.map(line => {
           const count = results.filter(item => item.lines.includes(line)).length;

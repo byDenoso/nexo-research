@@ -1,0 +1,114 @@
+.observation {
+  display: grid;
+  border-block: 1px solid var(--line);
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #02050b;
+}
+
+.photo img {
+  object-fit: cover;
+  object-position: 50% 48%;
+}
+
+.photoCaption {
+  display: grid;
+  align-content: center;
+  gap: var(--space-3);
+  padding: var(--panel-pad);
+}
+
+.photoCaption p {
+  color: var(--muted);
+  font-size: var(--small-size);
+}
+
+.photoCaption a,
+.sequence figcaption {
+  font-size: var(--meta-size);
+  line-height: 1.55;
+}
+
+.sequence figcaption {
+  color: var(--muted);
+}
+
+.title {
+  font: 400 clamp(1.65rem, 3vw, 2.5rem)/1.1 var(--font-display);
+  letter-spacing: -.025em;
+}
+
+.sequence {
+  display: grid;
+  gap: var(--space-5);
+  border-block: 1px solid var(--line);
+  padding: var(--panel-pad);
+  background: var(--surface);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: start;
+  padding-block: var(--space-2);
+  border-block-start: 1px solid var(--line);
+}
+
+.stepIndex {
+  color: var(--accent);
+  font: 500 var(--label-size)/1.6 var(--font-mono);
+}
+
+.stepLabel {
+  font: 400 1.125rem/1.2 var(--font-display);
+}
+
+.detail {
+  display: block;
+  margin-block-start: var(--space-1);
+  color: var(--muted);
+  font: 400 var(--label-size)/1.5 var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 64rem) {
+  .observation {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+
+  .photoCaption {
+    padding-inline: clamp(1.75rem, 4vw, 4rem);
+  }
+
+  .steps {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-template-columns: none;
+  }
+
+  .steps li {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block-start: var(--space-4);
+    padding-inline-end: var(--space-3);
+  }
+
+  .steps li::before {
+    content: "";
+    position: absolute;
+    inset-block-start: -.2rem;
+    inset-inline-start: 0;
+    inline-size: .4rem;
+    block-size: .4rem;
+    background: var(--accent);
+  }
+}

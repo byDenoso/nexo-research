@@ -1,5 +1,6 @@
 import {notFound} from 'next/navigation';
 import type {ComponentProps} from 'react';
+import {MethodsSequence} from '@/components/EditorialFigures';
 import {Tex} from '@/components/Math';
 import {PageHead} from '@/components/ui';
 import {D, tr} from '@/lib/dict';
@@ -22,6 +23,7 @@ export default async function MethodsPage({params}: {params: Promise<{locale: st
   return (
     <>
       <PageHead kicker={tr(D.nav.methods, locale)} title={tr(D.methods.title, locale)} lead={tr(D.methods.lead, locale)} />
+      <div className="wrap page-body"><MethodsSequence locale={locale} /></div>
       <div className="wrap page-body methods-layout">
         <nav className="card methods-index" aria-labelledby="methods-index-title">
           <p className="kicker" id="methods-index-title">{contents}</p>

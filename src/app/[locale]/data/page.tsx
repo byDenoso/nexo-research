@@ -1,4 +1,5 @@
 import {notFound} from 'next/navigation';
+import {DataSequence} from '@/components/EditorialFigures';
 import {PageHead} from '@/components/ui';
 import {datasetMentions, getManifest, getResults} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
@@ -21,6 +22,7 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
     <>
       <PageHead kicker={tr(D.nav.data, locale)} title={tr(d.title, locale)} lead={tr(d.lead, locale)} />
       <div className="wrap mt-12 grid gap-10">
+        <DataSequence locale={locale} />
         <section className="source-access-section motion-reveal" aria-labelledby="public-sources">
           <div><p className="kicker">{locale === 'pt' ? 'Arquivos científicos' : 'Scientific archives'}</p><h2 id="public-sources">{locale === 'pt' ? 'Fontes de dados e software' : 'Data sources and software'}</h2><p>{locale === 'pt' ? 'Acesse os arquivos originais das colaborações e o código público do NEXO. Uma menção no manifesto não constitui prova de utilização de um release específico.' : 'Access original collaboration archives and NEXO public code. A mention in the manifest is not proof that a particular release was used.'}</p></div>
           <ul>
