@@ -5,7 +5,7 @@ import {href} from '@/lib/seo';
 
 export function Footer({locale}: {locale: Locale}) {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer dark-chapter">
       <div className="wrap footer-inner">
         <div>
           <Link href={href(locale)} prefetch={false} className="wordmark" aria-label={tr(D.site, locale)}>NEXO<span aria-hidden="true">/</span>Research</Link>

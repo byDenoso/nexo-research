@@ -5,7 +5,10 @@
 1. Import the repository in Vercel (framework: Next.js, root directory: repository root, Node 24).
 2. Build command: `npm run build`. Output: default.
 3. No environment variable is required. Set `NEXT_PUBLIC_SITE_URL` to the production origin when the domain moves.
-4. Every pull request gets a preview URL. Production deploys from `main`.
+4. Production is built from `main`. In the current project the Git integration does not trigger builds on
+   push or merge: after merging, create the production deployment from the merge commit (Vercel dashboard,
+   CLI or API, target `production`, Git source `byDenoso/nexo-research` at `main`). Reconnect the Git
+   integration in the project settings to get automatic production and preview deployments back.
 
 ## Domain migration (nexoresearch.org)
 

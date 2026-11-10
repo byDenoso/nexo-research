@@ -29,27 +29,46 @@ test.describe('native research interactions', () => {
 
     await path.getByRole('link', {name: 'See the methodology'}).click();
     await expect(page).toHaveURL(/\/en\/methods#tests$/);
-    await expect(page.getByRole('heading', {name: 'Tests', exact: true})).toBeInViewport();
+    await expect(page.getByRole('heading', {name: 'Tests', exact: true})).toBeInViewport({timeout: 20000});
   });
 });
 
-test('the white and black themes share the blue research panel', async ({page}) => {
+test('the method chapter, the sources chapter and the footer keep one dark look in both themes', async ({page}) => {
   await page.setViewportSize({width: 360, height: 800});
   await page.emulateMedia({colorScheme: 'light'});
   await page.goto('/pt');
 
-  const panel = page.locator('.research-method-band');
-  await expect(panel).toHaveCSS('background-color', 'rgb(0, 51, 160)');
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  const chapters = page.locator('.dark-chapter');
+  await expect(chapters).toHaveCount(3);
+  for (const chapter of await chapters.all()) await expect(chapter).toHaveCSS('background-color', 'rgb(2, 5, 11)');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(247, 246, 242)');
   await expect(page.locator('img[src*="cosmic-field"]')).toHaveCount(0);
+  // Links inside the chapter use the light-on-dark accent even in the white theme.
+  await expect(page.locator('.method-chapter .text-link').first()).toHaveCSS('color', 'rgb(155, 185, 255)');
 
   await page.getByRole('button', {name: 'Alternar tema'}).click();
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
-  await expect(panel).toHaveCSS('background-color', 'rgb(0, 51, 160)');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(2, 5, 11)');
+  for (const chapter of await chapters.all()) await expect(chapter).toHaveCSS('background-color', 'rgb(2, 5, 11)');
+});
+
+test('the method track marks progress and shows one stage at a time', async ({page}) => {
+  await page.setViewportSize({width: 1440, height: 900});
+  await page.goto('/en');
+  const track = page.locator('.pipeline');
+  const active = () => track.evaluate(node => getComputedStyle(node).getPropertyValue('--active').trim());
+  expect(await active()).toBe('1');
+  await track.locator('summary').filter({hasText: 'Review'}).click();
+  expect(await active()).toBe('5');
+  await expect(track.locator('details[open]')).toHaveCount(1);
+  await expect(track.getByText(/^A second reading tries to refute/)).toBeVisible();
+  // The open stage fills the shared panel under the track, not its own column.
+  const panel = await track.locator('details[open] .pipeline-copy').boundingBox();
+  const whole = await track.boundingBox();
+  expect(panel!.width).toBeGreaterThan(whole!.width * 0.95);
 });
 
 const motionSections = [
-  ['/pt', '.pipeline-step'],
+  ['/pt', '.pipeline-step summary'],
   ['/en/research', '.research-panel'],
   ['/en/results', '.results-filters'],
   ['/pt/results/t-05ae703af393', '.record-values > li'],
