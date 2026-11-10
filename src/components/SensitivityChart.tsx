@@ -37,10 +37,15 @@ export function SensitivityChart({rows, series, locale, highlight, title, lead}:
 }) {
   const pt = locale === 'pt';
   const all = rows.flatMap(row => row.points.map(point => ({...point, row})));
-  const fallback = all.find(point => point.id === highlight) ?? all.reduce<(typeof all)[number] | undefined>((best, point) => (!best || point.value > best.value ? point : best), undefined);
+  const featured = all.find(point => point.id === highlight);
+  const fallback = featured ?? all.reduce<(typeof all)[number] | undefined>((best, point) => (!best || point.value > best.value ? point : best), undefined);
   const [active, setActive] = useState<string | undefined>(fallback?.id);
   if (!all.length || !fallback) return null;
   const selected = all.find(point => point.id === active) ?? fallback;
+  const plotRows = rows.map(row => ({row, ...place(row.points)}));
+  const lastDot = Math.max(...plotRows.map(({lanes}, index) => index * 3 + lanes - 1));
+  const min = Math.min(...all.map(point => point.value));
+  const max = Math.max(...all.map(point => point.value));
   const number = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-GB', {maximumFractionDigits: 3});
   const range = (row: SensitivityRow) => `z = ${number.format(row.zLow)}–${number.format(row.zHigh)}`;
   const removed = (row: SensitivityRow) => (pt ? `sem ${range(row)}` : `without ${range(row)}`);
@@ -49,7 +54,7 @@ export function SensitivityChart({rows, series, locale, highlight, title, lead}:
     `${point.id}: ${point.row.compilation}, ${removed(point.row)}, ${pt ? 'redução de' : 'reduction of'} ${number.format(point.value)}%`;
 
   return (
-    <figure className="viz sens" data-inview="">
+    <figure className="viz sens" data-inview="" data-story={featured ? '' : undefined} style={{'--sens-last-dot': lastDot} as React.CSSProperties}>
       <figcaption className="viz-head">
         <p className="viz-title">{title}</p>
         {lead && <p className="viz-lead">{lead}</p>}
@@ -59,8 +64,7 @@ export function SensitivityChart({rows, series, locale, highlight, title, lead}:
         <li className="viz-legend-note"><span className="viz-swatch viz-swatch-ring" aria-hidden="true" />{pt ? 'execução selecionada' : 'selected run'}</li>
       </ul>
       <div className="sens-plot">
-        {rows.map((row, rowIndex) => {
-          const {dots, lanes} = place(row.points);
+        {plotRows.map(({row, dots, lanes}, rowIndex) => {
           const seriesIndex = series.indexOf(row.compilation);
           return (
             <div className="sens-row" key={row.key}>
@@ -75,6 +79,7 @@ export function SensitivityChart({rows, series, locale, highlight, title, lead}:
                   <button
                     key={dot.id} type="button" tabIndex={-1} className="sens-dot" data-series={seriesIndex}
                     data-active={dot.id === selected.id ? '' : undefined}
+                    data-featured={dot.id === featured?.id ? '' : undefined}
                     style={{insetInlineStart: `${dot.value}%`, insetBlockEnd: `${dot.lane * LANE + 5}px`, '--i': rowIndex * 3 + dot.lane} as React.CSSProperties}
                     aria-label={describe({...row.points.find(point => point.id === dot.id)!, row})}
                     onMouseEnter={() => setActive(dot.id)} onFocus={() => setActive(dot.id)} onClick={() => setActive(dot.id)}
@@ -84,12 +89,22 @@ export function SensitivityChart({rows, series, locale, highlight, title, lead}:
             </div>
           );
         })}
+        {featured && <div className="sens-row sens-extent" aria-hidden="true">
+          <div className="sens-extent-track">
+            <span className="sens-extent-line" style={{insetInlineStart: `${min}%`, inlineSize: `${max - min}%`}} />
+          </div>
+        </div>}
         <div className="sens-row sens-axis" aria-hidden="true">
           <p className="sens-label" />
           <div className="sens-ticks">{TICKS.map(tick => <span key={tick} style={{insetInlineStart: `${tick}%`}}>{tick}%</span>)}</div>
         </div>
         <p className="sens-axis-title">{pt ? 'Redução da melhora do ajuste ao excluir a faixa (%)' : 'Reduction in fit improvement when the range is removed (%)'}</p>
       </div>
+      {featured && <ol className="sens-story" role="list" aria-label={pt ? 'Leitura do gráfico' : 'Reading the chart'}>
+        <li><strong>{number.format(all.length)}</strong><span>{pt ? 'Execuções públicas' : 'Public runs'}</span></li>
+        <li><strong>{number.format(featured.value)}%</strong><span>{pt ? 'Execução em destaque' : 'Featured run'}</span></li>
+        <li><strong>{number.format(min)}%–{number.format(max)}%</strong><span>{pt ? 'Faixa observada' : 'Observed range'}</span></li>
+      </ol>}
       <p className="sens-readout" role="status">
         <span className="viz-swatch" data-series={series.indexOf(selected.row.compilation)} aria-hidden="true" />
         <strong key={selected.id}>{number.format(selected.value)}%</strong>

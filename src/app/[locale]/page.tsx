@@ -29,14 +29,13 @@ const topics = [
 ] as const;
 
 // Lead story: one question told as question, data, result and limits. Texts restate the public
-// record; the range across runs is computed from the manifest at build time.
+// record; the featured value and range across runs come from the manifest figures.
 const LEAD_ID = 'T-05ae703af393';
 const lead = {
   title: {pt: 'O peso das supernovas próximas', en: 'The leverage of nearby supernovae'},
   steps: [
     {k: {pt: 'Pergunta', en: 'Question'}, v: {pt: 'A preferência por energia escura variável depende de alguma faixa de redshift das supernovas?', en: 'Does the preference for evolving dark energy depend on a particular supernova redshift range?'}},
-    {k: {pt: 'Dados', en: 'Data'}, v: {pt: 'DES-SN5YR e Union3, com as restrições de BAO e CMB fixas e o prior Ωm = 0,3 ± 0,01.', en: 'DES-SN5YR and Union3, with BAO and CMB constraints held fixed and the prior Ωm = 0.3 ± 0.01.'}},
-    {k: {pt: 'Resultado', en: 'Result'}, v: {pt: 'Sem as supernovas de z = 0,01–0,15, a melhora do ajuste em DES-SN5YR caiu cerca de 94%.', en: 'Without the supernovae at z = 0.01–0.15, the fit improvement in DES-SN5YR fell by about 94%.'}}
+    {k: {pt: 'Dados', en: 'Data'}, v: {pt: 'DES-SN5YR e Union3, com as restrições de BAO e CMB fixas e o prior Ωm = 0,3 ± 0,01.', en: 'DES-SN5YR and Union3, with BAO and CMB constraints held fixed and the prior Ωm = 0.3 ± 0.01.'}}
   ]
 } as const;
 
@@ -58,8 +57,8 @@ export default async function Home({params}:{params:Promise<{locale:string}>}){
   const results=getResults(), families=getFamilies(results), snapshot=getManifest().generatedFrom;
   const leadResult = results.find(item => item.id === LEAD_ID);
   const strip = sensitivityPoints(results);
-  const values = strip.map(point => point.value);
-  const number = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-GB', {maximumFractionDigits: 0});
+  const featuredRun = strip.find(point => point.id === LEAD_ID);
+  const number = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-GB', {maximumFractionDigits: 3});
   const stories = secondary.flatMap(entry => {const result = results.find(item => item.id === entry.id); return result ? [{entry, result}] : [];});
   const caveat = pt ? 'Registro interno, sem validação independente nem significância global estabelecida.' : 'Internal record, without established independent validation or global significance.';
   return <>
@@ -88,9 +87,10 @@ export default async function Home({params}:{params:Promise<{locale:string}>}){
           <h3>{lead.title[locale]}</h3>
           <dl className="story-steps">
             {lead.steps.map(step => <div key={step.k.en}><dt>{step.k[locale]}</dt><dd>{step.v[locale]}</dd></div>)}
-            <div><dt>{pt?'Limites':'Limits'}</dt><dd>{caveat} {values.length > 1 && (pt
-              ? `O efeito não foi exclusivo dessa faixa e muda com a configuração: nas ${values.length} execuções públicas desta medida, vai de ${number.format(Math.min(...values))}% a ${number.format(Math.max(...values))}%.`
-              : `The effect was not exclusive to that range and changes with the configuration: across the ${values.length} public runs of this measure it goes from ${number.format(Math.min(...values))}% to ${number.format(Math.max(...values))}%.`)}</dd></div>
+            {featuredRun && <div><dt>{pt?'Resultado':'Result'}</dt><dd>{pt
+              ? `Sem as supernovas de z = ${number.format(featuredRun.zLow)}–${number.format(featuredRun.zHigh)}, a melhora do ajuste em ${featuredRun.compilation} caiu cerca de ${number.format(featuredRun.value)}%.`
+              : `Without the supernovae at z = ${number.format(featuredRun.zLow)}–${number.format(featuredRun.zHigh)}, the fit improvement in ${featuredRun.compilation} fell by about ${number.format(featuredRun.value)}%.`}</dd></div>}
+            <div><dt>{pt?'Limites':'Limits'}</dt><dd>{caveat} {pt?'O efeito varia entre as configurações examinadas.':'The effect varies across the configurations examined.'}</dd></div>
           </dl>
           <Link href={href(locale,'/results/'+leadResult.slug)} className="btn arrow-link">{pt?'Ver método e limites':'View methods and limits'}<span className="sr-only">: {lead.title[locale]}</span></Link>
         </div>
