@@ -8,7 +8,7 @@ import {href} from '@/lib/seo';
 // panel under the track; on narrow screens it opens in place.
 export function Pipeline({locale}: {locale: Locale}) {
   return (
-    <ol className="pipeline" role="list">
+    <ol className="pipeline" role="list" data-inview="">
       {D.how.steps.map((step, index) => {
         const number = String(index + 1).padStart(2, '0');
         return (
