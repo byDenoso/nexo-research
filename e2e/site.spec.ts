@@ -182,7 +182,7 @@ test('the methods index opens the existing test section by keyboard', async ({pa
 
 test('home discloses source date without implying current research activity', async ({page}) => {
   await page.goto('/pt');
-  await expect(page.getByText('O arquivo público em contexto')).toBeVisible();
+  await expect(page.getByRole('heading', {name: 'O que consta no catálogo'})).toBeVisible();
   await expect(page.locator('.editorial-archive')).toContainText('última data do snapshot');
 });
 

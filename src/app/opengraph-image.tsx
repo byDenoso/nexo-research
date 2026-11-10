@@ -28,8 +28,8 @@ export default async function Image() {
         <div style={{display: 'flex', flexDirection: 'column', gap: 22}}>
           <div style={{fontSize: 18, letterSpacing: 5, color: '#cfdcff'}}>INDEPENDENT COSMOLOGY RESEARCH</div>
           <div style={{display: 'flex', flexDirection: 'column', fontSize: 84, fontWeight: 400, letterSpacing: -3, lineHeight: 1}}>
-            <span>The physics of an</span>
-            <span>evolving universe</span>
+            <span>Cosmic expansion</span>
+            <span>and dark energy</span>
           </div>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 36, marginTop: 18, borderTop: '1px solid #ffffff38', paddingTop: 17}}>
             <span style={{fontSize: 23}}>nexoresearch.org</span>

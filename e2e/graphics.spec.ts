@@ -6,7 +6,7 @@ const animation = (selector: string) => (page: import('@playwright/test').Page) 
 test('the hero is animated, and still reads as one plain heading', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/pt');
-  await expect(page.getByRole('heading', {level: 1, name: 'A física de um Universo em evolução.'})).toBeVisible();
+  await expect(page.getByRole('heading', {level: 1, name: 'Expansão do Universo e energia escura'})).toBeVisible();
   expect(await animation('.word > span')(page)).toBe('word-rise');
   expect(await animation('.cine-image')(page)).toBe('ken-burns');
   expect(await animation('.reticle-ticks')(page)).toBe('spin');
