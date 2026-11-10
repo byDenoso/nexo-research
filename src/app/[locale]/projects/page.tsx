@@ -17,9 +17,9 @@ export default async function ProjectsPage({params}: {params: Promise<{locale: s
   return (
     <>
       <PageHead kicker={tr(D.nav.projects, locale)} title={tr(D.projects.title, locale)} lead={tr(D.projects.lead, locale)} />
-      <ul className="wrap mt-12 grid gap-4 md:grid-cols-2">
+      <ul className="wrap projects-index" role="list">
         {getProjects().map(project => (
-          <li key={project.id} className="card motion-reveal p-6">
+          <li key={project.id} className="card motion-reveal project-row">
             <p className="font-mono text-xs text-muted">{tr(D.lines.items[project.line].n, locale)} · {tr(D.projects.state[project.state], locale)}</p>
             <h2 className="mt-2 text-xl font-semibold">{pick(project.title, locale)}</h2>
             <p className="mt-2 text-muted">{pick(project.summary, locale)}</p>

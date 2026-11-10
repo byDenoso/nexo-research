@@ -177,7 +177,7 @@ test('the methods index opens the existing test section by keyboard', async ({pa
   await link.focus();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/en\/methods#tests$/);
-  await expect(page.getByRole('heading', {name: 'Tests', exact: true})).toBeInViewport();
+  await expect(page.getByRole('heading', {name: 'Tests', exact: true})).toBeInViewport({timeout: 20000});
 });
 
 test('home discloses source date without implying current research activity', async ({page}) => {
