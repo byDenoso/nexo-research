@@ -102,8 +102,8 @@ export function SensitivityChart({rows, series, locale, highlight, title, lead}:
       </div>
       {featured && <ol className="sens-story" role="list" aria-label={pt ? 'Leitura do gráfico' : 'Reading the chart'}>
         <li><strong>{number.format(all.length)}</strong><span>{pt ? 'Execuções públicas' : 'Public runs'}</span></li>
-        <li><strong>{number.format(featured.value)}%</strong><span>{pt ? 'Execução em destaque' : 'Featured run'}</span></li>
-        <li><strong>{number.format(min)}%–{number.format(max)}%</strong><span>{pt ? 'Faixa observada' : 'Observed range'}</span></li>
+        <li><strong>{number.format(featured.value)}%</strong><span>{featured.row.compilation} · {removed(featured.row)}</span></li>
+        <li><strong>{number.format(min)}%–{number.format(max)}%</strong><span>{pt ? 'Menor e maior redução' : 'Lowest and highest reduction'}</span></li>
       </ol>}
       <p className="sens-readout" role="status">
         <span className="viz-swatch" data-series={series.indexOf(selected.row.compilation)} aria-hidden="true" />

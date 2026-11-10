@@ -6,7 +6,7 @@ const t = (pt: string, en: string): Pair => ({pt, en});
 
 export const D = {
   site: t('NEXO Research', 'NEXO Research'),
-  tagline: t('Pesquisa em cosmologia computacional e observacional.', 'Research in computational and observational cosmology.'),
+  tagline: t('Pesquisa independente sobre expansão cósmica e energia escura. O catálogo reúne testes com dados astronômicos públicos.', 'Independent research on cosmic expansion and dark energy. The catalogue covers tests with public astronomical data.'),
   mission: t(
     'O NEXO testa modelos cosmológicos contra dados públicos, com hipóteses, critérios e limites registrados antes do resultado. Esta página reúne o que já foi calculado, o que ainda é candidato e o que falta verificar.',
     'NEXO tests cosmological models against public data, with hypotheses, criteria and limits recorded before the result. This site collects what has been computed, what is still a candidate and what remains to be verified.'
@@ -109,12 +109,12 @@ export const D = {
     authors: t('Autores', 'Authors'), topic: t('Tema', 'Topic'), year: t('Ano', 'Year'), type: t('Estado', 'State')
   },
   projects: {title: t('Projetos', 'Projects'), lead: t('Programas de pesquisa em andamento, descritos pela pergunta que cada um procura responder.', 'Ongoing research programmes, described by the question each one tries to answer.'), state: {active: t('Em andamento', 'Active'), planned: t('Planejado', 'Planned'), paused: t('Pausado', 'Paused')}},
-  research: {title: t('Pesquisa', 'Research'), lead: t('As frentes científicas do NEXO, com os projetos e resultados públicos de cada uma.', 'The scientific fronts of NEXO, with the projects and public results of each.')},
+  research: {title: t('Pesquisa', 'Research'), lead: t('Consulte os testes de expansão, as comparações entre sondas e as buscas em catálogos de galáxias. Cada linha leva aos registros associados.', 'Find expansion tests, comparisons across probes and searches in galaxy catalogues. Each research area links to its records.')},
   filters: {search: t('Buscar', 'Search'), line: t('Linha', 'Line'), status: t('Estado', 'Status'), all: t('Todas', 'All'), year: t('Ano', 'Year'), more: t('Mostrar mais', 'Show more'), records: t('Registros exibidos', 'Displayed records'), shown: t('exibidos', 'shown'), of: t('de', 'of'), none: t('Nenhum registro encontrado.', 'No records found.'), reset: t('Limpar filtros', 'Clear filters')},
   updates: {title: t('Atualizações científicas', 'Scientific updates'), lead: t('Registros públicos recentes da Tower, em ordem de atualização. Um registro recente não comprova execução atual.', 'Recent public records from the Tower, in order of update. A recent record does not prove current execution.'), latest: t('Última atualização do manifesto', 'Latest manifest update')},
   methods: {
     title: t('Métodos e reprodutibilidade', 'Methods and reproducibility'),
-    lead: t('Como uma pergunta vira um número, e o que impede que um número vire uma conclusão maior do que ele sustenta.', 'How a question becomes a number, and what keeps a number from becoming a larger conclusion than it supports.'),
+    lead: t('Veja como os testes comparam modelos ao ΛCDM, quais critérios entram antes do ajuste e como o resultado é revisado.', 'See how tests compare models with ΛCDM, which criteria are set before fitting and how results are reviewed.'),
     contents: t('Nesta página', 'On this page'),
     equation: t('Equação', 'Equation')
   },
@@ -127,9 +127,9 @@ export const D = {
     private: t('Registros internos da Tower permanecem privados e não são lidos por este site.', 'Internal Tower records remain private and are not read by this site.')
   },
   code: {title: t('Código', 'Code'), lead: t('Repositórios e software públicos.', 'Public repositories and software.'), site: t('Código-fonte deste site', 'Source code of this site'), partial: t('A lista reúne apenas repositórios autorizados para divulgação. Cada resultado indica quando há código ou artefatos associados.', 'The list holds only repositories cleared for public release. Each result states when associated code or artefacts exist.'), none: t('Código de análise ainda não publicado. Cada resultado indica quando há código ou artefatos associados.', 'Analysis code is not yet published. Each result states when associated code or artefacts exist.')},
-  about: {title: t('Sobre', 'About'), lead: t('O pesquisador, a história e a missão.', 'The researcher, the history and the mission.')},
-  contact: {title: t('Contato e colaboração', 'Contact and collaboration'), lead: t('Colaborações com grupos que trabalham com os mesmos dados são bem-vindas.', 'Collaborations with groups working on the same data are welcome.'), none: t('O canal de contato público será divulgado aqui pelo pesquisador.', 'The public contact channel will be published here by the researcher.')},
-  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('Todo resultado é público, com seu estado e seus limites.', 'Every result is public, with its status and its limits.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados: manifesto público da Tower', 'Data: public Tower manifest')},
+  about: {title: t('Sobre', 'About'), lead: t('Pesquisa independente conduzida por Dener Pereira sobre expansão cósmica e energia escura.', 'Independent research on cosmic expansion and dark energy conducted by Dener Pereira.')},
+  contact: {title: t('Contato e colaboração', 'Contact and collaboration'), lead: t('Para propor uma verificação independente, indique o registro do catálogo e a análise que pretende repetir.', 'To propose an independent check, identify the catalogue record and the analysis you would repeat.'), none: t('O canal de contato público será divulgado aqui pelo pesquisador.', 'The public contact channel will be published here by the researcher.')},
+  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('O catálogo reúne os testes autorizados para divulgação.', 'The catalogue contains the tests cleared for public release.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados: manifesto público da Tower', 'Data: public Tower manifest')},
   notFound: {title: t('Página não encontrada', 'Page not found'), back: t('Voltar ao início', 'Back to home')}
 } as const;
 

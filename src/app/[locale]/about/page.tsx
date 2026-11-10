@@ -13,7 +13,7 @@ export default async function AboutPage({params}:{params:Promise<{locale:string}
   if(!isLocale(locale))notFound();
   const Content=locale==='pt'?(await import('@/content/about.pt.mdx')).default:(await import('@/content/about.en.mdx')).default;
   return <>
-    <PageHead kicker={tr(D.nav.about,locale)} title="NEXO Research" lead={locale==='pt'?'Um programa independente dedicado à investigação da evolução do Universo.':'An independent programme investigating the evolving universe.'}/>
+    <PageHead kicker={tr(D.nav.about,locale)} title="NEXO Research" lead={tr(D.about.lead,locale)}/>
     <article className="wrap prose-nx mt-10"><Content/></article>
   </>;
 }
