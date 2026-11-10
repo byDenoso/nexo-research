@@ -189,12 +189,10 @@ button.btn { cursor: pointer; }
 .wordmark::before {
   content: "";
   flex: none;
-  inline-size: 1.35rem;
-  block-size: 1.35rem;
-  border: 1px solid var(--accent);
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--accent) 0 10%, transparent 12%),
-    linear-gradient(45deg, transparent 46%, var(--accent) 47% 52%, transparent 53%);
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  background: currentColor;
+  mask: url('/icon.svg') center / contain no-repeat;
 }
 .header-inner > .wordmark { min-block-size: var(--control-size); }
 .header-controls { display: flex; align-items: center; gap: var(--space-2); }
@@ -1190,7 +1188,6 @@ body {font-feature-settings:"ss01","cv05"}
 .site-header {border-block-start:0;background:color-mix(in srgb,var(--bg) 93%,transparent);-webkit-backdrop-filter:saturate(150%) blur(16px);backdrop-filter:saturate(150%) blur(16px)}
 .wordmark {gap:.7rem;color:inherit;font:600 .8125rem/1 var(--font-sans);letter-spacing:.2em;text-transform:uppercase}
 .wordmark span {margin-inline:.15em;color:inherit;opacity:.45;font-weight:400}
-.wordmark::before {inline-size:1.5rem;block-size:1.5rem;border-color:currentColor;background:radial-gradient(circle,currentColor 0 9%,transparent 11%),linear-gradient(45deg,transparent 47.5%,currentColor 48% 52%,transparent 52.5%)}
 .primary-nav a {color:inherit;opacity:.74;font-size:.875rem;letter-spacing:.005em}
 .primary-nav a:is(:hover,:focus-visible) {color:inherit;opacity:1}
 .site-header .header-control {background:transparent;color:inherit;border-color:color-mix(in srgb,currentColor 28%,transparent)}
