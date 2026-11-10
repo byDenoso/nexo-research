@@ -5,6 +5,7 @@ import type {ReactNode} from 'react';
 import '../globals.css';
 import {Footer} from '@/components/Footer';
 import {Header} from '@/components/Header';
+import {MotionObserver} from '@/components/Motion';
 import {D, tr} from '@/lib/dict';
 import {HTML_LANG, LOCALES, isLocale} from '@/lib/i18n';
 import {SITE_URL, pageMeta} from '@/lib/seo';
@@ -23,7 +24,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
   return {metadataBase: new URL(SITE_URL), ...pageMeta(locale, '', 'NEXO Research', tr(D.tagline, locale)), title: {default: 'NEXO Research', template: '%s · NEXO Research'}};
 }
 
-const themeScript = `try{var s=localStorage.getItem('nexo-theme');var t=s||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}`;
+const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}`;
 
 export default async function LocaleLayout({children, params}: {children: ReactNode; params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -47,6 +48,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
         <Header locale={locale} />
         <main id="main" className="flex-1" tabIndex={-1}>{children}</main>
         <Footer locale={locale} />
+        <MotionObserver />
       </body>
     </html>
   );

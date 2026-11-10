@@ -798,21 +798,8 @@ details > summary::-webkit-details-marker { display: none; }
 }
 
 /* NEXO scientific editorial system: observation > question > evidence > provenance. */
-.editorial-hero {border-bottom:1px solid var(--line)}
-.editorial-hero-grid {display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);gap:clamp(2rem,5vw,5rem);align-items:center;padding-block:clamp(2.5rem,4.5vw,4.8rem)}
-.editorial-intro {min-width:0}
-.editorial-intro .kicker {display:flex;align-items:center;gap:.8rem}
-.editorial-intro .kicker::before {content:"";width:1.55rem;height:2px;background:var(--accent)}
-.editorial-intro h1 {max-width:16ch;margin-top:1.3rem;font-size:clamp(3rem,5.55vw,5.7rem);line-height:1.035;letter-spacing:-.055em;font-weight:600;text-wrap:balance}
-.editorial-lead {max-width:53ch;color:var(--muted);margin-top:1.6rem;font-size:clamp(1.14rem,1.65vw,1.42rem);line-height:1.52}
-.editorial-intro .home-actions {margin-top:2.2rem}
-.editorial-index {margin-top:3.1rem;padding-top:1.1rem;border-top:1px solid var(--line);color:var(--muted);font:400 .77rem/1.5 var(--font-mono);text-transform:uppercase;letter-spacing:.025em}
-.hero-observation {min-width:0}
-.hero-image-frame {position:relative;aspect-ratio:1.06;min-height:26rem;width:100%;background:#02050b;overflow:hidden}
 .science-cover {object-fit:cover}
-.observation-label {position:absolute;top:1rem;left:1rem;background:#02050bcf;color:#fff;font:500 .76rem/1.35 var(--font-mono);padding:.65rem .8rem;border:1px solid #ffffff5a}
-.hero-observation figcaption {display:flex;gap:.65rem 1rem;justify-content:space-between;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-block:.85rem;color:var(--muted);font-size:.77rem;line-height:1.5}
-.hero-observation figcaption a,.research-photo-card figcaption a {color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.research-photo-card figcaption a {color:var(--accent);text-decoration:underline;text-underline-offset:2px}
 .question-section {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2rem,7vw,8rem);padding-block:clamp(4rem,8vw,8rem)}
 .editorial-section-intro h2,.editorial-section-header h2,.research-method-grid h2,.editorial-archive h2,.editorial-closer h2 {margin-top:.75rem;font-size:clamp(2rem,3.6vw,3.55rem);font-weight:600;line-height:1.15;letter-spacing:-.04em;text-wrap:balance}
 .editorial-section-intro > p:last-child,.editorial-section-header > div > p:last-child,.editorial-archive-heading > p:last-child,.editorial-closer p:not(.kicker) {max-width:62ch;color:var(--muted);margin-top:1.15rem}
@@ -823,7 +810,7 @@ details > summary::-webkit-details-marker { display: none; }
 .editorial-section-header {display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:1.2rem 2rem;margin-bottom:2.35rem}
 .editorial-section-header > div {max-width:47rem}
 .editorial-section-header > a {display:inline-flex;align-items:center;min-height:44px}
-.research-photo-grid,.editorial-featured-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.15rem}
+.research-photo-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.15rem}
 .research-photo-card {display:flex;flex-direction:column;min-width:0;border:1px solid var(--line);background:var(--surface)}
 .research-photo-card figure {margin:0}
 .research-photo-frame {position:relative;width:100%;aspect-ratio:1.22;overflow:hidden;background:#05070c}
@@ -870,38 +857,26 @@ details > summary::-webkit-details-marker { display: none; }
 .editorial-closer-actions .text-link {text-align:center;padding:.6rem}
 @media (prefers-reduced-motion:no-preference) {
  .science-cover {transition:transform .4s ease-out}
- .hero-observation:hover .science-cover,.research-photo-card:hover .science-cover {transform:scale(1.025)}
- .editorial-intro h1 {animation:editorial-enter 440ms ease-out both}
+ .research-photo-card:hover .science-cover {transform:scale(1.025)}
  @keyframes editorial-enter {from {opacity:.5;transform:translateY(8px)} to {opacity:1;transform:translateY(0)}}
 }
 @media (max-width:67rem) {
- .editorial-hero-grid {gap:2rem}
- .editorial-intro h1 {font-size:clamp(2.8rem,5.6vw,4.6rem)}
- .research-photo-grid,.editorial-featured-grid {gap:.75rem}
+ .research-photo-grid {gap:.75rem}
  .research-photo-copy {padding:1.25rem}
 }
 @media (max-width:56rem) {
- .editorial-hero-grid,.question-section,.research-method-grid,.editorial-archive {grid-template-columns:1fr}
- .editorial-intro h1 {font-size:clamp(2.85rem,7vw,4.5rem)}
- .hero-image-frame {min-height:0;aspect-ratio:1.7}
+ .question-section,.research-method-grid,.editorial-archive {grid-template-columns:1fr}
  .question-section {gap:2rem}
- .research-photo-grid,.editorial-featured-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
- .research-photo-grid > article:last-child,.editorial-featured-grid > article:last-child {grid-column:1/-1}
+ .research-photo-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .research-photo-grid > article:last-child {grid-column:1/-1}
  .editorial-featured-card h3 {min-height:0}
  .editorial-closer {flex-direction:column;align-items:start}
 }
 @media (max-width:40rem) {
- .editorial-hero-grid {padding-top:2rem}
- .editorial-intro h1 {font-size:clamp(2.45rem,8.5vw,3.35rem);max-width:18ch;line-height:1.07}
- .editorial-lead {font-size:1.04rem;margin-top:1.2rem}
- .editorial-intro .home-actions {margin-top:1.5rem}
- .editorial-intro .home-actions .btn {width:100%}
- .editorial-index {margin-top:1.8rem;font-size:.7rem}
- .hero-image-frame {aspect-ratio:1.23}
  .question-section {padding-block:3rem}
  .editorial-question-list li {padding-block:1rem;font-size:1.1rem}
- .research-photo-grid,.editorial-featured-grid {grid-template-columns:1fr;gap:1rem}
- .research-photo-grid > article:last-child,.editorial-featured-grid > article:last-child {grid-column:auto}
+ .research-photo-grid {grid-template-columns:1fr;gap:1rem}
+ .research-photo-grid > article:last-child {grid-column:auto}
  .research-photo-frame {aspect-ratio:1.5}
  .editorial-featured-card {padding:1.4rem}
  .editorial-figure strong {font-size:2.1rem}
@@ -940,3 +915,259 @@ details > summary::-webkit-details-marker { display: none; }
 .updates-editorial-layout p:not(.kicker) {color:var(--muted);margin-top:1rem}
 .updates-editorial-layout a {display:inline-flex;align-items:center;min-height:44px;margin-top:1.5rem;margin-right:1.5rem}
 @media(max-width:40rem){.updates-editorial-layout {grid-template-columns:1fr;gap:3rem}}
+
+/* Editorial observatory pass: cinematic hero, lead story, NEXO's own figures, dossier. */
+
+/* Figure series. Two categorical slots, stepped per theme and checked for colour-vision
+   separation and 3:1 contrast against each surface. Text never wears these colours. */
+:root { --series-1: #4f84ea; --series-2: #d07a1e; }
+:root[data-theme="light"] { --series-1: #1f55c8; --series-2: #c2570c; }
+
+/* Hero: one look in both themes, so every colour is explicit. */
+.cine-hero {background:#02050b;color:#fff;border-bottom:1px solid var(--line)}
+.cine-hero .hero-observation {margin:0}
+.cine-stage {position:relative;display:grid;align-items:end;min-block-size:clamp(32rem,calc(100svh - var(--header-size) - 3.5rem),52rem);overflow:hidden;isolation:isolate}
+.cine-image {z-index:-2;object-position:50% 38%}
+.cine-stage::before {content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to top,#02050b 0%,#02050be6 24%,#02050b8c 54%,#02050b26 82%),linear-gradient(to right,#02050bb8 0%,#02050b00 62%)}
+.cine-copy {padding-block:clamp(7rem,18vh,12rem) clamp(2rem,4.5vw,3.75rem)}
+.cine-copy .kicker {display:flex;align-items:center;gap:.8rem;color:#cfdcff}
+.cine-copy .kicker::before {content:"";width:1.55rem;height:2px;background:#cfdcff}
+.cine-copy h1 {max-width:14ch;margin-top:1.1rem;font-size:clamp(2.75rem,7.6vw,7.25rem);font-weight:600;line-height:.97;letter-spacing:-.055em;text-wrap:balance}
+.cine-lead {max-width:52ch;margin-top:1.5rem;color:#e6ebf5;font-size:clamp(1.08rem,1.5vw,1.35rem);line-height:1.5}
+.cine-copy .home-actions {margin-top:2rem}
+.cine-ghost {background:#02050b66;color:#fff;border-color:#ffffff99}
+.cine-ghost:is(:hover,:focus-visible) {background:#ffffff24;border-color:#fff}
+.cine-hero :focus-visible {outline-color:#fff}
+.cine-credit {background:#02050b;border-top:1px solid #ffffff24;color:#b7bdca;font-size:.74rem;line-height:1.45}
+.cine-credit .wrap {display:flex;flex-wrap:wrap;justify-content:space-between;gap:.35rem 1.5rem;padding-block:.8rem}
+.cine-credit a {display:inline-flex;align-items:center;min-height:24px;color:#cfdcff;text-decoration:underline;text-underline-offset:2px}
+
+/* Lead story: one analysis told as question, data, result, limits, beside its figure. */
+.editorial-featured .editorial-section-header {margin-bottom:clamp(1.75rem,3vw,2.75rem)}
+.lead-story {display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:start;gap:clamp(1.75rem,4vw,4.25rem);padding-top:clamp(1.5rem,3vw,2.5rem);border-top:3px solid var(--brand)}
+.lead-story-copy {min-width:0}
+.lead-story-copy h3 {margin-top:1.25rem;font-size:clamp(1.9rem,3.5vw,3.3rem);font-weight:600;line-height:1.07;letter-spacing:-.04em;text-wrap:balance}
+.story-steps {margin-top:1.75rem}
+.story-steps > div {display:grid;grid-template-columns:6.25rem minmax(0,1fr);gap:1rem;padding-block:.95rem;border-top:1px solid var(--line)}
+.story-steps dt {padding-top:.22rem;color:var(--accent);font:500 var(--label-size)/1.5 var(--font-mono);letter-spacing:.1em;text-transform:uppercase}
+.story-steps dd {min-width:0;font-size:1.02rem;line-height:1.5}
+.story-steps > div:last-child dd {color:var(--muted);font-size:var(--small-size)}
+.lead-story-copy > .btn {margin-top:1.5rem}
+.lead-story > .viz,.record-reading > .viz {padding:var(--panel-pad);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+.story-pair {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.15rem;margin-top:clamp(1.5rem,3vw,2.5rem)}
+.story-pair .editorial-featured-card h3 {min-height:0}
+.record-figure .viz {margin-block:var(--space-4)}
+.story-pair .viz {margin-top:1.3rem;padding-block:1.2rem;border-block:1px solid var(--line)}
+.editorial-archive {border-bottom:0}
+
+/* Figures. Ink carries every label and value; the mark beside it carries identity. */
+.viz {display:grid;gap:1rem;min-width:0}
+.viz-title {font-size:clamp(1.05rem,1.5vw,1.3rem);font-weight:600;line-height:1.3;text-wrap:balance}
+.viz-lead {margin-top:.3rem;color:var(--muted);font-size:var(--small-size)}
+.viz-legend {display:flex;flex-wrap:wrap;gap:.4rem 1.25rem;color:var(--muted);font-size:var(--meta-size)}
+.viz-legend li {display:inline-flex;align-items:center;gap:.45rem}
+.viz-swatch {flex:0 0 auto;width:.7rem;height:.7rem;border-radius:50%;background:var(--series-1)}
+.viz-swatch[data-series="1"] {background:var(--series-2)}
+.viz-swatch-ring {background:transparent;box-shadow:inset 0 0 0 2px var(--ink)}
+.sens-row {display:grid;grid-template-columns:minmax(0,13.5rem) minmax(0,1fr);align-items:center;gap:1rem;padding-block:.3rem;border-top:1px solid var(--line)}
+.sens-label {display:flex;flex-wrap:wrap;align-items:center;gap:.1rem .5rem;min-width:0;font-size:var(--meta-size);line-height:1.4}
+.sens-name {font-weight:600}
+.sens-range {font-family:var(--font-mono);white-space:nowrap}
+.sens-count {flex-basis:100%;padding-left:1.15rem;color:var(--muted)}
+.sens-track {position:relative;margin-inline:8px 22px;border-inline-end:1px solid var(--line);background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:25% 100%}
+.sens-dot {position:absolute;width:12px;height:12px;padding:0;border:0;border-radius:50%;background:var(--series-1);box-shadow:0 0 0 2px var(--surface);transform:translateX(-50%);cursor:pointer}
+.sens-dot::after {content:"";position:absolute;inset:0 -5px}
+.sens-dot[data-series="1"] {background:var(--series-2)}
+.sens-dot:is(:hover,:focus-visible,[data-active]) {z-index:1;box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--ink);outline:0}
+.sens-axis {padding-block:0;border-top-color:var(--control-line)}
+.sens-ticks {position:relative;height:1.5rem;margin-inline:8px 22px;color:var(--muted);font:400 var(--label-size)/1.5 var(--font-mono)}
+.sens-ticks span {position:absolute;top:.3rem;transform:translateX(-50%);white-space:nowrap}
+.sens-axis-title {margin-top:.2rem;color:var(--muted);font-size:var(--meta-size);text-align:end}
+.sens-readout {display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .75rem;padding:.75rem 1rem;border-radius:var(--control-radius);background:var(--raised);font-size:var(--small-size)}
+.sens-readout strong {font:500 1.35rem/1.2 var(--font-mono);font-variant-numeric:tabular-nums}
+.sens-readout a {display:inline-flex;align-items:center;min-height:var(--control-size);margin-left:auto}
+.viz-table summary {display:flex;align-items:center;min-height:var(--control-size);color:var(--accent);font-size:var(--small-size);font-weight:500;cursor:pointer}
+.viz-table-scroll {max-height:20rem;overflow:auto;border:1px solid var(--line)}
+.viz-table table {width:100%;border-collapse:collapse;font-size:var(--meta-size)}
+.viz-table :is(th,td) {padding:.45rem .65rem;border-bottom:1px solid var(--line);text-align:start;white-space:nowrap}
+.viz-table thead th {position:sticky;top:0;background:var(--raised);font-weight:600}
+.viz-table td:nth-child(3) {font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.viz-source {color:var(--muted);font-size:.78rem;line-height:1.55}
+
+.pair-plot {padding-inline:8px 22px}
+.pair-track {position:relative;height:30px;border-bottom:1px solid var(--control-line);background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:50% 100%}
+.pair-link {position:absolute;top:14px;height:2px;background:var(--control-line)}
+.pair-dot,.pair-key {width:12px;height:12px;border-radius:50%;background:var(--series-1)}
+.pair-dot {position:absolute;top:9px;box-shadow:0 0 0 2px var(--surface);transform:translateX(-50%)}
+:is(.pair-dot,.pair-key)[data-step="1"] {background:var(--surface);border:3px solid var(--series-1)}
+.pair-plot .sens-ticks {margin-inline:0}
+.pair-values {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem 1.25rem}
+.pair-values > div {display:flex;flex-direction:column;gap:.3rem;min-width:0}
+.pair-values dt {display:flex;align-items:center;gap:.45rem;color:var(--muted);font-size:var(--meta-size);line-height:1.4}
+.pair-key {flex:0 0 auto}
+.pair-values dd {font:500 clamp(1.5rem,2.4vw,2.2rem)/1.15 var(--font-mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+
+/* Dossier in the record sidebar. */
+.dossier-index {display:flex;flex-wrap:wrap;gap:0 1rem;margin-top:.6rem;font-size:var(--meta-size)}
+.dossier-index a {display:inline-flex;align-items:center;min-height:var(--control-size);color:var(--accent);text-decoration:underline;text-underline-offset:.23em}
+.record-provenance .dossier-data {display:grid;gap:.85rem;margin-block:.25rem 0;font-family:var(--font-sans);font-size:var(--small-size)}
+.dossier-data li {display:grid;gap:.15rem}
+.dossier-data strong {font-weight:600}
+.dossier-data li > span,.dossier-note {color:var(--muted);font-size:var(--meta-size);line-height:1.5}
+.dossier-note {display:block;margin-top:.2rem}
+
+.results-pages {display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1rem;margin-block-start:var(--space-8)}
+
+@media (prefers-reduced-motion:no-preference) {
+ .sens-dot {transition:box-shadow var(--motion)}
+ .cine-copy h1 {animation:editorial-enter 440ms ease-out both}
+}
+@media (min-width:62.001rem) {
+ .lead-story-copy {position:sticky;top:calc(var(--header-size) + 1.5rem)}
+}
+@media (max-width:62rem) {
+ .lead-story {grid-template-columns:1fr}
+}
+@media (max-width:40rem) {
+ .cine-stage {min-block-size:clamp(30rem,calc(100svh - var(--header-size) - 5rem),40rem)}
+ .cine-image {object-position:38% 42%}
+ .cine-copy {padding-block:9rem 1.75rem}
+ .cine-copy h1 {font-size:clamp(2.5rem,11.5vw,3.5rem);line-height:1.02}
+ .cine-lead {margin-top:1.1rem;font-size:1.04rem}
+ .cine-copy .home-actions .btn {width:100%}
+ .story-steps > div {grid-template-columns:1fr;gap:.2rem}
+ .story-pair {grid-template-columns:1fr}
+ .sens-row {grid-template-columns:1fr;gap:.2rem;padding-block:.55rem}
+ .sens-count {flex-basis:auto;padding-left:0}
+ .sens-readout a {margin-left:0}
+}
+
+/* Motion graphics pass. Static rules first: this is what a visitor with reduced motion, or a
+   browser without scroll timelines, sees. Every animation lives in the media query below and
+   only moves, scales or clips; text is never faded, so contrast holds at every scroll position. */
+.word {display:inline-block;overflow:hidden;vertical-align:bottom;padding-block:.1em .16em;margin-block:-.1em -.16em}
+.word > span {display:inline-block}
+.cine-media {position:absolute;inset:0;z-index:-2;overflow:hidden}
+.cine-copy {position:relative;z-index:1}
+.reticle {position:absolute;inset-block-start:clamp(3rem,13vh,6.5rem);inset-inline-end:clamp(1.5rem,11vw,12rem);width:clamp(8.5rem,17vw,15rem);color:#ffffffd9;pointer-events:none;translate:calc(var(--mx,0) * 16px) calc(var(--my,0) * 12px)}
+.reticle svg {display:block;width:100%;height:auto;overflow:visible}
+.reticle :is(.reticle-ticks,.reticle-corners,.reticle-ring-inner) {transform-box:view-box;transform-origin:100px 100px}
+.reticle-label {position:absolute;inset-block-start:calc(100% + .65rem);inset-inline:0;font:500 .68rem/1 var(--font-mono);letter-spacing:.16em;text-align:center;white-space:nowrap}
+.cine-cue {position:absolute;inset-block-end:1.5rem;inset-inline-end:var(--gutter);width:1px;height:3.25rem;background:linear-gradient(#fff0,#ffffffc7);transform-origin:top}
+.btn-sheen {position:relative;overflow:hidden}
+.research-method-band {position:relative;overflow:hidden;isolation:isolate}
+.expansion-field {position:absolute;inset:0;z-index:-1;width:100%;height:100%;color:#fff;opacity:.2;pointer-events:none}
+.field-layer {transform-box:view-box;transform-origin:400px 200px}
+.field-b {display:none}
+.page-head-inner::after {content:"";display:block;width:3.5rem;height:3px;margin-block-start:1.35rem;background:var(--brand-outline);transform-origin:left}
+.count-up {font-variant-numeric:tabular-nums}
+@media (max-width:40rem) {
+ .reticle {inset-block-start:1.25rem;inset-inline-end:1rem;width:6.25rem}
+ .reticle-label {font-size:.58rem}
+ .cine-cue {display:none}
+}
+
+@media (prefers-reduced-motion:no-preference) {
+ /* Hero: the observation breathes, the title arrives word by word, the reticle acquires. */
+ .cine-image {animation:ken-burns 46s ease-in-out infinite alternate;will-change:transform}
+ .word > span {animation:word-rise 780ms var(--motion-enter-ease) both;animation-delay:calc(var(--i) * 75ms + 140ms)}
+ .cine-copy h1 {animation:none}
+ .cine-copy :is(.kicker,.cine-lead,.home-actions) {animation:clip-rise 720ms var(--motion-enter-ease) both}
+ .cine-copy .cine-lead {animation-delay:620ms}
+ .cine-copy .home-actions {animation-delay:760ms}
+ .reticle {transition:translate 500ms ease-out}
+ .reticle-ticks {animation:spin 110s linear infinite}
+ .reticle-ring:not(.reticle-ring-inner) {stroke-dasharray:1;animation:draw 1.7s var(--motion-enter-ease) .35s both}
+ .reticle-ring-inner {animation:breathe 5.5s ease-in-out infinite}
+ .reticle-cross path {stroke-dasharray:1;animation:draw 1.1s ease-out 1s both}
+ .reticle-corners {animation:breathe 4.5s ease-in-out -2s infinite}
+ .reticle-dot {animation:blink 2.4s ease-in-out infinite}
+ .reticle-label {animation:clip-rise 600ms var(--motion-enter-ease) 1.5s both}
+ .cine-cue {animation:cue 2.4s ease-in-out infinite}
+ @supports (animation-timeline:scroll(root block)) {
+  .cine-media {animation:hero-drift linear both;animation-timeline:scroll(root block);animation-range:0 110vh}
+  .cine-copy {animation:hero-copy linear both;animation-timeline:scroll(root block);animation-range:12vh 85vh}
+  .reticle svg {animation:hero-reticle linear both;animation-timeline:scroll(root block);animation-range:0 90vh}
+ }
+
+ /* Pages and sections. */
+ :where(main) > :where(:not(.cine-hero)) {animation:page-in 460ms var(--motion-enter-ease) both}
+ .page-head-inner::after {animation:grow-x 820ms var(--motion-enter-ease) 320ms both}
+ @supports (animation-timeline:view()) {
+  :is(.lead-story-copy,.lead-story > .viz,.record-reading > .viz,.editorial-featured-card,.research-photo-card,.editorial-question-list li,.story-steps > div,.editorial-archive-metrics > div,.family-record,.family-figure,.dossier-data li,.research-sources li,.editorial-closer) {
+   animation:rise auto linear both;animation-timeline:view();animation-range:entry 0% entry 70%
+  }
+  :is(.research-photo-card,.editorial-featured-card,.editorial-archive-metrics > div,.editorial-question-list li):nth-child(2) {animation-range:entry 14% entry 84%}
+  :is(.research-photo-card,.editorial-archive-metrics > div,.editorial-question-list li):nth-child(3) {animation-range:entry 28% entry 98%}
+  :is(.editorial-section-header,.editorial-section-intro,.research-method-grid,.editorial-archive-heading,.editorial-closer) h2 {
+   animation:mask-up auto linear both;animation-timeline:view();animation-range:entry 5% entry 85%
+  }
+  .research-photo-frame {animation:wipe auto linear both;animation-timeline:view();animation-range:entry 0% entry 85%}
+  .research-photo-frame img {animation:settle auto linear both;animation-timeline:view();animation-range:entry 0% cover 45%}
+  .family-chart-track span {transform-origin:left;animation:grow-x auto linear both;animation-timeline:view();animation-range:entry 0% entry 100%}
+ }
+
+ /* Figures assemble once, on a clock, so a dot never rests at a value it does not have. */
+ html[data-js] .sens[data-inview=""] .sens-dot,
+ html[data-js] .pair[data-inview=""] :is(.pair-link,.pair-dot) {opacity:0}
+ .sens[data-inview="in"] .sens-dot {animation:dot-fly 860ms var(--motion-enter-ease) both;animation-delay:calc(var(--i,0) * 24ms)}
+ .sens-readout strong {animation:pop 340ms var(--motion-enter-ease)}
+ .pair[data-inview="in"] .pair-dot[data-step="0"] {animation:dot-pop 420ms var(--motion-enter-ease) both}
+ .pair[data-inview="in"] .pair-link {transform-origin:left;animation:grow-x 900ms var(--motion-enter-ease) 280ms both}
+ .pair[data-inview="in"] .pair-link[data-dir="down"] {transform-origin:right}
+ .pair[data-inview="in"] .pair-dot[data-step="1"] {animation:pair-move 900ms var(--motion-enter-ease) 280ms both}
+
+ /* The field: comoving points receding, two layers half a period apart for a seamless loop. */
+ .field-b {display:inline}
+ .field-layer {animation:expand 28s linear infinite}
+ .field-b {animation-delay:-14s}
+
+ /* Small things. */
+ .wordmark::before {animation:mark-in 900ms var(--motion-enter-ease) both;transition:rotate 600ms var(--motion-enter-ease)}
+ .wordmark:is(:hover,:focus-visible)::before {rotate:180deg}
+ .theme-toggle svg {transition:rotate 500ms var(--motion-enter-ease)}
+ [data-theme="light"] .theme-toggle svg {rotate:-30deg}
+ .status-badge::before {animation:blink 2.8s ease-in-out infinite}
+ .pipeline-step details[open] .pipeline-index {animation:halo 2.6s ease-out infinite}
+ .btn-sheen::before {content:"";position:absolute;inset:0;background:linear-gradient(110deg,#fff0 30%,#ffffff47 50%,#fff0 70%);translate:-120% 0;pointer-events:none}
+ .btn-sheen:is(:hover,:focus-visible)::before {animation:sheen 760ms ease-out}
+ :is(.editorial-featured-card,.research-photo-card) {transition:transform var(--motion),border-color var(--motion),box-shadow var(--motion)}
+ @media (hover:hover) {
+  :is(.editorial-featured-card,.research-photo-card):hover {transform:translateY(-.3rem);border-color:var(--control-line);box-shadow:var(--shadow)}
+ }
+
+ @supports selector(:active-view-transition) {
+  :root:active-view-transition {view-transition-name:root}
+  .site-header {view-transition-name:site-header}
+  ::view-transition-old(root) {animation:vt-out 170ms ease-in both}
+  ::view-transition-new(root) {animation:vt-in 340ms var(--motion-enter-ease) both}
+ }
+}
+
+@keyframes ken-burns {from {transform:scale(1.03)} to {transform:scale(1.13) translate(-1.6%,-1.1%)}}
+@keyframes word-rise {from {transform:translateY(112%)}}
+@keyframes clip-rise {from {clip-path:inset(0 0 100% 0);translate:0 1.1rem} to {clip-path:inset(-20% -5% -20% -5%)}}
+@keyframes spin {to {transform:rotate(360deg)}}
+@keyframes draw {from {stroke-dashoffset:1} to {stroke-dashoffset:0}}
+@keyframes breathe {50% {transform:scale(1.06)}}
+@keyframes blink {50% {opacity:.3}}
+@keyframes cue {0% {transform:scaleY(0);transform-origin:top} 45% {transform:scaleY(1);transform-origin:top} 55% {transform:scaleY(1);transform-origin:bottom} 100% {transform:scaleY(0);transform-origin:bottom}}
+@keyframes hero-drift {to {transform:translateY(14%) scale(1.08)}}
+@keyframes hero-copy {to {transform:translateY(-3rem)}}
+@keyframes hero-reticle {to {transform:rotate(55deg) scale(1.25)}}
+@keyframes page-in {from {translate:0 .8rem}}
+@keyframes rise {from {translate:0 2.4rem}}
+@keyframes mask-up {from {clip-path:inset(0 0 100% 0);translate:0 .45em} to {clip-path:inset(-15% -5% -15% -5%)}}
+@keyframes wipe {from {clip-path:inset(0 0 100% 0)} to {clip-path:inset(0)}}
+@keyframes settle {from {scale:1.2}}
+@keyframes grow-x {from {transform:scaleX(0)}}
+@keyframes dot-fly {from {inset-inline-start:0%;opacity:0;scale:.3}}
+@keyframes dot-pop {from {opacity:0;scale:.2}}
+@keyframes pair-move {from {inset-inline-start:var(--from);opacity:0}}
+@keyframes pop {from {scale:1.22;color:var(--accent)}}
+@keyframes expand {0% {transform:scale(.45);opacity:0} 14% {opacity:1} 78% {opacity:1} 100% {transform:scale(1.55);opacity:0}}
+@keyframes mark-in {from {rotate:-140deg;scale:.6}}
+@keyframes halo {from {box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent)} to {box-shadow:0 0 0 .7rem #0000}}
+@keyframes sheen {to {translate:120% 0}}
+@keyframes vt-out {to {opacity:0;transform:translateY(-.5rem)}}
+@keyframes vt-in {from {opacity:0;transform:translateY(.75rem)}}

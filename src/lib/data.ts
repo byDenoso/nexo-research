@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {manifest as manifestSchema, projects as projectsSchema, publications as publicationsSchema, type Manifest, type Project, type Publication, type Result} from './schemas.ts';
+import {dossiers as dossiersSchema, manifest as manifestSchema, projects as projectsSchema, publications as publicationsSchema, type Dossier, type Manifest, type Project, type Publication, type Result} from './schemas.ts';
 import {z} from 'zod';
 
 const dataRoot = join(process.cwd(), 'data');
@@ -15,6 +15,16 @@ export const getResults = (): Result[] => getManifest().results;
 export const getResult = (slug: string): Result | undefined => getResults().find(item => item.slug === slug);
 export const getProjects = (): Project[] => projectsSchema.parse(json('curated/projects.json'));
 export const getPublications = (): Publication[] => publicationsSchema.parse(json('curated/publications.json')).sort((a, b) => b.date.localeCompare(a.date));
+
+let dossierCache: Map<string, Dossier> | undefined;
+export function getDossier(id: string): Dossier | undefined {
+  dossierCache ??= new Map(dossiersSchema.parse(json('curated/dossiers.json')).map(entry => [entry.id, entry]));
+  return dossierCache.get(id);
+}
+
+// Date of the last editorial revision of each static route, maintained by hand in pages.json.
+const pageDates = z.record(z.string(), z.string().regex(/^\d{4}-\d{2}-\d{2}$/));
+export const getPageDates = (): Record<string, string> => pageDates.parse(json('curated/pages.json'));
 
 const profile = z.object({
   name: z.string(), affiliation: z.string(),

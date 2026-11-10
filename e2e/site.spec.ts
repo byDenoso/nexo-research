@@ -64,6 +64,92 @@ test.describe('initial results', () => {
   });
 });
 
+test.describe('catalogue without scripts', () => {
+  test.use({javaScriptEnabled: false});
+  test('every family is reachable through server-rendered pages', async ({page}) => {
+    await page.goto('/pt/results');
+    await page.getByRole('link', {name: 'Mostrar mais'}).click();
+    await expect(page).toHaveURL(/\/pt\/results\/page\/2$/);
+    await expect(page.getByRole('main').getByRole('article')).toHaveCount(11);
+    await expect(page.locator('h1')).toHaveCount(1);
+    await page.getByRole('link', {name: /Página anterior/}).click();
+    await expect(page).toHaveURL(/\/pt\/results$/);
+  });
+});
+
+test('search ignores accents and reads the editorial family titles', async ({page}) => {
+  await page.goto('/pt/results');
+  await expect(page.getByRole('button', {name: 'Mostrar mais'})).toBeVisible();
+  const shown = page.getByRole('status').filter({hasText: 'exibidas'});
+  await page.getByLabel('Buscar').fill('tracadores');
+  await expect(shown).not.toContainText('35 de 35');
+  await expect(page.getByRole('heading', {level: 3, name: 'Dependência dos traçadores e grupos BAO'})).toBeVisible();
+  await page.getByLabel('Buscar').fill('CONCENTRACAO do sinal');
+  await expect(page.getByRole('heading', {level: 3, name: 'Concentração do sinal por redshift'})).toBeVisible();
+});
+
+test('home links name the analysis they open', async ({page}) => {
+  for (const locale of ['pt', 'en']) {
+    await page.goto(`/${locale}`);
+    const names = await page.getByRole('main').getByRole('link').evaluateAll(nodes => nodes.map(node => (node as HTMLElement).innerText.replace(/\s+/g, ' ').trim()));
+    const repeated = names.filter((name, index) => name && names.indexOf(name) !== index && !/^T-[0-9a-f]{12}$/.test(name));
+    expect(repeated).toEqual([]);
+  }
+});
+
+test('a highlighted record carries its dossier and its own figure', async ({page}) => {
+  await page.goto('/pt/results/t-05ae703af393');
+  const dossier = page.getByRole('complementary', {name: 'Dossiê de verificação'});
+  await expect(dossier).toContainText('DES-SN5YR');
+  await expect(dossier.getByRole('link', {name: /arXiv:2401\.02929/})).toHaveAttribute('href', 'https://arxiv.org/abs/2401.02929');
+  await expect(dossier).toContainText('Não consta no resumo público.');
+  await expect(page.locator('.record-reading .sens-dot[data-active]')).toHaveCount(1);
+  await dossier.getByRole('link', {name: 'Condições do teste'}).click();
+  await expect(page).toHaveURL(/#method$/);
+  await page.goto('/en/results/t-0e94e9e2951b');
+  await expect(page.locator('.pair-values dd')).toHaveText(['2.18\u2009σ', '0.35\u2009σ']);
+});
+
+test('the figure answers to pointer and offers its data as a table', async ({page}) => {
+  await page.goto('/en');
+  const figure = page.locator('.lead-story .sens');
+  await expect(figure.locator('.sens-readout')).toContainText('94%');
+  await figure.getByRole('button', {name: /Union3, without z = 0\.1–0\.3/}).first().click();
+  await expect(figure.locator('.sens-readout')).toContainText('Union3');
+  await figure.locator('summary').click();
+  await expect(figure.getByRole('table')).toBeVisible();
+  expect(await figure.getByRole('row').count()).toBeGreaterThan(40);
+});
+
+test('the code page shows the empty notice only while no repository is listed', async ({page}) => {
+  await page.goto('/pt/code');
+  await expect(page.getByText('Código de análise ainda não publicado.')).toBeVisible();
+  await expect(page.getByRole('main').locator('a.card')).toHaveCount(0);
+});
+
+test('the compact menu opens and navigates with the keyboard', async ({page}) => {
+  await page.setViewportSize({width: 390, height: 844});
+  await page.goto('/pt');
+  const menu = page.locator('details.site-menu');
+  await menu.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(menu).toHaveAttribute('open', '');
+  const link = menu.getByRole('link', {name: 'Métodos'});
+  await link.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/pt\/methods$/);
+});
+
+test('result filters are labelled and operable from the keyboard', async ({page}) => {
+  await page.goto('/pt/results');
+  await expect(page.getByRole('button', {name: 'Mostrar mais'})).toBeVisible();
+  const survey = page.getByLabel('Levantamento mencionado');
+  await survey.focus();
+  await survey.selectOption('Planck');
+  await expect(page).toHaveURL(/survey=Planck/);
+  await expect(page.getByRole('status').filter({hasText: 'exibidas'})).not.toContainText('35 de 35');
+});
+
 test('line filter from the research page is honoured', async ({page}) => {
   await page.goto('/en/results?line=local-group');
   await expect(page.getByRole('status').filter({hasText: 'shown'})).toContainText('0 of 0');
@@ -102,7 +188,8 @@ test('home discloses source date without implying current research activity', as
 
 test('the DES-SN5YR interval result is clearly presented as exploratory', async ({page}) => {
   await page.goto('/pt');
-  await expect(page.locator('.editorial-featured a[href="/pt/results/t-05ae703af393"]')).toHaveCount(1);
+  await expect(page.locator('.lead-story-copy a[href="/pt/results/t-05ae703af393"]')).toHaveCount(1);
+  await expect(page.locator('.lead-story .sens-dot')).toHaveCount(await page.locator('.lead-story .viz-table tbody tr').count());
   await expect(page.locator('.editorial-featured')).toContainText('sem validação independente');
   await page.goto('/pt/results/t-05ae703af393');
   await expect(page.getByRole('main')).toContainText('reduziu em cerca de 94%');
@@ -139,6 +226,8 @@ test('sitemap lists localized scientific families', async ({request}) => {
   const locs = [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1] ?? '');
   expect(locs.filter(loc => loc.includes('/results/families/')).length).toBeGreaterThan(10);
   expect(locs.filter(loc => /\/results\/t-[a-f0-9]+/.test(loc)).length).toBe(0);
+  const dates = new Set([...body.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map(match => match[1]));
+  expect(dates.size).toBeGreaterThan(1);
 });
 
 test('keyboard users reach the main content through the skip link', async ({page}) => {
@@ -172,6 +261,8 @@ test('editorial homepage is responsive and shows real credited observations', as
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
     await expect(page.locator('main img')).toHaveCount(4);
     for (const image of await page.locator('main img').all()) {
+      // Not scrollIntoViewIfNeeded: it waits for a still box, and the hero image drifts by design.
+      await image.evaluate(node => node.scrollIntoView({block: 'center', behavior: 'instant'}));
       await expect.poll(async () => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     }
     await expect(page.getByRole('heading',{level:1})).toHaveCount(1);

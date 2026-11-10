@@ -70,6 +70,25 @@ export const approval = z.object({
 });
 export const approvals = z.array(approval);
 
+// Dossier: where a highlighted result can be checked. It never changes a status. A field that
+// has not been confirmed against the source is left out and shown as "not stated"; nothing is inferred.
+const reference = z.object({label: z.string(), url: url.optional(), doi: z.string().regex(/^10\.\d{4,9}\/\S+$/).optional(), arxiv: z.string().regex(/^\d{4}\.\d{4,5}(v\d+)?$/).optional()});
+export const dossier = z.object({
+  id: z.string().regex(/^T-[0-9a-f]{12}$/),
+  datasets: z.array(z.object({
+    name: z.string().min(1),
+    role: localized,
+    release: z.string().min(1).optional(),
+    table: z.string().min(1).optional(),
+    reference: reference.optional()
+  })).min(1),
+  code: z.array(z.object({label: z.string(), url})).optional(),
+  artefacts: z.array(z.object({label: z.string(), url, sha256: z.string().regex(/^[0-9a-f]{64}$/).optional()})).optional(),
+  analysisDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+});
+export const dossiers = z.array(dossier);
+export type Dossier = z.infer<typeof dossier>;
+
 export const PUB_STATES = ['INTERNAL', 'PREPRINT', 'SUBMITTED', 'ACCEPTED', 'PUBLISHED'] as const;
 export const publication = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),

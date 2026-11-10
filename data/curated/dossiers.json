@@ -1,0 +1,39 @@
+[
+  {
+    "id": "T-05ae703af393",
+    "datasets": [
+      {
+        "name": "DES-SN5YR",
+        "role": {"pt-BR": "Compilação de supernovas Ia ajustada, com exclusão de uma faixa de redshift por vez.", "en": "Type Ia supernova compilation fitted with one redshift range removed at a time."},
+        "reference": {"label": "DES Collaboration (2024), arXiv:2401.02929", "url": "https://arxiv.org/abs/2401.02929", "arxiv": "2401.02929"}
+      },
+      {
+        "name": "Union3",
+        "role": {"pt-BR": "Compilação de supernovas Ia ajustada, com exclusão de uma faixa de redshift por vez.", "en": "Type Ia supernova compilation fitted with one redshift range removed at a time."},
+        "reference": {"label": "Rubin et al. (2023), arXiv:2311.12098", "url": "https://arxiv.org/abs/2311.12098", "arxiv": "2311.12098"}
+      },
+      {
+        "name": "BAO e CMB",
+        "role": {"pt-BR": "Restrições mantidas fixas em todos os ajustes. O resumo público não identifica o levantamento nem o release.", "en": "Constraints held fixed in every fit. The public summary does not identify the survey or the release."}
+      }
+    ]
+  },
+  {
+    "id": "T-0e94e9e2951b",
+    "datasets": [
+      {
+        "name": "eROSITA: resumos publicados de S₈",
+        "role": {"pt-BR": "Cinco intervalos de redshift, com erros diagonais. O resumo público não identifica o artigo nem a tabela de origem.", "en": "Five redshift bins with diagonal errors. The public summary does not identify the source paper or table."}
+      }
+    ]
+  },
+  {
+    "id": "T-9cdf8dcdf082",
+    "datasets": [
+      {
+        "name": "H₀ e densidade observada de energia escura",
+        "role": {"pt-BR": "Grandezas de entrada da derivação. O resumo público não informa os valores adotados nem suas fontes.", "en": "Input quantities of the derivation. The public summary does not state the adopted values or their sources."}
+      }
+    ]
+  }
+]

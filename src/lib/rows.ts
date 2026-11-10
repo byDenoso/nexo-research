@@ -4,6 +4,7 @@ import type {FamilyRow} from '../components/ResultsBrowser.tsx';
 import type {Family} from './families.ts';
 import {DATASETS} from './data.ts';
 import type {ResultCardData} from '../components/ui.tsx';
+import {fold} from './search.ts';
 
 export function toResultCard(item: Result, locale: Locale): ResultCardData {
   return {
@@ -24,8 +25,11 @@ export function toFamilyRows(families: Family[], locale: Locale): FamilyRow[] {
     lines: family.lines,
     statuses: family.statuses,
     surveys: DATASETS.filter(([, pattern]) => family.records.some(item => pattern.test(item.question.en+' '+item.method.en+' '+item.result.en))).map(([name]) => name),
-    haystack: family.records.map(item =>
-      [item.question['pt-BR'], item.question.en, item.result['pt-BR'], item.result.en, item.id].join(' ')
-    ).join(' ').toLocaleLowerCase(locale === 'pt' ? 'pt-BR' : 'en')
+    // Editorial title and description first, then every record in both languages; folded so the
+    // query ignores case and accents.
+    haystack: fold([
+      family.title['pt-BR'], family.title.en, family.description['pt-BR'], family.description.en, family.slug,
+      ...family.records.flatMap(item => [item.question['pt-BR'], item.question.en, item.result['pt-BR'], item.result.en, item.id])
+    ].join(' '))
   }));
 }

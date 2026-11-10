@@ -4,6 +4,8 @@ import {useEffect, useMemo, useState} from 'react';
 import {D, tr} from '@/lib/dict';
 import type {Locale} from '@/lib/i18n';
 import type {Line, Status} from '@/lib/schemas';
+import {PAGE_SIZE as PAGE, matches} from '@/lib/search';
+import {href} from '@/lib/seo';
 import {EmptyState, FamilyCard} from './ui';
 
 export type FamilyRow = {
@@ -18,7 +20,6 @@ export type FamilyRow = {
   surveys: string[];
   haystack: string;
 };
-const PAGE = 24;
 const lines = Object.keys(D.lines.items) as Line[];
 const statuses = Object.keys(D.status) as Status[];
 const asLine = (value: string | null): Line | 'all' => (lines.some(line => line === value) ? value as Line : 'all');
@@ -66,15 +67,14 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
   const availableSurveys = useMemo(() => [...new Set(rows.flatMap(row=>row.surveys))].sort(),[rows]);
   const years = useMemo(() => [...new Set(rows.map(row => row.year))].sort().reverse(), [rows]);
   const filtered = useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase(locale === 'pt' ? 'pt-BR' : 'en');
     return rows.filter(row =>
       (line === 'all' || row.lines.includes(line)) &&
       (status === 'all' || row.statuses.includes(status)) &&
       (survey === 'all' || row.surveys.includes(survey)) &&
       (year === 'all' || row.year === year) &&
-      (!needle || row.haystack.includes(needle))
+      (!query.trim() || matches(row.haystack, query))
     );
-  }, [rows, query, line, status, survey, year, locale]);
+  }, [rows, query, line, status, survey, year]);
   const shown = filtered.slice(0, page * PAGE);
   const executionCount = filtered.reduce((total, item) => total + item.recordCount, 0);
   const reset = () => {setQuery(''); setLine('all'); setStatus('all'); setSurvey('all'); setYear('all'); setPage(1);};
@@ -135,7 +135,14 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
           {shown.map(row => <li key={row.slug}><FamilyCard item={row} locale={locale} /></li>)}
         </ul>
       )}
-      {shown.length < filtered.length && <div className="results-more"><button type="button" className="btn" onClick={() => setPage(value => value + 1)}>{tr(f.more, locale)}</button></div>}
+      {shown.length < filtered.length && (
+        <div className="results-more">
+          {hydrated
+            ? <button type="button" className="btn" onClick={() => setPage(value => value + 1)}>{tr(f.more, locale)}</button>
+            // Before scripts run the same control is a link to the next server-rendered page.
+            : <a className="btn" href={href(locale, '/results/page/2')}>{tr(f.more, locale)}</a>}
+        </div>
+      )}
     </div>
   );
 }
