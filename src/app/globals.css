@@ -72,7 +72,11 @@
   --header-size: 4.5rem;
   --focus-width: 2px;
   --focus-offset: 3px;
-  --motion: 160ms ease-out;
+  --nx-motion-quick: 180ms;
+  --nx-motion-enter: 560ms;
+  --nx-motion-data: 900ms;
+  --nx-motion-ease: cubic-bezier(.22,1,.36,1);
+  --motion: var(--nx-motion-quick) var(--nx-motion-ease);
   --motion-enter-time: 240ms;
   --motion-enter-ease: cubic-bezier(.2, .75, .25, 1);
   --motion-enter: var(--motion-enter-time) var(--motion-enter-ease);
@@ -1044,6 +1048,23 @@ details > summary::-webkit-details-marker { display: none; }
   .site-header {view-transition-name:site-header}
   ::view-transition-old(root) {animation:vt-out 170ms ease-in both}
   ::view-transition-new(root) {animation:vt-in 340ms var(--motion-enter-ease) both}
+ }
+}
+
+@supports selector(::view-transition-group(.nx-catalogue-title)) {
+ :root:active-view-transition-type(nx-catalogue-title) .site-header {view-transition-name:none}
+ :root:active-view-transition-type(nx-catalogue-title) .record-head h1 {animation:none}
+ :root:active-view-transition-type(nx-catalogue-title)::view-transition-group(root),
+ :root:active-view-transition-type(nx-catalogue-title)::view-transition-new(root),
+ ::view-transition-new(.nx-catalogue-title) {animation:none;mix-blend-mode:normal}
+ :root:active-view-transition-type(nx-catalogue-title)::view-transition-old(root),
+ ::view-transition-old(.nx-catalogue-title) {display:none}
+ ::view-transition-group(.nx-catalogue-title) {
+  animation-duration:var(--nx-motion-enter);
+  animation-timing-function:var(--nx-motion-ease);
+ }
+ @media (prefers-reduced-motion:reduce) {
+  ::view-transition-group(.nx-catalogue-title) {animation:none}
  }
 }
 
