@@ -26,7 +26,19 @@ The Research page reuses `jades-goods-south.jpg` with a landscape display crop a
   Credit: NASA, ESA, J. Lotz, M. Mountain, A. Koekemoer, HFF Team (STScI).
   Loaded from NASA Science through Next.js image optimisation.
 
-## NEXO Research identity
+## Home cover figure
+
+`pantheon-volume.jpg` (2560 × 1440 px) is an original NEXO Research Institute rendering. It places the
+1,543 unique supernovae of the Pantheon+ compilation at their catalogued right ascension and
+declination, at comoving distances computed from the catalogued CMB-frame redshift in flat ΛCDM
+with Ωm = 0.3 and H₀ = 70 km/s/Mpc. The four shells mark z = 0.1, 0.5, 1.0 and 2.0. Point colour
+and brightness are illustrative and encode no measurement. Rendered with Blender (Cycles).
+
+- Data: Scolnic et al. (2022), [arXiv:2112.03863](https://arxiv.org/abs/2112.03863), file `Pantheon+SH0ES.dat`
+  from the public [Pantheon+ data release](https://github.com/PantheonPlusSH0ES/DataRelease).
+- The figure illustrates the sample geometry. It is not a NEXO result.
+
+## NEXO Research Institute identity
 
 - The [orbital mark](../src/app/icon.svg) is an original NEXO Research asset. The navigation and
   footer use its silhouette in the surrounding text colour. The social card uses the paper-white

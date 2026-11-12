@@ -15,10 +15,10 @@ test('institutional home keeps publications out of the main, compact and footer 
     await page.goto(`/${locale}`);
     await expect(page.locator('header a, footer a, main a').filter({hasText: /^(Publicações|Publications)$/})).toHaveCount(0);
     await expect(page.locator(`a[href="/${locale}/publications"]`)).toHaveCount(0);
-    const scope = page.locator('.editorial-archive');
+    const scope = page.locator('.inst-lead');
     await expect(scope).toBeVisible();
-    await expect(page.locator('.hero-observation img')).toHaveCount(1);
-    await expect(scope.locator('dd')).toHaveCount(3);
+    await expect(page.locator('.inst-cover img')).toHaveCount(1);
+    await expect(scope.locator('.inst-facts b')).toHaveCount(3);
     expect((await request.get(`/${locale}/publications`)).ok()).toBe(true);
   }
 });
@@ -112,7 +112,7 @@ test('a highlighted record carries its dossier and its own figure', async ({page
 
 test('the figure answers to pointer and offers its data as a table', async ({page}) => {
   await page.goto('/en');
-  const figure = page.locator('.lead-story .sens');
+  const figure = page.locator('.inst-feature-main .sens');
   await expect(figure.locator('.sens-readout')).toContainText('94%');
   await figure.getByRole('button', {name: /Union3, without z = 0\.1–0\.3/}).first().click();
   await expect(figure.locator('.sens-readout')).toContainText('Union3');
@@ -182,15 +182,15 @@ test('the methods index opens the existing test section by keyboard', async ({pa
 
 test('home discloses source date without implying current research activity', async ({page}) => {
   await page.goto('/pt');
-  await expect(page.getByRole('heading', {name: 'O que consta no catálogo'})).toBeVisible();
-  await expect(page.locator('.editorial-archive')).toContainText('última data do snapshot');
+  await expect(page.locator('.inst-facts')).toContainText('Catálogo atualizado em');
+  await expect(page.getByRole('main')).not.toContainText(/em andamento|pesquisa ativa/i);
 });
 
 test('the DES-SN5YR interval result is clearly presented as exploratory', async ({page}) => {
   await page.goto('/pt');
-  await expect(page.locator('.lead-story-copy a[href="/pt/results/t-05ae703af393"]')).toHaveCount(1);
-  await expect(page.locator('.lead-story .sens-dot')).toHaveCount(await page.locator('.lead-story .viz-table tbody tr').count());
-  await expect(page.locator('.editorial-featured')).toContainText('sem validação independente');
+  await expect(page.locator('.inst-feature-main > p > a[href="/pt/results/t-05ae703af393"]')).toHaveCount(1);
+  await expect(page.locator('.inst-feature-main .sens-dot')).toHaveCount(await page.locator('.inst-feature-main .viz-table tbody tr').count());
+  await expect(page.locator('.inst-feature')).toContainText('sem validação independente');
   await page.goto('/pt/results/t-05ae703af393');
   await expect(page.getByRole('main')).toContainText('reduziu em cerca de 94%');
   await expect(page.getByText('Data do registro público', {exact: true})).toBeVisible();
@@ -254,14 +254,13 @@ test('language switch preserves records and URL filters', async ({page}) => {
   await expect(page).toHaveURL(/\/en\/results\/t-05ae703af393$/);
 });
 
-test('editorial homepage is responsive and shows real credited observations', async ({page}) => {
+test('the homepage is responsive and shows the credited cover figure', async ({page}) => {
   for (const width of [360,390,768,1440]) {
     await page.setViewportSize({width,height:900});
     await page.goto('/pt');
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
-    await expect(page.locator('main img')).toHaveCount(4);
+    await expect(page.locator('main img')).toHaveCount(1);
     for (const image of await page.locator('main img').all()) {
-      // Not scrollIntoViewIfNeeded: it waits for a still box, and the hero image drifts by design.
       await image.evaluate(node => node.scrollIntoView({block: 'center', behavior: 'instant'}));
       await expect.poll(async () => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     }

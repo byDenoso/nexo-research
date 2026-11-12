@@ -1423,3 +1423,63 @@ body:has(main > .cine-hero) .site-header {position:fixed;inset-inline:0}
   .project-row > p:first-child {padding-block-start:.5rem}
   .project-row > p:last-child {padding-block-start:.3rem}
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Institute pass. A plain institutional home: reading column and support column,
+   NEXO's own figures, one navigation, and every element in its final state.
+   ─────────────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { animation: none !important; }
+html { scroll-behavior: auto !important; }
+.site-header { background: var(--bg); color: var(--ink); border-block-start: 0; border-block-end: 1px solid var(--line); }
+.wordmark { gap: .6rem; font: 600 1.0625rem/1.1 var(--font-serif, var(--font-source-serif)), Georgia, serif; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.wordmark .wordmark-rest { margin: 0; color: inherit; opacity: 1; font-weight: 600; }
+.site-footer .wordmark { color: inherit; }
+@media (max-width: 26rem) { .wordmark .wordmark-rest { display: none; } }
+@media (min-width: 64rem) {
+  .site-menu { display: none; }
+  .primary-nav a { color: var(--ink); font-size: .9375rem; }
+}
+.inst-lead { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; padding-block: clamp(2rem, 5vw, 4rem); }
+.inst-lead h1 { font: 600 clamp(2rem, 4.4vw, 3.25rem)/1.12 var(--font-source-serif), Georgia, serif; letter-spacing: -.01em; text-wrap: balance; }
+.inst-intro { max-inline-size: 34em; margin-block-start: 1.1rem; font-size: 1.125rem; line-height: 1.55; }
+.inst-facts { display: flex; flex-wrap: wrap; gap: .35rem 1.75rem; margin-block-start: 1.4rem; color: var(--muted); font-size: .9375rem; }
+.inst-facts b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+.inst-actions { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin-block-start: 1.25rem; font-size: .9375rem; }
+.inst-cover { margin: 0; }
+.inst-cover img { display: block; inline-size: 100%; block-size: auto; border-radius: 3px; background: #02040a; }
+.inst-cover figcaption { margin-block-start: .5rem; color: var(--muted); font-size: .8125rem; line-height: 1.5; }
+.inst-cover figcaption a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+.inst-section { padding-block: clamp(2rem, 4.5vw, 3.25rem); border-block-start: 1px solid var(--line); }
+.inst-section h2 { font: 600 clamp(1.45rem, 2.6vw, 1.9rem)/1.15 var(--font-source-serif), Georgia, serif; text-wrap: balance; }
+.inst-section h3 { font: 600 1.2rem/1.2 var(--font-source-serif), Georgia, serif; }
+.inst-section h3 a { color: inherit; }
+.inst-section h3 a:is(:hover, :focus-visible) { color: var(--accent); }
+.inst-label { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .6rem; margin-block-end: .6rem; color: var(--muted); font-size: .875rem; }
+.inst-feature { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); }
+.inst-feature > * { min-inline-size: 0; }
+.inst-feature-main > * + * { margin-block-start: 1.4rem; }
+.inst-test { display: grid; gap: .6rem; max-inline-size: 46em; }
+.inst-test > div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 1rem; }
+.inst-test dt { padding-block-start: .1rem; color: var(--muted); font-size: .875rem; }
+.inst-side-item { padding-block: 1.1rem; border-block-start: 1px solid var(--line); }
+.inst-side-item > * + * { margin-block-start: .5rem; }
+.inst-side-item p { font-size: .9375rem; }
+.inst-value { font: 500 1.6rem/1.2 var(--font-plex-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.inst-note { padding-block-start: 1rem; border-block-start: 1px solid var(--line); color: var(--muted); font-size: .8125rem; }
+.inst-lines { margin-block-start: 1.25rem; }
+.inst-lines a { display: grid; grid-template-columns: minmax(0, 15em) minmax(0, 1fr) auto; gap: .35rem 1.5rem; padding-block: 1rem; border-block-start: 1px solid var(--line); color: var(--ink); }
+.inst-lines li:last-child a { border-block-end: 1px solid var(--line); }
+.inst-lines strong { font: 600 1.125rem/1.25 var(--font-source-serif), Georgia, serif; }
+.inst-lines small { color: var(--muted); font-size: .875rem; }
+.inst-lines a:is(:hover, :focus-visible) strong { color: var(--accent); }
+.inst-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); }
+.inst-two > div > * + * { margin-block-start: .9rem; }
+.inst-two p { max-inline-size: 34em; }
+.inst-steps { max-inline-size: 36em; padding-inline-start: 1.3em; list-style: decimal; }
+.inst-steps li { padding-block: .28rem; }
+@media (max-width: 56rem) {
+  .inst-lead, .inst-feature, .inst-two { grid-template-columns: minmax(0, 1fr); }
+  .inst-lines a { grid-template-columns: minmax(0, 1fr); }
+  .inst-test > div { grid-template-columns: minmax(0, 1fr); gap: .1rem; }
+}
+.inst-descriptor { margin-block-start: .6rem; color: var(--muted); font: 400 clamp(1.15rem, 2vw, 1.4rem)/1.3 var(--font-source-serif), Georgia, serif; }

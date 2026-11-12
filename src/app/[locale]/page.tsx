@@ -1,35 +1,28 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {CountUp} from '@/components/Motion';
-import {ExpansionField, HeroReticle} from '@/components/MotionGraphics';
 import {PairChart} from '@/components/PairChart';
-import {Pipeline} from '@/components/Pipeline';
 import {SensitivityChart} from '@/components/SensitivityChart';
 import {StatusBadge} from '@/components/ui';
 import {getManifest, getResults} from '@/lib/data';
+import {D, tr} from '@/lib/dict';
 import {getFamilies} from '@/lib/families';
 import {fmtDate, isLocale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
 import {compilations, sensitivityPoints, sensitivityRows} from '@/lib/sensitivity';
 
-// Observations from the JWST Advanced Deep Extragalactic Survey (JADES), served from /public/images
-// as crops of the ESA/Webb publication files (CC BY 4.0). Credits are shown beside each image
-// with the wording of the source; docs/IMAGE-CREDITS.md lists the originals and the crops.
-const HERO = {
-  image: '/images/jades-gs-z14-0-field.jpg',
-  source: 'https://esawebb.org/images/jades5/',
-  credit: 'NASA, ESA, CSA, J. Olmsted (STScI), S. Carniani (Scuola Normale Superiore), JADES Collaboration'
-} as const;
+// Cover figure: NEXO's own rendering of the Pantheon+ supernovae at their sky positions.
+// docs/IMAGE-CREDITS.md records the data source, and the cosmology used for distances.
+const COVER = {image: '/images/pantheon-volume.jpg', width: 2560, height: 1440} as const;
 
-const topics = [
-  {image:'/images/jades-transients.jpg', source:'https://esawebb.org/images/JADES7/', credit:'NASA, ESA, CSA, STScI', title:{pt:'Expansão e energia escura',en:'Expansion and dark energy'}, desc:{pt:'O que muda ao variar supernovas, BAO e priors cosmológicos?',en:'What changes with supernova selection, BAO and cosmological priors?'}, caption:{pt:'Transientes no campo JADES, 83 marcados em círculos · JWST / NIRCam (recorte)',en:'Transients in the JADES field, 83 circled · JWST / NIRCam (crop)'},anchor:'expansion',zoom:1,position:'50% 50%'},
-  {image:'/images/jades-goods-south.jpg', source:'https://esawebb.org/images/JADES2/', credit:'NASA, ESA, CSA, B. Robertson (UC Santa Cruz), B. Johnson (Center for Astrophysics, Harvard & Smithsonian), S. Tacchella (University of Cambridge), M. Rieke (Univ. of Arizona), D. Eisenstein (Center for Astrophysics, Harvard & Smithsonian), A. Pagan (STScI)', title:{pt:'Universo primordial e galáxias',en:'Early universe and galaxies'}, desc:{pt:'Que propriedades físicas de objetos distantes resistem à seleção e à calibração?',en:'Which properties of distant sources survive selection and calibration effects?'}, caption:{pt:'Campo GOODS-Sul · JADES · JWST / NIRCam (recorte)',en:'GOODS-South field · JADES · JWST / NIRCam (crop)'},anchor:'galaxies',zoom:1,position:'50% 50%'},
-  {image:'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2014/10/STScI-01EVT3178GPJ7BSGWHHVAKWMK0.tif/jcr:content/renditions/cq5dam.web.1280.1280.jpeg', source:'https://science.nasa.gov/asset/hubble/hubble-frontier-fields-image-of-abell-2744/', credit:'NASA / ESA / J. Lotz / M. Mountain / A. Koekemoer / HFF Team (STScI)', title:{pt:'Estruturas e consistência entre sondas',en:'Structure and cross-probe consistency'}, desc:{pt:'Quais hipóteses resistem às medidas de crescimento, lenteamento e CMB?',en:'Which hypotheses survive comparisons of growth, lensing and CMB?'}, caption:{pt:'Aglomerado Abell 2744 · Hubble',en:'Abell 2744 cluster · Hubble'},anchor:'probes',zoom:1,position:'50% 50%'}
+const areas = [
+  {anchor: 'expansion', title: {pt: 'Expansão e energia escura', en: 'Expansion and dark energy'}, desc: {pt: 'O que muda ao variar supernovas, BAO e priors cosmológicos?', en: 'What changes with supernova selection, BAO and cosmological priors?'}, data: 'DES-SN5YR · Union3 · Pantheon+ · DESI'},
+  {anchor: 'probes', title: {pt: 'Estruturas e consistência entre sondas', en: 'Structure and cross-probe consistency'}, desc: {pt: 'Quais hipóteses resistem às medidas de crescimento, lenteamento e CMB?', en: 'Which hypotheses survive comparisons of growth, lensing and CMB?'}, data: 'Planck · eROSITA · DESI'},
+  {anchor: 'galaxies', title: {pt: 'Universo primordial e galáxias', en: 'Early universe and galaxies'}, desc: {pt: 'Que propriedades físicas de objetos distantes resistem à seleção e à calibração?', en: 'Which properties of distant sources survive selection and calibration effects?'}, data: 'JWST · JADES'}
 ] as const;
 
-// Lead story: one question told as question, data, result and limits. Texts restate the public
-// record; the featured value and range across runs come from the manifest figures.
+// Lead analysis: one question told as question, data, result and limits. Texts restate the public
+// record; the featured value and the range across runs come from the manifest figures.
 const LEAD_ID = 'T-05ae703af393';
 const lead = {
   title: {pt: 'O efeito de retirar supernovas próximas do ajuste', en: 'Removing nearby supernovae from the fit'},
@@ -40,98 +33,106 @@ const lead = {
 } as const;
 
 const secondary = [
-  {id: 'T-0e94e9e2951b', title: {pt: 'A tendência de S₈ no eROSITA', en: 'The S₈ trend in eROSITA'}, summary: {pt: 'Excluir o intervalo de maior redshift enfraqueceu a tendência de S₈ em um ajuste a resumos publicados do eROSITA.', en: 'Removing the highest-redshift bin weakened an S₈ trend in a fit to published eROSITA summaries.'}},
-  {id: 'T-9cdf8dcdf082', title: {pt: 'A escala de energia na derivação holográfica', en: 'The energy scale in the holographic derivation'}, summary: {pt: 'A derivação usa H₀ e a densidade observada de energia escura como entradas. Uma previsão independente precisaria fixar a escala sem esses dados.', en: 'The derivation takes H₀ and the observed dark-energy density as inputs. An independent prediction would need to fix the scale without those data.'}, value: {pt: '2,283 meV', en: '2.283 meV'}, label: {pt: 'escala de energia derivada de dados cosmológicos', en: 'energy scale derived from cosmological data'}}
+  {id: 'T-0e94e9e2951b', area: {pt: 'Crescimento de estruturas', en: 'Structure growth'}, title: {pt: 'A tendência de S₈ no eROSITA', en: 'The S₈ trend in eROSITA'}, summary: {pt: 'Excluir o intervalo de maior redshift enfraqueceu a tendência de S₈ em um ajuste a resumos publicados do eROSITA.', en: 'Removing the highest-redshift bin weakened an S₈ trend in a fit to published eROSITA summaries.'}},
+  {id: 'T-9cdf8dcdf082', area: {pt: 'Teoria', en: 'Theory'}, title: {pt: 'A escala de energia na derivação holográfica', en: 'The energy scale in the holographic derivation'}, summary: {pt: 'A derivação usa H₀ e a densidade observada de energia escura como entradas. Uma previsão independente precisaria fixar a escala sem esses dados.', en: 'The derivation takes H₀ and the observed dark-energy density as inputs. An independent prediction would need to fix the scale without those data.'}, value: {pt: '2,283 meV', en: '2.283 meV'}}
 ] as const;
 
-const archives=[
-  {name:'DESI',url:'https://data.desi.lbl.gov/doc/releases/',desc:{pt:'Documentação e releases espectroscópicos',en:'Spectroscopic documentation and releases'}},
-  {name:'Pantheon+',url:'https://github.com/PantheonPlusSH0ES/DataRelease',desc:{pt:'Dados públicos de supernovas',en:'Public supernova data'}},
-  {name:'MAST',url:'https://archive.stsci.edu/',desc:{pt:'Arquivo de observações Hubble e Webb',en:'Hubble and Webb observation archive'}}
-] as const;
-
-export default async function Home({params}:{params:Promise<{locale:string}>}){
-  const {locale}=await params;
-  if(!isLocale(locale)) notFound();
+export default async function Home({params}: {params: Promise<{locale: string}>}) {
+  const {locale} = await params;
+  if (!isLocale(locale)) notFound();
   const pt = locale === 'pt';
-  const results=getResults(), families=getFamilies(results), snapshot=getManifest().generatedFrom;
+  const results = getResults(), families = getFamilies(results), snapshot = getManifest().generatedFrom;
   const leadResult = results.find(item => item.id === LEAD_ID);
   const strip = sensitivityPoints(results);
   const featuredRun = strip.find(point => point.id === LEAD_ID);
   const number = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-GB', {maximumFractionDigits: 3});
+  const values = strip.map(point => point.value);
   const stories = secondary.flatMap(entry => {const result = results.find(item => item.id === entry.id); return result ? [{entry, result}] : [];});
-  const caveat = pt ? 'Registro interno, sem validação independente nem significância global estabelecida.' : 'Internal record, without established independent validation or global significance.';
   return <>
-    <section className="cine-hero" aria-labelledby="editorial-title">
-      <figure className="hero-observation">
-        <div className="cine-stage">
-          <div className="cine-media"><Image src={HERO.image} alt={pt?'Campo profundo do levantamento JADES observado pelo telescópio Webb, com milhares de galáxias distantes':'JADES deep field observed by the Webb telescope, showing thousands of distant galaxies'} fill sizes="100vw" priority quality={90} className="science-cover cine-image"/></div>
-          <HeroReticle label="JWST / NIRCam" />
-          <div className="wrap cine-copy">
-            <p className="kicker">{pt?'Pesquisa independente em cosmologia':'Independent cosmology research'}</p>
-            <h1 id="editorial-title">{(pt?'Expansão do Universo e energia escura':'Cosmic expansion and dark energy').split(' ').map((word, index, words) => <span key={index}><span className="word" data-em={index >= words.length - 2 ? '' : undefined} style={{'--i': index} as React.CSSProperties}><span>{word}</span></span>{' '}</span>)}</h1>
-            <p className="cine-lead">{pt?'O NEXO usa dados públicos de supernovas e de outros levantamentos para testar modelos de expansão. O catálogo informa as condições de cada teste divulgado.':'NEXO tests expansion models using public data from supernova compilations and other surveys. The catalogue lists the conditions of each test made public.'}</p>
-            <div className="home-actions"><Link className="btn btn-primary arrow-link" href={href(locale,'/results')}>{pt?'Ver os resultados':'View the results'}</Link><Link className="btn cine-ghost arrow-link" href={href(locale,'/research')}>{pt?'Ver linhas de pesquisa':'View research areas'}</Link></div>
-          </div>
-          <span className="cine-cue" aria-hidden="true" />
-        </div>
-        <figcaption className="cine-credit"><div className="wrap"><span>{pt?'Entorno de JADES-GS-z14-0 no campo GOODS-Sul · JADES · JWST / NIRCam (recorte). Imagem observacional externa, não produzida pelo NEXO.':'Surroundings of JADES-GS-z14-0 in the GOODS-South field · JADES · JWST / NIRCam (crop). External observation, not produced by NEXO.'}</span><a href={HERO.source} target="_blank" rel="noopener noreferrer">{HERO.credit} ↗</a></div></figcaption>
+    <section className="wrap inst-lead" aria-labelledby="institute-title">
+      <div className="inst-lead-copy">
+        <h1 id="institute-title">NEXO Research Institute</h1>
+        <p className="inst-descriptor">{pt ? 'Instituto independente de pesquisa em cosmologia' : 'An independent research institute in cosmology'}</p>
+        <p className="inst-intro">{pt
+          ? 'Testamos modelos de expansão do Universo com dados públicos de supernovas, oscilações acústicas de bárions e radiação cósmica de fundo. Cada teste é registrado antes do cálculo e entra no catálogo com suas condições e seus limites.'
+          : 'We test models of cosmic expansion against public data from supernovae, baryon acoustic oscillations and the cosmic microwave background. Each test is recorded before the calculation and enters the catalogue with its conditions and limits.'}</p>
+        <p className="inst-facts">
+          <span><b>{number.format(families.length)}</b> {pt ? 'famílias de resultados' : 'result families'}</span>
+          <span><b>{number.format(results.length)}</b> {pt ? 'registros de testes' : 'test records'}</span>
+          <span>{pt ? 'Catálogo atualizado em' : 'Catalogue updated on'} <b>{fmtDate(snapshot.latestUpdate, locale)}</b></span>
+        </p>
+        <p className="inst-actions"><Link className="text-link" href={href(locale, '/results')}>{pt ? 'Abrir o catálogo' : 'Open the catalogue'}</Link><Link className="text-link" href={href(locale, '/methods')}>{pt ? 'Como os testes são feitos' : 'How the tests are run'}</Link></p>
+      </div>
+      <figure className="inst-cover">
+        <Image src={COVER.image} width={COVER.width} height={COVER.height} priority quality={88} sizes="(max-width: 56rem) 100vw, 46vw"
+          alt={pt ? 'Supernovas do Pantheon+ dispostas em três dimensões em torno do observador, com cascas esféricas em redshift 0,1, 0,5, 1,0 e 2,0' : 'Pantheon+ supernovae placed in three dimensions around the observer, with spherical shells at redshift 0.1, 0.5, 1.0 and 2.0'} />
+        <figcaption>{pt
+          ? 'As 1.543 supernovas do Pantheon+ nas posições do céu, com cascas em z = 0,1, 0,5, 1,0 e 2,0. Distâncias comóveis em ΛCDM plano (Ωm = 0,3; H₀ = 70 km/s/Mpc). Visualização do NEXO sobre dados de '
+          : 'The 1,543 Pantheon+ supernovae at their sky positions, with shells at z = 0.1, 0.5, 1.0 and 2.0. Comoving distances in flat ΛCDM (Ωm = 0.3; H₀ = 70 km/s/Mpc). NEXO visualisation of data from '}
+          <a href="https://arxiv.org/abs/2112.03863" target="_blank" rel="noopener noreferrer">Scolnic et al. (2022)</a>.</figcaption>
       </figure>
     </section>
 
-    {leadResult && <section className="wrap editorial-featured" aria-labelledby="featured-title">
-      <div className="editorial-section-header"><div><p className="kicker">{pt?'Arquivo público':'Public archive'} · {fmtDate(snapshot.latestUpdate,locale)}</p><h2 id="featured-title">{pt?'Análises em destaque':'Selected research analyses'}</h2><p>{pt?'Os destaques abaixo são resultados candidatos. Cada um leva ao registro com as condições do teste.':'The analyses below are candidate results. Each links to a record with its test conditions.'}</p></div><Link href={href(locale,'/results')} className="text-link arrow-link">{pt?'Catálogo completo':'Full catalogue'}</Link></div>
-      <article className="lead-story">
-        <div className="lead-story-copy">
-          <div className="editorial-featured-top"><span className="kicker">01 / {pt?'Expansão e energia escura':'Expansion and dark energy'}</span><StatusBadge locale={locale} status={leadResult.status}/></div>
-          <h3>{lead.title[locale]}</h3>
-          <dl className="story-steps">
+    {leadResult && <section className="wrap inst-section" aria-labelledby="featured-title">
+      <div className="inst-feature">
+        <article className="inst-feature-main">
+          <p className="inst-label">{pt ? 'Análise em destaque' : 'Featured analysis'} · {pt ? 'Expansão e energia escura' : 'Expansion and dark energy'} <StatusBadge locale={locale} status={leadResult.status} /></p>
+          <h2 id="featured-title">{lead.title[locale]}</h2>
+          <dl className="inst-test">
             {lead.steps.map(step => <div key={step.k.en}><dt>{step.k[locale]}</dt><dd>{step.v[locale]}</dd></div>)}
-            {featuredRun && <div><dt>{pt?'Resultado':'Result'}</dt><dd>{pt
+            {featuredRun && <div><dt>{pt ? 'Resultado' : 'Result'}</dt><dd>{pt
               ? `Sem as supernovas de z = ${number.format(featuredRun.zLow)}–${number.format(featuredRun.zHigh)}, a melhora do ajuste em ${featuredRun.compilation} caiu cerca de ${number.format(featuredRun.value)}%.`
               : `Without the supernovae at z = ${number.format(featuredRun.zLow)}–${number.format(featuredRun.zHigh)}, the fit improvement in ${featuredRun.compilation} fell by about ${number.format(featuredRun.value)}%.`}</dd></div>}
-            <div><dt>{pt?'Limites':'Limits'}</dt><dd>{caveat} {pt?'O efeito varia entre as configurações examinadas.':'The effect varies across the configurations examined.'}</dd></div>
+            {values.length > 1 && <div><dt>{pt ? 'Limites' : 'Limits'}</dt><dd>{pt
+              ? `O efeito varia entre as configurações examinadas, de ${number.format(Math.min(...values))}% a ${number.format(Math.max(...values))}%. As execuções não são medições independentes.`
+              : `The effect varies across the configurations examined, from ${number.format(Math.min(...values))}% to ${number.format(Math.max(...values))}%. The runs are not independent measurements.`}</dd></div>}
           </dl>
-          <Link href={href(locale,'/results/'+leadResult.slug)} className="btn arrow-link">{pt?'Ver método e limites':'View methods and limits'}<span className="sr-only">: {lead.title[locale]}</span></Link>
+          <SensitivityChart
+            rows={sensitivityRows(strip)} series={compilations(strip)} locale={locale} highlight={LEAD_ID}
+            title={pt ? 'Quanto cai a melhora do ajuste ao excluir uma faixa de redshift?' : 'How much does fit improvement fall when a redshift range is removed?'}
+            lead={pt ? 'Execuções públicas do NEXO, por compilação de supernovas e faixa excluída.' : 'Public NEXO runs, by supernova compilation and removed range.'}
+          />
+          <p><Link href={href(locale, '/results/' + leadResult.slug)} className="text-link">{pt ? 'Método e limites deste registro' : 'Methods and limits of this record'}</Link></p>
+        </article>
+        <div className="inst-feature-side">
+          <p className="inst-label">{pt ? 'Outras análises' : 'Other analyses'}</p>
+          {stories.map(({entry, result}) => <article className="inst-side-item" key={result.id}>
+            <p className="inst-label">{entry.area[locale]} <StatusBadge locale={locale} status={result.status} /></p>
+            <h3><Link href={href(locale, '/results/' + result.slug)}>{entry.title[locale]}</Link></h3>
+            {'value' in entry ? <p className="inst-value">{entry.value[locale]}</p> : <PairChart item={result} locale={locale} compact />}
+            <p>{entry.summary[locale]}</p>
+          </article>)}
+          <p className="inst-note">{pt
+            ? 'Candidato indica registro interno, sem validação independente nem significância global estabelecida.'
+            : 'Candidate marks an internal record, without independent validation or established global significance.'}</p>
+          <p><Link href={href(locale, '/results')} className="text-link">{pt ? 'Todas as análises' : 'All analyses'}</Link></p>
         </div>
-        <SensitivityChart
-          rows={sensitivityRows(strip)} series={compilations(strip)} locale={locale} highlight={LEAD_ID}
-          title={pt?'Quanto cai a melhora do ajuste ao excluir uma faixa de redshift?':'How much does fit improvement fall when a redshift range is removed?'}
-          lead={pt?'Execuções públicas do NEXO, por compilação de supernovas e faixa excluída.':'Public NEXO runs, by supernova compilation and removed range.'}
-        />
-      </article>
-      <div className="story-pair">{stories.map(({entry,result},i)=><article className="editorial-featured-card" key={result.id}>
-        <div className="editorial-featured-top"><span className="kicker">0{i+2} / {pt?'Teste':'Test'}</span><StatusBadge locale={locale} status={result.status}/></div>
-        <h3>{entry.title[locale]}</h3>
-        {'value' in entry ? <div className="editorial-figure"><strong>{entry.value[locale]}</strong><small>{entry.label[locale]}</small></div> : <PairChart item={result} locale={locale} compact/>}
-        <p>{entry.summary[locale]}</p>
-        <p className="editorial-featured-caveat">{caveat}</p>
-        <Link href={href(locale,'/results/'+result.slug)} className="text-link arrow-link">{pt?'Ver método e limites':'View methods and limits'}<span className="sr-only">: {entry.title[locale]}</span></Link>
-      </article>)}</div>
+      </div>
     </section>}
 
-    <section className="wrap question-section" aria-labelledby="questions-title">
-      <div className="editorial-section-intro"><p className="kicker">{pt?'Perguntas científicas':'Scientific questions'}</p><h2 id="questions-title">{pt?'Testes com dados de levantamentos':'Tests with survey data'}</h2><p>{pt?'Nos testes de expansão, variamos a amostra de supernovas e o prior de densidade de matéria para medir o efeito sobre o ajuste.':'In the expansion tests, we vary the supernova sample and matter-density prior to measure how each choice affects the fit.'}</p></div>
-      <ol className="editorial-question-list"><li><span>01</span>{pt?'A energia escura muda ao longo do tempo cósmico?':'Does dark energy evolve over cosmic time?'}</li><li><span>02</span>{pt?'Quanto o ajuste muda ao excluir faixas de redshift das supernovas?':'How much does the fit change when supernova redshift ranges are excluded?'}</li><li><span>03</span>{pt?'Como surgem estruturas e galáxias no Universo jovem?':'How do structures and galaxies emerge in the early universe?'}</li></ol>
+    <section className="wrap inst-section" aria-labelledby="areas-title">
+      <h2 id="areas-title">{pt ? 'Linhas de pesquisa' : 'Research areas'}</h2>
+      <ul className="inst-lines" role="list">{areas.map(area => <li key={area.anchor}><Link href={href(locale, '/research') + '#' + area.anchor}>
+        <strong>{area.title[locale]}</strong><span>{area.desc[locale]}</span><small>{area.data}</small>
+      </Link></li>)}</ul>
     </section>
 
-    <section className="visual-research" aria-labelledby="areas-title"><div className="wrap">
-      <div className="editorial-section-header"><div><p className="kicker">{pt?'Temas do catálogo':'Catalogue topics'}</p><h2 id="areas-title">{pt?'Linhas de pesquisa':'Research areas'}</h2></div><Link href={href(locale,'/research')} className="text-link arrow-link">{pt?'Todas as linhas':'All research areas'}</Link></div>
-      <div className="research-photo-grid">{topics.map((area,i)=><article key={area.anchor} className="research-photo-card"><figure><div className="research-photo-frame"><Image src={area.image} alt={area.caption[locale]} fill sizes="(max-width: 700px) 100vw, (max-width: 1050px) 50vw, 33vw" className="science-cover" style={{objectPosition: area.position, '--zoom': area.zoom} as React.CSSProperties}/></div><figcaption><a href={area.source} target="_blank" rel="noopener noreferrer">{area.caption[locale]} · {area.credit} ↗</a></figcaption></figure><div className="research-photo-copy"><p className="kicker">0{i+1} / {pt?'Pesquisa':'Research'}</p><h3>{area.title[locale]}</h3><p>{area.desc[locale]}</p><Link href={href(locale,'/research')+'#'+area.anchor} className="text-link arrow-link">{pt?'Ver linha de pesquisa':'View research area'}<span className="sr-only">: {area.title[locale]}</span></Link></div></article>)}</div>
-    </div></section>
-
-    <section className="dark-chapter method-chapter" aria-labelledby="methods-title"><div className="wrap">
-      <div className="editorial-section-header"><div><p className="kicker">{pt?'Método e rastreabilidade':'Method and traceability'}</p><h2 id="methods-title">{pt?'Como uma hipótese é testada':'How a hypothesis is tested'}</h2><p>{pt?'Abra uma etapa para ver o que se registra antes do ajuste e quais verificações entram na revisão.':'Open a stage to see what is recorded before fitting and which checks are part of the review.'}</p></div><Link href={href(locale,'/methods')} className="text-link arrow-link">{pt?'Métodos completos':'Full methods'}</Link></div>
-      <Pipeline locale={locale}/>
-    </div></section>
-
-    <section className="dark-chapter source-chapter" aria-labelledby="sources-title"><ExpansionField /><div className="wrap source-grid">
-      <div className="source-copy"><p className="kicker">{pt?'Dados e software':'Data and software'}</p><h2 id="sources-title">{pt?'Onde encontrar os dados e o código':'Where to find the data and code'}</h2><p>{pt?'As análises partem de levantamentos públicos. A página de dados mostra o snapshot em uso, seu SHA-256 e os conjuntos citados nos resumos.':'The analyses start from public surveys. The data page shows the snapshot in use, its SHA-256 and the data sets named in the summaries.'}</p><Link href={href(locale,'/data')} className="btn cine-ghost arrow-link">{pt?'Ver dados e fontes':'View data and sources'}</Link></div>
-      <div><ul className="source-index" role="list">{archives.map(source=><li key={source.name}><a href={source.url} rel="noopener noreferrer" target="_blank"><span><strong>{source.name}</strong><small>{source.desc[locale]}</small></span><b aria-hidden="true">↗</b></a></li>)}<li><Link href={href(locale,'/code')}><span><strong>{pt?'Código do NEXO':'NEXO code'}</strong><small>{pt?'Repositórios e artefatos públicos':'Public repositories and artefacts'}</small></span><b aria-hidden="true">→</b></Link></li></ul><p className="source-note">{pt?'Os arquivos externos não representam afiliação ou endosso institucional.':'External archives do not imply institutional affiliation or endorsement.'}</p></div>
-    </div></section>
-
-    <section className="wrap editorial-archive" aria-labelledby="archive-title"><div className="editorial-archive-heading"><p className="kicker">{pt?'Manifesto da Tower':'Tower manifest'}</p><h2 id="archive-title">{pt?'O que consta no catálogo':'What the catalogue contains'}</h2><p>{pt?'Uma família agrupa testes da mesma pergunta. O total de registros inclui as variações de dados e de método.':'A family groups tests of the same question. The record count includes variations in data and methods.'}</p></div><dl className="editorial-archive-metrics"><div><dd><CountUp value={families.length} locale={pt?'pt-BR':'en-GB'} /></dd><dt>{pt?'famílias de resultados':'result families'}</dt></div><div><dd><CountUp value={results.length} locale={pt?'pt-BR':'en-GB'} /></dd><dt>{pt?'registros públicos de testes':'public test records'}</dt></div><div><dd>{fmtDate(snapshot.latestUpdate,locale)}</dd><dt>{pt?'última data do snapshot':'latest snapshot record date'}</dt></div></dl><Link href={href(locale,'/data')} className="text-link arrow-link">{pt?'Ver proveniência e SHA-256':'View provenance and SHA-256'}</Link></section>
-
-    <section className="wrap editorial-closer" aria-labelledby="closer-title"><div><p className="kicker">{pt?'Sobre o projeto':'About the project'}</p><h2 id="closer-title">{pt?'Quem conduz a pesquisa':'Who conducts the research'}</h2><p>{pt?'Dener Pereira conduz a pesquisa independente do NEXO e responde pela interpretação dos testes e pelo conteúdo do catálogo.':'Dener Pereira conducts NEXO’s independent research and is responsible for interpreting the tests and editing the catalogue.'}</p></div><div className="editorial-closer-actions"><Link className="btn btn-primary arrow-link" href={href(locale,'/about')}>{pt?'Conhecer o NEXO':'About NEXO'}</Link><Link className="btn arrow-link" href={href(locale,'/contact')}>{pt?'Contato':'Contact'}</Link><Link className="text-link" href={href(locale,'/updates')}>{pt?'Atualizações editoriais':'Editorial updates'}</Link></div></section>
+    <section className="wrap inst-section inst-two">
+      <div aria-labelledby="methods-title">
+        <h2 id="methods-title">{pt ? 'Como uma hipótese é testada' : 'How a hypothesis is tested'}</h2>
+        <ol className="inst-steps">{D.how.steps.map(step => <li key={step.k}><strong>{tr(step.n, locale)}.</strong> {tr(step.d, locale)}</li>)}</ol>
+        <p><Link href={href(locale, '/methods')} className="text-link">{pt ? 'Métodos completos' : 'Full methods'}</Link></p>
+      </div>
+      <div aria-labelledby="about-title">
+        <h2 id="about-title">{pt ? 'O instituto' : 'The institute'}</h2>
+        <p>{pt
+          ? 'O NEXO Research Institute é um projeto independente, dirigido por Dener Pereira, que responde pela interpretação dos testes e pelo conteúdo do catálogo.'
+          : 'NEXO Research Institute is an independent project directed by Dener Pereira, who is responsible for interpreting the tests and for the content of the catalogue.'}</p>
+        <p>{pt
+          ? 'Para propor uma verificação, indique o identificador do registro e o ajuste, o corte de amostra ou a hipótese que você quer conferir.'
+          : 'To propose a check, give the record identifier and the fit, sample cut or hypothesis you want to verify.'}</p>
+        <p className="inst-actions"><Link href={href(locale, '/about')} className="text-link">{pt ? 'Sobre o instituto' : 'About the institute'}</Link><Link href={href(locale, '/data')} className="text-link">{pt ? 'Dados e proveniência' : 'Data and provenance'}</Link><Link href={href(locale, '/contact')} className="text-link">{pt ? 'Contato' : 'Contact'}</Link></p>
+      </div>
+    </section>
   </>;
 }
