@@ -64,7 +64,105 @@
         "url": "https://github.com/byDenoso/nexo-analyses/blob/main/T-05ae703af393/expected.json",
         "sha256": "389bc45302b94d1a0a7d0db6364cf7eb784944cf7dd6944985d1200daf0be2ec"
       }
-    ]
+    ],
+    "method": {
+      "pt-BR": "O ajuste de cada compilação (DES-SN5YR e Union3) é repetido após excluir, uma por vez, as faixas z = 0,01–0,15; 0,15–0,5; 0,5–2,3. Compara-se ΛCDM plano com o modelo w0wa pela diferença de χ². As medidas de BAO do DESI DR2 são mantidas fixas, e adota-se o prior Ωm = 0,3 ± 0,01. Nenhuma likelihood da radiação cósmica de fundo entra no ajuste.",
+      "en": "The fit to each compilation (DES-SN5YR and Union3) is repeated after excluding, one at a time, the ranges z = 0.01–0.15; 0.15–0.5; 0.5–2.3. Flat ΛCDM is compared with the w0wa model through the χ² difference. DESI DR2 BAO measurements are held fixed, and the adopted prior is Ωm = 0.3 ± 0.01. No cosmic microwave background likelihood enters the fit."
+    },
+    "corrections": [
+      {
+        "date": "2026-11-12",
+        "note": {
+          "pt-BR": "O texto anterior dizia que as restrições da radiação cósmica de fundo eram mantidas fixas. O código publicado não usa likelihood de CMB; o prior em Ωm ocupa esse lugar. O texto também dizia que não havia valores para os demais cortes; eles constam da reexecução abaixo. O estado do registro e o valor de cerca de 94% não mudaram.",
+          "en": "The earlier text said that cosmic microwave background constraints were held fixed. The published code uses no CMB likelihood; the prior on Ωm takes its place. The text also said that values for the other cuts were unavailable; they are given in the rerun below. The record status and the value of about 94% did not change."
+        }
+      }
+    ],
+    "rerun": {
+      "date": "2026-11-12",
+      "values": [
+        {
+          "label": {
+            "pt-BR": "DES-SN5YR, amostra completa (1820 supernovas): Δχ² entre ΛCDM e w0wa",
+            "en": "DES-SN5YR, full sample (1820 supernovae): Δχ² between ΛCDM and w0wa"
+          },
+          "value": {
+            "pt-BR": "6,78",
+            "en": "6.78"
+          }
+        },
+        {
+          "label": {
+            "pt-BR": "DES-SN5YR sem z = 0,01–0,15: parcela da melhora removida",
+            "en": "DES-SN5YR without z = 0.01–0.15: share of the improvement removed"
+          },
+          "value": {
+            "pt-BR": "94,2%",
+            "en": "94.2%"
+          }
+        },
+        {
+          "label": {
+            "pt-BR": "DES-SN5YR sem z = 0,15–0,5: a melhora aumenta",
+            "en": "DES-SN5YR without z = 0.15–0.5: the improvement grows"
+          },
+          "value": {
+            "pt-BR": "+35,9%",
+            "en": "+35.9%"
+          }
+        },
+        {
+          "label": {
+            "pt-BR": "DES-SN5YR sem z = 0,5–2,3: a melhora aumenta",
+            "en": "DES-SN5YR without z = 0.5–2.3: the improvement grows"
+          },
+          "value": {
+            "pt-BR": "+15,5%",
+            "en": "+15.5%"
+          }
+        },
+        {
+          "label": {
+            "pt-BR": "Union3, amostra completa (22 nós): Δχ² entre ΛCDM e w0wa",
+            "en": "Union3, full sample (22 nodes): Δχ² between ΛCDM and w0wa"
+          },
+          "value": {
+            "pt-BR": "7,86",
+            "en": "7.86"
+          }
+        },
+        {
+          "label": {
+            "pt-BR": "Union3 sem z = 0,01–0,15: parcela da melhora removida",
+            "en": "Union3 without z = 0.01–0.15: share of the improvement removed"
+          },
+          "value": {
+            "pt-BR": "54,0%",
+            "en": "54.0%"
+          }
+        },
+        {
+          "label": {
+            "pt-BR": "Union3 sem z = 0,15–0,5: parcela da melhora removida",
+            "en": "Union3 without z = 0.15–0.5: share of the improvement removed"
+          },
+          "value": {
+            "pt-BR": "1,9%",
+            "en": "1.9%"
+          }
+        },
+        {
+          "label": {
+            "pt-BR": "Union3 sem z = 0,5–2,3: o script recusa o ajuste, por restarem menos de 10 pontos",
+            "en": "Union3 without z = 0.5–2.3: the script refuses the fit, fewer than 10 points remain"
+          },
+          "value": {
+            "pt-BR": "sem valor",
+            "en": "no value"
+          }
+        }
+      ]
+    }
   },
   {
     "id": "T-0e94e9e2951b",

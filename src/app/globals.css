@@ -1507,3 +1507,10 @@ html { scroll-behavior: auto !important; }
   font: 600 .8125rem/1.5 var(--font-sans); letter-spacing: 0; text-transform: none;
 }
 .status-badge { font-size: .75rem; letter-spacing: .06em; }
+
+/* Dated correction and rerun table on a record page. */
+.record-correction { margin-top: .75rem; padding-left: .875rem; border-left: 2px solid var(--line, currentColor); font-size: .9375rem; }
+.record-rerun { width: 100%; margin-top: .75rem; border-collapse: collapse; font-size: .9375rem; }
+.record-rerun th, .record-rerun td { padding: .5rem .5rem .5rem 0; border-top: 1px solid var(--line, currentColor); text-align: left; vertical-align: top; font-weight: 400; }
+.record-rerun thead th { border-top: 0; font-weight: 600; }
+.record-rerun td { white-space: nowrap; font-variant-numeric: tabular-nums; }

@@ -104,7 +104,12 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
       <div className="wrap page-body record-layout">
         <div className="record-reading">
           <Block id="question" title={tr(R.question, locale)}><p>{scientificText(pick(item.question, locale), locale)}</p></Block>
-          <Block id="method" title={tr(R.method, locale)}><p>{scientificText(pick(item.method, locale), locale)}</p></Block>
+          <Block id="method" title={tr(R.method, locale)}>
+            <p>{scientificText(pick(dossier?.method ?? item.method, locale), locale)}</p>
+            {dossier?.corrections?.map(entry => (
+              <p key={entry.date} className="record-correction"><strong>{pt ? 'Correção de' : 'Correction of'} <time dateTime={entry.date}>{fmtDate(entry.date, locale)}</time>.</strong> {scientificText(pick(entry.note, locale), locale)}</p>
+            ))}
+          </Block>
           <div className="card record-evidence">
             <Block id="result" title={tr(R.result, locale)}><p>{scientificText(pick(item.result, locale), locale)}</p></Block>
             <Figure item={item} locale={locale} />
@@ -112,6 +117,15 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
               <Block id="limits" className="record-limits" title={tr(R.limits, locale)}><ul>{item.figure.limitations.map((entry, index) => <li key={index}>{scientificText(pick(entry, locale), locale)}</li>)}</ul></Block>
             )}
           </div>
+          {dossier?.rerun && (
+            <Block id="rerun" title={pt ? 'Reexecução do código publicado' : 'Rerun of the published code'}>
+              <p>{pt ? 'Valores obtidos ao rodar novamente o script em' : 'Values returned when the script was run again on'} <time dateTime={dossier.rerun.date}>{fmtDate(dossier.rerun.date, locale)}</time>.</p>
+              <table className="record-rerun">
+                <thead><tr><th scope="col">{pt ? 'Ajuste' : 'Fit'}</th><th scope="col">{pt ? 'Valor' : 'Value'}</th></tr></thead>
+                <tbody>{dossier.rerun.values.map((entry, index) => <tr key={index}><th scope="row">{scientificText(pick(entry.label, locale), locale)}</th><td>{pick(entry.value, locale)}</td></tr>)}</tbody>
+              </table>
+            </Block>
+          )}
           {inStrip && (
             <SensitivityChart
               rows={sensitivityRows(strip)} series={compilations(strip)} locale={locale} highlight={item.id}

@@ -101,6 +101,10 @@ test('a highlighted record carries its dossier and its own figure', async ({page
   await page.goto('/pt/results/t-05ae703af393');
   const dossier = page.getByRole('complementary', {name: 'Dossiê de verificação'});
   await expect(dossier).toContainText('DES-SN5YR');
+  await expect(page.locator('#method')).toContainText('Nenhuma likelihood da radiação cósmica de fundo entra no ajuste.');
+  await expect(page.locator('#method')).not.toContainText('radiação cósmica de fundo são mantidas fixas');
+  await expect(page.locator('#method .record-correction')).toContainText('Correção de');
+  await expect(page.locator('#rerun tbody tr')).toHaveCount(8);
   await expect(dossier.getByRole('link', {name: /arXiv:2401\.02929/})).toHaveAttribute('href', 'https://arxiv.org/abs/2401.02929');
   await expect(dossier).toContainText('Não consta no resumo público.');
   await expect(page.locator('.record-reading .sens-dot[data-active]')).toHaveCount(1);
@@ -140,7 +144,7 @@ test('institute, projects, data and updates carry the institutional content', as
   await expect(page.locator('#cite')).toContainText('NEXO Research Institute (2026). Public catalogue of cosmological tests');
   await expect(page.getByRole('link', {name: 'Download the snapshot (JSON)'})).toHaveAttribute('href', '/atlas-public.json');
   await page.goto('/pt/updates');
-  await expect(page.locator('.inst-log > li')).toHaveCount(5);
+  await expect(page.locator('.inst-log > li')).toHaveCount(6);
   const feed = await request.get('/feed.xml');
   expect(feed.status()).toBe(200);
   expect(feed.headers()['content-type']).toContain('application/atom+xml');

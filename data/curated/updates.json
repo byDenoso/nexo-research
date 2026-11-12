@@ -1,6 +1,19 @@
 [
   {
     "date": "2026-11-12",
+    "kind": "catalogue",
+    "title": {
+      "pt-BR": "Correção no registro T-05ae703af393",
+      "en": "Correction to record T-05ae703af393"
+    },
+    "body": {
+      "pt-BR": "O método do registro dizia que as restrições da radiação cósmica de fundo eram mantidas fixas. O código não usa likelihood de CMB, e o texto foi corrigido. A página passou a trazer os valores de todas as exclusões obtidos na reexecução. O estado do registro não mudou.",
+      "en": "The record method said that cosmic microwave background constraints were held fixed. The code uses no CMB likelihood, and the text was corrected. The page now gives the values of every exclusion from the rerun. The record status did not change."
+    },
+    "url": "https://nexoresearch.org/pt/results/t-05ae703af393"
+  },
+  {
+    "date": "2026-11-12",
     "kind": "software",
     "title": {
       "pt-BR": "Código do registro T-05ae703af393 publicado",

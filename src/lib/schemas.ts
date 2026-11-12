@@ -84,8 +84,17 @@ export const dossier = z.object({
   })).min(1),
   code: z.array(z.object({label: z.string(), url})).optional(),
   artefacts: z.array(z.object({label: z.string(), url, sha256: z.string().regex(/^[0-9a-f]{64}$/).optional()})).optional(),
-  analysisDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
-});
+  analysisDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  // Corrected method text, used when the source summary misstates what the code does. Every use
+  // needs a dated entry in `corrections` saying what changed.
+  method: localized.optional(),
+  corrections: z.array(z.object({date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), note: localized})).optional(),
+  // Values returned when the published script was run again.
+  rerun: z.object({
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    values: z.array(z.object({label: localized, value: localized})).min(1)
+  }).optional()
+}).refine(entry => !entry.method || Boolean(entry.corrections?.length), {message: 'a corrected method needs a dated correction'});
 export const dossiers = z.array(dossier);
 export type Dossier = z.infer<typeof dossier>;
 
