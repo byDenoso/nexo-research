@@ -79,7 +79,7 @@ export function FamilyCard({item, locale}: {item: {slug: string; title: string; 
   return (
     <article className="card result-card family-card">
       <div className="result-card-meta">
-        <span className="family-tag">{locale === 'pt' ? 'Pergunta científica' : 'Scientific question'}</span>
+        <span className="family-tag">{item.recordCount > 1 ? (locale === 'pt' ? 'Família de testes' : 'Test family') : (locale === 'pt' ? 'Teste' : 'Test')}</span>
         <span>{item.recordCount} {locale === 'pt' ? (item.recordCount === 1 ? 'registro' : 'registros') : (item.recordCount === 1 ? 'record' : 'records')}</span>
       </div>
       <h3>

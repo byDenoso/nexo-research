@@ -131,7 +131,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <p>{pt
           ? 'Para propor uma verificação, indique o identificador do registro e o ajuste, o corte de amostra ou a hipótese que você quer conferir.'
           : 'To propose a check, give the record identifier and the fit, sample cut or hypothesis you want to verify.'}</p>
-        <p className="inst-actions"><Link href={href(locale, '/about')} className="text-link">{pt ? 'Sobre o instituto' : 'About the institute'}</Link><Link href={href(locale, '/data')} className="text-link">{pt ? 'Dados e proveniência' : 'Data and provenance'}</Link><Link href={href(locale, '/contact')} className="text-link">{pt ? 'Contato' : 'Contact'}</Link></p>
+        <p className="inst-actions"><Link href={href(locale, '/about')} className="text-link">{pt ? 'Sobre o instituto' : 'About the institute'}</Link><Link href={href(locale, '/code')} className="text-link">{pt ? 'Código' : 'Code'}</Link><Link href={href(locale, '/data')} className="text-link">{pt ? 'Dados e proveniência' : 'Data and provenance'}</Link><Link href={href(locale, '/contact')} className="text-link">{pt ? 'Contato' : 'Contact'}</Link></p>
       </div>
     </section>
   </>;

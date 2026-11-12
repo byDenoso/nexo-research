@@ -4,5 +4,22 @@
   "orcid": "0009-0005-0076-9797",
   "email": "phys@denerpereira.com.br",
   "profileUrl": "https://orcid.org/0009-0005-0076-9797",
-  "repositories": []
+  "repositories": [
+    {
+      "label": "nexo-guard",
+      "url": "https://github.com/byDenoso/nexo-research/tree/main/software/nexo-guard",
+      "description": {
+        "pt-BR": "Regras de admissão de resultados e protocolo de busca em catálogos: partição da amostra, limiar calibrado em nulos, potência por injeção e uso único da reserva. Python, com 43 casos de teste.",
+        "en": "Admission rules for results and the catalogue search protocol: sample partition, threshold calibrated on nulls, power by injection and single use of the holdout. Python, with 43 test cases."
+      }
+    },
+    {
+      "label": "nexo-research",
+      "url": "https://github.com/byDenoso/nexo-research",
+      "description": {
+        "pt-BR": "Código deste site, o snapshot público do catálogo e o histórico das decisões editoriais.",
+        "en": "Source of this site, the public catalogue snapshot and the history of editorial decisions."
+      }
+    }
+  ]
 }

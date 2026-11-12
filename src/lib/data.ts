@@ -31,9 +31,30 @@ const profile = z.object({
   orcid: z.string().regex(/^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/).nullable(),
   email: z.string().email().nullable(),
   profileUrl: z.string().url().nullable(),
-  repositories: z.array(z.object({label: z.string(), url: z.string().url(), description: z.string().optional()}))
+  repositories: z.array(z.object({label: z.string(), url: z.string().url(), description: z.object({'pt-BR': z.string(), en: z.string()}).optional()}))
 });
 export const getProfile = () => profile.parse(json('curated/profile.json'));
+
+const update = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  kind: z.enum(['catalogue', 'software', 'site']),
+  title: z.object({'pt-BR': z.string(), en: z.string()}),
+  body: z.object({'pt-BR': z.string(), en: z.string()}),
+  url: z.string().url().optional()
+});
+export type Update = z.infer<typeof update>;
+// Dated log shown on the updates page and in the feed. The entry for the catalogue snapshot is
+// derived from the manifest, so it cannot drift from the data in use.
+export function getUpdates(): Update[] {
+  const curated = z.array(update).parse(json('curated/updates.json'));
+  const source = getManifest().generatedFrom;
+  const snapshot: Update = {
+    date: source.latestUpdate.slice(0, 10), kind: 'catalogue',
+    title: {'pt-BR': 'Snapshot do catálogo', en: 'Catalogue snapshot'},
+    body: {'pt-BR': `O snapshot em uso reúne ${source.tests} registros de testes. Esta é a data do registro mais recente.`, en: `The snapshot in use holds ${source.tests} test records. This is the date of the most recent record.`}
+  };
+  return [...curated, snapshot].sort((a, b) => b.date.localeCompare(a.date));
+}
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nexoresearch.org';
 

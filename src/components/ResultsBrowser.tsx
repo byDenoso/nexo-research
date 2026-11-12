@@ -122,8 +122,8 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
         )}
       </form>
       <p className="filter-precision-note">{locale === 'pt'
-        ? 'Levantamentos são identificados por menção textual nos resumos; a opção não comprova uso direto dos dados. O filtro de estágio aparece quando houver mais de um estado autorizado.'
-        : 'Surveys are identified by textual mentions in summaries; this does not establish direct dataset usage. The stage filter appears when more than one approved status is available.'}</p>
+        ? 'O filtro de levantamento usa as menções no texto dos resumos.'
+        : 'The survey filter uses mentions in the text of the summaries.'}</p>
       <h2 className="sr-only">{tr(f.records, locale)}</h2>
       <p className="results-count" role="status" aria-live="polite" aria-atomic="true">
         {shown.length} {tr(f.of, locale)} {filtered.length} {locale === 'pt' ? 'perguntas/famílias exibidas' : 'questions/families shown'} · {executionCount} {locale === 'pt' ? 'registros de execução' : 'execution records'}

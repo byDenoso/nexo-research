@@ -1483,3 +1483,27 @@ html { scroll-behavior: auto !important; }
   .inst-test > div { grid-template-columns: minmax(0, 1fr); gap: .1rem; }
 }
 .inst-descriptor { margin-block-start: .6rem; color: var(--muted); font: 400 clamp(1.15rem, 2vw, 1.4rem)/1.3 var(--font-source-serif), Georgia, serif; }
+
+/* Institute pass: inner pages */
+.inst-page { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; max-inline-size: 60rem; }
+.inst-page > * { min-inline-size: 0; }
+.inst-page h2 { font: 600 1.4rem/1.25 var(--font-serif, var(--font-source-serif)), Georgia, serif; }
+.inst-page > section > p, .inst-page > section > h2 + p { margin-block-start: .75rem; max-inline-size: 44rem; }
+.inst-repos, .inst-projects, .inst-log { display: grid; border-block-start: 1px solid var(--ink); }
+:is(.inst-repos, .inst-projects, .inst-log) > li { padding-block: 1.5rem; border-block-end: 1px solid var(--line); }
+:is(.inst-repos, .inst-projects, .inst-log) > li > p:not(.inst-label) { margin-block-start: .6rem; max-inline-size: 44rem; color: var(--muted); }
+:is(.inst-repos, .inst-projects, .inst-log) h2 { margin-block-start: .35rem; }
+.inst-repos h2 a { text-decoration: underline; text-underline-offset: .18em; text-decoration-thickness: 1px; }
+.inst-repos h2 a:hover { color: var(--accent); }
+.inst-repo-url { font: 400 .875rem/1.5 var(--font-mono); overflow-wrap: anywhere; }
+.inst-pre { margin-block-start: 1rem; padding: 1rem 1.25rem; border: 1px solid var(--line); border-radius: .25rem; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 .875rem/1.6 var(--font-mono); }
+.inst-projects dl { display: flex; flex-wrap: wrap; gap: .5rem 2.5rem; margin-block-start: 1rem; font-size: .9375rem; }
+.inst-projects dl > div { display: flex; gap: .5rem; }
+.inst-projects dt { color: var(--muted); }
+.inst-citation { margin-block: 1rem; padding-inline-start: 1rem; border-inline-start: 2px solid var(--line); overflow-wrap: anywhere; font-size: .9375rem; }
+.inst-prose h2 { scroll-margin-block-start: 6rem; }
+/* Labels: plain sans at a readable size instead of tracked uppercase monospace. */
+.kicker, .results-filters label, .record-block h2, .record-provenance h2, .family-tag {
+  font: 600 .8125rem/1.5 var(--font-sans); letter-spacing: 0; text-transform: none;
+}
+.status-badge { font-size: .75rem; letter-spacing: .06em; }

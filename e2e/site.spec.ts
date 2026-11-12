@@ -121,10 +121,37 @@ test('the figure answers to pointer and offers its data as a table', async ({pag
   expect(await figure.getByRole('row').count()).toBeGreaterThan(40);
 });
 
-test('the code page shows the empty notice only while no repository is listed', async ({page}) => {
+test('the code page lists the public repositories and how to run the validator tests', async ({page}) => {
   await page.goto('/pt/code');
-  await expect(page.getByText('Código de análise ainda não publicado.')).toBeVisible();
-  await expect(page.getByRole('main').locator('a.card')).toHaveCount(0);
+  await expect(page.getByText('Código de análise ainda não publicado.')).toHaveCount(0);
+  const repos = page.locator('.inst-repos > li');
+  await expect(repos).toHaveCount(2);
+  await expect(repos.first().getByRole('link', {name: 'nexo-guard'})).toHaveAttribute('href', 'https://github.com/byDenoso/nexo-research/tree/main/software/nexo-guard');
+  await expect(page.getByRole('main')).toContainText('python test_nexo_v32.py');
+});
+
+test('institute, projects, data and updates carry the institutional content', async ({page, request}) => {
+  await page.goto('/pt/about');
+  for (const name of ['Missão', 'Integridade', 'Direção', 'Como citar']) await expect(page.getByRole('heading', {name, exact: true})).toBeVisible();
+  await page.goto('/pt/projects');
+  await expect(page.locator('.inst-projects > li')).toHaveCount(8);
+  await expect(page.locator('.inst-projects > li').filter({hasText: 'Grupo Local'})).toContainText('Em preparação');
+  await page.goto('/en/data');
+  await expect(page.locator('#cite')).toContainText('NEXO Research Institute (2026). Public catalogue of cosmological tests');
+  await expect(page.getByRole('link', {name: 'Download the snapshot (JSON)'})).toHaveAttribute('href', '/atlas-public.json');
+  await page.goto('/pt/updates');
+  await expect(page.locator('.inst-log > li')).toHaveCount(4);
+  const feed = await request.get('/feed.xml');
+  expect(feed.status()).toBe(200);
+  expect(feed.headers()['content-type']).toContain('application/atom+xml');
+  expect(await feed.text()).toContain('<title>Validation rules published</title>');
+});
+
+test('no page states how the calculations are automated beyond the methods wording', async ({page}) => {
+  for (const path of ['/pt', '/pt/about', '/pt/projects', '/pt/research', '/en/about', '/en/projects']) {
+    await page.goto(path);
+    await expect(page.getByRole('main')).not.toContainText(/agente|agent|inteligência artificial|artificial intelligence/i);
+  }
 });
 
 test('the compact menu opens and navigates with the keyboard', async ({page}) => {

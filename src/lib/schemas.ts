@@ -115,6 +115,8 @@ export const project = z.object({
   title: localized,
   summary: localized,
   line,
+  // Optional pattern, tested on the English question, that narrows the records of the line to this project.
+  pattern: z.string().optional(),
   state: z.enum(['active', 'planned', 'paused'])
 });
 export const projects = z.array(project);

@@ -14,6 +14,6 @@ export default async function AboutPage({params}:{params:Promise<{locale:string}
   const Content=locale==='pt'?(await import('@/content/about.pt.mdx')).default:(await import('@/content/about.en.mdx')).default;
   return <>
     <PageHead kicker={tr(D.nav.about,locale)} title="NEXO Research Institute" lead={tr(D.about.lead,locale)}/>
-    <article className="wrap prose-nx mt-10"><Content/></article>
+    <article className="wrap prose-nx mt-10 inst-prose"><Content/></article>
   </>;
 }

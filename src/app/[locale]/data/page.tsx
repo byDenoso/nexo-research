@@ -1,10 +1,12 @@
+import Link from 'next/link';
 import {notFound} from 'next/navigation';
+import {BibtexButton} from '@/components/Bibtex';
 import {DataSequence} from '@/components/EditorialFigures';
 import {PageHead} from '@/components/ui';
 import {datasetMentions, getManifest, getResults} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
 import {fmtDate, isLocale} from '@/lib/i18n';
-import {datasetMentionId, pageMeta} from '@/lib/seo';
+import {SITE_URL, datasetMentionId, href, pageMeta} from '@/lib/seo';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -18,6 +20,19 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
   const source = getManifest().generatedFrom;
   const mentions = datasetMentions(getResults());
   const d = D.data;
+  const pt = locale === 'pt';
+  const day = source.latestUpdate.slice(0, 10), year = day.slice(0, 4);
+  const file = `${SITE_URL}/atlas-public.json`;
+  const citation = pt
+    ? `NEXO Research Institute (${year}). Catálogo público de testes cosmológicos, snapshot de ${fmtDate(source.latestUpdate, locale)}. SHA-256 ${source.snapshotSha256}. ${file}`
+    : `NEXO Research Institute (${year}). Public catalogue of cosmological tests, snapshot of ${fmtDate(source.latestUpdate, locale)}. SHA-256 ${source.snapshotSha256}. ${file}`;
+  const bibtex = `@misc{nexo${year}catalogue,
+  author = {{NEXO Research Institute}},
+  title = {Public catalogue of cosmological tests},
+  year = {${year}},
+  note = {Snapshot of ${day}, SHA-256 ${source.snapshotSha256}},
+  howpublished = {\\url{${file}}}
+}`;
   return (
     <>
       <PageHead kicker={tr(D.nav.data, locale)} title={tr(d.title, locale)} lead={tr(d.lead, locale)} />
@@ -29,7 +44,7 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
             <li><a href="https://data.desi.lbl.gov/doc/releases/" target="_blank" rel="noopener noreferrer">DESI · {locale === 'pt' ? 'Dados e documentação' : 'Data and documentation'} ↗</a></li>
             <li><a href="https://github.com/PantheonPlusSH0ES/DataRelease" target="_blank" rel="noopener noreferrer">Pantheon+ · {locale === 'pt' ? 'Release público' : 'Public release'} ↗</a></li>
             <li><a href="https://archive.stsci.edu/" target="_blank" rel="noopener noreferrer">MAST · {locale === 'pt' ? 'Arquivo espacial' : 'Space telescope archive'} ↗</a></li>
-            <li><a href="https://github.com/byDenoso/nexo-research" target="_blank" rel="noopener noreferrer">NEXO Research Institute · {locale === 'pt' ? 'Código do portal' : 'Portal source code'} ↗</a></li>
+            <li><Link href={href(locale, '/code')}>NEXO Research Institute · {locale === 'pt' ? 'Validador e código do site' : 'Validator and site source'}</Link></li>
           </ul>
         </section>
         <section aria-labelledby="snap" className="card motion-reveal p-6">
@@ -41,7 +56,14 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
             <dt className="text-muted">{tr(D.updates.latest, locale)}</dt><dd className="font-mono">{fmtDate(source.latestUpdate, locale)}</dd>
             <dt className="text-muted">{tr(d.sha, locale)}</dt><dd className="break-all font-mono text-xs">{source.snapshotSha256}</dd>
           </dl>
+          <p className="mt-4"><a className="text-link" href="/atlas-public.json" download>{pt ? 'Baixar o snapshot (JSON)' : 'Download the snapshot (JSON)'}</a></p>
           <p className="mt-4 text-sm text-muted">{tr(d.private, locale)}</p>
+        </section>
+        <section id="cite" aria-labelledby="cite-h" className="card p-6 inst-cite">
+          <h2 id="cite-h" className="text-xl font-semibold">{pt ? 'Como citar' : 'How to cite'}</h2>
+          <p className="mt-3">{pt ? 'Para citar o catálogo, use a data e o hash do snapshot. Para citar um resultado, acrescente o identificador do registro, por exemplo T-05ae703af393.' : 'To cite the catalogue, use the snapshot date and hash. To cite one result, add the record identifier, for example T-05ae703af393.'}</p>
+          <p className="inst-citation">{citation}</p>
+          <BibtexButton bibtex={bibtex} label={tr(D.pubs.bibtex, locale)} done={tr(D.pubs.copied, locale)} />
         </section>
         <section aria-labelledby="mentioned">
           <h2 id="mentioned" className="motion-reveal text-xl font-semibold">{tr(d.mentioned, locale)}</h2>

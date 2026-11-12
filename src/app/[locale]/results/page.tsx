@@ -22,7 +22,7 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
     <>
       <PageHead kicker={tr(D.nav.results, locale)} title={tr(D.results.title, locale)} lead={tr(D.results.lead, locale)} />
       <div className="wrap page-body">
-        <p className="snapshot-disclosure">{locale === 'pt' ? 'Última data nos registros deste snapshot público' : 'Latest record date in this public snapshot'}: {new Intl.DateTimeFormat(locale === 'pt' ? 'pt-BR' : 'en-GB', {dateStyle: 'long', timeZone: 'UTC'}).format(new Date(getManifest().generatedFrom.latestUpdate))}. {locale === 'pt' ? 'Não representa a atividade atual da pesquisa.' : 'It does not represent current research activity.'}</p>
+        <p className="snapshot-disclosure">{locale === 'pt' ? 'Catálogo atualizado em' : 'Catalogue updated on'} {new Intl.DateTimeFormat(locale === 'pt' ? 'pt-BR' : 'en-GB', {dateStyle: 'long', timeZone: 'UTC'}).format(new Date(getManifest().generatedFrom.latestUpdate))}. {locale === 'pt' ? 'Candidato indica resultado interno, ainda sem validação independente. Os estados estão descritos em' : 'Candidate marks an internal result without independent validation yet. Statuses are described in'} <a className="text-link" href={`/${locale}/methods#result`}>{locale === 'pt' ? 'Métodos' : 'Methods'}</a>.</p>
         <ResultsBrowser rows={rows} locale={locale} />
       </div>
     </>

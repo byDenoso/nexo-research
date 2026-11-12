@@ -96,9 +96,9 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
             <StatusBadge status={item.status} locale={locale} />
             <span>{item.id}</span>
           </div>
-          <h1>{family && family.records.length > 1 ? pick(family.title, locale) : pick(item.question, locale)}</h1>
+          <h1>{family ? pick(family.title, locale) : pick(item.question, locale)}</h1>
           {family && family.records.length > 1 && <p className="family-subhead">{locale === 'pt' ? 'Execução individual' : 'Individual run'} · {item.id}</p>}
-          <p className="record-status-note">{item.statusSource === 'default' ? tr(R.defaultNote, locale) : approval?.statusNote ? pick(approval.statusNote, locale) : tr(D.status[item.status].d, locale)}</p>
+          {item.statusSource !== 'default' && <p className="record-status-note">{approval?.statusNote ? pick(approval.statusNote, locale) : tr(D.status[item.status].d, locale)}</p>}
         </div>
       </header>
       <div className="wrap page-body record-layout">

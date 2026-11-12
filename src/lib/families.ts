@@ -62,6 +62,36 @@ const rules: Rule[] = [
   }
 ];
 
+// Short titles for questions that stand alone. The full question stays in the record.
+const shortTitles: Record<string, Localized> = {
+  'T-02f7489641ed': {'pt-BR': 'R = 1 na derivação clássica da teoria efetiva', en: 'R = 1 in the classical derivation of the effective theory'},
+  'T-0e94e9e2951b': {'pt-BR': 'Tendência de S₈ com o redshift no eROSITA', en: 'The S₈–redshift trend in eROSITA'},
+  'T-1367215bcab5': {'pt-BR': 'Onde o sinal de energia escura aparece nas supernovas', en: 'Where the dark-energy signal sits in the supernova data'},
+  'T-1835cc9958da': {'pt-BR': 'Correções quânticas e R = 1 no modelo bosônico mínimo', en: 'Quantum corrections and R = 1 in the minimal bosonic model'},
+  'T-1ce99e7e0634': {'pt-BR': 'Precedentes na literatura para a cadeia teórica completa', en: 'Literature precedents for the complete theoretical chain'},
+  'T-2205a23164a9': {'pt-BR': 'Início da supressão de crescimento associada a S₈', en: 'Onset of the growth suppression associated with S₈'},
+  'T-2666d450a769': {'pt-BR': 'Grupos de traçadores BAO: Pantheon+ e DES-SN5YR, Ωm = 0,315 ± 0,03', en: 'BAO tracer groups: Pantheon+ and DES-SN5YR, Ωm = 0.315 ± 0.03'},
+  'T-28160180cded': {'pt-BR': 'Intervalos BAO do DESI DR2: DES-SN5YR e Union3', en: 'DESI DR2 BAO bins: DES-SN5YR and Union3'},
+  'T-3357f4745632': {'pt-BR': 'Autointeração da matéria escura em anãs e aglomerados', en: 'Dark-matter self-interaction in dwarfs and clusters'},
+  'T-44aff9f2cbb1': {'pt-BR': 'Grupos de traçadores BAO: Pantheon+ e DES-SN5YR, Ωm = 0,3 ± 0,01', en: 'BAO tracer groups: Pantheon+ and DES-SN5YR, Ωm = 0.3 ± 0.01'},
+  'T-5dd5dbe490a8': {'pt-BR': 'Holografia, escala meV e teoria efetiva local na literatura', en: 'Holography, the meV scale and a local effective theory in the literature'},
+  'T-6b374d4280fa': {'pt-BR': 'Grupos de traçadores BAO: Pantheon+ e DES-SN5YR, Ωm = 0,33 ± 0,01', en: 'BAO tracer groups: Pantheon+ and DES-SN5YR, Ωm = 0.33 ± 0.01'},
+  'T-7fee1af7c420': {'pt-BR': 'Busca de referências e citações da cadeia teórica', en: 'Reference and citation search for the theoretical chain'},
+  'T-8de9463d750d': {'pt-BR': 'Intervalos BAO do DESI DR2: Pantheon+ e Union3, Ωm = 0,33 ± 0,01', en: 'DESI DR2 BAO bins: Pantheon+ and Union3, Ωm = 0.33 ± 0.01'},
+  'T-9149c53edf29': {'pt-BR': 'Grupos de traçadores BAO: Pantheon+ e Union3, Ωm = 0,315 ± 0,03', en: 'BAO tracer groups: Pantheon+ and Union3, Ωm = 0.315 ± 0.03'},
+  'T-9537693865ff': {'pt-BR': 'Mapa tridimensional do DESI DR1 e efeitos de seleção', en: 'A three-dimensional DESI DR1 map and selection effects'},
+  'T-979f49b40eea': {'pt-BR': 'Anomalias da matéria escura fria e efeitos bariônicos', en: 'Cold-dark-matter anomalies and baryonic effects'},
+  'T-991afb0ac010': {'pt-BR': 'Supressão de crescimento e a diferença de S₈ entre Planck e lentes', en: 'Growth suppression and the S₈ difference between Planck and lensing'},
+  'T-9cdf8dcdf082': {'pt-BR': 'A escala de 2,3 meV na derivação holográfica', en: 'The 2.3 meV scale in the holographic derivation'},
+  'T-bafb08d721ba': {'pt-BR': 'Escala de corte: floresta Lyman-α e galáxias satélites', en: 'Cutoff scale: the Lyman-α forest and satellite galaxies'},
+  'T-bf77ab2aa7e0': {'pt-BR': 'Redes de citações dos precedentes parciais', en: 'Citation networks of the partial precedents'},
+  'T-d9c9e3fb1f2f': {'pt-BR': 'Intervalos BAO do DESI DR2: Pantheon+ e Union3, Ωm = 0,315 ± 0,007', en: 'DESI DR2 BAO bins: Pantheon+ and Union3, Ωm = 0.315 ± 0.007'},
+  'T-da1718e2d9b8': {'pt-BR': 'Supersimetria e a proteção de R = 1', en: 'Supersymmetry and the protection of R = 1'},
+  'T-dcb222351488': {'pt-BR': 'Intervalos BAO do DESI DR2: Pantheon+ e Union3, Ωm = 0,315 ± 0,03', en: 'DESI DR2 BAO bins: Pantheon+ and Union3, Ωm = 0.315 ± 0.03'},
+  'T-dda8417064f4': {'pt-BR': 'Autointeração da matéria escura dependente da velocidade', en: 'Velocity-dependent dark-matter self-interaction'},
+  'T-efe9e688a928': {'pt-BR': 'Calibrações de massa por lentes fracas no eROSITA', en: 'Weak-lensing mass calibrations in eROSITA'}
+};
+
 export type Family = {
   slug: string;
   title: Localized;
@@ -81,11 +111,9 @@ export function getFamilies(results: Result[]): Family[] {
     if (!family) {
       family = {
         slug,
-        title: rule?.title ?? item.question,
-        description: rule?.description ?? {
-          'pt-BR': 'Pergunta individual do manifesto público. O método e os limites constam no registro.',
-          en: 'Individual public-manifest question. The method and limitations are in its record.'
-        },
+        title: rule?.title ?? shortTitles[item.id] ?? item.question,
+        // A question that stands alone is described by its own result.
+        description: rule?.description ?? item.result,
         records: [],
         lines: [],
         statuses: [],
