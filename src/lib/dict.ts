@@ -5,7 +5,7 @@ type Pair = {pt: string; en: string};
 const t = (pt: string, en: string): Pair => ({pt, en});
 
 export const D = {
-  site: t('NEXO Research', 'NEXO Research'),
+  site: t('NEXO Research Institute', 'NEXO Research Institute'),
   tagline: t('Pesquisa independente sobre expansão cósmica e energia escura. O catálogo reúne testes com dados astronômicos públicos.', 'Independent research on cosmic expansion and dark energy. The catalogue covers tests with public astronomical data.'),
   mission: t(
     'O NEXO testa modelos cosmológicos contra dados públicos, com hipóteses, critérios e limites registrados antes do resultado. Esta página reúne o que já foi calculado, o que ainda é candidato e o que falta verificar.',

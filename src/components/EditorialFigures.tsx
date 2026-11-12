@@ -45,7 +45,7 @@ function SequenceFigure({id, title, stages, source, sourceLabel, locale}: {
         ))}
       </ol>
       <figcaption>
-        {locale === 'pt' ? 'Diagrama editorial do NEXO Research · ' : 'NEXO Research editorial diagram · '}
+        {locale === 'pt' ? 'Diagrama editorial do NEXO Research Institute · ' : 'NEXO Research Institute editorial diagram · '}
         <a className="text-link" href={source}>{sourceLabel}</a>
       </figcaption>
     </figure>

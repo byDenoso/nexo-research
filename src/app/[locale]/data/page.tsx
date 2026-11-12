@@ -29,7 +29,7 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
             <li><a href="https://data.desi.lbl.gov/doc/releases/" target="_blank" rel="noopener noreferrer">DESI · {locale === 'pt' ? 'Dados e documentação' : 'Data and documentation'} ↗</a></li>
             <li><a href="https://github.com/PantheonPlusSH0ES/DataRelease" target="_blank" rel="noopener noreferrer">Pantheon+ · {locale === 'pt' ? 'Release público' : 'Public release'} ↗</a></li>
             <li><a href="https://archive.stsci.edu/" target="_blank" rel="noopener noreferrer">MAST · {locale === 'pt' ? 'Arquivo espacial' : 'Space telescope archive'} ↗</a></li>
-            <li><a href="https://github.com/byDenoso/nexo-research" target="_blank" rel="noopener noreferrer">NEXO Research · {locale === 'pt' ? 'Código do portal' : 'Portal source code'} ↗</a></li>
+            <li><a href="https://github.com/byDenoso/nexo-research" target="_blank" rel="noopener noreferrer">NEXO Research Institute · {locale === 'pt' ? 'Código do portal' : 'Portal source code'} ↗</a></li>
           </ul>
         </section>
         <section aria-labelledby="snap" className="card motion-reveal p-6">

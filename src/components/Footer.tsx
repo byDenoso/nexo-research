@@ -8,7 +8,7 @@ export function Footer({locale}: {locale: Locale}) {
     <footer className="site-footer dark-chapter">
       <div className="wrap footer-inner">
         <div>
-          <Link href={href(locale)} prefetch={false} className="wordmark" aria-label={tr(D.site, locale)}>NEXO<span aria-hidden="true">/</span>Research</Link>
+          <Link href={href(locale)} prefetch={false} className="wordmark" aria-label={tr(D.site, locale)}>NEXO<span className="wordmark-rest"> Research Institute</span></Link>
           <p className="footer-summary">{tr(D.footer.line, locale)}</p>
         </div>
         <nav aria-label={tr(D.footer.navigation, locale)}>
