@@ -37,3 +37,9 @@ The last line reads `43/43 casos passaram`. Identifiers and messages in the code
 
 This is the validation layer. The analysis scripts behind each catalogue record are not in this
 directory; each record states whether its code and artefacts are available.
+
+## Licence
+
+The files in this directory are released under the Creative Commons Attribution 4.0 International
+licence (CC BY 4.0), see [LICENSE](LICENSE). Reuse is allowed with credit to the NEXO Research
+Institute. The licence applies to this directory only, not to the rest of the repository.
