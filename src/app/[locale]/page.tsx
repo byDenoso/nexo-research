@@ -28,7 +28,7 @@ const lead = {
   title: {pt: 'O efeito de retirar supernovas próximas do ajuste', en: 'Removing nearby supernovae from the fit'},
   steps: [
     {k: {pt: 'Pergunta', en: 'Question'}, v: {pt: 'A preferência por energia escura variável depende de alguma faixa de redshift das supernovas?', en: 'Does the preference for evolving dark energy depend on a particular supernova redshift range?'}},
-    {k: {pt: 'Dados', en: 'Data'}, v: {pt: 'DES-SN5YR e Union3, com as restrições de BAO e CMB fixas e o prior Ωm = 0,3 ± 0,01.', en: 'DES-SN5YR and Union3, with BAO and CMB constraints held fixed and the prior Ωm = 0.3 ± 0.01.'}}
+    {k: {pt: 'Dados', en: 'Data'}, v: {pt: 'DES-SN5YR e Union3, com o BAO do DESI DR2 fixo e o prior Ωm = 0,3 ± 0,01.', en: 'DES-SN5YR and Union3, with DESI DR2 BAO held fixed and the prior Ωm = 0.3 ± 0.01.'}}
   ]
 } as const;
 

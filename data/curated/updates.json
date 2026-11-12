@@ -1,22 +1,53 @@
 [
   {
+    "date": "2026-11-12",
+    "kind": "software",
+    "title": {
+      "pt-BR": "Código do registro T-05ae703af393 publicado",
+      "en": "Code for record T-05ae703af393 published"
+    },
+    "body": {
+      "pt-BR": "O script do teste de exclusão de faixas de redshift foi reexecutado e publicado com as entradas fixadas por hash. No DES-SN5YR, retirar z = 0,01–0,15 remove 94,2% da melhora do ajuste. O dossiê do registro passou a nomear os releases usados e a informar que nenhuma likelihood de CMB entra no ajuste.",
+      "en": "The script of the redshift-range exclusion test was run again and published with inputs pinned by hash. In DES-SN5YR, removing z = 0.01–0.15 takes away 94.2% of the fit improvement. The record dossier now names the releases used and states that no CMB likelihood enters the fit."
+    },
+    "url": "https://github.com/byDenoso/nexo-analyses/tree/main/T-05ae703af393"
+  },
+  {
     "date": "2026-11-11",
     "kind": "software",
-    "title": {"pt-BR": "Regras de validação publicadas", "en": "Validation rules published"},
-    "body": {"pt-BR": "O validador de admissão de resultados e o protocolo de busca em catálogos (versão 3.2) passaram a ficar abertos no repositório, com 43 casos de teste em dados sintéticos.", "en": "The admission validator and the catalogue search protocol (version 3.2) are now open in the repository, with 43 test cases on synthetic data."},
+    "title": {
+      "pt-BR": "Regras de validação publicadas",
+      "en": "Validation rules published"
+    },
+    "body": {
+      "pt-BR": "O validador de admissão de resultados e o protocolo de busca em catálogos (versão 3.2) passaram a ficar abertos no repositório, com 43 casos de teste em dados sintéticos.",
+      "en": "The admission validator and the catalogue search protocol (version 3.2) are now open in the repository, with 43 test cases on synthetic data."
+    },
     "url": "https://github.com/byDenoso/nexo-research/tree/main/software/nexo-guard"
   },
   {
     "date": "2026-11-11",
     "kind": "site",
-    "title": {"pt-BR": "Página do instituto, projetos e forma de citar", "en": "Institute page, projects and how to cite"},
-    "body": {"pt-BR": "A página do instituto passou a trazer missão, conduta, integridade e direção. Cada projeto mostra os registros que já tem no catálogo. A página de dados traz o arquivo do snapshot e a referência para citação. Nenhum estado científico mudou.", "en": "The institute page now states mission, conduct, integrity and direction. Each project shows the records it already has in the catalogue. The data page carries the snapshot file and a reference for citation. No scientific status changed."}
+    "title": {
+      "pt-BR": "Página do instituto, projetos e forma de citar",
+      "en": "Institute page, projects and how to cite"
+    },
+    "body": {
+      "pt-BR": "A página do instituto passou a trazer missão, conduta, integridade e direção. Cada projeto mostra os registros que já tem no catálogo. A página de dados traz o arquivo do snapshot e a referência para citação. Nenhum estado científico mudou.",
+      "en": "The institute page now states mission, conduct, integrity and direction. Each project shows the records it already has in the catalogue. The data page carries the snapshot file and a reference for citation. No scientific status changed."
+    }
   },
   {
     "date": "2026-11-09",
     "kind": "site",
-    "title": {"pt-BR": "Catálogo organizado por família de testes", "en": "Catalogue grouped by test family"},
-    "body": {"pt-BR": "Os registros do catálogo foram organizados pela pergunta investigada, e cada destaque passou a trazer pergunta, dados, resultado e limites. Nenhum estado científico mudou.", "en": "Catalogue records were grouped by the question investigated, and each highlight now states question, data, result and limits. No scientific status changed."},
+    "title": {
+      "pt-BR": "Catálogo organizado por família de testes",
+      "en": "Catalogue grouped by test family"
+    },
+    "body": {
+      "pt-BR": "Os registros do catálogo foram organizados pela pergunta investigada, e cada destaque passou a trazer pergunta, dados, resultado e limites. Nenhum estado científico mudou.",
+      "en": "Catalogue records were grouped by the question investigated, and each highlight now states question, data, result and limits. No scientific status changed."
+    },
     "url": "https://github.com/byDenoso/nexo-research/pull/5"
   }
 ]

@@ -14,6 +14,14 @@
       }
     },
     {
+      "label": "nexo-analyses",
+      "url": "https://github.com/byDenoso/nexo-analyses",
+      "description": {
+        "pt-BR": "Código das análises por trás dos registros do catálogo, uma pasta por registro, com entradas fixadas por hash e a saída esperada. Um registro só entra depois de reexecutado.",
+        "en": "Analysis code behind catalogue records, one directory per record, with inputs pinned by hash and the expected output. A record enters only after it has been run again."
+      }
+    },
+    {
       "label": "nexo-research",
       "url": "https://github.com/byDenoso/nexo-research",
       "description": {

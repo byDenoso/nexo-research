@@ -4,17 +4,65 @@
     "datasets": [
       {
         "name": "DES-SN5YR",
-        "role": {"pt-BR": "Compilação de supernovas Ia ajustada, com exclusão de uma faixa de redshift por vez.", "en": "Type Ia supernova compilation fitted with one redshift range removed at a time."},
-        "reference": {"label": "DES Collaboration (2024), arXiv:2401.02929", "url": "https://arxiv.org/abs/2401.02929", "arxiv": "2401.02929"}
+        "role": {
+          "pt-BR": "Compilação de supernovas Ia ajustada, com exclusão de uma faixa de redshift por vez.",
+          "en": "Type Ia supernova compilation fitted with one redshift range removed at a time."
+        },
+        "release": "Dovekie, des-science/DES-SN5YR @ c9a4fca",
+        "table": "4_DISTANCES_COVMAT/DES-Dovekie_HD.csv; STAT+SYS.npz",
+        "reference": {
+          "label": "DES Collaboration (2024), arXiv:2401.02929",
+          "url": "https://arxiv.org/abs/2401.02929",
+          "arxiv": "2401.02929"
+        }
       },
       {
         "name": "Union3",
-        "role": {"pt-BR": "Compilação de supernovas Ia ajustada, com exclusão de uma faixa de redshift por vez.", "en": "Type Ia supernova compilation fitted with one redshift range removed at a time."},
-        "reference": {"label": "Rubin et al. (2023), arXiv:2311.12098", "url": "https://arxiv.org/abs/2311.12098", "arxiv": "2311.12098"}
+        "role": {
+          "pt-BR": "Compilação de supernovas Ia ajustada, com exclusão de uma faixa de redshift por vez.",
+          "en": "Type Ia supernova compilation fitted with one redshift range removed at a time."
+        },
+        "release": "rubind/union3_release @ f5c3873",
+        "table": "mu_mat_union3_cosmo=2_mu.fits",
+        "reference": {
+          "label": "Rubin et al. (2023), arXiv:2311.12098",
+          "url": "https://arxiv.org/abs/2311.12098",
+          "arxiv": "2311.12098"
+        }
       },
       {
-        "name": "BAO e CMB",
-        "role": {"pt-BR": "Restrições mantidas fixas em todos os ajustes. O resumo público não identifica o levantamento nem o release.", "en": "Constraints held fixed in every fit. The public summary does not identify the survey or the release."}
+        "name": "DESI DR2 BAO",
+        "role": {
+          "pt-BR": "Média e covariância gaussianas de todos os traçadores, mantidas fixas em todos os ajustes.",
+          "en": "Gaussian mean and covariance of all tracers, held fixed in every fit."
+        },
+        "release": "CobayaSampler/bao_data @ bb0c1c9",
+        "table": "desi_bao_dr2/desi_gaussian_bao_ALL_GCcomb (mean, cov)",
+        "reference": {
+          "label": "DESI Collaboration (2025), arXiv:2503.14738",
+          "url": "https://arxiv.org/abs/2503.14738",
+          "arxiv": "2503.14738"
+        }
+      },
+      {
+        "name": "Prior em Ωm",
+        "role": {
+          "pt-BR": "Prior gaussiano Ωm = 0,3 ± 0,01. No código reproduzido, nenhuma likelihood de CMB entra no ajuste; o prior ocupa esse lugar.",
+          "en": "Gaussian prior Ωm = 0.3 ± 0.01. In the reproduced code no CMB likelihood enters the fit; the prior takes its place."
+        }
+      }
+    ],
+    "code": [
+      {
+        "label": "nexo-analyses / T-05ae703af393",
+        "url": "https://github.com/byDenoso/nexo-analyses/tree/main/T-05ae703af393"
+      }
+    ],
+    "artefacts": [
+      {
+        "label": "expected.json",
+        "url": "https://github.com/byDenoso/nexo-analyses/blob/main/T-05ae703af393/expected.json",
+        "sha256": "389bc45302b94d1a0a7d0db6364cf7eb784944cf7dd6944985d1200daf0be2ec"
       }
     ]
   },
@@ -23,7 +71,10 @@
     "datasets": [
       {
         "name": "eROSITA: resumos publicados de S₈",
-        "role": {"pt-BR": "Cinco intervalos de redshift, com erros diagonais. O resumo público não identifica o artigo nem a tabela de origem.", "en": "Five redshift bins with diagonal errors. The public summary does not identify the source paper or table."}
+        "role": {
+          "pt-BR": "Cinco intervalos de redshift, com erros diagonais. O resumo público não identifica o artigo nem a tabela de origem.",
+          "en": "Five redshift bins with diagonal errors. The public summary does not identify the source paper or table."
+        }
       }
     ]
   },
@@ -32,7 +83,10 @@
     "datasets": [
       {
         "name": "H₀ e densidade observada de energia escura",
-        "role": {"pt-BR": "Grandezas de entrada da derivação. O resumo público não informa os valores adotados nem suas fontes.", "en": "Input quantities of the derivation. The public summary does not state the adopted values or their sources."}
+        "role": {
+          "pt-BR": "Grandezas de entrada da derivação. O resumo público não informa os valores adotados nem suas fontes.",
+          "en": "Input quantities of the derivation. The public summary does not state the adopted values or their sources."
+        }
       }
     ]
   }

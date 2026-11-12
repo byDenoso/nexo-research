@@ -125,7 +125,7 @@ test('the code page lists the public repositories and how to run the validator t
   await page.goto('/pt/code');
   await expect(page.getByText('Código de análise ainda não publicado.')).toHaveCount(0);
   const repos = page.locator('.inst-repos > li');
-  await expect(repos).toHaveCount(2);
+  await expect(repos).toHaveCount(3);
   await expect(repos.first().getByRole('link', {name: 'nexo-guard'})).toHaveAttribute('href', 'https://github.com/byDenoso/nexo-research/tree/main/software/nexo-guard');
   await expect(page.getByRole('main')).toContainText('python test_nexo_v32.py');
 });
@@ -140,7 +140,7 @@ test('institute, projects, data and updates carry the institutional content', as
   await expect(page.locator('#cite')).toContainText('NEXO Research Institute (2026). Public catalogue of cosmological tests');
   await expect(page.getByRole('link', {name: 'Download the snapshot (JSON)'})).toHaveAttribute('href', '/atlas-public.json');
   await page.goto('/pt/updates');
-  await expect(page.locator('.inst-log > li')).toHaveCount(4);
+  await expect(page.locator('.inst-log > li')).toHaveCount(5);
   const feed = await request.get('/feed.xml');
   expect(feed.status()).toBe(200);
   expect(feed.headers()['content-type']).toContain('application/atom+xml');
