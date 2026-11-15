@@ -1,0 +1,1 @@
+{"name":"nexo-cosmos-local-review","private":true,"type":"module","scripts":{"dev":"node preview.mjs"}}

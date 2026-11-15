@@ -3,6 +3,7 @@ import {IBM_Plex_Mono, IBM_Plex_Sans, Source_Serif_4} from 'next/font/google';
 import {notFound} from 'next/navigation';
 import type {ReactNode} from 'react';
 import '../globals.css';
+import '../editorial.css';
 import {Footer} from '@/components/Footer';
 import {Header} from '@/components/Header';
 import {MotionObserver} from '@/components/Motion';
@@ -26,7 +27,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
   return {metadataBase: new URL(SITE_URL), ...pageMeta(locale, '', 'NEXO Research Institute', tr(D.tagline, locale)), title: {default: 'NEXO Research Institute', template: '%s · NEXO Research Institute'}};
 }
 
-const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}`;
+const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s||'light';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}`;
 
 export default async function LocaleLayout({children, params}: {children: ReactNode; params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -40,7 +41,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
     ]
   };
   return (
-    <html lang={HTML_LANG[locale]} className={`${sans.variable} ${mono.variable} ${serif.variable}`} suppressHydrationWarning data-theme="dark">
+    <html lang={HTML_LANG[locale]} className={`${sans.variable} ${mono.variable} ${serif.variable}`} suppressHydrationWarning data-theme="light">
       <head>
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} />

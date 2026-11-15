@@ -70,3 +70,31 @@ describe('curated editorial files', () => {
     }
   });
 });
+
+// A curated entrance must resolve to a real run without hiding its scientific state.
+import {readResult, selectedIds, isNegative} from '../src/lib/editorial.ts';
+describe('public reading layer', () => {
+  it('keeps featured runs resolvable in both languages with visible limits', () => {
+    for (const id of selectedIds) {
+      const item = manifest.results.find(item => item.id === id);
+      expect(item, id).toBeDefined();
+      for (const locale of ['pt','en'] as const) {
+        const reading = readResult(item!, locale);
+        expect(reading.question).toContain('?');
+        expect(reading.why.length).toBeGreaterThan(40);
+        expect(reading.limit.length).toBeGreaterThan(40);
+      }
+    }
+  });
+  it('indexes plain-language questions without losing source terminology', () => {
+    expect(find('a amostra muda a resposta')).toContain('redshift-exclusion');
+    expect(find('fitting assumptions')).toContain('bao-prior');
+    expect(find('T-05ae703af393')).toEqual(['redshift-exclusion']);
+  });
+  it('keeps a negative outcome distinct from the evidence state', () => {
+    const negative = manifest.results.filter(r => isNegative(r.id));
+    expect(negative).toHaveLength(1);
+    expect(negative[0]!.status).toBe('CANDIDATE');
+    expect(readResult(negative[0]!, 'pt').limit).toContain('comparação de resumos');
+  });
+});

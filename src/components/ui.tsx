@@ -75,10 +75,11 @@ export function ResultCard({item, locale}: {item: ResultCardData; locale: Locale
   );
 }
 
-export function FamilyCard({item, locale}: {item: {slug: string; title: string; description: string; recordCount: number; updated: string}; locale: Locale}) {
+export function FamilyCard({item, locale}: {item: {slug: string; title: string; description: string; finding?: string; negative?: boolean; statuses?: Status[]; recordCount: number; updated: string}; locale: Locale}) {
   return (
     <article className="card result-card family-card">
       <div className="result-card-meta">
+        {item.statuses?.map(status => <StatusBadge key={status} status={status} locale={locale} />)}
         <span className="family-tag">{item.recordCount > 1 ? (locale === 'pt' ? 'Família de testes' : 'Test family') : (locale === 'pt' ? 'Teste' : 'Test')}</span>
         <span>{item.recordCount} {locale === 'pt' ? (item.recordCount === 1 ? 'registro' : 'registros') : (item.recordCount === 1 ? 'record' : 'records')}</span>
       </div>
@@ -87,7 +88,9 @@ export function FamilyCard({item, locale}: {item: {slug: string; title: string; 
           <Link href={href(locale, '/results/families/' + item.slug)} prefetch={false} transitionTypes={[catalogueTitleTransition]}>{item.title}</Link>
         </CatalogueTitle>
       </h3>
-      <p className="result-card-excerpt line-clamp-4">{item.description}</p>
+      <p className="family-context">{item.description}</p>
+      {item.finding && <p className="family-finding"><strong>{locale === 'pt' ? 'Uma execução documentada' : 'One documented run'}</strong>{item.finding}</p>}
+      {item.negative && <span className="outcome-tag">{locale === 'pt' ? 'Resultado negativo' : 'Negative result'}</span>}
       <p className="result-card-date">{locale === 'pt' ? 'Último registro' : 'Latest record'}: {item.updated}</p>
     </article>
   );

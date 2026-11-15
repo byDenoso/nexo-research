@@ -10,6 +10,7 @@ import {scientificText, sameText} from '@/lib/format';
 import {D, tr} from '@/lib/dict';
 import {href, pageMeta} from '@/lib/seo';
 import {compilations, sensitivityPoints, sensitivityRows} from '@/lib/sensitivity';
+import {readResult, isNegative} from '@/lib/editorial';
 import type {Result} from '@/lib/schemas';
 
 export const dynamicParams = false;
@@ -65,6 +66,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
   const {locale, slug} = await params;
   const item = getResult(slug);
   if (!isLocale(locale) || !item) notFound();
+  const reading = readResult(item, locale);
   const R = D.results;
   const approval = item.approval;
   const family = familyFor(getResults(), item);
@@ -96,27 +98,33 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
             <StatusBadge status={item.status} locale={locale} />
             <span>{item.id}</span>
           </div>
-          <h1>{family ? pick(family.title, locale) : pick(item.question, locale)}</h1>
+          <h1>{reading.question}</h1>
+          <p className="record-deck">{reading.finding}</p>
           {family && family.records.length > 1 && <p className="family-subhead">{locale === 'pt' ? 'Execução individual' : 'Individual run'} · {item.id}</p>}
           {item.statusSource !== 'default' && <p className="record-status-note">{approval?.statusNote ? pick(approval.statusNote, locale) : tr(D.status[item.status].d, locale)}</p>}
         </div>
       </header>
+      <section className="wrap brief-reading" aria-label={pt ? 'Leitura em dois minutos' : 'Two-minute reading'}>
+        <div><p className="kicker">{pt ? 'A leitura em 2 minutos' : 'The two-minute reading'}</p><h2>{pt ? 'Por que esta pergunta importa' : 'Why this question matters'}</h2><p>{reading.why}</p></div>
+        <div className="visible-limit"><strong>{pt ? 'O limite da conclusão' : 'Scope of the conclusion'}</strong><p>{reading.limit}</p>{isNegative(item.id) && <span className="outcome-tag">{pt ? 'Resultado negativo' : 'Negative result'}</span>}<p className="evidence-explained"><StatusBadge status={item.status} locale={locale}/> {tr(D.status[item.status].d, locale)}</p></div>
+        <nav className="reading-jumps" aria-label={pt ? 'Aprofundar este resultado' : 'Explore this result'}><a href="#result">{pt ? 'O resultado' : 'The result'} ↓</a><a href="#method">{pt ? 'Como foi testado' : 'How it was tested'} ↓</a><a href="#record-provenance-title">{pt ? 'Dados, código e fontes' : 'Data, code and sources'} ↓</a></nav>
+      </section>
       <div className="wrap page-body record-layout">
         <div className="record-reading">
           <Block id="question" title={tr(R.question, locale)}><p>{scientificText(pick(item.question, locale), locale)}</p></Block>
+          <div className="card record-evidence">
+            <Block id="result" title={tr(R.result, locale)}><p>{scientificText(pick(item.result, locale), locale)}</p></Block>
+            <Figure item={item} locale={locale} />
+            {item.figure && item.figure.limitations.length > 0 && (
+              <Block id="limits" className="record-limits" title={tr(R.limits, locale)}>{dossier?.corrections?.length ? <p className="record-correction">{pt ? 'Limites do resumo de origem. Há correções documentadas nas condições do teste e valores adicionais na reexecução abaixo.' : 'Limits from the source summary. Corrections are documented in the test conditions and additional values in the rerun below.'}</p> : null}<ul>{item.figure.limitations.map((entry, index) => <li key={index}>{scientificText(pick(entry, locale), locale)}</li>)}</ul></Block>
+            )}
+          </div>
           <Block id="method" title={tr(R.method, locale)}>
             <p>{scientificText(pick(dossier?.method ?? item.method, locale), locale)}</p>
             {dossier?.corrections?.map(entry => (
               <p key={entry.date} className="record-correction"><strong>{pt ? 'Correção de' : 'Correction of'} <time dateTime={entry.date}>{fmtDate(entry.date, locale)}</time>.</strong> {scientificText(pick(entry.note, locale), locale)}</p>
             ))}
           </Block>
-          <div className="card record-evidence">
-            <Block id="result" title={tr(R.result, locale)}><p>{scientificText(pick(item.result, locale), locale)}</p></Block>
-            <Figure item={item} locale={locale} />
-            {item.figure && item.figure.limitations.length > 0 && (
-              <Block id="limits" className="record-limits" title={tr(R.limits, locale)}><ul>{item.figure.limitations.map((entry, index) => <li key={index}>{scientificText(pick(entry, locale), locale)}</li>)}</ul></Block>
-            )}
-          </div>
           {dossier?.rerun && (
             <Block id="rerun" title={pt ? 'Reexecução do código publicado' : 'Rerun of the published code'}>
               <p>{pt ? 'Valores obtidos ao rodar novamente o script em' : 'Values returned when the script was run again on'} <time dateTime={dossier.rerun.date}>{fmtDate(dossier.rerun.date, locale)}</time>.</p>

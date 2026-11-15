@@ -4,6 +4,7 @@ import type {FamilyRow} from '../components/ResultsBrowser.tsx';
 import type {Family} from './families.ts';
 import {DATASETS} from './data.ts';
 import type {ResultCardData} from '../components/ui.tsx';
+import {familyQuestion, familyEntry, readResult, isNegative} from './editorial.ts';
 import {fold} from './search.ts';
 
 export function toResultCard(item: Result, locale: Locale): ResultCardData {
@@ -17,8 +18,10 @@ export function toResultCard(item: Result, locale: Locale): ResultCardData {
 export function toFamilyRows(families: Family[], locale: Locale): FamilyRow[] {
   return families.map(family => ({
     slug: family.slug,
-    title: pick(family.title, locale),
-    description: pick(family.description, locale),
+    title: familyQuestion(family, locale),
+    finding: readResult(familyEntry(family), locale).finding,
+    negative: family.records.some(r => isNegative(r.id)),
+    description: family.records.length === 1 ? readResult(familyEntry(family), locale).why : pick(family.description, locale),
     recordCount: family.records.length,
     updated: fmtDate(family.updatedAt, locale),
     year: family.updatedAt.slice(0, 4),
@@ -28,6 +31,8 @@ export function toFamilyRows(families: Family[], locale: Locale): FamilyRow[] {
     // Editorial title and description first, then every record in both languages; folded so the
     // query ignores case and accents.
     haystack: fold([
+      familyQuestion(family, 'pt'), familyQuestion(family, 'en'),
+      readResult(familyEntry(family), 'pt').finding, readResult(familyEntry(family), 'en').finding,
       family.title['pt-BR'], family.title.en, family.description['pt-BR'], family.description.en, family.slug,
       ...family.records.flatMap(item => [item.question['pt-BR'], item.question.en, item.result['pt-BR'], item.result.en, item.id])
     ].join(' '))

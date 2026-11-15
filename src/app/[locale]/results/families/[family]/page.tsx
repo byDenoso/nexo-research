@@ -4,6 +4,7 @@ import {CatalogueHeading} from '@/components/CatalogueHeading';
 import {CatalogueTitle} from '@/components/CatalogueTitle';
 import {FamilyFigure} from '@/components/FamilyFigure';
 import {StatusBadge} from '@/components/ui';
+import {familyQuestion, familyEntry, readResult} from '@/lib/editorial';
 import {getResults} from '@/lib/data';
 import {getFamilies, getFamily} from '@/lib/families';
 import {LOCALES, fmtDate, isLocale, pick} from '@/lib/i18n';
@@ -26,13 +27,14 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
   if (!isLocale(locale)) notFound();
   const family = getFamily(getResults(), slug);
   if (!family) notFound();
+  const entry = familyEntry(family), reading = readResult(entry, locale), pt = locale === 'pt';
   return (
     <article>
       <header className="record-head">
         <div className="wrap record-head-inner">
           <Link className="text-link record-back" href={href(locale, '/results')}>← {locale === 'pt' ? 'Todas as perguntas' : 'All questions'}</Link>
           <p className="kicker">{locale === 'pt' ? 'Família de investigação' : 'Research family'}</p>
-          <CatalogueTitle slug={family.slug}><CatalogueHeading title={pick(family.title, locale)} /></CatalogueTitle>
+          <CatalogueTitle slug={family.slug}><CatalogueHeading title={familyQuestion(family, locale)} /></CatalogueTitle>
           <p className="record-status-note">{pick(family.description, locale)}</p>
           <p className="family-subhead">{family.records.length} {locale === 'pt' ?
             (family.records.length === 1 ? 'registro de execução' : 'registros de execução') :
@@ -43,7 +45,9 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
         <p className="card family-method-note">{locale === 'pt' ?
           'Agrupamento editorial pela pergunta investigada. Cada registro conserva o identificador, os priors, o método, o resultado e o estado originais. Os valores não foram combinados, e a presença de um sinal em uma execução não prova significância global.' :
           'Editorial grouping by research question. Each record preserves its original identifier, priors, method, result and status. Values have not been combined, and a signal in a single run is not a global detection.'}</p>
-        <FamilyFigure family={family} locale={locale} />
+        <section className="family-entry"><div><p className="kicker">{pt ? 'Uma execução para começar' : 'One run to start with'}</p><h2>{reading.finding}</h2><p>{reading.why}</p><Link className="journal-button" href={href(locale, '/results/'+entry.slug)}>{pt ? 'Entenda este resultado' : 'Understand this result'} →</Link></div><div className="visible-limit"><strong>{pt ? 'Limite desta execução' : 'Limit of this run'}</strong><p>{reading.limit}</p><StatusBadge status={entry.status} locale={locale}/></div></section>
+        <nav className="reading-jumps" aria-label={pt ? 'Nesta família' : 'In this family'}><a href="#family-figure">{pt ? 'Compare os valores' : 'Compare the values'} ↓</a><a href="#variants-heading">{pt ? 'Todas as execuções' : 'All runs'} ↓</a></nav>
+        <div id="family-figure"><FamilyFigure family={family} locale={locale} /></div>
         <section aria-labelledby="variants-heading">
           <h2 id="variants-heading" className="family-section-title">{locale === 'pt' ? 'Execuções e variações' : 'Runs and variants'}</h2>
           <ol className="family-records">

@@ -12,6 +12,8 @@ export type FamilyRow = {
   slug: string;
   title: string;
   description: string;
+  finding: string;
+  negative: boolean;
   recordCount: number;
   updated: string;
   year: string;
@@ -30,6 +32,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
   const [line, setLine] = useState<Line | 'all'>('all');
   const [status, setStatus] = useState<Status | 'all'>('all');
   const [survey, setSurvey] = useState('all');
+  const [outcome, setOutcome] = useState('all');
   const [year, setYear] = useState('all');
   const [page, setPage] = useState(1);
   const [hydrated, setHydrated] = useState(false);
@@ -40,6 +43,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
     setLine(asLine(params.get('line')));
     setStatus(asStatus(params.get('status')));
     setSurvey(params.get('survey') ?? 'all');
+    setOutcome(params.get('outcome') === 'negative' ? 'negative' : 'all');
     setYear(params.get('year') ?? 'all');
     setPage(Math.max(1, Math.min(100, Number(params.get('page')) || 1)));
     setHydrated(true);
@@ -52,6 +56,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
     if (line !== 'all') params.set('line', line);
     if (status !== 'all') params.set('status', status);
     if (survey !== 'all') params.set('survey', survey);
+    if (outcome !== 'all') params.set('outcome', outcome);
     if (year !== 'all') params.set('year', year);
     if (page > 1) params.set('page', String(page));
     const search = params.toString();
@@ -59,10 +64,10 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
     if (next !== window.location.pathname + window.location.search + window.location.hash) {
       window.history.replaceState(window.history.state, '', next);
     }
-  }, [query, line, status, survey, year, page, hydrated]);
+  }, [query, line, status, survey, year, outcome, page, hydrated]);
 
   const f = D.filters;
-  const availableLines = useMemo(() => lines.filter(code => rows.some(row => row.lines.includes(code))), [rows]);
+  const availableLines = lines; // Keep a zero-count research area selectable when linked from /research.
   const availableStatuses = useMemo(() => statuses.filter(code => rows.some(row => row.statuses.includes(code))), [rows]);
   const availableSurveys = useMemo(() => [...new Set(rows.flatMap(row=>row.surveys))].sort(),[rows]);
   const years = useMemo(() => [...new Set(rows.map(row => row.year))].sort().reverse(), [rows]);
@@ -72,19 +77,21 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
       (status === 'all' || row.statuses.includes(status)) &&
       (survey === 'all' || row.surveys.includes(survey)) &&
       (year === 'all' || row.year === year) &&
+      (outcome === 'all' || row.negative) &&
       (!query.trim() || matches(row.haystack, query))
     );
-  }, [rows, query, line, status, survey, year]);
+  }, [rows, query, line, status, survey, year, outcome]);
   const shown = filtered.slice(0, page * PAGE);
   const executionCount = filtered.reduce((total, item) => total + item.recordCount, 0);
-  const reset = () => {setQuery(''); setLine('all'); setStatus('all'); setSurvey('all'); setYear('all'); setPage(1);};
+  const reset = () => {setQuery(''); setLine('all'); setStatus('all'); setSurvey('all'); setYear('all'); setOutcome('all'); setPage(1);};
   const change = <T,>(setter: (value: T) => void) => (value: T) => {setter(value); setPage(1);};
 
   return (
     <div>
+      <div className="catalogue-reading-key"><span>{locale === 'pt' ? 'Leia uma pergunta' : 'Read a question'}</span><span>{locale === 'pt' ? 'Compare as execuções' : 'Compare its runs'}</span><span>{locale === 'pt' ? 'Confira as fontes' : 'Check the sources'}</span></div>
       <form role="search" onSubmit={event => event.preventDefault()} className="card results-filters">
         <label className="wide-filter">{tr(f.search, locale)}
-          <input type="search" value={query} onChange={event => change(setQuery)(event.target.value)} autoComplete="off" />
+          <input placeholder={locale === 'pt' ? 'Pergunta, levantamento ou identificador…' : 'Question, survey or identifier…'} type="search" value={query} onChange={event => change(setQuery)(event.target.value)} autoComplete="off" />
         </label>
         {availableLines.length > 1 && (
           <label className="wide-filter">{tr(f.line, locale)}
@@ -104,7 +111,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
             </select>
           </label>
         )}
-        {availableStatuses.length > 1 && (
+        {availableStatuses.length > 0 && (
           <label>{tr(f.status, locale)}
             <select value={status} onChange={event => change(setStatus)(event.target.value as Status | 'all')}>
               <option value="all">{tr(f.all, locale)}</option>
@@ -112,6 +119,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
             </select>
           </label>
         )}
+        <label>{locale === 'pt' ? 'Tipo de leitura' : 'Reading type'}<select value={outcome} onChange={event => change(setOutcome)(event.target.value)}><option value="all">{locale === 'pt' ? 'Todos os resultados' : 'All results'}</option><option value="negative">{locale === 'pt' ? 'Resultado negativo em destaque' : 'Featured negative result'}</option></select></label>
         {years.length > 1 && (
           <label>{tr(f.year, locale)}
             <select value={year} onChange={event => change(setYear)(event.target.value)}>
