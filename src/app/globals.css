@@ -1514,3 +1514,62 @@ html { scroll-behavior: auto !important; }
 .record-rerun th, .record-rerun td { padding: .5rem .5rem .5rem 0; border-top: 1px solid var(--line, currentColor); text-align: left; vertical-align: top; font-weight: 400; }
 .record-rerun thead th { border-top: 0; font-weight: 600; }
 .record-rerun td { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Polish pass (15/11). Same identity: serif titles, flat surfaces, hairlines.
+   Adds hierarchy to the lead, a framed cover, clearer actions and hover states.
+   ─────────────────────────────────────────────────────────────────────────── */
+::selection { background: color-mix(in srgb, var(--brand) 28%, transparent); color: var(--ink); }
+:focus-visible { outline: var(--focus-width) solid var(--accent); outline-offset: var(--focus-offset); }
+
+.site-header { background: color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter: saturate(140%) blur(14px); backdrop-filter: saturate(140%) blur(14px); }
+
+.inst-lead { align-items: center; padding-block: clamp(2.5rem, 6vw, 5rem); }
+.inst-lead h1 { font-size: clamp(2.25rem, 4.9vw, 3.75rem); line-height: 1.06; letter-spacing: -.022em; }
+.inst-descriptor { margin-block-start: .9rem; padding-inline-start: .9rem; border-inline-start: 2px solid var(--brand-outline); }
+.inst-intro { color: color-mix(in srgb, var(--ink) 88%, var(--muted)); }
+
+.inst-facts { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 0; margin-block-start: 1.75rem; padding-block: .9rem; border-block: 1px solid var(--line); }
+.inst-facts > span:last-child b { order: 0; }
+.inst-facts > span { display: grid; gap: .1rem; padding-inline: 1.25rem; border-inline-start: 1px solid var(--line); font-size: .8125rem; line-height: 1.35; }
+.inst-facts > span:first-child { padding-inline-start: 0; border-inline-start: 0; }
+.inst-facts b { order: -1; font: 600 1.5rem/1.15 var(--font-source-serif), Georgia, serif; letter-spacing: -.01em; }
+.inst-facts > span:last-child b { font-size: 1.0625rem; line-height: 1.6; }
+
+.inst-lead .inst-actions { gap: .75rem 1.25rem; align-items: center; margin-block-start: 1.6rem; }
+.inst-lead .inst-actions a:first-child { padding: .7rem 1.15rem; border: 1px solid var(--brand-outline); border-radius: var(--control-radius); background: var(--brand); color: var(--on-brand); text-decoration: none; font-weight: 500; transition: background-color var(--motion); }
+.inst-lead .inst-actions a:first-child:is(:hover, :focus-visible) { background: var(--brand-hover); }
+
+.text-link { text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); transition: color var(--motion), text-decoration-color var(--motion); }
+.text-link:is(:hover, :focus-visible) { color: var(--accent-hover); text-decoration-color: currentColor; }
+
+.inst-cover img { border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1.25rem 3rem -1.5rem #00000066; }
+.inst-cover figcaption { margin-block-start: .75rem; padding-inline-start: .75rem; border-inline-start: 1px solid var(--line); }
+
+.inst-section { padding-block: clamp(2.5rem, 5.5vw, 4rem); }
+.inst-section > h2, .inst-feature-main > h2, .inst-two h2 { letter-spacing: -.012em; }
+.inst-label { font-size: .8125rem; letter-spacing: .01em; }
+.inst-test > div { padding-block: .55rem; border-block-start: 1px solid var(--line); }
+.inst-test > div:first-child { border-block-start: 0; padding-block-start: 0; }
+.inst-test dt { font-weight: 600; color: var(--ink); }
+
+.inst-feature-side { align-self: start; padding: clamp(1rem, 2vw, 1.5rem); border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+.inst-feature-side > .inst-label:first-child { margin-block-end: 0; padding-block-end: .9rem; font-weight: 600; color: var(--ink); }
+.inst-value { color: var(--accent); letter-spacing: -.01em; }
+
+.inst-lines a { align-items: baseline; padding-inline: .75rem; margin-inline: -.75rem; transition: background-color var(--motion); }
+.inst-lines a:is(:hover, :focus-visible) { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.inst-lines span { color: color-mix(in srgb, var(--ink) 82%, var(--muted)); }
+.inst-lines small { font-family: var(--font-mono); font-size: .75rem; white-space: nowrap; }
+
+.inst-steps li::marker { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.inst-steps li { padding-inline-start: .35rem; }
+
+@media (max-width: 56rem) {
+  .inst-facts > span { padding-inline: .9rem; }
+  .inst-lines small { white-space: normal; }
+}
+@media (max-width: 30rem) {
+  .inst-facts { display: grid; grid-template-columns: 1fr 1fr; row-gap: .9rem; }
+  .inst-facts > span:last-child { grid-column: 1 / -1; padding-inline-start: 0; border-inline-start: 0; }
+}
