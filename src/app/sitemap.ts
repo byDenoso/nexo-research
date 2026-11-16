@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const editorial = getPageDates();
   // Editorial pages carry the date of their last revision; family pages the date of their
   // latest record. The snapshot date only raises pages that actually render snapshot data.
-  const pages = ['', ...ROUTES.map(route => `/${route}`)].map(path => {
+  const pages = ['', ...ROUTES.map(route => `/${route}`), '/resultado-vivo'].map(path => {
     const revised = `${editorial[path]}T00:00:00.000Z`;
     return {path, lastModified: DATA_DRIVEN.has(path) ? later(revised, snapshot) : revised};
   });
