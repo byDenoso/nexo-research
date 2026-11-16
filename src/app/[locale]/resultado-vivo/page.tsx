@@ -1,5 +1,6 @@
 import {notFound} from 'next/navigation';
 import {LiveResult} from '@/components/LiveResult';
+import {PageHead} from '@/components/ui';
 import {isLocale, type Locale} from '@/lib/i18n';
 import {pageMeta} from '@/lib/seo';
 
@@ -27,11 +28,7 @@ export default async function LivingResultPage({params}: {params: Promise<{local
   if (!isLocale(locale)) notFound();
   const {title,lead,section} = copy[locale];
   return <>
-    <header className="wrap pt-[clamp(1.7rem,4vw,3rem)] pb-[clamp(1rem,2.5vw,2rem)]">
-      <p className="kicker">{section}</p>
-      <h1 className="font-display text-[clamp(2.8rem,6vw,5.2rem)] leading-none tracking-[-.045em] mt-2">{title}</h1>
-      <p className="max-w-[66ch] text-muted mt-3 leading-relaxed">{lead}</p>
-    </header>
-    <div className="wrap"><LiveResult locale={locale}/></div>
+    <PageHead kicker={section} title={title} lead={lead} />
+    <div className="wrap page-body"><LiveResult locale={locale}/></div>
   </>;
 }

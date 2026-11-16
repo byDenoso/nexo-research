@@ -15,10 +15,10 @@ test('institutional home keeps publications out of the main, compact and footer 
     await page.goto(`/${locale}`);
     await expect(page.locator('header a, footer a, main a').filter({hasText: /^(Publicações|Publications)$/})).toHaveCount(0);
     await expect(page.locator(`a[href="/${locale}/publications"]`)).toHaveCount(0);
-    const scope = page.locator('.inst-lead');
+    const scope = page.locator('.catalogue-note');
     await expect(scope).toBeVisible();
-    await expect(page.locator('.inst-cover img')).toHaveCount(1);
-    await expect(scope.locator('.inst-facts b')).toHaveCount(3);
+    await expect(page.locator('.research-hero-image img')).toHaveCount(1);
+    await expect(scope.locator('.inst-facts dd')).toHaveCount(3);
     expect((await request.get(`/${locale}/publications`)).ok()).toBe(true);
   }
 });
@@ -83,9 +83,9 @@ test('search ignores accents and reads the editorial family titles', async ({pag
   const shown = page.getByRole('status').filter({hasText: 'exibidas'});
   await page.getByLabel('Buscar').fill('tracadores');
   await expect(shown).not.toContainText('35 de 35');
-  await expect(page.getByRole('heading', {level: 3, name: 'Dependência dos traçadores e grupos BAO'})).toBeVisible();
+  await expect(page.locator('h3 a[href="/pt/results/families/bao-tracer-exclusion"]')).toHaveText('Diferentes mapas de galáxias contam a mesma história?');
   await page.getByLabel('Buscar').fill('CONCENTRACAO do sinal');
-  await expect(page.getByRole('heading', {level: 3, name: 'Concentração do sinal por redshift'})).toBeVisible();
+  await expect(page.locator('h3 a[href="/pt/results/families/redshift-concentration"]')).toHaveText('Em que parte da amostra aparece o sinal?');
 });
 
 test('home links name the analysis they open', async ({page}) => {
@@ -116,7 +116,7 @@ test('a highlighted record carries its dossier and its own figure', async ({page
 
 test('the figure answers to pointer and offers its data as a table', async ({page}) => {
   await page.goto('/en');
-  const figure = page.locator('.inst-feature-main .sens');
+  const figure = page.locator('#em-foco .sens');
   await expect(figure.locator('.sens-readout')).toContainText('94%');
   await figure.getByRole('button', {name: /Union3, without z = 0\.1–0\.3/}).first().click();
   await expect(figure.locator('.sens-readout')).toContainText('Union3');
@@ -220,7 +220,7 @@ test('home discloses source date without implying current research activity', as
 test('the DES-SN5YR interval result is clearly presented as exploratory', async ({page}) => {
   await page.goto('/pt');
   await expect(page.locator('.inst-feature-main > p > a[href="/pt/results/t-05ae703af393"]')).toHaveCount(1);
-  await expect(page.locator('.inst-feature-main .sens-dot')).toHaveCount(await page.locator('.inst-feature-main .viz-table tbody tr').count());
+  await expect(page.locator('#em-foco .sens-dot')).toHaveCount(await page.locator('#em-foco .viz-table tbody tr').count());
   await expect(page.locator('.inst-feature')).toContainText('sem validação independente');
   await page.goto('/pt/results/t-05ae703af393');
   await expect(page.getByRole('main')).toContainText('reduziu em cerca de 94%');
@@ -290,7 +290,7 @@ test('the homepage is responsive and shows the credited cover figure', async ({p
     await page.setViewportSize({width,height:900});
     await page.goto('/pt');
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
-    await expect(page.locator('main img')).toHaveCount(1);
+    await expect(page.locator('main img')).toHaveCount(2);
     for (const image of await page.locator('main img').all()) {
       await image.evaluate(node => node.scrollIntoView({block: 'center', behavior: 'instant'}));
       await expect.poll(async () => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);

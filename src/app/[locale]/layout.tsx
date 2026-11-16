@@ -27,7 +27,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
   return {metadataBase: new URL(SITE_URL), ...pageMeta(locale, '', 'NEXO Research Institute', tr(D.tagline, locale)), title: {default: 'NEXO Research Institute', template: '%s · NEXO Research Institute'}};
 }
 
-const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s||'light';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}`;
+const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s==='dark'||s==='light'?s:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}`;
 
 export default async function LocaleLayout({children, params}: {children: ReactNode; params: Promise<{locale: string}>}) {
   const {locale} = await params;

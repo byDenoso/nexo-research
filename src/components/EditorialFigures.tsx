@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import {D, tr} from '@/lib/dict';
 import type {Locale} from '@/lib/i18n';
+import {goodsSouth} from '@/lib/observations';
 import styles from './EditorialFigures.module.css';
 
 export function ResearchObservation({locale}: {locale: Locale}) {
@@ -9,14 +10,14 @@ export function ResearchObservation({locale}: {locale: Locale}) {
   return (
     <figure className={styles.observation} aria-labelledby="research-observation-title">
       <div className={styles.photo}>
-        <Image src="/images/jades-goods-south.jpg" alt={pt ? 'Campo GOODS-Sul, com galáxias de diferentes cores e formas' : 'GOODS-South field, with galaxies of different colours and shapes'} fill sizes="(min-width: 64rem) 56vw, 92vw" />
+        <Image src={goodsSouth.image} alt={pt ? 'Campo GOODS-Sul, com galáxias de diferentes cores e formas' : 'GOODS-South field, with galaxies of different colours and shapes'} fill sizes="(min-width: 64rem) 56vw, 92vw" />
       </div>
       <figcaption className={styles.photoCaption}>
         <span className="kicker">{pt ? 'Observação externa · JWST / NIRCam' : 'External observation · JWST / NIRCam'}</span>
         <strong className={styles.title} id="research-observation-title">{title}</strong>
         <p>{pt ? 'Recorte do levantamento JADES que ilustra a observação de galáxias distantes.' : 'Crop from the JADES survey illustrating observations of distant galaxies.'}</p>
-        <a className="text-link" href="https://esawebb.org/images/JADES2/">
-          NASA, ESA, CSA, B. Robertson (UC Santa Cruz), B. Johnson (Center for Astrophysics, Harvard & Smithsonian), S. Tacchella (University of Cambridge), M. Rieke (Univ. of Arizona), D. Eisenstein (Center for Astrophysics, Harvard & Smithsonian), A. Pagan (STScI)
+        <a className="text-link" href={goodsSouth.source}>
+          {goodsSouth.credit}
         </a>
       </figcaption>
     </figure>

@@ -6,9 +6,9 @@ const animation = (selector: string) => (page: import('@playwright/test').Page) 
 test('the home reads as one plain heading and nothing on it animates', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/pt');
-  await expect(page.getByRole('heading', {level: 1, name: 'NEXO Research Institute'})).toBeVisible();
-  await expect(page.locator('.inst-feature-main .sens')).toHaveAttribute('data-inview', 'in');
-  for (const selector of ['.sens-dot', '.pair-dot', '.status-badge', '.inst-cover img']) {
+  await expect(page.getByRole('heading', {level: 1, name: 'Como medimos a expansão do Universo?'})).toBeVisible();
+  await expect(page.locator('#em-foco .sens')).toHaveAttribute('data-inview', 'in');
+  for (const selector of ['.sens-dot', '.pair-dot', '.status-badge', '.research-hero-image img']) {
     expect(await animation(selector)(page), selector).toBe('none');
   }
   expect(await page.evaluate(() => document.getAnimations().filter(item => item instanceof CSSAnimation).length)).toBe(0);
@@ -17,7 +17,7 @@ test('the home reads as one plain heading and nothing on it animates', async ({p
 test('figures are complete and sit on the published values', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/pt');
-  const figure = page.locator('.inst-feature-main .sens');
+  const figure = page.locator('#em-foco .sens');
   await figure.scrollIntoViewIfNeeded();
   await expect(figure).toHaveAttribute('data-inview', 'in');
   const dot = figure.locator('.sens-dot[data-active]');
@@ -29,12 +29,12 @@ test('figures are complete and sit on the published values', async ({page}) => {
   });
   expect(offset).toBeCloseTo(0.94, 2);
 
-  const pair = page.locator('.inst-side-item .pair');
+  const pair = page.locator('.journal-stories .pair');
   await pair.scrollIntoViewIfNeeded();
   await expect(pair).toHaveAttribute('data-inview', 'in');
   await expect(pair.locator('.pair-values dd')).toHaveText(['2,18 σ', '0,35 σ']);
 
-  const facts = page.locator('.inst-facts b');
+  const facts = page.locator('.inst-facts dd');
   await expect(facts.nth(0)).toHaveText('35');
   await expect(facts.nth(1)).toHaveText('169');
 });
@@ -42,10 +42,10 @@ test('figures are complete and sit on the published values', async ({page}) => {
 test('reduced motion shows every figure complete at once', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'reduce'});
   await page.goto('/en');
-  await expect(page.locator('.inst-feature-main .sens')).toHaveAttribute('data-inview', 'in');
-  await expect(page.locator('.inst-side-item .pair')).toHaveAttribute('data-inview', 'in');
+  await expect(page.locator('#em-foco .sens')).toHaveAttribute('data-inview', 'in');
+  await expect(page.locator('.journal-stories .pair')).toHaveAttribute('data-inview', 'in');
   expect(await page.locator('.sens-dot').first().evaluate(node => getComputedStyle(node).opacity)).toBe('1');
-  await expect(page.locator('.inst-facts b').nth(1)).toHaveText('169');
+  await expect(page.locator('.inst-facts dd').nth(1)).toHaveText('169');
 });
 
 test.describe('without scripts', () => {
@@ -54,7 +54,7 @@ test.describe('without scripts', () => {
     await page.goto('/pt');
     expect(await page.locator('.sens-dot').first().evaluate(node => getComputedStyle(node).opacity)).toBe('1');
     expect(await page.locator('.pair-dot').first().evaluate(node => getComputedStyle(node).opacity)).toBe('1');
-    await expect(page.locator('.inst-facts b').nth(0)).toHaveText('35');
+    await expect(page.locator('.inst-facts dd').nth(0)).toHaveText('35');
     await expect(page.locator('.pair-values dd').first()).toHaveText('2,18 σ');
   });
 });

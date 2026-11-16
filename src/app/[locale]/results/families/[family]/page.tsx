@@ -30,7 +30,7 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
   const entry = familyEntry(family), reading = readResult(entry, locale), pt = locale === 'pt';
   return (
     <article>
-      <header className="record-head">
+      <header className="record-head dark-chapter">
         <div className="wrap record-head-inner">
           <Link className="text-link record-back" href={href(locale, '/results')}>← {locale === 'pt' ? 'Todas as perguntas' : 'All questions'}</Link>
           <p className="kicker">{locale === 'pt' ? 'Família de investigação' : 'Research family'}</p>

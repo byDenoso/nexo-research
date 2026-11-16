@@ -88,7 +88,6 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
 
   return (
     <div>
-      <div className="catalogue-reading-key"><span>{locale === 'pt' ? 'Leia uma pergunta' : 'Read a question'}</span><span>{locale === 'pt' ? 'Compare as execuções' : 'Compare its runs'}</span><span>{locale === 'pt' ? 'Confira as fontes' : 'Check the sources'}</span></div>
       <form role="search" onSubmit={event => event.preventDefault()} className="card results-filters">
         <label className="wide-filter">{tr(f.search, locale)}
           <input placeholder={locale === 'pt' ? 'Pergunta, levantamento ou identificador…' : 'Question, survey or identifier…'} type="search" value={query} onChange={event => change(setQuery)(event.target.value)} autoComplete="off" />

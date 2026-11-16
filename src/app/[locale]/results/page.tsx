@@ -1,12 +1,13 @@
+import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {PageHead} from '@/components/ui';
 import {ResultsBrowser} from '@/components/ResultsBrowser';
 import {getResults, getManifest} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
 import {D, tr} from '@/lib/dict';
-import {isLocale} from '@/lib/i18n';
+import {fmtDate, isLocale} from '@/lib/i18n';
 import {toFamilyRows} from '@/lib/rows';
-import {pageMeta} from '@/lib/seo';
+import {href, pageMeta} from '@/lib/seo';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -17,14 +18,31 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
 export default async function ResultsPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   if (!isLocale(locale)) notFound();
-  const rows = toFamilyRows(getFamilies(getResults()), locale);
+  const pt = locale === 'pt';
+  const results = getResults();
+  const rows = toFamilyRows(getFamilies(results), locale);
+  const latest = getManifest().generatedFrom.latestUpdate;
+
   return (
     <>
-      <PageHead kicker={tr(D.nav.results, locale)} title={locale === 'pt' ? 'O que aprendemos ao testar.' : 'What we learn by testing.'} lead={locale === 'pt' ? 'Explore o recorte público por pergunta. Abra uma família para comparar execuções ou siga até um registro para conferir método, limites e fontes.' : 'Explore the public selection by question. Open a family to compare runs, or follow an individual record to its method, limits and sources.'} />
+      <PageHead
+        kicker={pt ? 'Arquivo público' : 'Public archive'}
+        title={pt ? 'Catálogo de resultados' : 'Results catalogue'}
+        lead={pt ? 'Explore o recorte público do NEXO por pergunta. Cada família reúne testes com resultados, limites e fontes consultáveis.' : 'Explore NEXO’s public selection by research question. Each family groups tests with results, limits and sources you can inspect.'}
+      />
+      <div className="catalogue-chapter">
+        <div className="wrap catalogue-ribbon">
+          <p><strong>{rows.length}</strong> {pt ? 'famílias' : 'families'} <span aria-hidden="true">·</span> <strong>{results.length}</strong> {pt ? 'execuções' : 'runs'}</p>
+          <p>{pt ? 'Atualizado em' : 'Updated on'} <time dateTime={latest}>{fmtDate(latest, locale)}</time></p>
+          <Link className="text-link arrow-link" href={href(locale, '/resultado-vivo')}>{pt ? 'Comparar sondas em 3D' : 'Compare probes in 3D'}</Link>
+        </div>
+      </div>
       <div className="wrap page-body">
-        <p className="mb-4"><a className="text-link" href={`/${locale}/resultado-vivo`}>{locale === 'pt' ? 'Compare sondas no Resultado vivo' : 'Compare probes in Living result'} <span aria-hidden="true">↗</span></a></p>
-        <p className="snapshot-disclosure">{locale === 'pt' ? 'Catálogo atualizado em' : 'Catalogue updated on'} {new Intl.DateTimeFormat(locale === 'pt' ? 'pt-BR' : 'en-GB', {dateStyle: 'long', timeZone: 'UTC'}).format(new Date(getManifest().generatedFrom.latestUpdate))}. {locale === 'pt' ? 'Candidato indica resultado interno, ainda sem validação independente. Os estados estão descritos em' : 'Candidate marks an internal result without independent validation yet. Statuses are described in'} <a className="text-link" href={`/${locale}/methods#result`}>{locale === 'pt' ? 'Métodos' : 'Methods'}</a>.</p>
         <ResultsBrowser rows={rows} locale={locale} />
+        <p className="snapshot-disclosure">
+          {pt ? 'O estado Candidato indica um resultado interno, sem validação independente. Consulte os ' : 'Candidate marks an internal result without independent validation. See the '}
+          <Link className="text-link" href={href(locale, '/methods') + '#result'}>{pt ? 'estados de evidência' : 'evidence statuses'}</Link>.
+        </p>
       </div>
     </>
   );

@@ -91,7 +91,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
   ];
   return (
     <article>
-      <header className="record-head">
+      <header className="record-head dark-chapter">
         <div className="wrap record-head-inner">
           <Link href={href(locale, family ? '/results/families/' + family.slug : '/results')} prefetch={false} className="text-link record-back">← {locale === 'pt' ? 'Voltar à pergunta científica' : 'Back to research question'}</Link>
           <div className="record-meta">

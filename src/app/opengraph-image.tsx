@@ -6,7 +6,7 @@ export const alt = 'NEXO Research Institute · Computational and observational c
 export const size = {width: 1200, height: 630};
 export const contentType = 'image/png';
 
-// Same observation as the home page hero, with its credit printed on the card.
+// JADES observation of the GS-z14-0 field, with the source and credit on the card.
 export default async function Image() {
   const [field, icon] = await Promise.all([
     readFile(join(process.cwd(), 'public/images/jades-gs-z14-0-field.jpg')),

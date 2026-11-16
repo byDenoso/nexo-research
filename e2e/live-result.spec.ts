@@ -60,12 +60,20 @@ test('orbits a real GPU scene and keeps controls usable in lite mode', async ({p
   expect(await view.evaluate(node => (node as HTMLCanvasElement).width)).toBeGreaterThan(250);
   const axis = viewport.locator('span').first();
   await expect.poll(()=>axis.evaluate(node=>node.style.transform)).toContain('translate');
-  const initial = await axis.evaluate(node=>node.style.transform);
+  const projectedLabel = () => axis.evaluate(node => {
+    const transform = new DOMMatrixReadOnly(getComputedStyle(node).transform);
+    return {x: transform.m41, y: transform.m42};
+  });
+  const initial = await projectedLabel();
+  const displacement = async () => {
+    const point = await projectedLabel();
+    return Math.hypot(point.x - initial.x, point.y - initial.y);
+  };
   await view.focus();
   await view.press('ArrowLeft');
-  await expect.poll(()=>axis.evaluate(node=>node.style.transform)).not.toBe(initial);
+  await expect.poll(displacement).toBeGreaterThan(1);
   await page.getByRole('button',{name:'Recentrar câmera'}).click();
-  await expect.poll(()=>axis.evaluate(node=>node.style.transform)).toBe(initial);
+  await expect.poll(displacement).toBeLessThan(1);
 
   await view.scrollIntoViewIfNeeded();
   const box = (await view.boundingBox())!;
@@ -82,7 +90,7 @@ test('orbits a real GPU scene and keeps controls usable in lite mode', async ({p
     await page.mouse.move(x-72,y+20,{steps:7});
     await page.mouse.up();
   }
-  await expect.poll(()=>axis.evaluate(node=>node.style.transform)).not.toBe(initial);
+  await expect.poll(displacement).toBeGreaterThan(1);
 
   await page.getByRole('button',{name:'Modo leve'}).click();
   await expect(viewport).toHaveAttribute('data-renderer','text');
