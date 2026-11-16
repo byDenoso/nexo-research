@@ -22,7 +22,10 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <p className="kicker">{pt ? 'Em foco / Expansão do Universo' : 'In focus / Cosmic expansion'}</p>
         <h1 id="cover-title">{pt ? <>O Universo se expande.<br/><em>Como sabemos o que o move?</em></> : <>The Universe expands.<br/><em>How do we know what drives it?</em></>}</h1>
         <p className="cover-deck">{pt ? 'A luz de estrelas e galáxias guarda pistas sobre a expansão. Investigamos quais explicações resistem quando os dados e as hipóteses são postos à prova.' : 'Light from stars and galaxies carries clues about expansion. We investigate which explanations survive when data and assumptions are put to the test.'}</p>
-        <Link className="journal-button" href="#em-foco">{pt ? 'Comece por uma pergunta' : 'Start with a question'} <span aria-hidden="true">↓</span></Link>
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+          <Link className="journal-button" href="#em-foco">{pt ? 'Comece por uma pergunta' : 'Start with a question'} <span aria-hidden="true">↓</span></Link>
+          <Link className="text-link text-sm" href={href(locale, '/resultado-vivo')}>{pt ? 'Explorar o Resultado vivo' : 'Explore the Living result'} <span aria-hidden="true">↗</span></Link>
+        </div>
       </div>
       <figure className="cover-observation">
         <Image src="/images/pantheon-volume.jpg" width={2560} height={1440} sizes="(max-width: 800px) 100vw, 55vw" priority alt={pt ? 'Visualização das 1.543 supernovas do Pantheon+ em suas posições no céu, em cascas de redshift.' : 'Visualisation of the 1,543 Pantheon+ supernovae at their sky positions in redshift shells.'}/>
