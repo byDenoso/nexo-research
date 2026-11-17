@@ -19,6 +19,7 @@ export function toFamilyRows(families: Family[], locale: Locale): FamilyRow[] {
   return families.map(family => ({
     slug: family.slug,
     title: familyQuestion(family, locale),
+    entrySlug: familyEntry(family).slug,
     finding: readResult(familyEntry(family), locale).finding,
     negative: family.records.some(r => isNegative(r.id)),
     description: family.records.length === 1 ? readResult(familyEntry(family), locale).why : pick(family.description, locale),

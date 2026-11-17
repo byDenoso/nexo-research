@@ -1,18 +1,20 @@
 'use client';
 
+import Link from 'next/link';
 import {useEffect, useMemo, useState} from 'react';
 import {D, tr} from '@/lib/dict';
 import type {Locale} from '@/lib/i18n';
 import type {Line, Status} from '@/lib/schemas';
 import {PAGE_SIZE as PAGE, matches} from '@/lib/search';
 import {href} from '@/lib/seo';
-import {EmptyState, FamilyCard} from './ui';
+import {EmptyState, StatusBadge} from './ui';
 
 export type FamilyRow = {
   slug: string;
   title: string;
   description: string;
   finding: string;
+  entrySlug: string;
   negative: boolean;
   recordCount: number;
   updated: string;
@@ -88,7 +90,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
 
   return (
     <div>
-      <form role="search" onSubmit={event => event.preventDefault()} className="card results-filters">
+      <form role="search" onSubmit={event => event.preventDefault()} className="results-filters nx-filters">
         <label className="wide-filter">{tr(f.search, locale)}
           <input placeholder={locale === 'pt' ? 'Pergunta, levantamento ou identificador…' : 'Question, survey or identifier…'} type="search" value={query} onChange={event => change(setQuery)(event.target.value)} autoComplete="off" />
         </label>
@@ -131,15 +133,35 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
       <p className="filter-precision-note">{locale === 'pt'
         ? 'O filtro de levantamento usa as menções no texto dos resumos.'
         : 'The survey filter uses mentions in the text of the summaries.'}</p>
-      <h2 className="sr-only">{tr(f.records, locale)}</h2>
+      <h2 className="nx-index-title">{locale === 'pt' ? 'Perguntas científicas' : 'Research questions'}</h2>
       <p className="results-count" role="status" aria-live="polite" aria-atomic="true">
         {shown.length} {tr(f.of, locale)} {filtered.length} {locale === 'pt' ? 'perguntas/famílias exibidas' : 'questions/families shown'} · {executionCount} {locale === 'pt' ? 'registros de execução' : 'execution records'}
       </p>
       {filtered.length === 0 ? (
         <EmptyState message={tr(f.none, locale)} action={<button type="button" onClick={reset} className="btn">{tr(f.reset, locale)}</button>} />
       ) : (
-        <ul className="result-grid" role="list">
-          {shown.map(row => <li key={row.slug}><FamilyCard item={row} locale={locale} /></li>)}
+        <ul className="nx-question-index" role="list">
+          {shown.map(row => (
+            <li key={row.slug}>
+              <article>
+                <div>
+                  <h3><Link href={href(locale, '/results/families/' + row.slug)}>{row.title}</Link></h3>
+                  <p>{row.description}</p>
+                </div>
+                <div className="nx-question-run">
+                  <p>{row.recordCount} {locale === 'pt' ? (row.recordCount === 1 ? 'execução' : 'execuções') : (row.recordCount === 1 ? 'run' : 'runs')}</p>
+                  <Link className="text-link arrow-link" href={href(locale, '/results/' + row.entrySlug)}
+                    aria-label={(locale === 'pt' ? 'Ler uma execução de ' : 'Read a run for ') + row.title}>
+                    {locale === 'pt' ? 'Ler uma execução' : 'Read a run'}
+                  </Link>
+                  <div className="nx-question-status">
+                    {row.statuses.map(status => <StatusBadge key={status} status={status} locale={locale} />)}
+                    {row.negative && <span className="outcome-tag">{locale === 'pt' ? 'Resultado negativo' : 'Negative result'}</span>}
+                  </div>
+                </div>
+              </article>
+            </li>
+          ))}
         </ul>
       )}
       {shown.length < filtered.length && (

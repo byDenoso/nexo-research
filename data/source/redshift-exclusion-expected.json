@@ -1,0 +1,140 @@
+{
+ "priors": {
+  "omega_m": [
+   0.3,
+   0.01
+  ]
+ },
+ "bao_release": "dr2",
+ "compilations": [
+  {
+   "compilation": "DES-SN5YR",
+   "n": 1820,
+   "full": {
+    "params": {
+     "omega_m": 0.30406532499291367,
+     "w0": -0.873044574679245,
+     "wa": -0.27056551799166806,
+     "a_rd": 30.07552101419345
+    },
+    "delta_chi2": 6.775613202428303
+   },
+   "holds": [
+    {
+     "band": [
+      0.01,
+      0.15
+     ],
+     "params": {
+      "omega_m": 0.2986301183508506,
+      "w0": -0.9634632303399057,
+      "wa": -0.011949006517985122,
+      "a_rd": 29.746186232831253
+     },
+     "delta_chi2": 0.3896262521736844,
+     "fraction_removed": 0.942495794766731
+    },
+    {
+     "band": [
+      0.15,
+      0.5
+     ],
+     "params": {
+      "omega_m": 0.30361201797982373,
+      "w0": -0.857460122489186,
+      "wa": -0.20305653211817343,
+      "a_rd": 30.247682223461513
+     },
+     "delta_chi2": 9.206048810979837,
+     "fraction_removed": -0.35870341708415304
+    },
+    {
+     "band": [
+      0.5,
+      2.3
+     ],
+     "params": {
+      "omega_m": 0.3051204224061891,
+      "w0": -0.8404121284629664,
+      "wa": -0.29492823672495916,
+      "a_rd": 30.263803465255553
+     },
+     "delta_chi2": 7.822270383498676,
+     "fraction_removed": -0.15447416341524078
+    }
+   ]
+  },
+  {
+   "compilation": "Union3",
+   "n": 22,
+   "full": {
+    "params": {
+     "omega_m": 0.30634318959442014,
+     "w0": -0.8113050049407645,
+     "wa": -0.3249580375418291,
+     "a_rd": 30.430301089512465
+    },
+    "delta_chi2": 7.864747176376035
+   },
+   "holds": [
+    {
+     "band": [
+      0.01,
+      0.15
+     ],
+     "params": {
+      "omega_m": 0.30353635973716325,
+      "w0": -0.8601708547079154,
+      "wa": -0.2075445439839096,
+      "a_rd": 30.223317870733105
+     },
+     "delta_chi2": 3.6194968550531996,
+     "fraction_removed": 0.5397821730461508
+    },
+    {
+     "band": [
+      0.15,
+      0.5
+     ],
+     "params": {
+      "omega_m": 0.3047412692418926,
+      "w0": -0.815379648015862,
+      "wa": -0.2237460802100908,
+      "a_rd": 30.510044664209705
+     },
+     "delta_chi2": 7.716974939152145,
+     "fraction_removed": 0.01878919104580568
+    },
+    {
+     "band": [
+      0.5,
+      2.3
+     ],
+     "refused": "Holdout deixou menos de dez pontos de supernovas."
+    }
+   ]
+  }
+ ],
+ "data_sources": [
+  {
+   "url": "https://raw.githubusercontent.com/CobayaSampler/bao_data/bb0c1c9009dc76d1391300e169e8df38fd1096db/desi_bao_dr2/desi_gaussian_bao_ALL_GCcomb_mean.txt",
+   "sha256": "9ac154ab583ce759c0f7eef3c978c7c70a6ead2d18774caceadf1a350a640585"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/CobayaSampler/bao_data/bb0c1c9009dc76d1391300e169e8df38fd1096db/desi_bao_dr2/desi_gaussian_bao_ALL_GCcomb_cov.txt",
+   "sha256": "252a143274c8a07c78694c119617d36594f6d7965d00319ca611c6ffb886e509"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/des-science/DES-SN5YR/c9a4fcafc4cbd19bd750dee47fc76194a45c181f/4_DISTANCES_COVMAT/DES-Dovekie_HD.csv",
+   "sha256": "2f57019d783eaa976df80a41b0054171a2d994ee9808d715ce850c2df5720aaf"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/des-science/DES-SN5YR/c9a4fcafc4cbd19bd750dee47fc76194a45c181f/4_DISTANCES_COVMAT/STAT%2BSYS.npz",
+   "sha256": "ffd3124b32148b1372bd95fda9299269f0352a9f8eee02d416c610e38495463b"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/rubind/union3_release/f5c387349b68f3535fdabf0fbc4f45cd407f9084/mu_mat_union3_cosmo=2_mu.fits",
+   "sha256": "ef98b7dde1025ee7134f3242aaea3f1f0ed3f2b29a718458c550a8e4e24d0349"
+  }
+ ]
+}

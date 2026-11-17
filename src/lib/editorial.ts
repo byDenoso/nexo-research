@@ -3,9 +3,11 @@ import type {Result} from './schemas.ts';
 import {getFamilies, type Family} from './families.ts';
 import {pick} from './i18n.ts';
 
+export const redshiftQuestion = {'pt-BR': 'Quanto muda o ajuste ao retirar supernovas próximas?', en: 'How much does the fit change when nearby supernovae are removed?'};
+
 // Reading layer only: never changes source numbers, IDs, family membership or scientific status.
 const questions: Record<string, [string, string]> = {
-  'redshift-exclusion': ['A energia escura muda — ou a amostra muda a resposta?', 'Does dark energy change — or does the sample change the answer?'],
+  'redshift-exclusion': [redshiftQuestion['pt-BR'], redshiftQuestion.en],
   'bao-prior': ['Quanto a resposta depende das hipóteses do ajuste?', 'How much does the answer depend on the fitting assumptions?'],
   'bao-tracer-exclusion': ['Diferentes mapas de galáxias contam a mesma história?', 'Do different galaxy tracers tell the same story?'],
   'redshift-concentration': ['Em que parte da amostra aparece o sinal?', 'Where in the sample does the signal appear?'],
@@ -18,8 +20,8 @@ const questions: Record<string, [string, string]> = {
 export type Reading = {question: string; finding: string; why: string; limit: string};
 const stories: Record<string, {pt: Reading; en: Reading}> = {
   'T-05ae703af393': {
-    pt: {question: 'A energia escura muda — ou a amostra muda a resposta?', finding: 'Retirar supernovas próximas enfraquece a preferência por energia escura variável.', why: 'Usamos explosões estelares como marcadores de distância. Se uma faixa da amostra pesa muito na resposta, precisamos entender esse efeito antes de interpretar uma mudança na expansão.', limit: 'A redução de cerca de 94% vale para esta configuração de DES-SN5YR, BAO e prior de matéria. Ela não identifica a causa física nem mede a probabilidade de uma teoria.'},
-    en: {question: 'Does dark energy change — or does the sample change the answer?', finding: 'Removing nearby supernovae weakens the preference for evolving dark energy.', why: 'Stellar explosions act as distance markers. When one part of the sample strongly affects the answer, we need to understand that effect before interpreting a change in expansion.', limit: 'The roughly 94% reduction applies to this DES-SN5YR, BAO and matter-prior configuration. It neither identifies a physical cause nor measures the probability of a theory.'}
+    pt: {question: redshiftQuestion['pt-BR'], finding: 'Retirar supernovas próximas enfraquece a preferência por energia escura variável.', why: 'Usamos explosões estelares como marcadores de distância. Se uma faixa da amostra pesa muito na resposta, precisamos entender esse efeito antes de interpretar uma mudança na expansão.', limit: 'A redução de cerca de 94% vale para esta configuração de DES-SN5YR, BAO e prior de matéria. Ela não identifica a causa física nem mede a probabilidade de uma teoria.'},
+    en: {question: redshiftQuestion.en, finding: 'Removing nearby supernovae weakens the preference for evolving dark energy.', why: 'Stellar explosions act as distance markers. When one part of the sample strongly affects the answer, we need to understand that effect before interpreting a change in expansion.', limit: 'The roughly 94% reduction applies to this DES-SN5YR, BAO and matter-prior configuration. It neither identifies a physical cause nor measures the probability of a theory.'}
   },
   'T-0e94e9e2951b': {
     pt: {question: 'Um único intervalo sustenta a tendência dos aglomerados?', finding: 'Sem o intervalo mais distante, a tendência de S₈ enfraquece de 2,18σ para 0,35σ.', why: 'O crescimento de estruturas permite confrontar a história da expansão com a forma como a matéria se agrupa. Aqui, verificamos quanto um intervalo influencia essa leitura.', limit: 'Ajuste a resumos publicados do eROSITA. As significâncias são nominais; não há correção global por múltiplos testes.'},

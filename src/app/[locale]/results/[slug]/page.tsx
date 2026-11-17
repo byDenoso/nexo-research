@@ -4,13 +4,15 @@ import {LOCALES, fmtDate, isLocale, pick, type Locale} from '@/lib/i18n';
 import {PairChart, pairOf} from '@/components/PairChart';
 import {SensitivityChart} from '@/components/SensitivityChart';
 import {StatusBadge} from '@/components/ui';
+import {redshiftId} from '@/components/RedshiftFigure';
+import {RedshiftRecord} from '@/components/RedshiftRecord';
 import {DATASETS, getDossier, getManifest, getResult, getResults} from '@/lib/data';
 import {familyFor} from '@/lib/families';
 import {scientificText, sameText} from '@/lib/format';
 import {D, tr} from '@/lib/dict';
 import {href, pageMeta} from '@/lib/seo';
 import {compilations, sensitivityPoints, sensitivityRows} from '@/lib/sensitivity';
-import {readResult, isNegative} from '@/lib/editorial';
+import {readResult, isNegative, redshiftQuestion} from '@/lib/editorial';
 import type {Result} from '@/lib/schemas';
 
 export const dynamicParams = false;
@@ -20,7 +22,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
   const {locale, slug} = await params;
   const item = getResult(slug);
   if (!isLocale(locale) || !item) return {};
-  return pageMeta(locale, `/results/${slug}`, pick(item.title, locale), pick(item.result, locale).slice(0, 200));
+  return pageMeta(locale, `/results/${slug}`, pick(item.id === redshiftId ? redshiftQuestion : item.title, locale), pick(item.result, locale).slice(0, 200));
 }
 
 function Block({id, title, children, className = ''}: {id?: string; title: string; children: React.ReactNode; className?: string}) {
@@ -66,6 +68,8 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
   const {locale, slug} = await params;
   const item = getResult(slug);
   if (!isLocale(locale) || !item) notFound();
+  const dossier = getDossier(item.id);
+  if (item.id === redshiftId && dossier) return <RedshiftRecord item={item} dossier={dossier} locale={locale} />;
   const reading = readResult(item, locale);
   const R = D.results;
   const approval = item.approval;
@@ -76,7 +80,6 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
   const pt = locale === 'pt';
   const strip = sensitivityPoints(getResults());
   const inStrip = strip.some(point => point.id === item.id);
-  const dossier = getDossier(item.id);
   const snapshot = getManifest().generatedFrom;
   const mentioned = DATASETS.filter(([, pattern]) => pattern.test(`${item.question.en} ${item.method.en} ${item.result.en}`)).map(([name]) => name);
   const missing = pt ? 'Não consta no resumo público.' : 'Not stated in the public summary.';

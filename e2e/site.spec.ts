@@ -17,7 +17,7 @@ test('institutional home keeps publications out of the main, compact and footer 
     await expect(page.locator(`a[href="/${locale}/publications"]`)).toHaveCount(0);
     const scope = page.locator('.catalogue-note');
     await expect(scope).toBeVisible();
-    await expect(page.locator('.research-hero-image img')).toHaveCount(1);
+    await expect(page.locator('.nx-observation img')).toHaveCount(1);
     await expect(scope.locator('.inst-facts dd')).toHaveCount(3);
     expect((await request.get(`/${locale}/publications`)).ok()).toBe(true);
   }
@@ -60,7 +60,7 @@ test.describe('initial results', () => {
     await page.goto('/pt/results');
     const records = page.getByRole('main').getByRole('article');
     await expect(records).toHaveCount(24);
-    await expect(records.first().getByRole('link')).toHaveAttribute('href', /\/pt\/results\/families\//);
+    await expect(records.first().getByRole('heading').getByRole('link')).toHaveAttribute('href', /\/pt\/results\/families\//);
   });
 });
 
@@ -99,30 +99,29 @@ test('home links name the analysis they open', async ({page}) => {
 
 test('a highlighted record carries its dossier and its own figure', async ({page}) => {
   await page.goto('/pt/results/t-05ae703af393');
-  const dossier = page.getByRole('complementary', {name: 'Dossiê de verificação'});
+  const dossier = page.getByRole('complementary', {name: 'Fontes e código'});
   await expect(dossier).toContainText('DES-SN5YR');
   await expect(page.locator('#method')).toContainText('Nenhuma likelihood da radiação cósmica de fundo entra no ajuste.');
   await expect(page.locator('#method')).not.toContainText('radiação cósmica de fundo são mantidas fixas');
-  await expect(page.locator('#method .record-correction')).toContainText('Correção de');
+  await expect(page.locator('#method .record-correction')).toContainText('Correção sobre o CMB');
   await expect(page.locator('#rerun tbody tr')).toHaveCount(8);
   await expect(dossier.getByRole('link', {name: /arXiv:2401\.02929/})).toHaveAttribute('href', 'https://arxiv.org/abs/2401.02929');
   await expect(dossier).toContainText('Não consta no resumo público.');
-  await expect(page.locator('.record-reading .sens-dot[data-active]')).toHaveCount(1);
-  await dossier.getByRole('link', {name: 'Condições do teste'}).click();
+  await expect(page.locator('.nx-plot-emphasis')).toHaveCount(1);
+  await page.getByRole('link', {name: 'Condições e método'}).click();
   await expect(page).toHaveURL(/#method$/);
   await page.goto('/en/results/t-0e94e9e2951b');
   await expect(page.locator('.pair-values dd')).toHaveText(['2.18\u2009σ', '0.35\u2009σ']);
 });
 
-test('the figure answers to pointer and offers its data as a table', async ({page}) => {
-  await page.goto('/en');
-  const figure = page.locator('#em-foco .sens');
-  await expect(figure.locator('.sens-readout')).toContainText('94%');
-  await figure.getByRole('button', {name: /Union3, without z = 0\.1–0\.3/}).first().click();
-  await expect(figure.locator('.sens-readout')).toContainText('Union3');
-  await figure.locator('summary').click();
-  await expect(figure.getByRole('table')).toBeVisible();
-  expect(await figure.getByRole('row').count()).toBeGreaterThan(40);
+test('the catalogue opens a family or the selected run directly', async ({page}) => {
+  await page.goto('/en/results');
+  const first = page.locator('.nx-question-index article').first();
+  await expect(first.getByRole('heading')).toHaveText('How much does the fit change when nearby supernovae are removed?');
+  await expect(first.getByRole('link', {name: /^Read a run for/})).toHaveAttribute('href', '/en/results/t-05ae703af393');
+  await first.getByRole('heading').getByRole('link').click();
+  await expect(page).toHaveURL('/en/results/families/redshift-exclusion');
+  await expect(page.locator('main .sens-dot')).toHaveCount(34);
 });
 
 test('the code page lists the public repositories and how to run the validator tests', async ({page}) => {
@@ -219,12 +218,11 @@ test('home discloses source date without implying current research activity', as
 
 test('the DES-SN5YR interval result is clearly presented as exploratory', async ({page}) => {
   await page.goto('/pt');
-  await expect(page.locator('.inst-feature-main > p > a[href="/pt/results/t-05ae703af393"]')).toHaveCount(1);
-  await expect(page.locator('#em-foco .sens-dot')).toHaveCount(await page.locator('#em-foco .viz-table tbody tr').count());
-  await expect(page.locator('.inst-feature')).toContainText('sem validação independente');
+  await expect(page.locator('.nx-primary')).toHaveAttribute('href', '/pt/results/t-05ae703af393');
+  await expect(page.locator('#em-foco .nx-status')).toContainText('Validação independente pendente');
   await page.goto('/pt/results/t-05ae703af393');
-  await expect(page.getByRole('main')).toContainText('reduziu em cerca de 94%');
-  await expect(page.getByText('Data do registro público', {exact: true})).toBeVisible();
+  await expect(page.getByRole('main')).toContainText('94,2%');
+  await expect(page.getByText(/Data do registro público/).first()).toBeVisible();
 });
 
 test.describe('theme', () => {

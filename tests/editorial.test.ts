@@ -87,7 +87,7 @@ describe('public reading layer', () => {
     }
   });
   it('indexes plain-language questions without losing source terminology', () => {
-    expect(find('a amostra muda a resposta')).toContain('redshift-exclusion');
+    expect(find('retirar supernovas proximas')).toContain('redshift-exclusion');
     expect(find('fitting assumptions')).toContain('bao-prior');
     expect(find('T-05ae703af393')).toEqual(['redshift-exclusion']);
   });

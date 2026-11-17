@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {PageHead} from '@/components/ui';
 import {ResultsBrowser} from '@/components/ResultsBrowser';
 import {getResults, getManifest} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
@@ -24,26 +23,26 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
   const latest = getManifest().generatedFrom.latestUpdate;
 
   return (
-    <>
-      <PageHead
-        kicker={pt ? 'Arquivo público' : 'Public archive'}
-        title={pt ? 'Catálogo de resultados' : 'Results catalogue'}
-        lead={pt ? 'Explore o recorte público do NEXO por pergunta. Cada família reúne testes com resultados, limites e fontes consultáveis.' : 'Explore NEXO’s public selection by research question. Each family groups tests with results, limits and sources you can inspect.'}
-      />
-      <div className="catalogue-chapter">
-        <div className="wrap catalogue-ribbon">
-          <p><strong>{rows.length}</strong> {pt ? 'famílias' : 'families'} <span aria-hidden="true">·</span> <strong>{results.length}</strong> {pt ? 'execuções' : 'runs'}</p>
-          <p>{pt ? 'Atualizado em' : 'Updated on'} <time dateTime={latest}>{fmtDate(latest, locale)}</time></p>
-          <Link className="text-link arrow-link" href={href(locale, '/resultado-vivo')}>{pt ? 'Comparar sondas em 3D' : 'Compare probes in 3D'}</Link>
+    <div className="nexo-editorial nx-catalogue">
+      <header className="wrap nx-catalogue-head">
+        <div>
+          <p className="nx-eyebrow">{pt ? 'Arquivo público' : 'Public archive'}</p>
+          <h1>{pt ? 'Catálogo de resultados' : 'Results catalogue'}</h1>
+          <p>{pt ? 'Encontre uma pergunta científica, compare as execuções da família e consulte os dados de cada ajuste.' : 'Find a research question, compare its family of runs and inspect the data for each fit.'}</p>
         </div>
-      </div>
-      <div className="wrap page-body">
+        <dl>
+          <div><dt>{pt ? 'Famílias de testes' : 'Test families'}</dt><dd>{rows.length}</dd></div>
+          <div><dt>{pt ? 'Execuções públicas' : 'Public runs'}</dt><dd>{results.length}</dd></div>
+          <div><dt>{pt ? 'Atualizado em' : 'Updated on'}</dt><dd><time dateTime={latest}>{fmtDate(latest, locale)}</time></dd></div>
+        </dl>
+      </header>
+      <div className="wrap nx-catalogue-content">
         <ResultsBrowser rows={rows} locale={locale} />
         <p className="snapshot-disclosure">
           {pt ? 'O estado Candidato indica um resultado interno, sem validação independente. Consulte os ' : 'Candidate marks an internal result without independent validation. See the '}
           <Link className="text-link" href={href(locale, '/methods') + '#result'}>{pt ? 'estados de evidência' : 'evidence statuses'}</Link>.
         </p>
       </div>
-    </>
+    </div>
   );
 }

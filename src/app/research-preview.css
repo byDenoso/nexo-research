@@ -1,0 +1,359 @@
+/* Editorial pages share the print palette and the visual language of the public figures. */
+.nexo-editorial {
+  --paper-edge: color-mix(in srgb, var(--muted) 42%, var(--bg));
+  --paper-blue: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  --figure-solid: var(--accent);
+  --figure-stripe: var(--muted);
+}
+
+.nexo-editorial .wrap { --frame: 79rem; }
+
+:root[data-theme="light"] body:has(.nexo-editorial) .site-header {
+  --ink: #101c31;
+  --muted: #414d61;
+  --surface: #fff;
+  --raised: #eeeee9;
+  --accent: var(--brand);
+  --line: #d7d9de;
+  background: var(--bg);
+  color-scheme: light;
+}
+body:has(.nexo-editorial) .header-living {
+  border-color: transparent;
+  color: var(--muted);
+}
+body:has(.nexo-editorial) .header-living:is(:hover, :focus-visible) {
+  background: transparent;
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.nx-eyebrow {
+  color: var(--accent);
+  font: 500 .75rem/1.5 var(--font-mono);
+  letter-spacing: .085em;
+  text-transform: uppercase;
+}
+
+.nx-lead {
+  display: grid;
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.75rem, 5vw, 5rem);
+  padding-block: clamp(2rem, 5vw, 4.75rem);
+}
+
+.nx-lead h1, .nx-catalogue-head h1, .nx-record-header h1 {
+  max-width: 20ch;
+  margin-block: .7rem .95rem;
+  font: 500 clamp(2.55rem, 5.2vw, 5rem)/1.01 var(--font-display);
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.nx-home .nx-lead h1 { text-wrap: wrap; }
+.nx-deck {
+  max-width: 45ch;
+  font: 400 clamp(1.13rem, 1.6vw, 1.48rem)/1.42 var(--font-display);
+}
+.nx-deck strong { color: var(--accent); font-weight: 650; }
+.nx-deck b { font-weight: 600; white-space: nowrap; }
+
+.nx-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: .65rem;
+  margin-block: 1rem;
+  color: var(--muted);
+  font-size: .875rem;
+}
+.nx-limit {
+  max-width: 43rem;
+  margin-block: 1.15rem 1.4rem;
+  padding: .1rem 0 .15rem .9rem;
+  border-inline-start: 2px solid var(--accent);
+}
+.nx-limit h2 { color: var(--accent); font: 600 .875rem/1.5 var(--font-sans); }
+.nx-limit p { margin-block-start: .2rem; color: var(--muted); font-size: .9375rem; line-height: 1.5; }
+
+.nx-actions, .nx-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem 1.2rem;
+  align-items: center;
+}
+.nx-actions a, .nx-jumps a {
+  min-block-size: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-size: .94rem;
+  font-weight: 600;
+}
+.nx-primary {
+  padding: .55rem .85rem;
+  background: var(--brand);
+  color: var(--on-brand);
+  line-height: 1.4;
+}
+.nx-primary:hover { background: var(--brand-hover); }
+
+.nx-paper-figure {
+  min-width: 0;
+  padding: clamp(.85rem, 2.5vw, 1.75rem);
+  border-block-start: 3px solid var(--accent);
+  border-block-end: 1px solid var(--paper-edge);
+  background: var(--surface);
+}
+.nx-paper-figure h2 {
+  margin-block: .22rem .45rem;
+  font: 500 clamp(1.7rem, 3vw, 2.65rem)/1.1 var(--font-display);
+  letter-spacing: -.035em;
+}
+.nx-paper-figure figcaption > p:last-child, .nx-figure-note {
+  color: var(--muted);
+  font-size: .91rem;
+  line-height: 1.45;
+}
+.nx-plot {
+  --plot-label-width: 8.4rem;
+  --plot-value-room: 2.65rem;
+  margin-block: .95rem .7rem;
+  font: 500 .77rem/1.2 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.nx-plot-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+  padding-block: 0 .8rem;
+}
+.nx-plot-legend span { display: inline-flex; align-items: center; gap: .38rem; }
+.nx-solid { background: var(--figure-solid); }
+.nx-hatched {
+  background: repeating-linear-gradient(135deg, var(--figure-stripe) 0 1.5px, transparent 1.5px 4px);
+  border: 1px solid var(--figure-stripe);
+}
+.nx-swatch { display: inline-block; width: 1.15rem; height: .63rem; }
+
+.nx-plot-axis, .nx-plot-row {
+  display: grid;
+  grid-template-columns: var(--plot-label-width) minmax(0, 1fr);
+  gap: .45rem;
+  padding-inline: .5rem;
+}
+.nx-plot-axis { color: var(--muted); padding-block-end: .35rem; }
+.nx-plot-axis > div {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - var(--plot-value-room));
+  transform: translateX(-.3ch);
+}
+.nx-plot-row {
+  align-items: center;
+  min-height: 3.25rem;
+  border-block-start: 1px solid var(--line);
+}
+.nx-plot-emphasis { background: var(--paper-blue); }
+.nx-plot-label { font-family: var(--font-sans); font-size: .92rem; font-weight: 600; }
+.nx-plot-pair { min-width: 0; display: grid; gap: .33rem; padding-block: .34rem; }
+.nx-plot-track {
+  width: calc(100% - var(--plot-value-room));
+  min-height: .9rem;
+  display: flex;
+  align-items: center;
+  gap: .34rem;
+  border-inline-start: 1px solid var(--paper-edge);
+}
+.nx-plot-track > span:not(.nx-plot-missing) { height: .68rem; flex-shrink: 0; }
+.nx-plot-track b { font-weight: 500; }
+.nx-plot-missing { padding-inline: .38rem; color: var(--muted); }
+
+.nx-figure-links {
+  position: relative;
+  margin-block-start: .65rem;
+  border-block-start: 1px solid var(--line);
+  font-size: .88rem;
+}
+.nx-figure-links > a {
+  display: inline-block;
+  min-block-size: 2.6rem;
+  align-content: center;
+}
+.nx-values summary, .nx-archive summary {
+  width: fit-content;
+  min-block-size: 2.75rem;
+  padding-block: .55rem;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+.nx-values summary::before {
+  content: '+';
+  display: inline-block;
+  width: 1.1em;
+  margin-inline-end: .25em;
+}
+.nx-values[open] summary::before { content: '−'; }
+.nx-values:not([open]) + a {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.nx-values table {
+  width: 100%;
+  margin-block-end: .5rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.nx-values caption { text-align: start; color: var(--muted); }
+.nx-values :is(th, td) { padding: .35rem .2rem; border-bottom: 1px solid var(--line); text-align: start; }
+.nx-values td, .nx-values thead th:not(:first-child) { text-align: end; }
+
+.nx-observation {
+  display: grid;
+  gap: clamp(1.4rem, 5vw, 5rem);
+  align-items: center;
+  padding-block: clamp(1.75rem, 4vw, 4rem);
+  border-block: 1px solid var(--paper-edge);
+}
+.nx-observation img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 15 / 8;
+  object-fit: cover;
+  background: #080f1d;
+}
+.nx-observation figcaption {
+  margin-block-start: .5rem;
+  color: var(--muted);
+  font-size: .79rem;
+  line-height: 1.55;
+}
+.nx-observation h2, .nx-method > h2, .nx-sources > h2 {
+  margin-block: .35rem .7rem;
+  font: 500 clamp(1.9rem, 3.6vw, 3.3rem)/1.12 var(--font-display);
+  letter-spacing: -.035em;
+}
+.nx-observation h2 { max-width: 23ch; }
+.nx-observation p:not(.nx-eyebrow) { max-width: 48ch; margin-block-end: 1rem; }
+.nx-more-research { padding-block: clamp(2rem, 5vw, 4.5rem); }
+
+.nx-catalogue-head {
+  display: grid;
+  gap: 1.5rem;
+  align-items: end;
+  padding-block: clamp(2.1rem, 5vw, 4.5rem) 1.65rem;
+  border-block-end: 2px solid var(--accent);
+}
+.nx-catalogue-head h1 { max-width: none; }
+.nx-catalogue-head p:not(.nx-eyebrow) { max-width: 48ch; color: var(--muted); }
+.nx-catalogue-head dl { display: grid; gap: .35rem; }
+.nx-catalogue-head dl div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding-block: .2rem;
+  border-block-end: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .9rem;
+}
+.nx-catalogue-head dd { white-space: nowrap; color: var(--ink); font-family: var(--font-mono); }
+.nx-catalogue-head dl div:last-child { border: 0; }
+.nx-filters { padding: 1rem 0 .35rem; }
+.nx-catalogue-content .filter-precision-note { margin-block: .5rem 1.6rem; }
+.nx-index-title {
+  font: 500 clamp(1.8rem, 3vw, 2.5rem)/1.1 var(--font-display);
+  letter-spacing: -.035em;
+}
+.nx-catalogue-content .results-count { margin-block: .3rem .75rem; }
+
+.nx-question-index { border-block-start: 1px solid var(--paper-edge); }
+.nx-question-index article {
+  display: grid;
+  gap: .6rem;
+  padding-block: 1.2rem;
+  border-block-end: 1px solid var(--line);
+}
+.nx-question-index h3 { max-width: 39ch; font: 500 clamp(1.35rem, 2.55vw, 2.05rem)/1.15 var(--font-display); letter-spacing: -.025em; }
+.nx-question-index h3 a { text-decoration: underline; text-decoration-color: var(--paper-edge); text-underline-offset: .16em; }
+.nx-question-index h3 a:hover { color: var(--accent); text-decoration-color: currentColor; }
+.nx-question-index h3 + p { max-width: 65ch; margin-block-start: .42rem; color: var(--muted); font-size: .95rem; }
+.nx-question-run { font-size: .88rem; }
+.nx-question-run > p { color: var(--muted); font-family: var(--font-mono); }
+.nx-question-run > a { display: inline-block; min-height: 2.25rem; align-content: center; }
+.nx-question-status { display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .65rem; }
+
+.nx-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: .7rem;
+  margin-block: 1.25rem 1.7rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+.nx-crumbs a { padding-block: .25rem; text-decoration: underline; text-underline-offset: .18em; }
+.nx-crumbs a + a::before { display: inline-block; content: '/'; margin-inline-end: .7rem; color: var(--paper-edge); }
+.nx-record-header h1 { max-width: 27ch; margin-block-end: 0; text-wrap: wrap; }
+.nx-record-lead { padding-block: 1.1rem clamp(2rem, 5vw, 4.25rem); }
+.nx-record-body {
+  display: grid;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-block-start: 1.35rem;
+  border-block-start: 1px solid var(--paper-edge);
+}
+.nx-method { min-width: 0; }
+.nx-method p, .nx-method ul { margin-block: .75rem; }
+.nx-method > p { max-width: 65ch; }
+.nx-correction {
+  padding: .85rem 1rem;
+  margin-block: 1.4rem;
+  border-inline-start: 2px solid var(--accent);
+  background: var(--paper-blue);
+}
+.nx-correction h3, .nx-sources h3 { font-weight: 600; }
+.nx-correction p { margin-block: .35rem 0; }
+.nx-archive { border-block-start: 1px solid var(--line); }
+.nx-archive:last-of-type { border-block-end: 1px solid var(--line); }
+.nx-archive caption { text-align: start; }
+.nx-archive table { margin-block-end: .8rem; }
+.nx-sources {
+  min-width: 0;
+  padding-block-start: .75rem;
+  border-block-start: 2px solid var(--accent);
+  font-size: .92rem;
+}
+.nx-sources > h2 { font-size: clamp(1.65rem, 2.65vw, 2.45rem); }
+.nx-sources dl > div {
+  padding-block: .75rem;
+  border-block-end: 1px solid var(--line);
+}
+.nx-sources dt { font-weight: 600; }
+.nx-sources dd { color: var(--muted); }
+.nx-source-technical {
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font: 400 .8rem/1.6 var(--font-mono);
+}
+.nx-sources :is(h3, p, ul) { margin-block-start: .7rem; }
+
+@media (min-width: 39rem) {
+  .nx-question-index article { grid-template-columns: minmax(0, 1fr) minmax(11rem, .29fr); gap: 1.65rem; }
+}
+@media (min-width: 56rem) {
+  .nx-lead { grid-template-columns: minmax(0, .98fr) minmax(0, 1.1fr); }
+  .nx-observation { grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); }
+  .nx-catalogue-head { grid-template-columns: minmax(0, 1fr) minmax(16rem, .35fr); }
+  .nx-filters { grid-template-columns: minmax(0, 1.65fr) repeat(4, minmax(0, 1fr)); }
+  .nx-filters .wide-filter:first-child { grid-column: auto; }
+  .nx-record-body { grid-template-columns: minmax(0, 1.45fr) minmax(0, .8fr); }
+}
+@media (max-width: 31rem) {
+  .nx-lead h1, .nx-catalogue-head h1, .nx-record-header h1 { font-size: clamp(2.35rem, 10.2vw, 3.2rem); }
+  .nx-plot { --plot-label-width: 6.3rem; --plot-value-room: 2.25rem; }
+  .nx-plot-label { font-size: .82rem; }
+  .nx-values:not([open]) + a { position: static; }
+  .nx-figure-links > a { min-block-size: 2rem; }
+}
