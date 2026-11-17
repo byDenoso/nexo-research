@@ -25,7 +25,7 @@ export function StatusBadge({status, locale}: {status: Status; locale: Locale}) 
 
 export function PageHead({kicker, title, lead}: {kicker?: string; title: string; lead?: string}) {
   return (
-    <header className="page-head dark-chapter">
+    <header className="page-head section-intro">
       <div className="wrap page-head-inner">
         {kicker && kicker !== title && <p className="kicker">{kicker}</p>}
         <h1>{title}</h1>

@@ -14,6 +14,6 @@ export default async function AboutPage({params}:{params:Promise<{locale:string}
   const Content=locale==='pt'?(await import('@/content/about.pt.mdx')).default:(await import('@/content/about.en.mdx')).default;
   return <>
     <PageHead kicker={tr(D.nav.about,locale)} title="NEXO Research Institute" lead={tr(D.about.lead,locale)}/>
-    <article className="wrap prose-nx mt-10 inst-prose"><Content/></article>
+    <div className="wrap about-layout"><nav aria-label={locale === 'pt' ? 'Neste documento' : 'On this page'}><ul>{[['mission','Missão','Mission'],['integrity','Integridade','Integrity'],['direction','Direção','Leadership'],['cite','Como citar','How to cite'],['collaborate','Contato','Contact']].map(([id,pt,en]) => <li key={id}><a href={'#'+id}>{locale === 'pt' ? pt : en}</a></li>)}</ul></nav><article className="prose-nx inst-prose"><Content/></article></div>
   </>;
 }

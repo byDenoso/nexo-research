@@ -6,7 +6,7 @@ const animation = (selector: string) => (page: import('@playwright/test').Page) 
 test('the home reads as one plain heading and nothing on it animates', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/pt');
-  await expect(page.getByRole('heading', {level: 1, name: 'Supernovas próximas pesam no ajuste da energia escura'})).toBeVisible();
+  await expect(page.getByRole('heading', {level: 1, name: 'Como o Universo se expande?'})).toBeVisible();
   await expect(page.locator('#em-foco .nx-plot')).toBeVisible();
   for (const selector of ['.nx-plot-track', '.pair-dot', '.status-badge', '.nx-observation img']) {
     expect(await animation(selector)(page), selector).toBe('none');

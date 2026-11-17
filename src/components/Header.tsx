@@ -5,9 +5,10 @@ import {href} from '@/lib/seo';
 import {ThemeToggle} from './ThemeToggle';
 import {LanguageSwitch} from './LanguageSwitch';
 
-const primary = ['research', 'results', 'methods', 'data', 'about'] as const;
+const primary = ['research', 'publications', 'results', 'data', 'about'] as const;
 function label(route: typeof NAV_ROUTES[number], locale: Locale) {
-  if (route === 'data') return locale === 'pt' ? 'Dados e código' : 'Data & Software';
+  if (route === 'data') return locale === 'pt' ? 'Dados e métodos' : 'Data & Methods';
+  if (route === 'results') return locale === 'pt' ? 'Descobertas' : 'Discoveries';
   if (route === 'about') return locale === 'pt' ? 'Instituto' : 'Institute';
   return tr(D.nav[route], locale);
 }

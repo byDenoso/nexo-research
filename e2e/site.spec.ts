@@ -10,11 +10,12 @@ test('root redirects to the visitor language', async ({request}) => {
   expect(en.headers().location).toMatch(/\/en$/);
 });
 
-test('institutional home keeps publications out of the main, compact and footer navigation', async ({page, request}) => {
+test('institutional home includes publications in the main, compact and footer navigation', async ({page, request}) => {
   for (const locale of ['pt', 'en']) {
     await page.goto(`/${locale}`);
-    await expect(page.locator('header a, footer a, main a').filter({hasText: /^(Publicações|Publications)$/})).toHaveCount(0);
-    await expect(page.locator(`a[href="/${locale}/publications"]`)).toHaveCount(0);
+    for (const landmark of ['header', 'main', 'footer']) {
+      await expect(page.locator(`${landmark} a[href="/${locale}/publications"]`).first()).toBeAttached();
+    }
     const scope = page.locator('.catalogue-note');
     await expect(scope).toBeVisible();
     await expect(page.locator('.nx-observation img')).toHaveCount(1);
@@ -164,7 +165,7 @@ test('the compact menu opens and navigates with the keyboard', async ({page}) =>
   await menu.locator('summary').focus();
   await page.keyboard.press('Enter');
   await expect(menu).toHaveAttribute('open', '');
-  const link = menu.getByRole('link', {name: 'Métodos'});
+  const link = menu.getByRole('link', {name: 'Métodos', exact: true});
   await link.focus();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/pt\/methods$/);

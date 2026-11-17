@@ -1,0 +1,18 @@
+{
+  "source": "https://github.com/PantheonPlusSH0ES/DataRelease/blob/c447f0fea703fcd0fff57de5000947b5ca81286b/Pantheon%2B_Data/4_DISTANCES_AND_COVAR/Pantheon%2BSH0ES.dat",
+  "sha256": "1cb0fc379ef066afdc2ffd1857681cc478024570d8a3eba284fb645775198cf8",
+  "uniqueCID": 1543,
+  "redshiftBinWidth": 0.25,
+  "redshiftCounts": [
+    929,
+    404,
+    162,
+    23,
+    8,
+    10,
+    4,
+    2,
+    0,
+    1
+  ]
+}
