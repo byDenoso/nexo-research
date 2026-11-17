@@ -60,7 +60,7 @@ test('atlas chapters, research selection and persistent catalogue sort',async({p
   await expect(page.locator('.research-question[id="expansion"]')).toBeVisible();
   await expect(page.locator('.research-question[id="galaxies"]')).toHaveCount(0);
   await page.getByLabel('Evidência no catálogo').selectOption({index:1});
-  await page.locator('#scenario-comparison summary').click();
+  await page.locator('#scenario-comparison > summary').click();
   await page.getByRole('combobox',{name:'Cenário',exact:true}).selectOption('shortRuler');
   await expect(page.locator('[data-scenario]')).toContainText('3,94');
   await page.goto('/pt/results');await page.getByLabel('Ordenar por').selectOption('title');
