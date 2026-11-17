@@ -131,3 +131,8 @@ body .site-header .header-living { padding-inline: .65rem; font-size: .81rem; }
   .cover-actions a span, .resource-routes a span { transition: transform 160ms ease-out; }
   .cover-actions a:hover span, .resource-routes a:hover span { transform: translateX(.16em); }
 }
+.nx-sources li > .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+}
