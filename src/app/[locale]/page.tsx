@@ -1,3 +1,4 @@
+import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
@@ -41,6 +42,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           </figure>
         </div>
       </section>
+      <ChapterNav locale={locale}/>
       <section id="em-foco" className="wrap nx-lead" aria-labelledby="cover-title">
         <div className="nx-lead-copy">
           <p className="nx-eyebrow">{pt ? 'Cosmologia observacional / Supernovas Ia' : 'Observational cosmology / Type Ia supernovae'}</p>
@@ -56,7 +58,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <RedshiftFigure locale={locale} />
       </section>
 
-      <section className="wrap nx-observation" aria-labelledby="galaxies-title">
+      <section id="galaxias" className="wrap nx-observation" aria-labelledby="galaxies-title">
         <figure>
           <Image src={goodsSouth.image} width={1400} height={1750} sizes="(min-width: 56rem) 48vw, 92vw" alt={pt ? 'Galáxias de cores e formas diversas no campo GOODS-Sul observado pelo Webb' : 'Galaxies of different colours and shapes in the GOODS-South field observed by Webb'} />
           <figcaption>{pt ? 'Campo GOODS-Sul observado pelo Webb / JADES.' : 'GOODS-South field observed by Webb / JADES.'} <a className="text-link" href={goodsSouth.source}>{goodsSouth.credit}</a></figcaption>
@@ -69,7 +71,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         </div>
       </section>
 
-      <section className="wrap nx-more-research" aria-labelledby="readings-title">
+      <section id="perguntas" className="wrap nx-more-research" aria-labelledby="readings-title">
         <div className="section-masthead">
           <h2 id="readings-title">{pt ? 'Outras perguntas do catálogo' : 'Other questions in the catalogue'}</h2>
           <Link className="text-link arrow-link" href={href(locale, '/results')}>{pt ? 'Ver todas as famílias' : 'See all test families'}</Link>
@@ -94,7 +96,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
       </section>
 
       {publications.length > 0 && <section className="wrap publication-strip"><h2>{pt ? 'Publicações recentes' : 'Recent publications'}</h2><ul>{publications.slice(0, 3).map(pub => <li key={pub.id}><time dateTime={pub.date}>{pub.date}</time><Link href={href(locale, '/publications') + '#' + pub.id}>{pub.title}</Link></li>)}</ul></section>}
-      <section className="catalogue-chapter" aria-labelledby="access-title">
+      <section id="fontes" className="catalogue-chapter" aria-labelledby="access-title">
         <div className="wrap catalogue-note">
           <div>
             <h2 id="access-title">{pt ? 'Métodos, dados e fontes' : 'Methods, data and sources'}</h2>

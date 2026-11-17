@@ -30,6 +30,7 @@ const asLine = (value: string | null): Line | 'all' => (lines.some(line => line 
 const asStatus = (value: string | null): Status | 'all' => (statuses.some(status => status === value) ? value as Status : 'all');
 
 export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Locale}) {
+  const [sort,setSort] = useState('editorial');
   const [query, setQuery] = useState('');
   const [line, setLine] = useState<Line | 'all'>('all');
   const [status, setStatus] = useState<Status | 'all'>('all');
@@ -40,7 +41,10 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    const read = () => {
     const params = new URLSearchParams(window.location.search);
+    const order=params.get("sort") ?? "";
+    setSort(["latest","title","runs"].includes(order) ? order : "editorial");
     setQuery(params.get('q') ?? '');
     setLine(asLine(params.get('line')));
     setStatus(asStatus(params.get('status')));
@@ -49,11 +53,13 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
     setYear(params.get('year') ?? 'all');
     setPage(Math.max(1, Math.min(100, Number(params.get('page')) || 1)));
     setHydrated(true);
+    }; read(); window.addEventListener("popstate",read); return ()=>window.removeEventListener("popstate",read);
   }, []);
 
   useEffect(() => {
     if (!hydrated) return;
     const params = new URLSearchParams();
+    if (sort!=='editorial') params.set('sort',sort);
     if (query.trim()) params.set('q', query.trim());
     if (line !== 'all') params.set('line', line);
     if (status !== 'all') params.set('status', status);
@@ -66,7 +72,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
     if (next !== window.location.pathname + window.location.search + window.location.hash) {
       window.history.replaceState(window.history.state, '', next);
     }
-  }, [query, line, status, survey, year, outcome, page, hydrated]);
+  }, [query, line, status, survey, year, outcome, page, hydrated, sort]);
 
   const f = D.filters;
   const availableLines = lines; // Keep a zero-count research area selectable when linked from /research.
@@ -74,7 +80,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
   const availableSurveys = useMemo(() => [...new Set(rows.flatMap(row=>row.surveys))].sort(),[rows]);
   const years = useMemo(() => [...new Set(rows.map(row => row.year))].sort().reverse(), [rows]);
   const filtered = useMemo(() => {
-    return rows.filter(row =>
+    const result=rows.filter(row =>
       (line === 'all' || row.lines.includes(line)) &&
       (status === 'all' || row.statuses.includes(status)) &&
       (survey === 'all' || row.surveys.includes(survey)) &&
@@ -82,10 +88,14 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
       (outcome === 'all' || row.negative) &&
       (!query.trim() || matches(row.haystack, query))
     );
-  }, [rows, query, line, status, survey, year, outcome]);
+    if(sort==="latest") result.sort((a,b)=>b.updated.localeCompare(a.updated));
+    if(sort==="title") result.sort((a,b)=>a.title.localeCompare(b.title,locale));
+    if(sort==="runs") result.sort((a,b)=>b.recordCount-a.recordCount);
+    return result;
+  }, [sort, locale, rows, query, line, status, survey, year, outcome]);
   const shown = filtered.slice(0, page * PAGE);
   const executionCount = filtered.reduce((total, item) => total + item.recordCount, 0);
-  const reset = () => {setQuery(''); setLine('all'); setStatus('all'); setSurvey('all'); setYear('all'); setOutcome('all'); setPage(1);};
+  const reset = () => {setSort('editorial');setQuery(''); setLine('all'); setStatus('all'); setSurvey('all'); setYear('all'); setOutcome('all'); setPage(1);};
   const change = <T,>(setter: (value: T) => void) => (value: T) => {setter(value); setPage(1);};
 
   return (
@@ -129,6 +139,8 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
             </select>
           </label>
         )}
+        <label>{locale==='pt'?'Ordenar por':'Sort by'}<select value={sort} onChange={e=>change(setSort)(e.target.value)}>
+          <option value="editorial">{locale==='pt'?'Ordem editorial':'Editorial order'}</option><option value="latest">{locale==='pt'?'Mais recentes':'Most recent'}</option><option value="title">A–Z</option><option value="runs">{locale==='pt'?'Mais execuções':'Most runs'}</option></select></label>
       </form>
       <p className="filter-precision-note">{locale === 'pt'
         ? 'O filtro de levantamento usa as menções no texto dos resumos.'

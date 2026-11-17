@@ -1,3 +1,4 @@
+import {BAO_LEVEL,evaluateProfile,pairedLrg2Shift} from '../src/lib/live-result-bao';
 import {describe, expect, it} from 'vitest';
 import {
   baoFootprint, LIVE_RESULT_COMPARISONS, LIVE_RESULT_IMPLIED, LIVE_RESULT_PLANCK_REFERENCE,
@@ -28,7 +29,8 @@ describe('live result reference data', () => {
     expect(desOffset.bao).toBeUndefined();
     expect(desOffset.joint).toBeUndefined();
     expect(withoutLrg2.bao).toEqual({omegaM: 0.2993, h0: 68.4});
-    expect(withoutLrg2.metrics[0]).toMatchObject({previous: 4.65, value: 1.86});
+    expect(withoutLrg2.metrics[0]).toMatchObject({value: 1.86});
+    expect(withoutLrg2.metrics[0]?.previous).toBeUndefined();
     expect(withoutLrg2.description.en).toContain('fixed points with BAO alone');
     expect(shortRuler.bao).toEqual({omegaM: 0.2972, h0: 72.63});
     expect(shortRuler.metrics.map(row => row.value)).toEqual([143.6, 0.157, 12.6]);
@@ -53,17 +55,23 @@ describe('live result reference data', () => {
 describe('BAO likelihood footprint', () => {
   // Benchmark from adaptive quadrature, dense inversion, and root solving on the release files.
   it.each([
-    ['baseline', 0.28445013, 0.31059614],
-    ['withoutLrg2', 0.28599075, 0.31329877],
-  ] as const)('matches the reconstructed ΛCDM boundary for %s', (scenario, minOmega, maxOmega) => {
-    const points = baoFootprint(scenario)!;
-    expect(points.length).toBe(49);
-    expect(points.at(-1)).toEqual(points[0]);
-    expect(points.every(({omegaM, h0}) => Number.isFinite(omegaM) && Number.isFinite(h0))).toBe(true);
-    expect(Math.min(...points.map(point => point.omegaM))).toBeCloseTo(minOmega, 6);
-    expect(Math.max(...points.map(point => point.omegaM))).toBeCloseTo(maxOmega, 6);
+    ['baseline', .29746182], ['withoutLrg2', .29961163],
+  ] as const)('puts each joint contour at its declared likelihood level for %s',(id,m)=>{
+    const profile=(v:number)=>evaluateProfile(v,147.5,id==='withoutLrg2');
+    for(const level of [68,95] as const){
+      const points=baoFootprint(id,level)!;
+      expect(points).toHaveLength(49); expect(points.at(-1)).toEqual(points[0]);
+      for(const p of points){
+        const r=profile(p.omegaM);
+        expect(r.chiSquared-profile(m).chiSquared+r.inverseH0Curvature*(1/p.h0-1/r.h0)**2).toBeCloseTo(BAO_LEVEL[level],5);
+      }
+    }
   });
-
+  it('matches the paired displacement computed by independent dense GLS on the released files',()=>{
+    const d=pairedLrg2Shift();
+    expect(d.omegaM).toBeCloseTo(.00214981,6);expect(d.h0).toBeCloseTo(-.26934778,4);
+    expect(d.sigmaOmegaM).toBeCloseTo(.00248424,6);expect(d.sigmaH0).toBeCloseTo(.20798979,5);
+  });
   it('preserves BAO-only contours for other tests and omits an unverified short-ruler contour', () => {
     expect(baoFootprint('desOffset')).toBe(baoFootprint('baseline'));
     expect(baoFootprint('masslessNeutrinos')).toBe(baoFootprint('baseline'));

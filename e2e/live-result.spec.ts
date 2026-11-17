@@ -3,11 +3,6 @@ import {expect, test} from '@playwright/test';
 
 const route = '/pt/resultado-vivo';
 
-// The Linux CI runner has no physical GPU. Exercise the scene through Chromium's software GPU.
-if (process.platform === 'linux') {
-  test.use({launchOptions:{args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']}});
-}
-
 test('compares published references and each sensitivity scenario, with readable sources', async ({page}) => {
   const errors: string[] = [];
   page.on('pageerror',error=>errors.push(error.message));
@@ -15,32 +10,32 @@ test('compares published references and each sensitivity scenario, with readable
   await page.goto(route);
   await expect(page.getByRole('heading',{level:1,name:'Resultado vivo'})).toBeVisible();
   const impact = page.locator('[data-scenario]');
-  const option = (name: string) => page.getByRole('button',{name,exact:true});
-
-  await option('Offset do DES').click();
+  const select=page.getByRole('combobox',{name:'Cenário',exact:true});
+  await expect(select).toHaveValue('baseline');
+  await expect(page.locator('[data-level]')).toHaveCount(2);
+  await select.selectOption('desOffset');
   await expect(impact).toContainText('Submetido à Physical Review D');
   await expect(impact).toContainText('0,03 mag');
   await expect(impact).toContainText('7,16 → 0,52');
   await expect(impact).toContainText('DES-Dovekie');
-  await option('Offset do DES').click();
-  await expect(impact).toHaveAttribute('data-scenario','baseline');
-
-  await option('Sem o bin LRG2').click();
+  await select.selectOption('withoutLrg2');
   await expect(impact).toContainText('Ωₘ 0,2993 · H₀ 68,40');
-  await expect(impact).toContainText('4,65 → 1,86');
-
-  await option('Régua acústica encurtada').click();
-  await expect(option('Sem o bin LRG2')).toHaveAttribute('aria-pressed','false');
+  await expect(impact).toContainText('1,86');
+  await expect(impact).not.toContainText('4,65');
+  await expect(impact).toContainText('-0,27 ± 0,21');
+  await expect(page.locator('[data-reference="bao"]')).toBeVisible();
+  await expect(page).toHaveURL(/scenario=withoutLrg2/);
+  await select.selectOption('shortRuler');
   await expect(impact).toContainText('72,63');
   await expect(impact).toContainText('12,6 σ');
   await expect(impact).toContainText('3,88 → 0,34 σ');
   await expect(impact).toContainText('143,6 Mpc');
-
-  await option('Neutrinos sem massa').click();
+  await expect(impact).toContainText('Incertezas pareadas indisponíveis');
+  await expect(page.locator('[data-level]')).toHaveCount(0);
+  await select.selectOption('masslessNeutrinos');
   await expect(impact).toContainText('Planck + DESI');
   await expect(impact).toContainText('Ωₘ 0,2985 · H₀ 68,67');
   await expect(impact).toContainText('4,3');
-
   await page.getByText('Valores, faixas e comparações',{exact:true}).click();
   await expect(page.getByText('Ωₘ 0,2972 · H₀ 68,69',{exact:true}).last()).toBeVisible();
   await expect(page.getByText('Ωₘ 0,352 ± 0,017',{exact:true}).last()).toBeVisible();
@@ -52,55 +47,22 @@ test('compares published references and each sensitivity scenario, with readable
   expect(errors).toEqual([]);
 });
 
-test('orbits a real GPU scene and keeps controls usable in lite mode', async ({page, isMobile}) => {
+test('opens in the labelled plane and enables a quantitative 3D surface on request',async({page})=>{
   await page.goto(route);
-  const viewport = page.locator('[data-renderer]');
-  await expect(viewport).toHaveAttribute('data-renderer',/^(webgpu|webgl2)$/,{timeout:20_000});
-  const view = page.getByRole('img',{name:/Cena tridimensional/});
-  expect(await view.evaluate(node => (node as HTMLCanvasElement).width)).toBeGreaterThan(250);
-  const axis = viewport.locator('span').first();
-  await expect.poll(()=>axis.evaluate(node=>node.style.transform)).toContain('translate');
-  const projectedLabel = () => axis.evaluate(node => {
-    const transform = new DOMMatrixReadOnly(getComputedStyle(node).transform);
-    return {x: transform.m41, y: transform.m42};
-  });
-  const initial = await projectedLabel();
-  const displacement = async () => {
-    const point = await projectedLabel();
-    return Math.hypot(point.x - initial.x, point.y - initial.y);
-  };
-  await view.focus();
-  await view.press('ArrowLeft');
-  await expect.poll(displacement).toBeGreaterThan(1);
-  await page.getByRole('button',{name:'Recentrar câmera'}).click();
-  await expect.poll(displacement).toBeLessThan(1);
-
-  await view.scrollIntoViewIfNeeded();
-  const box = (await view.boundingBox())!;
-  const x = box.x + box.width * 0.54, y = box.y + box.height * 0.48;
-  if (isMobile) {
-    const session = await page.context().newCDPSession(page);
-    await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
-    await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x-72,y}]});
-    await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-    await session.detach();
-  } else {
-    await page.mouse.move(x,y);
-    await page.mouse.down();
-    await page.mouse.move(x-72,y+20,{steps:7});
-    await page.mouse.up();
+  const plane=page.getByRole('img',{name:/vista superior/});
+  await expect(plane).toContainText('H₀ (km/s/Mpc)');
+  await page.getByRole('button',{name:'Aproximar'}).click();
+  await expect(page.getByRole('button',{name:'Restaurar escala'})).toBeEnabled();
+  await page.getByRole('button',{name:'Restaurar escala'}).click();
+  for(const name of ['BAO · DESI DR2','Pantheon+']){
+    const button=page.getByRole('button',{name,exact:true}); await button.focus(); await button.press('Space');
+    await expect(button).toHaveAttribute('aria-pressed','true');
   }
-  await expect.poll(displacement).toBeGreaterThan(1);
-
-  await page.getByRole('button',{name:'Modo leve'}).click();
-  await expect(viewport).toHaveAttribute('data-renderer','text');
-  await expect(viewport.getByText('Leitura sem 3D')).toBeVisible();
-  await page.getByRole('button',{name:'BAO · DESI DR2'}).click();
-  await expect(viewport.getByText('BAO · DESI DR2')).toHaveCount(0);
-  await page.getByRole('button',{name:'Sem o bin LRG2'}).click();
-  await expect(viewport.getByText('Ωₘ 0,2993 · H₀ 68,40')).toBeVisible();
-  await page.getByRole('button',{name:'Abrir em 3D'}).click();
-  await expect(viewport).toHaveAttribute('data-renderer',/^(webgpu|webgl2)$/,{timeout:20_000});
+  await page.getByRole('button',{name:'3D · BAO'}).click();
+  await expect(page.getByRole('img',{name:/altura em Δχ²/})).toBeVisible();
+  const angle=page.getByRole('slider',{name:'Rotação'});await angle.focus();await angle.press('ArrowRight');await expect(angle).toHaveValue('36');
+  await page.getByRole('button',{name:'Recentrar'}).click();await expect(angle).toHaveValue('35');
+  await page.getByRole('button',{name:'Voltar a 2D'}).click();await expect(plane).toBeVisible();
 });
 
 test('reads in both themes and survives browsers without GPU support', async ({page}) => {
@@ -113,8 +75,7 @@ test('reads in both themes and survives browsers without GPU support', async ({p
     } as typeof getContext;
   });
   await page.goto(route);
-  const viewport = page.locator('[data-renderer]');
-  await expect(viewport.getByText('Leitura sem 3D')).toBeVisible({timeout:15_000});
+  await expect(page.getByRole('img',{name:/vista superior/})).toBeVisible();
   await page.getByText('Valores, faixas e comparações',{exact:true}).click();
   await page.getByText('Fontes e estado da evidência',{exact:true}).click();
   for (const theme of ['light','dark']) {

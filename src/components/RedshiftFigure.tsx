@@ -1,3 +1,4 @@
+import {RedshiftPlot} from './RedshiftPlot';
 import {pick, type Locale} from '@/lib/i18n';
 import {getDossier} from '@/lib/data';
 import expected from '../../data/source/redshift-exclusion-expected.json';
@@ -26,8 +27,6 @@ export function RedshiftFigure({locale}: {locale: Locale}) {
       values: [cut.delta_chi2, union.holds.find(other => other.band[0] === cut.band[0] && other.band[1] === cut.band[1])?.delta_chi2],
     })),
   ];
-  const ticks = [0, 2, 4, 6, 8, 10];
-  const maximum = Math.max(...ticks);
   const missing = pt ? 'Sem ajuste' : 'No fit';
   const dossier = getDossier(redshiftId);
   const data = dossier?.artefacts?.[0];
@@ -39,30 +38,7 @@ export function RedshiftFigure({locale}: {locale: Locale}) {
         <h2 id="redshift-figure-title">{pt ? 'Ganho de ajuste por corte' : 'Fit improvement by cut'}</h2>
         <p>{pt ? 'Δχ² mede quanto o modelo com energia escura variável melhora o ajuste em relação a ΛCDM plano. Cada faixa é retirada separadamente.' : 'Δχ² measures how much the evolving dark-energy model improves the fit over flat ΛCDM. Each interval is removed separately.'}</p>
       </figcaption>
-      <div className="nx-plot" aria-hidden="true">
-        <div className="nx-plot-legend">
-          <span><i className="nx-swatch nx-solid" />DES-SN5YR</span>
-          <span><i className="nx-swatch nx-hatched" />Union3</span>
-        </div>
-        <div className="nx-plot-axis">
-          <span>Δχ²</span>
-          <div>{ticks.map(tick => <span key={tick}>{tick}</span>)}</div>
-        </div>
-        {rows.map((row, index) => (
-          <div key={row.label} className={`nx-plot-row${index === 1 ? ' nx-plot-emphasis' : ''}`}>
-            <div className="nx-plot-label">{row.label}</div>
-            <div className="nx-plot-pair">
-              {row.values.map((value, series) => (
-                <div className="nx-plot-track" key={series}>
-                  {value === undefined
-                    ? <span className="nx-plot-missing">{missing}</span>
-                    : <><span className={series === 0 ? 'nx-solid' : 'nx-hatched'} style={{width: `${value / maximum * 100}%`}} /><b>{number.format(value)}</b></>}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+      <RedshiftPlot locale={locale} rows={rows}/>
       <p className="nx-figure-note">{pt ? 'Barras mais curtas indicam menor ganho de ajuste. Union3 fica com menos de 10 pontos no último corte.' : 'Shorter bars indicate a smaller improvement. Fewer than 10 Union3 points remain after the final cut.'}</p>
       <div className="nx-figure-links">
         <details className="nx-values">
