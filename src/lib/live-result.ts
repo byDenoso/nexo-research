@@ -1,5 +1,5 @@
 import type {Locale} from './i18n';
-import {makeBaoFootprint} from './live-result-bao';
+import {BAO_LEVEL, makeBaoFootprint} from './live-result-bao';
 
 export type Text = Readonly<Record<Locale, string>>;
 export type PlanePoint = Readonly<{omegaM: number; h0: number}>;
@@ -110,8 +110,8 @@ export const LIVE_RESULT_PROBES: Record<ProbeId, LiveResultProbe> = {
     shortLabel: {pt: 'DES-SN5YR', en: 'DES-SN5YR'},
     anchor: {omegaM: 0.352, sigmaOmegaM: 0.017},
     description: {
-      pt: 'As distâncias relativas das supernovas DES-SN5YR delimitam Ωₘ em ΛCDM plano. A faixa se estende em h porque a análise das supernovas sozinhas deixa a escala de distância livre.',
-      en: 'The relative distances of DES-SN5YR supernovae constrain Ωₘ in flat ΛCDM. The band extends along h because the supernova-only analysis leaves the distance scale free.',
+      pt: 'As distâncias relativas das supernovas DES-SN5YR delimitam Ωₘ em ΛCDM plano. A faixa se estende em H₀ porque a análise das supernovas sozinhas deixa a escala de distância livre.',
+      en: 'The relative distances of DES-SN5YR supernovae constrain Ωₘ in flat ΛCDM. The band extends along H₀ because the supernova-only analysis leaves the distance scale free.',
     },
     sourceIds: ['des'],
     status: 'published',
@@ -173,8 +173,8 @@ export const LIVE_RESULT_SCENARIOS: Record<ScenarioId, LiveResultScenario> = {
   baseline: {
     label: {pt: 'Referência', en: 'Reference'},
     description: {
-      pt: 'Veja onde cada sonda restringe Ωₘ e h sob ΛCDM plano. Arraste para mudar a perspectiva.',
-      en: 'See how each probe constrains Ωₘ and h in flat ΛCDM. Drag to change the perspective.',
+      pt: 'Veja onde cada sonda restringe Ωₘ e H₀ sob ΛCDM plano.',
+      en: 'See how each probe constrains Ωₘ and H₀ in flat ΛCDM.',
     },
     consequence: {
       pt: 'O Planck, o BAO com régua padrão e a escada indicam taxas de expansão diferentes.',
@@ -198,7 +198,8 @@ export const LIVE_RESULT_SCENARIOS: Record<ScenarioId, LiveResultScenario> = {
     status: 'submitted',
     metrics: [
       {label: {pt: 'Deslocamento de magnitude', en: 'Magnitude offset'}, value: LIVE_RESULT_DES_OFFSET.magnitude, decimals: 2, unit: 'mag'},
-      {label: fitGainLabel, previous: LIVE_RESULT_DES_OFFSET.before, value: LIVE_RESULT_DES_OFFSET.after, decimals: 2},
+      {label: {pt: 'Δχ² · calibração original', en: 'Δχ² · original calibration'}, value: LIVE_RESULT_DES_OFFSET.before, decimals: 2},
+      {label: {pt: 'Δχ² · calibração deslocada', en: 'Δχ² · shifted calibration'}, value: LIVE_RESULT_DES_OFFSET.after, decimals: 2},
     ],
   },
   withoutLrg2: {
@@ -208,12 +209,12 @@ export const LIVE_RESULT_SCENARIOS: Record<ScenarioId, LiveResultScenario> = {
       en: 'The contour drops both LRG2 measurements and uses the covariance submatrix for the retained distances. Δχ² compares models at fixed points with BAO alone.',
     },
     consequence: {
-      pt: 'O ponto de BAO muda pouco e cai o ganho de ajuste com energia escura variável quando se compara apenas BAO.',
-      en: 'The BAO point shifts only slightly, while the fit improvement from evolving dark energy drops in the BAO-only comparison.',
+      pt: 'O corte desloca o ajuste BAO para H₀ menor e Ωₘ maior.',
+      en: 'The cut shifts the BAO fit toward lower H₀ and higher Ωₘ.',
     },
     sourceIds: ['synthesis', 'desi', 'baoMean', 'baoCovariance'],
     status: 'provisional',
-    metrics: [{label: fitGainLabel, previous: LIVE_RESULT_LRG2.before, value: LIVE_RESULT_LRG2.after, decimals: 2}],
+    metrics: [{label: fitGainLabel, value: LIVE_RESULT_LRG2.after, decimals: 2}],
     bao: baoWithoutLrg2,
   },
   shortRuler: {
@@ -272,20 +273,17 @@ export const LIVE_RESULT_IMPLIED: readonly {probe: ProbeId; h0: number}[] = [
 ];
 
 export const LIVE_RESULT_BAO_CONTOUR_NOTE: Text = {
-  pt: 'O contorno de BAO é reconstruído das distâncias do DESI DR2 e da covariância, sob ΛCDM plano, e recentrado no ponto informado. A régua curta mostra o ponto informado, sem contorno reconstruído.',
-  en: 'The BAO contour is reconstructed from the DESI DR2 distances and covariance in flat ΛCDM and recentered on the reported point. The short ruler shows the reported point, with no reconstructed contour.',
+  pt: 'O contorno de BAO é reconstruído das distâncias do DESI DR2 e da covariância, sob ΛCDM plano, com r_d = 147,5 Mpc fixo. Os contornos conjuntos seguem o mínimo da verossimilhança. O ponto da síntese é indicado à parte. A régua curta mostra o ponto informado, sem contorno reconstruído.',
+  en: 'The BAO contour is reconstructed from the DESI DR2 distances and covariance in flat ΛCDM at fixed r_d = 147.5 Mpc. Joint contours follow the likelihood minimum. The synthesis point is marked separately. The short ruler shows the reported point, with no reconstructed contour.',
 };
 
-let baselineFootprint: readonly PlanePoint[] | undefined;
-let withoutLrg2Footprint: readonly PlanePoint[] | undefined;
-export function baoFootprint(scenario: ScenarioId): readonly PlanePoint[] | undefined {
+const footprints = new Map<string, readonly PlanePoint[]>();
+export function baoFootprint(scenario: ScenarioId, percent: 68 | 95 = 68) {
   if (scenario === 'shortRuler') return undefined;
-  if (scenario === 'withoutLrg2') {
-    withoutLrg2Footprint ??= makeBaoFootprint(baoWithoutLrg2, LIVE_RESULT_SHORT_RULER.referenceSoundHorizon, true);
-    return withoutLrg2Footprint;
-  }
-  baselineFootprint ??= makeBaoFootprint(baoStandard, LIVE_RESULT_SHORT_RULER.referenceSoundHorizon, false);
-  return baselineFootprint;
+  const cut = scenario === 'withoutLrg2';
+  const key = String(cut) + '-' + percent;
+  if (!footprints.has(key)) footprints.set(key, makeBaoFootprint(LIVE_RESULT_SHORT_RULER.referenceSoundHorizon, cut, BAO_LEVEL[percent]));
+  return footprints.get(key);
 }
 
 export function liveResultNumber(value: number, decimals: number, locale: Locale): string {

@@ -1,3 +1,4 @@
+import {ResearchAreas} from '@/components/ResearchAreas';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {ResearchObservation} from '@/components/EditorialFigures';
@@ -38,19 +39,10 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
         title={pt ? 'Perguntas sobre o Universo' : 'Questions about the Universe'}
         lead={pt ? 'Da expansão cósmica à luz das primeiras galáxias. Encontre a pergunta, os projetos que a investigam e os testes disponíveis para consulta.' : 'From cosmic expansion to the light of the earliest galaxies. Find the question, the projects investigating it and the tests available to explore.'}
       />
-      <div className="wrap page-body research-layout">
-        <nav className="research-index" aria-labelledby="research-index-title">
-          <h2 id="research-index-title" className="kicker">{pt ? 'Linhas de pesquisa' : 'Research areas'}</h2>
-          <ul role="list">
-            {LINES.map(line => <li key={line}><a href={'#' + line}>{tr(D.lines.items[line].n, locale)} <span aria-hidden="true">↓</span></a></li>)}
-          </ul>
-        </nav>
-        <div className="research-content">
-          <ResearchObservation locale={locale} />
-          {LINES.map(line => {
+      <ResearchAreas locale={locale} figure={<ResearchObservation locale={locale}/>} areas={LINES.map(line=>{
             const count = results.filter(item => item.lines.includes(line)).length;
             const areaProjects = projects.filter(project => project.line === line);
-            return (
+            return {line,statuses:results.filter(item=>item.lines.includes(line)).map(item=>item.status),content:(
               <section key={line} id={line} className="research-question" aria-labelledby={line + '-title'}>
                 <div>
                   <p className="kicker">{tr(D.lines.items[line].n, locale)}</p>
@@ -74,17 +66,15 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
                   </details>
                 )}
               </section>
-            );
-          })}
+            )};
+          })} output={
           <section id="scientific-output" className="research-question">
             <h2>{pt ? 'Produção científica pública' : 'Public scientific output'}</h2>
             {publications.length > 0 ? (
               <ul>{publications.map(pub => <li key={pub.id}><Link className="text-link" href={href(locale, '/publications') + '#' + pub.id}>{pub.title}</Link></li>)}</ul>
             ) : <p>{pt ? 'Os registros do catálogo dão acesso aos testes e às fontes. Manuscritos liberados para divulgação aparecem na página de publicações.' : 'The catalogue records give access to tests and sources. Manuscripts cleared for disclosure appear on the publications page.'}</p>}
             <Link className="text-link arrow-link" href={href(locale, '/methods')}>{pt ? 'Como avaliamos a evidência' : 'How we assess evidence'}</Link>
-          </section>
-        </div>
-      </div>
+          </section>}/>
     </>
   );
 }

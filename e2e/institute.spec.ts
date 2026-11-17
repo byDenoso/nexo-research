@@ -50,3 +50,19 @@ test('measure the cover and its publication navigation in Chromium', async ({pag
   await page.locator('.cover-actions').getByRole('link',{name:'Publicações'}).click();
   await expect(page).toHaveURL(/\/pt\/publications$/);
 });
+
+test('atlas chapters, research selection and persistent catalogue sort',async({page})=>{
+  await page.goto('/pt');
+  const chapters=page.getByRole('navigation',{name:'Capítulos'});await chapters.getByRole('link',{name:'Galáxias'}).click();
+  await expect(page).toHaveURL(/#galaxias$/);
+  await page.goto('/pt/research');
+  await page.getByLabel('Tema',{exact:true}).selectOption('expansion');
+  await expect(page.locator('.research-question[id="expansion"]')).toBeVisible();
+  await expect(page.locator('.research-question[id="galaxies"]')).toHaveCount(0);
+  await page.getByLabel('Evidência no catálogo').selectOption({index:1});
+  await page.locator('#scenario-comparison > summary').click();
+  await page.getByRole('combobox',{name:'Cenário',exact:true}).selectOption('shortRuler');
+  await expect(page.locator('[data-scenario]')).toContainText('3,94');
+  await page.goto('/pt/results');await page.getByLabel('Ordenar por').selectOption('title');
+  await expect(page).toHaveURL(/sort=title/);await page.reload();await expect(page.getByLabel('Ordenar por')).toHaveValue('title');
+});

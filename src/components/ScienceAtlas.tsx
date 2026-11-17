@@ -24,6 +24,8 @@ function pathFor(curve: (x: number) => number, xmax: number, ymax: number) {
 export function ScienceAtlas({locale}: {locale: Locale}) {
   const pt = locale === 'pt';
   const [view, setView] = useState<View>('sky');
+  const [model,setModel]=useState<number|null>(null),[hover,setHover]=useState<number|null>(null);
+  const [bin,setBin]=useState(0);
   const [z, setZ] = useState(0.3);
   const f = (n: number) => n.toLocaleString(pt ? 'pt-BR' : 'en-GB', {maximumFractionDigits: 2});
   const sky = view === 'sky', dist = view === 'distribution', expansion = view === 'expansion';
@@ -48,7 +50,7 @@ export function ScienceAtlas({locale}: {locale: Locale}) {
       <select id="atlas-view" value={view} onChange={event => setView(event.target.value as View)}>{views.map(entry => <option value={entry[0]} key={entry[0]}>{entry[pt ? 1 : 2]}</option>)}</select>
       <p>{notes[view]}</p>
       <a className="text-link" href={source}>{sourceName}</a>
-      <Link className="text-link" href={'/'+locale+'/resultado-vivo'}>{pt ? 'Plano Ωₘ × h e incertezas das sondas' : 'Ωₘ × h plane and probe uncertainties'}</Link>
+      <Link className="text-link" href={'/'+locale+'/resultado-vivo'}>{pt ? 'Plano Ωₘ × H₀ e incertezas das sondas' : 'Ωₘ × H₀ plane and probe uncertainties'}</Link>
     </div>
     <figure><figcaption><strong>{title}</strong><span>{sky || dist ? 'Pantheon+ · N = '+f(sample.uniqueCID) : pt ? 'Modelo ilustrativo' : 'Illustrative model'}</span></figcaption>
       <p className="axis-note">{yLabel}</p>
@@ -56,12 +58,14 @@ export function ScienceAtlas({locale}: {locale: Locale}) {
         {yticks.map((v,i) => {const y=top+height*(1-i/(yticks.length-1));return <g key={v}><line className="axis-rule" x1={left} x2={left+width} y1={y} y2={y}/><text x={left-8} y={y+4} textAnchor="end">{f(v)}</text></g>;})}
         {xticks.map((v,i) => <text key={v} x={left+width*i/(xticks.length-1)} y="228" textAnchor="middle">{f(v)}</text>)}
         {sky && <image x="0" y="0" width="580" height="248" href="/images/pantheon-sky.svg"/>}
-        {dist && sample.redshiftCounts.map((n,i) => <rect key={i} fill="var(--accent)" x={left+i*50+1} y={top+height*(1-n/yMax)} width="48" height={height*n/yMax}/>)}
-        {expansion && [0.3,1].map(m => <path key={m} className="atlas-line" strokeDasharray={m===1 ? '7 4' : undefined} d={pathFor(x => Math.sqrt(m*(1+x)**3+1-m),2,yMax)}/>)}
+        {dist && sample.redshiftCounts.map((n,i) => <rect key={i} onMouseEnter={()=>setBin(i)} onClick={()=>setBin(i)} opacity={i===bin?1:.48} fill="var(--accent)" x={left+i*50+1} y={top+height*(1-n/yMax)} width="48" height={height*n/yMax}/>)}
+        {expansion && [0.3,1].map(m => <path key={m} opacity={(hover??model)===null || (hover??model)===m ? 1 : .24} onMouseEnter={()=>setHover(m)} onMouseLeave={()=>setHover(null)} onClick={()=>setModel(m===model?null:m)} className="atlas-line" strokeDasharray={m===1 ? '7 4' : undefined} d={pathFor(x => Math.sqrt(m*(1+x)**3+1-m),2,yMax)}/>)}
         {view==='spectrum' && <path className="atlas-line" d={pathFor(x=>Math.exp(-.5*((600+x-observed)/10)**2),750,1)}/>}
       </svg>
       <p className="axis-note axis-x">{xLabel}</p>
       {view === 'spectrum' && <label className="spectrum-control"><span>z = {f(z)} · λ = {f(observed)} nm</span><input type="range" min="0" max="1" step=".01" value={z} aria-label="Redshift" onChange={event=>setZ(Number(event.target.value))}/></label>}
+      {expansion && <div className="model-legend">{[.3,1].map(m=><button key={m} type="button" aria-pressed={model===m} onFocus={()=>setHover(m)} onBlur={()=>setHover(null)} onMouseEnter={()=>setHover(m)} onMouseLeave={()=>setHover(null)} onClick={()=>setModel(m===model?null:m)}>Ωₘ = {f(m)}</button>)}</div>}
+      {dist && <label className="spectrum-control"><span>{f(bin*.25)} ≤ z &lt; {f((bin+1)*.25)} · N = {sample.redshiftCounts[bin]}</span><input type="range" min="0" max={sample.redshiftCounts.length-1} step="1" value={bin} aria-label={pt?'Faixa de redshift':'Redshift bin'} onChange={e=>setBin(Number(e.target.value))}/></label>}
       {dist && <details><summary>{pt ? 'Contagens por intervalo' : 'Counts by bin'}</summary><dl>{sample.redshiftCounts.map((n,i)=><div key={i}><dt>{f(i*.25)} ≤ z &lt; {f((i+1)*.25)}</dt><dd>{n}</dd></div>)}</dl></details>}
     </figure>
   </section>;

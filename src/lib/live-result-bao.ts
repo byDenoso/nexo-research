@@ -21,7 +21,7 @@ const pairs: readonly BaoPair[] = [
   {z: 2.330, dm: 38.988973961958784, dh: 8.631545674846294, varianceDm: 2.82685779e-1, covariance: -2.31395216e-2, varianceDh: 1.02136194e-2},
 ];
 const LIGHT_SPEED_KM_S = 299792.458;
-const CONTOUR_LEVEL = 2.3;
+export const BAO_LEVEL = {68: -2 * Math.log(0.32), 95: -2 * Math.log(0.05)};
 const CONTOUR_HALF_SEGMENTS = 24;
 
 function inverseExpansion(z: number, omegaM: number): number {
@@ -40,7 +40,7 @@ function transverseIntegral(z: number, omegaM: number): number {
 
 type Profile = PlanePoint & {chiSquared: number; inverseH0Curvature: number};
 
-function evaluateProfile(omegaM: number, ruler: number, withoutLrg2: boolean): Profile {
+export function evaluateProfile(omegaM: number, ruler: number, withoutLrg2: boolean): Profile {
   const scale = LIGHT_SPEED_KM_S / ruler;
   const dm = scale * transverseIntegral(isotropic.z, omegaM);
   const dh = scale * inverseExpansion(isotropic.z, omegaM);
@@ -83,38 +83,68 @@ function minimum(profile: (omegaM: number) => Profile, lower: number, upper: num
   return profile((lower + upper) / 2);
 }
 
-function contourEdge(profile: (omegaM: number) => Profile, best: Profile, outside: number): number {
+function contourEdge(profile: (omegaM: number) => Profile, best: Profile, outside: number, level: number): number {
   let inside = best.omegaM;
   for (let i = 0; i < 36; i++) {
     const mid = (inside + outside) / 2;
-    if (profile(mid).chiSquared - best.chiSquared > CONTOUR_LEVEL) outside = mid;
+    if (profile(mid).chiSquared - best.chiSquared > level) outside = mid;
     else inside = mid;
   }
   return inside;
 }
 
-export function makeBaoFootprint(anchor: PlanePoint, ruler: number, withoutLrg2: boolean): readonly PlanePoint[] {
+export function makeBaoFootprint(ruler: number, withoutLrg2: boolean, level: number): readonly PlanePoint[] {
   const lower = 0.15;
   const upper = 0.5;
   const profile = (omegaM: number) => evaluateProfile(omegaM, ruler, withoutLrg2);
   const best = minimum(profile, lower, upper);
-  const left = contourEdge(profile, best, lower);
-  const right = contourEdge(profile, best, upper);
+  const left = contourEdge(profile, best, lower, level);
+  const right = contourEdge(profile, best, upper, level);
   const lowerSide: PlanePoint[] = [];
   const upperSide: PlanePoint[] = [];
   for (let i = 0; i <= CONTOUR_HALF_SEGMENTS; i++) {
     const fraction = (1 - Math.cos(Math.PI * i / CONTOUR_HALF_SEGMENTS)) / 2;
     const omegaM = left + (right - left) * fraction;
     const row = profile(omegaM);
-    const remaining = CONTOUR_LEVEL - (row.chiSquared - best.chiSquared);
+    const remaining = level - (row.chiSquared - best.chiSquared);
     const delta = Math.sqrt(Math.max(0, remaining) / row.inverseH0Curvature);
     const inverseH0 = 1 / row.h0;
-    const shiftOmegaM = anchor.omegaM + (omegaM - best.omegaM);
-    lowerSide.push({omegaM: shiftOmegaM, h0: anchor.h0 + (1 / (inverseH0 + delta) - best.h0)});
+    lowerSide.push({omegaM, h0: 1 / (inverseH0 + delta)});
     if (i > 0 && i < CONTOUR_HALF_SEGMENTS) {
-      upperSide.push({omegaM: shiftOmegaM, h0: anchor.h0 + (1 / (inverseH0 - delta) - best.h0)});
+      upperSide.push({omegaM, h0: 1 / (inverseH0 - delta)});
     }
   }
   const first = lowerSide[0];
   return first ? [...lowerSide, ...upperSide.reverse(), first] : [];
+}
+
+// Linearized nested GLS estimates share every retained observation. Evaluate
+// both Fisher matrices at one common point, including DM–DH covariance.
+function fisher(omegaM:number, h0:number, cut:boolean) {
+  let mm=0, mh=0, hh=0;
+  const scale=LIGHT_SPEED_KM_S/(147.5*h0);
+  const gradient=(distance:(m:number)=>number)=>{
+    const step=1e-5;
+    return [scale*(distance(omegaM+step)-distance(omegaM-step))/(2*step),-scale*distance(omegaM)/h0] as const;
+  };
+  const accumulate=(a:readonly [number,number],b:readonly [number,number],weight:number)=>{
+    mm+=a[0]*b[0]*weight; mh+=a[0]*b[1]*weight; hh+=a[1]*b[1]*weight;
+  };
+  const dv=gradient(m=>Math.cbrt(isotropic.z*transverseIntegral(isotropic.z,m)**2*inverseExpansion(isotropic.z,m)));
+  accumulate(dv,dv,1/isotropic.variance);
+  for(const pair of pairs){
+    if(cut && pair.lrg2) continue;
+    const dm=gradient(m=>transverseIntegral(pair.z,m)), dh=gradient(m=>inverseExpansion(pair.z,m));
+    const det=pair.varianceDm*pair.varianceDh-pair.covariance**2;
+    accumulate(dm,dm,pair.varianceDh/det); accumulate(dh,dh,pair.varianceDm/det);
+    accumulate(dm,dh,-pair.covariance/det); accumulate(dh,dm,-pair.covariance/det);
+  }
+  const det=mm*hh-mh*mh;
+  return {omegaM:hh/det,h0:mm/det};
+}
+export function pairedLrg2Shift() {
+  const best=(cut:boolean)=>minimum(m=>evaluateProfile(m,147.5,cut),.15,.5);
+  const full=best(false),cut=best(true);
+  const fc=fisher(full.omegaM,full.h0,true), ff=fisher(full.omegaM,full.h0,false);
+  return {omegaM:cut.omegaM-full.omegaM,h0:cut.h0-full.h0,sigmaOmegaM:Math.sqrt(fc.omegaM-ff.omegaM),sigmaH0:Math.sqrt(fc.h0-ff.h0)};
 }
