@@ -144,7 +144,7 @@ body .site-header .header-living { padding-inline: .65rem; font-size: .81rem; }
 .area-filters {display:grid;gap:.55rem;margin-block:1rem}.area-filters label {display:grid;gap:.25rem}
 .area-filters select {min-width:0;max-width:100%;width:100%;border:1px solid var(--control-line);padding:.5rem;background:var(--surface);color:var(--ink)}
 #scenario-comparison {margin-block:2rem}#scenario-comparison[open]>summary {margin-bottom:1rem}
-@media(prefers-reduced-motion:no-preference){html:has(.chapter-nav){scroll-behavior:smooth}}
+@media(prefers-reduced-motion:no-preference){html:has(.chapter-nav a:focus){scroll-behavior:smooth !important}}
 @media(prefers-reduced-motion:reduce){.chapter-nav svg {transition:none}}
 
 .nx-plot-legend button,.model-legend button {display:inline-flex;align-items:center;gap:.4rem;min-height:2.4rem;padding:.2rem .55rem;border:1px solid var(--line);cursor:pointer}

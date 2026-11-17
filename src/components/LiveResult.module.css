@@ -1,4 +1,5 @@
 .experience {
+  container-type:inline-size;
   --field: #0d1729;
   --field-edge: #101e35;
   --field-center: #182d4a;
@@ -165,3 +166,5 @@
 .caption,.shift {font-size:.92rem;padding:.6rem 1rem;color:var(--muted)}.shift {border-inline-start:2px solid var(--accent);padding:.55rem .75rem;margin:.8rem 0}
 .shift p {color:var(--ink);font-variant-numeric:tabular-nums}.legend button[aria-pressed=true] {outline:1px solid var(--control-line);outline-offset:-1px}.legend button[aria-pressed=false] {opacity:1}
 @media (prefers-reduced-motion:reduce){.series {transition:none}}
+
+@container (max-width: 49rem) { .workspace {grid-template-columns:minmax(0,1fr)} }

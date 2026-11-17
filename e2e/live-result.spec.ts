@@ -16,7 +16,8 @@ test('compares published references and each sensitivity scenario, with readable
   await select.selectOption('desOffset');
   await expect(impact).toContainText('Submetido à Physical Review D');
   await expect(impact).toContainText('0,03 mag');
-  await expect(impact).toContainText('7,16 → 0,52');
+  await expect(impact.locator('dl div').filter({hasText:'calibração original'})).toContainText('7,16');
+  await expect(impact.locator('dl div').filter({hasText:'calibração deslocada'})).toContainText('0,52');
   await expect(impact).toContainText('DES-Dovekie');
   await select.selectOption('withoutLrg2');
   await expect(impact).toContainText('Ωₘ 0,2993 · H₀ 68,40');

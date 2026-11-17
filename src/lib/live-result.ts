@@ -198,7 +198,8 @@ export const LIVE_RESULT_SCENARIOS: Record<ScenarioId, LiveResultScenario> = {
     status: 'submitted',
     metrics: [
       {label: {pt: 'Deslocamento de magnitude', en: 'Magnitude offset'}, value: LIVE_RESULT_DES_OFFSET.magnitude, decimals: 2, unit: 'mag'},
-      {label: fitGainLabel, previous: LIVE_RESULT_DES_OFFSET.before, value: LIVE_RESULT_DES_OFFSET.after, decimals: 2},
+      {label: {pt: 'Δχ² · calibração original', en: 'Δχ² · original calibration'}, value: LIVE_RESULT_DES_OFFSET.before, decimals: 2},
+      {label: {pt: 'Δχ² · calibração deslocada', en: 'Δχ² · shifted calibration'}, value: LIVE_RESULT_DES_OFFSET.after, decimals: 2},
     ],
   },
   withoutLrg2: {

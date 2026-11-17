@@ -24,7 +24,7 @@ describe('live result reference data', () => {
     const {desOffset, withoutLrg2, shortRuler, masslessNeutrinos} = LIVE_RESULT_SCENARIOS;
     expect(desOffset).toMatchObject({status: 'submitted', sourceIds: ['offset', 'desi']});
     expect(LIVE_RESULT_STATUS[desOffset.status].pt).toBe('Submetido à Physical Review D');
-    expect(desOffset.metrics.map(row => [row.previous, row.value])).toEqual([[undefined, 0.03], [7.16, 0.52]]);
+    expect(desOffset.metrics.map(row => [row.previous, row.value])).toEqual([[undefined, 0.03], [undefined, 7.16], [undefined, 0.52]]);
     expect(desOffset.description.pt).toContain('DES-Dovekie');
     expect(desOffset.bao).toBeUndefined();
     expect(desOffset.joint).toBeUndefined();
