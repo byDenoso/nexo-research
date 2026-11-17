@@ -4,7 +4,7 @@ import {notFound} from 'next/navigation';
 import {PairChart} from '@/components/PairChart';
 import {RedshiftFigure, RedshiftFinding, RedshiftLimit, redshiftSlug} from '@/components/RedshiftFigure';
 import {StatusBadge} from '@/components/ui';
-import {getManifest, getResult, getResults} from '@/lib/data';
+import {getManifest, getResult, getResults, getPublications} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
 import {readResult, selectedIds, isNegative} from '@/lib/editorial';
 import {fmtDate, isLocale} from '@/lib/i18n';
@@ -16,6 +16,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
   if (!isLocale(locale)) notFound();
   const pt = locale === 'pt';
   const results = getResults();
+  const publications = getPublications();
   const latest = getManifest().generatedFrom.latestUpdate;
   const lead = getResult(redshiftSlug);
   const stories = selectedIds.slice(1).flatMap(id => {
@@ -25,10 +26,25 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
 
   return (
     <div className="nexo-editorial nx-home">
+      <section className="institute-cover" aria-labelledby="institute-title">
+        <div className="wrap cover-grid">
+          <div className="cover-copy">
+            <p className="cover-label">NEXO Research Institute</p>
+            <h1 id="institute-title">{pt ? 'Como o Universo se expande?' : 'How does the Universe expand?'}</h1>
+            <p>{pt ? 'Investigamos a energia escura, a formação de estruturas e as primeiras galáxias. Cada análise pública liga a hipótese aos dados e aos limites do resultado.' : 'We investigate dark energy, the growth of structure and the earliest galaxies. Each public analysis connects a hypothesis to its data and the limits of its findings.'}</p>
+            <div className="cover-actions"><Link href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link><Link href={href(locale, '/publications')}>{pt ? 'Publicações' : 'Publications'} <span aria-hidden="true">→</span></Link></div>
+          </div>
+          <figure className="volume-plate">
+            <Image src="/images/pantheon-volume.jpg" width={2560} height={1440} sizes="(min-width: 56rem) 54vw, 96vw" preload alt={pt ? 'Distribuição tridimensional das supernovas do Pantheon+ em quatro cascas de redshift' : 'Three-dimensional distribution of Pantheon+ supernovae inside four redshift shells'} />
+            <figcaption><strong>Pantheon+</strong><span>{pt ? '1.543 supernovas · geometria da amostra' : '1,543 supernovae · sample geometry'}</span></figcaption>
+            <details><summary>{pt ? 'Escala e fonte' : 'Scale and source'}</summary><p>{pt ? 'As cascas marcam z = 0,1, 0,5, 1 e 2. As distâncias comóveis usam ΛCDM plano, Ωₘ = 0,3 e H₀ = 70 km/s/Mpc. Cor e brilho são ilustrativos.' : 'Shells mark z = 0.1, 0.5, 1 and 2. Comoving distances assume flat ΛCDM, Ωₘ = 0.3 and H₀ = 70 km/s/Mpc. Colour and brightness are illustrative.'} <a href="https://arxiv.org/abs/2112.03863">Scolnic et al. (2022)</a>.</p></details>
+          </figure>
+        </div>
+      </section>
       <section id="em-foco" className="wrap nx-lead" aria-labelledby="cover-title">
         <div className="nx-lead-copy">
           <p className="nx-eyebrow">{pt ? 'Cosmologia observacional / Supernovas Ia' : 'Observational cosmology / Type Ia supernovae'}</p>
-          <h1 id="cover-title">{pt ? 'Supernovas próximas pesam no ajuste da energia escura' : 'Nearby supernovae carry weight in the dark-energy fit'}</h1>
+          <h2 id="cover-title">{pt ? 'Supernovas próximas pesam no ajuste da energia escura' : 'Nearby supernovae carry weight in the dark-energy fit'}</h2>
           <p className="nx-deck"><RedshiftFinding locale={locale} /></p>
           {lead && <p className="nx-status"><StatusBadge status={lead.status} locale={locale} /> {pt ? 'Validação independente pendente' : 'Independent validation pending'}</p>}
           <RedshiftLimit locale={locale} />
@@ -77,6 +93,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         </div>
       </section>
 
+      {publications.length > 0 && <section className="wrap publication-strip"><h2>{pt ? 'Publicações recentes' : 'Recent publications'}</h2><ul>{publications.slice(0, 3).map(pub => <li key={pub.id}><time dateTime={pub.date}>{pub.date}</time><Link href={href(locale, '/publications') + '#' + pub.id}>{pub.title}</Link></li>)}</ul></section>}
       <section className="catalogue-chapter" aria-labelledby="access-title">
         <div className="wrap catalogue-note">
           <div>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {BibtexButton} from '@/components/Bibtex';
 import {EmptyState, PageHead} from '@/components/ui';
-import {getPublications, toBibtex} from '@/lib/data';
+import {getPublications, getResults, getDossier, toBibtex} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
 import {isLocale, pick} from '@/lib/i18n';
 import {SITE_URL, href, pageMeta} from '@/lib/seo';
@@ -17,6 +17,13 @@ export default async function PublicationsPage({params}: {params: Promise<{local
   const {locale} = await params;
   if (!isLocale(locale)) notFound();
   const publications = getPublications();
+  const pt = locale === 'pt';
+  const references = new Map<string, string>();
+  for (const record of getResults()) {
+    for (const dataset of getDossier(record.id)?.datasets ?? []) {
+      if (dataset.reference?.url) references.set(dataset.reference.url, dataset.reference.label);
+    }
+  }
   const jsonLd = publications.map(pub => ({
     '@context': 'https://schema.org', '@type': 'ScholarlyArticle', headline: pub.title, author: pub.authors.map(name => ({'@type': 'Person', name})),
     datePublished: pub.date, abstract: pick(pub.abstract, locale), url: `${SITE_URL}/${locale}/publications#${pub.id}`,
@@ -29,9 +36,9 @@ export default async function PublicationsPage({params}: {params: Promise<{local
         {publications.length === 0 ? (
           <EmptyState message={tr(D.pubs.empty, locale)} action={<Link href={href(locale, '/results')} className="btn arrow-link">{tr(D.cta.results, locale)}</Link>} />
         ) : (
-          <ul className="grid gap-4">
+          <ul className="bibliography">
             {publications.map(pub => (
-              <li key={pub.id} id={pub.id} className="card motion-reveal scroll-mt-24 p-6">
+              <li key={pub.id} id={pub.id} className="scroll-mt-24">
                 <p className="font-mono text-xs text-muted">{tr(D.pubState[pub.state], locale)} · {pub.date}{pub.venue ? ` · ${pub.venue}` : ''}</p>
                 <h2 className="mt-2 text-xl font-semibold">{pub.title}</h2>
                 <p className="mt-1 text-sm text-muted">{pub.authors.join(', ')}</p>
@@ -40,12 +47,15 @@ export default async function PublicationsPage({params}: {params: Promise<{local
                   {pub.doi && <a className="text-accent underline underline-offset-4" href={`https://doi.org/${pub.doi}`} rel="noopener noreferrer">DOI</a>}
                   {pub.arxiv && <a className="text-accent underline underline-offset-4" href={`https://arxiv.org/abs/${pub.arxiv}`} rel="noopener noreferrer">arXiv</a>}
                   {pub.pdf && <a className="text-accent underline underline-offset-4" href={pub.pdf} rel="noopener noreferrer">{tr(D.pubs.pdf, locale)}</a>}
+                  {pub.code && <a className="text-link" href={pub.code}>{pt ? 'Código' : 'Code'}</a>}
+                  {pub.data && <a className="text-link" href={pub.data}>{pt ? 'Dados' : 'Data'}</a>}
                   <BibtexButton bibtex={toBibtex(pub)} label={tr(D.pubs.bibtex, locale)} done={tr(D.pubs.copied, locale)} />
                 </div>
               </li>
             ))}
           </ul>
         )}
+        {references.size > 0 && <section className="external-references"><header><h2>{pt ? 'Referências dos dados' : 'Data references'}</h2><p>{pt ? 'Trabalhos externos citados nos dossiês de reprodução.' : 'External papers cited in the reproducibility dossiers.'}</p></header><ul>{Array.from(references, ([url, label]) => <li key={url}><a href={url}>{label} <span aria-hidden="true">↗</span></a></li>)}</ul></section>}
       </div>
       {jsonLd.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} />}
     </>

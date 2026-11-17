@@ -17,7 +17,7 @@ export function Footer({locale}: {locale: Locale}) {
         <nav aria-label={tr(D.footer.navigation, locale)}>
           <h2>{pt ? 'Pesquisa' : 'Research'}</h2>
           <ul className="footer-links" role="list">
-            {(['research', 'results', 'methods', 'projects'] as const).map(route => (
+            {(['research', 'publications', 'results', 'methods', 'projects'] as const).map(route => (
               <li key={route}><Link href={href(locale, '/' + route)} prefetch={false}>{tr(D.nav[route], locale)}</Link></li>
             ))}
             <li><Link href={href(locale, '/resultado-vivo')}>{pt ? 'Resultado vivo' : 'Living result'}</Link></li>

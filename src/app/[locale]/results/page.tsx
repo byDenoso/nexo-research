@@ -26,7 +26,7 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
     <div className="nexo-editorial nx-catalogue">
       <header className="wrap nx-catalogue-head">
         <div>
-          <p className="nx-eyebrow">{pt ? 'Arquivo público' : 'Public archive'}</p>
+          <p className="nx-eyebrow">{pt ? 'Descobertas e candidatos' : 'Discoveries and candidates'}</p>
           <h1>{pt ? 'Catálogo de resultados' : 'Results catalogue'}</h1>
           <p>{pt ? 'Encontre uma pergunta científica, compare as execuções da família e consulte os dados de cada ajuste.' : 'Find a research question, compare its family of runs and inspect the data for each fit.'}</p>
         </div>

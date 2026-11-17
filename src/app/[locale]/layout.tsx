@@ -1,10 +1,11 @@
 import type {Metadata, Viewport} from 'next';
-import {IBM_Plex_Mono, IBM_Plex_Sans, Source_Serif_4} from 'next/font/google';
+import {IBM_Plex_Mono, IBM_Plex_Sans} from 'next/font/google';
 import {notFound} from 'next/navigation';
 import type {ReactNode} from 'react';
 import '../globals.css';
 import '../editorial.css';
 import '../research-preview.css';
+import '../institute.css';
 import {Footer} from '@/components/Footer';
 import {Header} from '@/components/Header';
 import {MotionObserver} from '@/components/Motion';
@@ -14,13 +15,11 @@ import {SITE_URL, pageMeta} from '@/lib/seo';
 import {getProfile} from '@/lib/data';
 
 const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'swap'});
-// Display face: a variable serif with optical sizes and Greek, so titles such as "Ωm" stay in one family.
-const serif = Source_Serif_4({subsets: ['latin'], style: ['normal', 'italic'], axes: ['opsz'], variable: '--font-source-serif', display: 'swap'});
 const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'swap'});
 
 export const dynamicParams = false;
 export const generateStaticParams = () => LOCALES.map(locale => ({locale}));
-export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#02050b'}, {media: '(prefers-color-scheme: light)', color: '#f7f6f2'}]};
+export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#02050b'}, {media: '(prefers-color-scheme: light)', color: '#ffffff'}]};
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
@@ -42,7 +41,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
     ]
   };
   return (
-    <html lang={HTML_LANG[locale]} className={`${sans.variable} ${mono.variable} ${serif.variable}`} suppressHydrationWarning data-theme="light">
+    <html lang={HTML_LANG[locale]} className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning data-theme="light">
       <head>
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} />

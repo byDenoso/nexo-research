@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {BibtexButton} from '@/components/Bibtex';
+import {ScienceAtlas} from '@/components/ScienceAtlas';
 import {DataSequence} from '@/components/EditorialFigures';
 import {PageHead} from '@/components/ui';
 import {datasetMentions, getManifest, getResults} from '@/lib/data';
@@ -35,8 +36,14 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
 }`;
   return (
     <>
-      <PageHead kicker={tr(D.nav.data, locale)} title={tr(d.title, locale)} lead={tr(d.lead, locale)} />
+      <PageHead kicker={tr(D.nav.data, locale)} title={pt ? 'Dados e métodos' : 'Data & Methods'} lead={tr(d.lead, locale)} />
       <div className="wrap mt-12 grid gap-10">
+        <nav className="resource-routes" aria-label={pt ? 'Recursos técnicos' : 'Technical resources'}>
+          <Link href={href(locale, '/methods')}>{pt ? 'Método de validação' : 'Validation method'} <span>→</span></Link>
+          <Link href="#atlas">{pt ? 'Atlas de observáveis' : 'Observable atlas'} <span>↓</span></Link>
+          <Link href={href(locale, '/code')}>{pt ? 'Código e reprodução' : 'Code and reproduction'} <span>→</span></Link>
+        </nav>
+        <ScienceAtlas locale={locale} />
         <DataSequence locale={locale} />
         <section className="source-access-section motion-reveal" aria-labelledby="public-sources">
           <div><p className="kicker">{locale === 'pt' ? 'Arquivos científicos' : 'Scientific archives'}</p><h2 id="public-sources">{locale === 'pt' ? 'Fontes de dados e software' : 'Data sources and software'}</h2><p>{locale === 'pt' ? 'Acesse os arquivos originais das colaborações e o código público do NEXO. Uma menção no manifesto não constitui prova de utilização de um release específico.' : 'Access original collaboration archives and NEXO public code. A mention in the manifest is not proof that a particular release was used.'}</p></div>
