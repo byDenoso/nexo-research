@@ -102,3 +102,8 @@ html[data-lab-motion] .primary-nav a[aria-current] {text-decoration:underline;te
   html[data-lab-motion] .site-menu[open] .menu-stroke.top {d:path("M5 5L19 19")}
   html[data-lab-motion] .site-menu[open] .menu-stroke.bottom {d:path("M5 19L19 5")}
 }
+@media (prefers-reduced-motion:no-preference) {
+  @keyframes sky-drift {from {transform:scale(1.05) translate(-.7%,.35%)}to {transform:scale(1.05) translate(.7%,-.35%)}}
+  .cosmic-field[data-quality=composited] canvas {animation:sky-drift 38s ease-in-out infinite alternate !important}
+  .cosmic-field[data-running=false] canvas {animation-play-state:paused !important}
+}

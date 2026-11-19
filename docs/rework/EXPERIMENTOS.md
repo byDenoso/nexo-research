@@ -22,3 +22,14 @@ Na superfície BAO, a altura é o χ² no ponto escolhido menos o mínimo da mes
 - As medições de LCP, INP e CLS usam a implementação de Web Vitals distribuída com o Next.js. Cada execução de `e2e/institute.spec.ts` registra os valores por dispositivo no log da integração contínua.
 
 As faixas de confiança, o contraste da régua curta e a calibração das significâncias seguem os contratos públicos de cada análise. A tabela de energia escura com a restrição w ≥ −1 depende da liberação dos valores por Ωₘ fixo.
+
+## Desempenho da Home
+
+Medianas de três navegações por largura, cada uma em um novo contexto de Chromium 153, no servidor local de produção. As interações foram abrir e fechar a legenda da figura Pantheon+. A cadência abaixo mede callbacks de tela em um segundo.
+
+| Largura | LCP | INP | CLS | Cadência da tela |
+| --- | ---: | ---: | ---: | ---: |
+| 1.280 px | 340 ms | 72 ms | 0,0226 | 60 Hz |
+| 390 px | 484 ms | 72 ms | 0,0007 | 58 Hz |
+
+No desktop com renderização por software, a primeira implementação registrou INP mediano de 296 ms e cadência de 25 Hz. A versão publicada desenha o campo estelar uma vez nesse modo e move a camada no compositor. Em GPU, o shader ajusta a resolução ao tempo de quadro e cede recursos durante a interação. Os experimentos científicos têm renderização própria sob demanda.

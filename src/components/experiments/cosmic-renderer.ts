@@ -26,7 +26,7 @@ fn hash(v:vec2f)->f32{return fract(sin(dot(v,vec2f(127.1,311.7)))*43758.5453);}
  let haze=.5+.5*sin(q.x*3.+q.y*4.+.42*sin(q.y*7.+frame.y*.024)+frame.y*.03);
  return vec4f(vec3f(.020,.040,.078)*haze*haze+vec3f(.55,.71,.95)*min(stars,1.),1.);}`;
 
-export type FieldRenderer={canvas:HTMLCanvasElement; draw:(v:Float32Array<ArrayBuffer>)=>void; dispose:()=>void; backend:string};
+export type FieldRenderer={canvas:HTMLCanvasElement; draw:(v:Float32Array<ArrayBuffer>)=>void; dispose:()=>void; backend:string; software:boolean};
 async function webgpu():Promise<FieldRenderer|null> {
   const adapter=await navigator.gpu?.requestAdapter({powerPreference:'low-power'});
   if(!adapter) return null;
@@ -40,7 +40,7 @@ async function webgpu():Promise<FieldRenderer|null> {
     const pipeline=await device.createRenderPipelineAsync({layout:'auto',vertex:{module:shader,entryPoint:'vert'},fragment:{module:shader,entryPoint:'frag',targets:[{format}]}});
     const uniform=device.createBuffer({size:16,usage:GPUBufferUsage.UNIFORM|GPUBufferUsage.COPY_DST});
     const group=device.createBindGroup({layout:pipeline.getBindGroupLayout(0),entries:[{binding:0,resource:{buffer:uniform}}]});
-    return {canvas,backend:'webgpu',draw(v){
+    return {canvas,backend:'webgpu',software:adapter.info.isFallbackAdapter,draw(v){
       device.queue.writeBuffer(uniform,0,v);
       const encoder=device.createCommandEncoder();
       const pass=encoder.beginRenderPass({colorAttachments:[{view:context.getCurrentTexture().createView(),clearValue:{r:0,g:0,b:0,a:1},loadOp:'clear',storeOp:'store'}]});
@@ -59,7 +59,9 @@ function webgl():FieldRenderer|null {
   if(!gl.getProgramParameter(program,gl.LINK_STATUS)){gl.deleteProgram(program);return null;}
   gl.useProgram(program);
   const uniform=gl.getUniformLocation(program,'frame');
-  return {canvas,backend:'webgl2',draw(v){gl.viewport(0,0,canvas.width,canvas.height);gl.uniform4fv(uniform,v);gl.drawArrays(gl.TRIANGLES,0,3);},
+  const info=gl.getExtension('WEBGL_debug_renderer_info');
+  const software=info ? /swiftshader|llvmpipe|softpipe|software/i.test(String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL))) : false;
+  return {canvas,backend:'webgl2',software,draw(v){gl.viewport(0,0,canvas.width,canvas.height);gl.uniform4fv(uniform,v);gl.drawArrays(gl.TRIANGLES,0,3);},
     dispose(){gl.deleteProgram(program);gl.getExtension('WEBGL_lose_context')?.loseContext();}};
 }
 export async function createField():Promise<FieldRenderer|null> {
