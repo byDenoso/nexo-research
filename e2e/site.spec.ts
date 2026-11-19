@@ -10,16 +10,21 @@ test('root redirects to the visitor language', async ({request}) => {
   expect(en.headers().location).toMatch(/\/en$/);
 });
 
-test('institutional home includes publications in the main, compact and footer navigation', async ({page, request}) => {
+test('institutional home links to results in the cover and menus and to publications in the footer', async ({page, request}) => {
   for (const locale of ['pt', 'en']) {
     await page.goto(`/${locale}`);
-    for (const landmark of ['header', 'main', 'footer']) {
-      await expect(page.locator(`${landmark} a[href="/${locale}/publications"]`).first()).toBeAttached();
+    const resultsLabel = locale === 'pt' ? 'Explorar resultados' : 'Explore results';
+    for (const selector of ['.primary-nav', '.site-menu-panel', '.cover-actions']) {
+      const link = page.locator(`${selector} a[href="/${locale}/results"]`);
+      await expect(link).toHaveCount(1);
+      await expect(link).toContainText(resultsLabel);
     }
+    await expect(page.locator(`header a[href="/${locale}/publications"]`)).toHaveCount(0);
+    await expect(page.locator(`footer a[href="/${locale}/publications"]`)).toBeAttached();
     const scope = page.locator('.catalogue-note');
     await expect(scope).toBeVisible();
     await expect(page.locator('.nx-observation img')).toHaveCount(1);
-    await expect(scope.locator('.inst-facts dd')).toHaveCount(3);
+    await expect(scope.locator('.inst-facts dd')).toHaveCount(4);
     expect((await request.get(`/${locale}/publications`)).ok()).toBe(true);
   }
 });
@@ -211,9 +216,14 @@ test('the methods index opens the existing test section by keyboard', async ({pa
   await expect(page.getByRole('heading', {name: 'Tests', exact: true})).toBeInViewport({timeout: 20000});
 });
 
-test('home discloses source date without implying current research activity', async ({page}) => {
+test('home separates catalogue and editorial dates without implying current research activity', async ({page}) => {
   await page.goto('/pt');
-  await expect(page.locator('.inst-facts')).toContainText('Catálogo atualizado em');
+  const facts = page.locator('.inst-facts > div');
+  const version = facts.filter({hasText: 'Versão do catálogo'});
+  const revision = facts.filter({hasText: 'Última revisão editorial da home'});
+  await expect(version.locator('a')).toHaveAttribute('href', '/pt/data#snap');
+  await expect(version.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
+  await expect(revision.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/);
   await expect(page.getByRole('main')).not.toContainText(/em andamento|pesquisa ativa/i);
 });
 
