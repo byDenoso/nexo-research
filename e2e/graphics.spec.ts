@@ -1,17 +1,17 @@
 import {expect, test} from '@playwright/test';
 
-const animation = (selector: string) => (page: import('@playwright/test').Page) =>
-  page.locator(selector).first().evaluate(node => getComputedStyle(node).animationName);
-
-test('the home reads as one plain heading and nothing on it animates', async ({page}) => {
+test('the cover adds optional motion while scientific values are present immediately', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/pt');
-  await expect(page.getByRole('heading', {level: 1, name: 'Como o Universo se expande?'})).toBeVisible();
-  await expect(page.locator('#em-foco .nx-plot')).toBeVisible();
-  for (const selector of ['.nx-plot-track', '.journal-erosita output', '.status-badge', '.nx-observation img']) {
-    expect(await animation(selector)(page), selector).toBe('none');
-  }
-  expect(await page.evaluate(() => document.getAnimations().filter(item => item instanceof CSSAnimation).length)).toBe(0);
+  const title = page.getByRole('heading', {level: 1, name: 'Como o Universo se expande?'});
+  await expect(title).toBeVisible();
+  expect(await title.evaluate(node => getComputedStyle(node).animationName)).toBe('cover-enter');
+  await expect(page.locator('.cover-actions a').first()).toHaveText(/Explorar resultados/);
+  await expect(page.locator('.journal-erosita output')).toHaveText('2,18 σ');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await expect(page.locator('.cosmic-field canvas:visible')).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Pausar fundo'})).toHaveCount(0);
+  expect(await title.evaluate(node=>getComputedStyle(node).animationName)).toBe('none');
 });
 
 test('figures are complete and sit on the published values', async ({page}) => {
@@ -53,7 +53,7 @@ test.describe('without scripts', () => {
 });
 
 test('the page never scrolls sideways', async ({page}) => {
-  for (const width of [320, 360, 768, 1440]) {
+  for (const width of [295, 320, 360, 768, 1440]) {
     await page.setViewportSize({width, height: 900});
     await page.goto('/pt');
     for (const top of [0, 600, 1800, 4200]) {

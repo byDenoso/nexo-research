@@ -1,3 +1,5 @@
+import {CosmicCover} from '@/components/CosmicCover';
+import {ExpansionStory} from '@/components/experiments/ExpansionStory';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -29,6 +31,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
   return (
     <div className="nexo-editorial nx-home">
       <section className="institute-cover" aria-labelledby="institute-title">
+        <CosmicCover locale={locale}/>
         <div className="wrap cover-grid">
           <div className="cover-copy">
             <p className="cover-label">NEXO Research Institute</p>
@@ -61,6 +64,8 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         </div>
         <RedshiftFigure locale={locale} />
       </section>
+
+      <ExpansionStory locale={locale} />
 
       <section id="galaxias" className="wrap nx-observation" aria-labelledby="galaxies-title">
         <figure>

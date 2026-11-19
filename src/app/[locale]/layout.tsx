@@ -6,6 +6,7 @@ import '../globals.css';
 import '../editorial.css';
 import '../research-preview.css';
 import '../institute.css';
+import '../experiments.css';
 import {Footer} from '@/components/Footer';
 import {Header} from '@/components/Header';
 import {MotionObserver} from '@/components/Motion';

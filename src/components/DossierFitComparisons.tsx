@@ -1,5 +1,6 @@
 import {fmtDate, pick, type Locale} from '@/lib/i18n';
 import type {Dossier} from '@/lib/schemas';
+import {TracerSelector} from './experiments/TracerSelector';
 import diagnostic from '../../public/desi-dr2-tracer-diagnostic.json';
 import styles from './FitComparison.module.css';
 
@@ -31,6 +32,7 @@ export function DesiTracerComparison({locale}: {locale: Locale}) {
       <p>{pt
         ? 'Δχ² = χ²(ΛCDM) − χ²(CPL). A variação é o Δχ² após a retirada menos o Δχ² da amostra completa. Um valor negativo indica perda de ganho do CPL.'
         : 'Δχ² = χ²(ΛCDM) − χ²(CPL). The change is the Δχ² after omission minus the full-sample Δχ². A negative value indicates a smaller CPL improvement.'}</p>
+      <TracerSelector locale={locale} rows={rows}/>
       <figure className={styles.figure} aria-labelledby="desi-shift-title">
         <figcaption className={styles.title} id="desi-shift-title">{pt ? 'Variação no ganho de ajuste do CPL' : 'Change in CPL fit improvement'}</figcaption>
         <div className={`${styles.layout} ${styles.diagnosticLayout}`}>

@@ -1,3 +1,4 @@
+import {ModelCurves} from '@/components/experiments/ModelCurves';
 import Link from 'next/link';
 import {redshiftQuestion} from '@/lib/editorial';
 import {getManifest, lastDossierCorrection} from '@/lib/data';
@@ -100,6 +101,7 @@ export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: 
             <Link className="text-link arrow-link" href={href(locale, '/data')}>{tr(D.data.title, locale)}</Link>
           </aside>
         </div>
+        <ModelCurves locale={locale} />
         {dossier.nonPhantomProfile && <NonPhantomProfile profile={dossier.nonPhantomProfile} locale={locale} />}
       </div>
     </article>

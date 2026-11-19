@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import {useState} from 'react';
+import {SkyVolume} from './experiments/SkyVolume';
 import {type Locale} from '@/lib/i18n';
 import sample from '../../data/source/pantheon-sky-summary.json';
 
@@ -44,6 +45,16 @@ export function ScienceAtlas({locale}: {locale: Locale}) {
   const source = sky || dist ? sample.source : expansion ? 'https://arxiv.org/abs/astro-ph/9905116' : 'https://physics.nist.gov/PhysRefData/Handbook/Tables/hydrogentable2.htm';
   const sourceName = sky || dist ? 'Pantheon+ · Pantheon+SH0ES.dat' : expansion ? 'Hogg (1999)' : 'NIST · H I';
   const title = views.find(entry => entry[0] === view)![pt ? 1 : 2];
+  const chart = (
+      <svg viewBox="0 0 580 248" role="img" aria-label={title+', '+yLabel+' / '+xLabel}>
+        {yticks.map((v,i) => {const y=top+height*(1-i/(yticks.length-1));return <g key={v}><line className="axis-rule" x1={left} x2={left+width} y1={y} y2={y}/><text x={left-8} y={y+4} textAnchor="end">{f(v)}</text></g>;})}
+        {xticks.map((v,i) => <text key={v} x={left+width*i/(xticks.length-1)} y="228" textAnchor="middle">{f(v)}</text>)}
+        {sky && <image x="0" y="0" width="580" height="248" href="/images/pantheon-sky.svg"/>}
+        {dist && sample.redshiftCounts.map((n,i) => <rect key={i} onMouseEnter={()=>setBin(i)} onClick={()=>setBin(i)} opacity={i===bin?1:.48} fill="var(--accent)" x={left+i*50+1} y={top+height*(1-n/yMax)} width="48" height={height*n/yMax}/>)}
+        {expansion && [0.3,1].map(m => <path key={m} opacity={(hover??model)===null || (hover??model)===m ? 1 : .24} onMouseEnter={()=>setHover(m)} onMouseLeave={()=>setHover(null)} onClick={()=>setModel(m===model?null:m)} className="atlas-line" strokeDasharray={m===1 ? '7 4' : undefined} d={pathFor(x => Math.sqrt(m*(1+x)**3+1-m),2,yMax)}/>)}
+        {view==='spectrum' && <path className="atlas-line" d={pathFor(x=>Math.exp(-.5*((600+x-observed)/10)**2),750,1)}/>}
+      </svg>
+  );
   return <section id="atlas" className="atlas" aria-labelledby="atlas-heading">
     <div className="atlas-intro"><h2 id="atlas-heading">{pt ? 'Atlas de observáveis' : 'Observable atlas'}</h2>
       <label htmlFor="atlas-view">{pt ? 'Visualização' : 'View'}</label>
@@ -54,14 +65,7 @@ export function ScienceAtlas({locale}: {locale: Locale}) {
     </div>
     <figure><figcaption><strong>{title}</strong><span>{sky || dist ? 'Pantheon+ · N = '+f(sample.uniqueCID) : pt ? 'Modelo ilustrativo' : 'Illustrative model'}</span></figcaption>
       <p className="axis-note">{yLabel}</p>
-      <svg viewBox="0 0 580 248" role="img" aria-label={title+', '+yLabel+' / '+xLabel}>
-        {yticks.map((v,i) => {const y=top+height*(1-i/(yticks.length-1));return <g key={v}><line className="axis-rule" x1={left} x2={left+width} y1={y} y2={y}/><text x={left-8} y={y+4} textAnchor="end">{f(v)}</text></g>;})}
-        {xticks.map((v,i) => <text key={v} x={left+width*i/(xticks.length-1)} y="228" textAnchor="middle">{f(v)}</text>)}
-        {sky && <image x="0" y="0" width="580" height="248" href="/images/pantheon-sky.svg"/>}
-        {dist && sample.redshiftCounts.map((n,i) => <rect key={i} onMouseEnter={()=>setBin(i)} onClick={()=>setBin(i)} opacity={i===bin?1:.48} fill="var(--accent)" x={left+i*50+1} y={top+height*(1-n/yMax)} width="48" height={height*n/yMax}/>)}
-        {expansion && [0.3,1].map(m => <path key={m} opacity={(hover??model)===null || (hover??model)===m ? 1 : .24} onMouseEnter={()=>setHover(m)} onMouseLeave={()=>setHover(null)} onClick={()=>setModel(m===model?null:m)} className="atlas-line" strokeDasharray={m===1 ? '7 4' : undefined} d={pathFor(x => Math.sqrt(m*(1+x)**3+1-m),2,yMax)}/>)}
-        {view==='spectrum' && <path className="atlas-line" d={pathFor(x=>Math.exp(-.5*((600+x-observed)/10)**2),750,1)}/>}
-      </svg>
+      {sky ? <SkyVolume locale={locale}>{chart}</SkyVolume> : chart}
       <p className="axis-note axis-x">{xLabel}</p>
       {view === 'spectrum' && <label className="spectrum-control"><span>z = {f(z)} · λ = {f(observed)} nm</span><input type="range" min="0" max="1" step=".01" value={z} aria-label="Redshift" onChange={event=>setZ(Number(event.target.value))}/></label>}
       {expansion && <div className="model-legend">{[.3,1].map(m=><button key={m} type="button" aria-pressed={model===m} onFocus={()=>setHover(m)} onBlur={()=>setHover(null)} onMouseEnter={()=>setHover(m)} onMouseLeave={()=>setHover(null)} onClick={()=>setModel(m===model?null:m)}>Ωₘ = {f(m)}</button>)}</div>}

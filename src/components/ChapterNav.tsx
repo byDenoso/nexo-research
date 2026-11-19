@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import type {Locale} from '@/lib/i18n';
-const entries=[['em-foco','Expansão','Expansion'],['galaxias','Galáxias','Galaxies'],['perguntas','Perguntas','Questions'],['fontes','Fontes','Sources']] as const;
+const entries=[['em-foco','Expansão','Expansion'],['expansao-em-etapas','Luz e redshift','Light and redshift'],['galaxias','Galáxias','Galaxies'],['perguntas','Perguntas','Questions'],['fontes','Fontes','Sources']] as const;
 export function ChapterNav({locale}: {locale:Locale}) {
   const [active,setActive]=useState<string>('em-foco');
   useEffect(()=>{

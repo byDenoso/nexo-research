@@ -148,3 +148,11 @@ export function pairedLrg2Shift() {
   const fc=fisher(full.omegaM,full.h0,true), ff=fisher(full.omegaM,full.h0,false);
   return {omegaM:cut.omegaM-full.omegaM,h0:cut.h0-full.h0,sigmaOmegaM:Math.sqrt(fc.omegaM-ff.omegaM),sigmaH0:Math.sqrt(fc.h0-ff.h0)};
 }
+
+export function baoMinimum(cut: boolean) {
+  return minimum(m => evaluateProfile(m, 147.5, cut), .15, .5);
+}
+
+export function baoDelta(profile: ReturnType<typeof evaluateProfile>, h0: number, bestChi2: number) {
+  return profile.chiSquared - bestChi2 + profile.inverseH0Curvature * (1 / h0 - 1 / profile.h0) ** 2;
+}

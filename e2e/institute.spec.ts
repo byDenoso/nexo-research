@@ -1,3 +1,5 @@
+import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
 import {expect, test} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
@@ -22,28 +24,18 @@ test('the atlas switches from the observed sky to counts, models and a movable l
 });
 
 test('measure the cover and its results navigation in Chromium', async ({page}, info) => {
-  await page.addInitScript(() => {
-    const data = {lcpMs: 0, cls: 0, longestInteractionMs: 0};
-    Object.assign(window, {nexoLab: data});
-    new PerformanceObserver(list => {
-      for (const entry of list.getEntries()) data.lcpMs = entry.startTime;
-    }).observe({type: 'largest-contentful-paint', buffered: true});
-    new PerformanceObserver(list => {
-      for (const e of list.getEntries() as (PerformanceEntry & {hadRecentInput: boolean; value: number})[]) {
-        if (!e.hadRecentInput) data.cls += e.value;
-      }
-    }).observe({type: 'layout-shift', buffered: true});
-    new PerformanceObserver(list => {
-      for (const e of list.getEntries() as (PerformanceEntry & {interactionId: number})[]) {
-        if (e.interactionId) data.longestInteractionMs = Math.max(data.longestInteractionMs,e.duration);
-      }
-    }).observe({type: 'event', buffered: true, durationThreshold: 16} as PerformanceObserverInit);
-  });
+  const require = createRequire(import.meta.url);
+  const vitals = readFileSync(require.resolve('next/dist/compiled/web-vitals'), 'utf8');
+  await page.addInitScript({content: `(function(){const __dirname="",module={exports:{}};${vitals}
+    window.nexoLab={};for(const name of ['LCP','INP','CLS'])module.exports['on'+name](
+      m=>{window.nexoLab[name]=m.value;},{reportAllChanges:true,durationThreshold:16});})();`});
   await page.goto('/pt');
   await page.waitForLoadState('networkidle');
   await page.locator('.volume-plate summary').click();
   await expect(page.locator('.volume-plate details')).toHaveAttribute('open','');
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(()=>requestAnimationFrame(()=>resolve(true)))));
+  await page.locator('.volume-plate summary').press('Enter');
+  await page.waitForFunction(()=>Object.keys((window as Window & {nexoLab?:object}).nexoLab ?? {}).length === 3);
   const metrics = await page.evaluate(() => (window as Window & {nexoLab?: unknown}).nexoLab);
   console.log('NEXO lab sample', info.project.name, JSON.stringify(metrics));
   await info.attach('lab-sample.json', {body: JSON.stringify(metrics), contentType: 'application/json'});

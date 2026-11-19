@@ -1,0 +1,104 @@
+@font-face {
+  font-family: 'Source Serif 4'; font-style: normal; font-weight: 200 900; font-display: swap;
+  src: url('@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2') format('woff2');
+}
+:root {--lab-radius:.8rem;--lab-ease:cubic-bezier(.22,.74,.23,1);--model-b:#a45521}
+:root[data-theme=dark] {--model-b:#ffc288}
+:root[data-theme=light] body:has(.nx-home,.expansion-story,.model-lab,.bao-lab,.atlas) {--bg:#f7f6f2;background-color:var(--bg)}
+.institute-cover {position:relative;isolation:isolate;background:#02050b;overflow:clip}
+.cosmic-field {position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 72% 45%,#0c1d37 0%,#02050b 75%)}
+.cosmic-field canvas {width:100%;height:100%;opacity:.8;display:block}
+.cosmic-field canvas[hidden] {display:none}
+.nx-home .cover-grid {padding-bottom:2.7rem}
+.nx-home .cover-copy h1,.expansion-story > header h2,.model-lab header h2 {
+  font-family:'Source Serif 4',Georgia,serif;font-weight:500;letter-spacing:-.046em;text-wrap:balance
+}
+.nx-home .cover-copy h1 {font-size:clamp(2.8rem,5.3vw,5.2rem);line-height:1.01;max-width:16ch}
+.nx-home .cover-actions a:first-child {border-radius:.5rem;box-shadow:0 4px 16px #0003}
+.nx-home .volume-plate img {border-radius:var(--lab-radius);background:#03070e}
+.cover-motion-switch {position:absolute;bottom:.35rem;right:var(--gutter);display:flex;align-items:center;gap:.4rem;color:#d6e1f3;font:500 .75rem var(--font-mono);min-height:34px;padding:0 .55rem;border:1px solid #58718b;border-radius:.4rem;background:#0a1422;cursor:pointer;z-index:2}
+.nx-home .nx-paper-figure,.atlas figure {border-radius:var(--lab-radius);box-shadow:0 7px 22px #101c310b}
+.expansion-story,.model-lab {--model-b:#a45521;margin-block:clamp(2.2rem,6vw,5rem);border-block-start:2px solid var(--accent);padding-block-start:1.4rem;min-width:0}
+:root[data-theme=dark] :is(.expansion-story,.model-lab) {--model-b:#ffc288}
+:is(.expansion-story,.model-lab) header h2 {font-size:clamp(1.8rem,3.5vw,3.1rem);line-height:1.08;margin:.35rem 0 .75rem;max-width:28ch}
+:is(.expansion-story,.model-lab)>header p:last-child {color:var(--muted);max-width:68ch}
+.story-grid,.lab-columns {display:grid;grid-template-columns:minmax(0,1fr);gap:1rem;margin-top:1rem;align-items:start}
+.story-steps article {border-inline-start:2px solid var(--line);padding:.55rem .9rem;margin:0 0 .6rem}
+.story-steps article[data-selected=true] {border-color:var(--accent);background:var(--raised)}
+.story-steps button {font:600 1.05rem var(--font-sans);min-height:38px;text-align:start;cursor:pointer}
+.story-steps article p,.experiment-note,.lab-sources,.model-lab aside>p {font-size:.88rem;line-height:1.52;color:var(--muted);max-width:74ch}
+.story-figure,.model-lab>.lab-columns {padding:clamp(.7rem,2.1vw,1.4rem);border:1px solid var(--line);border-radius:var(--lab-radius);background:var(--surface);box-shadow:0 8px 26px #0818290c}
+.story-figure figcaption {display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem}
+:is(.story-figure,.model-lab,.sky-volume,.bao-lab,.tracer-selector) :is(label,button,select) {font-size:.85rem}
+:is(.experiment-tools,.experiment-camera,.experiment-sliders,.story-figure,.sky-volume,.model-lab,.tracer-selector,.bao-lab) :is(button,select) {border:1px solid var(--control-line);border-radius:.4rem;color:var(--ink);background:var(--surface);padding:.35rem .58rem;min-height:40px;max-width:100%;cursor:pointer}
+:is(.experiment-frame,.sky-volume,.model-lab,.story-figure,.bao-lab) svg {display:block;width:100%;height:auto;color:var(--ink)}
+.experiment-viewport {position:relative;isolation:isolate;width:100%;min-width:0;border-radius:.55rem;overflow:hidden;background:var(--raised)}
+.experiment-static {width:100%;display:grid;align-items:center;min-height:inherit}
+.experiment-static svg {aspect-ratio:2/1;object-fit:contain}
+.experiment-canvas {position:absolute;inset:0;touch-action:none}
+.experiment-status {position:absolute;inset:auto .4rem .3rem auto;max-width:95%;padding:.15rem .42rem;background:var(--surface);color:var(--ink);font:500 .72rem/1.4 var(--font-mono);border-radius:.25rem}
+.experiment-tools,.experiment-camera,.lab-legend,.tracer-selector {display:flex;align-items:center;gap:.4rem .7rem;flex-wrap:wrap;margin:.55rem 0}
+.experiment-camera label,.experiment-tools label {display:flex;align-items:center;gap:.4rem}
+.experiment-camera input {width:5rem}
+.experiment-sliders,.lab-select,.lab-time,.tracer-selector label {display:grid;gap:.4rem;min-width:0}
+.experiment-sliders label {display:grid;gap:.1rem;font-family:var(--font-mono)}
+.experiment-sliders input,.lab-time input {width:100%;min-width:0;min-height:32px;accent-color:var(--accent)}
+.experiment-tools button[aria-pressed=true],.experiment-mode[aria-pressed=true] {border-color:var(--accent);color:var(--accent)}
+.lab-time,.lab-select {margin-block:.65rem}
+.lab-table {width:100%;font-size:.85rem;line-height:1.4;font-variant-numeric:tabular-nums;border-collapse:collapse}
+.lab-table caption {text-align:start;font-weight:600;color:var(--ink);padding-block:.5rem}
+.lab-table td,.lab-table th {border-bottom:1px solid var(--line);padding:.35rem .2rem;text-align:start;overflow-wrap:anywhere}
+.lab-table td {font-family:var(--font-mono)}
+.lab-sources {margin:.55rem 0}.lab-sources a {color:var(--accent);text-decoration:underline;text-underline-offset:.18rem}
+.lab-reading {font:600 1rem var(--font-mono);margin-block:.7rem}.lab-legend {font:500 .85rem var(--font-mono)}.lab-legend span:last-child {color:var(--model-b)}
+.bao-lab {padding:.55rem clamp(.55rem,1.6vw,1.15rem);min-width:0}.bao-lab>.experiment-note {margin:.4rem 0}
+.bao-lab .lab-details {margin:1rem 0;border-top:1px solid var(--line);padding-top:.5rem;font-size:.88rem}.lab-details summary {cursor:pointer;min-height:40px}
+.sky-volume>.experiment-mode {margin-bottom:.5rem}.tracer-selector output span {display:block;font:500 .85rem/1.45 var(--font-mono)}
+:is(.story-grid,.lab-columns)>* {min-width:0}
+@media (min-width:48rem) {
+  .story-grid {grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(1.25rem,3vw,3.2rem)}
+  .story-steps article {min-height:30vh;display:grid;align-content:center}
+  .story-figure {position:sticky;top:1rem}
+  .lab-columns {grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+  .experiment-static svg {max-height:24rem}
+}
+@media (max-width:34rem) {
+  .story-steps article {margin:.25rem 0;padding:.35rem .6rem}
+  .sky-volume .experiment-viewport,.bao-lab .experiment-viewport {min-height:10.5rem}
+  .experiment-static {min-height:inherit}
+  .chapter-nav {gap:.22rem .85rem}
+  .header-inner,.header-controls {min-width:0}
+  .lab-columns aside {overflow-wrap:anywhere}
+}
+@media (max-width:340px) {
+  .header-inner {gap:.25rem}
+  body .header-controls {gap:.22rem}
+  body .header-controls .header-living {padding-inline:.28rem;font-size:.72rem}
+  .nx-home .cover-grid {padding-bottom:2.9rem}
+  .nx-home .cover-copy h1 {font-size:2.7rem}
+  .nx-home .cover-actions {gap:.25rem .5rem}
+}
+@media (prefers-reduced-motion:no-preference) {
+  @keyframes cover-enter {from {transform:translateY(.6rem)}to {transform:none}}
+  .cover-copy > :is(h1,p,.cover-actions) {animation:cover-enter .48s var(--lab-ease) backwards !important}
+  .cover-copy h1 {animation-delay:50ms !important}.cover-copy > p:last-of-type {animation-delay:85ms !important}.cover-copy .cover-actions {animation-delay:125ms !important}
+  html[data-lab-motion] :is(.menu-stroke,.experiment-tools button,.experiment-mode,.cover-actions a,.story-steps article) {transition:transform .2s var(--lab-ease),opacity .18s,border-color .18s,background-color .18s}
+  html[data-lab-motion] .site-menu[open] .menu-stroke.top {transform:translate(6px,-1px) rotate(45deg);transform-origin:3px 6px}
+  html[data-lab-motion] .site-menu[open] .menu-stroke.bottom {transform:translate(6px,1px) rotate(-45deg);transform-origin:3px 18px}
+  html[data-lab-motion] .site-menu[open] .menu-stroke.middle {opacity:0}
+  html[data-lab-motion] .site-menu[open] .site-menu-panel {animation:cover-enter .18s var(--lab-ease) both !important}
+  .experiment-tools button:active,.cover-actions a:active,.experiment-mode:active {transform:scale(.975)}
+}
+@media (prefers-reduced-motion:reduce) {
+  .cosmic-field canvas,.cover-motion-switch {display:none}
+  :is(.experiment-frame,.model-lab,.story-steps) * {transition:none!important;animation:none!important}
+}
+html[data-lab-motion] .primary-nav a[aria-current] {text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.45rem}
+@media (prefers-reduced-motion:no-preference) {
+  /* Motion spring sampled at stiffness 430, damping 31, mass 1. Applied only to the control icon. */
+  .experiment-mode {transition:transform 450ms linear(0,.1581,.4447,.7011,.8768,.9751,1.0181,1.0291,1.0253,1.017,1.0093,1.004,1.0009,.9995,1)}
+  .experiment-mode:active {transform:scale(.955)}
+  html[data-lab-motion] .menu-stroke {transition:d .19s var(--lab-ease),opacity .17s;transform:none!important}
+  html[data-lab-motion] .site-menu[open] .menu-stroke.top {d:path("M5 5L19 19")}
+  html[data-lab-motion] .site-menu[open] .menu-stroke.bottom {d:path("M5 19L19 5")}
+}

@@ -1,11 +1,11 @@
 'use client';
 import {useId, useState} from 'react';
-import dynamic from 'next/dynamic';
+import BaoSurface from './BaoSurface';
 import {baoFootprint, LIVE_RESULT_PLANCK_REFERENCE as planck, LIVE_RESULT_PROBES as probes, LIVE_RESULT_PROBE_IDS as ids, LIVE_RESULT_SCENARIOS as scenarios, liveResultNumber, type PlanePoint, type ProbeId, type ScenarioId} from '@/lib/live-result';
 import type {Locale} from '@/lib/i18n';
 import styles from './LiveResult.module.css';
 
-const BaoSurface = dynamic(() => import('./BaoSurface'), {ssr: false});
+
 const labels = {cmb:'Planck', bao:'DESI', des:'DES', pantheon:'Pantheon+', ladder:'SH0ES'};
 
 
@@ -44,8 +44,8 @@ export function ProbePlane({locale, scenario}: {locale: Locale; scenario: Scenar
   const baseline=probes.bao.anchor as PlanePoint;
   return <section className={styles.plot} aria-labelledby="live-plane-title">
     <div className={styles.plotHeader}><div><h2 id="live-plane-title">Ωₘ × H₀</h2><p>ΛCDM · {pt?'geometria plana':'flat geometry'}</p></div>
-      <button type="button" className={styles.mode} aria-pressed={surface} onClick={()=>setSurface(v=>!v)}>{surface ? (pt?'Voltar a 2D':'Back to 2D') : '3D · BAO'}</button></div>
-    {surface ? <BaoSurface locale={locale} cut={scenario==='withoutLrg2'}/> : <>
+      <button type="button" className={styles.mode} disabled={scenario==='shortRuler'} aria-pressed={surface && scenario!=='shortRuler'} onClick={()=>setSurface(v=>!v)}>{surface && scenario!=='shortRuler' ? (pt?'Voltar a 2D':'Back to 2D') : '3D · BAO'}</button></div>
+    {surface && scenario!=='shortRuler' ? <BaoSurface key={String(scenario==='withoutLrg2')} locale={locale} cut={scenario==='withoutLrg2'}/> : <>
     <svg className={styles.plane} viewBox="0 0 418 277" role="img" aria-label={pt?'Restrições em Ωₘ e H₀ por sonda, vista superior':'Probe constraints in Ωₘ and H₀, top view'}>
       <defs><clipPath id={clip}><rect x="51" y="29" width="348" height="211"/></clipPath></defs>
       <text x="51" y="17" className={styles.axisTitle}>H₀ (km/s/Mpc)</text>

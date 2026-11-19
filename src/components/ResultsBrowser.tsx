@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {D, tr} from '@/lib/dict';
 import type {Locale} from '@/lib/i18n';
 import type {Line, Status} from '@/lib/schemas';
@@ -94,13 +94,34 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
     return result;
   }, [sort, locale, rows, query, line, status, survey, year, outcome]);
   const shown = filtered.slice(0, page * PAGE);
+  const indexRef = useRef<HTMLUListElement>(null);
+  const before = useRef(new Map<string, DOMRect>());
+  // Capture before React commits the new order; use layout coordinates independent of page scroll.
+  const remember = () => {
+    before.current.clear();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    indexRef.current?.querySelectorAll<HTMLElement>('[data-family]').forEach(el =>
+      before.current.set(el.dataset.family!, el.getBoundingClientRect()));
+  };
+  useLayoutEffect(() => {
+    const list = indexRef.current;
+    if (!list || !before.current.size) return;
+    for (const el of list.querySelectorAll<HTMLElement>('[data-family]')) {
+      const old = before.current.get(el.dataset.family!);
+      if (!old) continue;
+      const next = el.getBoundingClientRect(), dy = old.top - next.top;
+      if (dy && Math.abs(dy) < innerHeight && next.top < innerHeight && next.bottom > 0)
+        el.animate([{transform: `translateY(${dy}px)`}, {transform: 'translateY(0)'}], {duration: 240, easing: 'cubic-bezier(.2,.75,.3,1)'});
+    }
+    before.current.clear();
+  }, [filtered, page]);
   const executionCount = filtered.reduce((total, item) => total + item.recordCount, 0);
   const reset = () => {setSort('editorial');setQuery(''); setLine('all'); setStatus('all'); setSurvey('all'); setYear('all'); setOutcome('all'); setPage(1);};
   const change = <T,>(setter: (value: T) => void) => (value: T) => {setter(value); setPage(1);};
 
   return (
     <div>
-      <form role="search" onSubmit={event => event.preventDefault()} className="results-filters nx-filters">
+      <form onChangeCapture={remember} onClickCapture={remember} role="search" onSubmit={event => event.preventDefault()} className="results-filters nx-filters">
         <label className="wide-filter">{tr(f.search, locale)}
           <input placeholder={locale === 'pt' ? 'Pergunta, levantamento ou identificador…' : 'Question, survey or identifier…'} type="search" value={query} onChange={event => change(setQuery)(event.target.value)} autoComplete="off" />
         </label>
@@ -152,9 +173,9 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
       {filtered.length === 0 ? (
         <EmptyState message={tr(f.none, locale)} action={<button type="button" onClick={reset} className="btn">{tr(f.reset, locale)}</button>} />
       ) : (
-        <ul className="nx-question-index" role="list">
+        <ul ref={indexRef} className="nx-question-index" role="list">
           {shown.map(row => (
-            <li key={row.slug}>
+            <li data-family={row.slug} key={row.slug}>
               <article>
                 <div>
                   <h3><Link href={href(locale, '/results/families/' + row.slug)}>{row.title}</Link></h3>
