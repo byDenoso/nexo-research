@@ -48,6 +48,13 @@ test('DESI and the illustrative model expose matched numbers, filters and access
   await model.getByLabel('Grandeza',{exact:true}).selectOption('a');
   await expect(model.getByRole('img')).toHaveAccessibleName(/retrospecto/);
   const file=page.waitForEvent('download');await model.getByRole('button',{name:'Capturar figura'}).click();expect((await file).suggestedFilename()).toMatch(/\.svg$/);
+  await model.getByText('Resíduos das 13 medidas BAO do DESI',{exact:true}).click();
+  const residuals=model.getByRole('table',{name:'Medidas DESI DR2 e resíduos em σᵢ'});
+  await expect(residuals.locator('tbody tr')).toHaveCount(13);
+  await model.getByLabel('Medida BAO',{exact:true}).selectOption('DH');
+  await expect(residuals.locator('tbody tr')).toHaveCount(6);
+  const matched=await residuals.locator('tbody tr').first().locator('td').allTextContents();
+  expect(matched[1]).toBe(matched[2]);
   const audit=await new AxeBuilder({page}).include('#expansion-models').withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
   expect(audit.violations.map(x=>x.id)).toEqual([]);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBe(0);

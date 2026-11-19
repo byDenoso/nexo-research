@@ -156,3 +156,13 @@ export function baoMinimum(cut: boolean) {
 export function baoDelta(profile: ReturnType<typeof evaluateProfile>, h0: number, bestChi2: number) {
   return profile.chiSquared - bestChi2 + profile.inverseH0Curvature * (1 / h0 - 1 / profile.h0) ** 2;
 }
+
+export type BaoObservable = 'DV' | 'DM' | 'DH';
+type BaoMeasurement = {z:number; observable:BaoObservable; value:number; sigma:number};
+export const baoMeasurements: readonly BaoMeasurement[] = [
+  {z:isotropic.z,observable:'DV',value:isotropic.value,sigma:Math.sqrt(isotropic.variance)},
+  ...pairs.flatMap((p):BaoMeasurement[]=>[
+    {z:p.z,observable:'DM',value:p.dm,sigma:Math.sqrt(p.varianceDm)},
+    {z:p.z,observable:'DH',value:p.dh,sigma:Math.sqrt(p.varianceDh)},
+  ]),
+];

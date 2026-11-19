@@ -4,6 +4,7 @@ import {scaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 import {expansionPoint,referenceModel} from '@/lib/expansion';
 import type {Locale} from '@/lib/i18n';
+import {BaoResiduals} from './BaoResiduals';
 import {captureSvg, csvDownload} from './download';
 
 type Observable = 'h'|'distance'|'a'|'residual';
@@ -13,10 +14,11 @@ const quantities:Record<Observable,[string,string,string]> = {
   a:['Fator de escala','Scale factor','a'],
   residual:['Diferença em H(z)','H(z) difference','%'],
 };
-export function ModelCurves({locale}:{locale:Locale}) {
+export function ModelCurves({locale,desi=false}:{locale:Locale;desi?:boolean}) {
   const pt=locale==='pt', title=useId(), svg=useRef<SVGSVGElement>(null);
   const [model,setModel]=useState({...referenceModel,w0:-.85,wa:.2});
   const [view,setView]=useState<Observable>('h'),[index,setIndex]=useState(40);
+  const [showResiduals,setShowResiduals]=useState(false);
   const [captureError,setCaptureError]=useState(false);
   const f=(n:number,d=2)=>n.toLocaleString(pt?'pt-BR':'en-GB',{maximumFractionDigits:d});
   const data=useMemo(()=>Array.from({length:101},(_,i)=>{
@@ -79,5 +81,9 @@ export function ModelCurves({locale}:{locale:Locale}) {
       <div className="experiment-tools"><button type="button" onClick={saveCsv}>{pt?'Exportar dados (CSV)':'Export data (CSV)'}</button>
       <button type="button" onClick={()=>{if(svg.current)captureSvg(svg.current,'nexo-expansion').catch(()=>setCaptureError(true));}}>{pt?'Capturar figura':'Save figure'}</button></div>
       {captureError && <span role="status">{pt?'Falha na captura.':'Capture failed.'}</span>}</aside></div>
+    {desi && <details className="residual-disclosure" onToggle={e=>setShowResiduals(e.currentTarget.open)}>
+      <summary>{pt?'Resíduos das 13 medidas BAO do DESI':'Residuals of the 13 DESI BAO measurements'}</summary>
+      {showResiduals && <BaoResiduals locale={locale} model={model}/>}
+    </details>}
   </section>;
 }

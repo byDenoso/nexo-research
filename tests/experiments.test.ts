@@ -48,3 +48,29 @@ describe('physical quantities shared by the plots, scenes and exports',()=>{
     expect(density.at(-1)!.density).toBeLessThan(1e-5);
   });
 });
+
+describe('observed DESI residuals',()=>{
+  it('recovers the independent isotropic datum and the DESI ordering',async()=>{
+    const {baoResiduals}=await import('@/lib/bao-residuals');
+    const rows=baoResiduals(referenceModel);
+    expect(rows).toHaveLength(13);
+    const first=rows[0]!,z=.295,dm=comovingDistance(z)/147.5,dh=LIGHT_KM_S/hubble(z,referenceModel)/147.5;
+    expect(first.observable).toBe('DV');
+    expect(first.standardized).toBeCloseTo((7.94167639-Math.cbrt(z*dm**2*dh))/Math.sqrt(.00578998687),10);
+    expect(rows.find(p=>p.observable==='DH' && p.z===2.33)?.value).toBe(8.631545674846294);
+    expect(rows.find(p=>p.observable==='DM' && p.z===2.33)?.value).toBe(38.988973961958784);
+    // Off-diagonal DM,DH entries of the six public covariance blocks, in increasing redshift.
+    const covariances=[-.0326062007,-.0237445646,-.0112938006,-.0290308418,-.195215562,-.0231395216];
+    for(const cut of [false,true]){
+      let chi2=first.standardized**2;
+      covariances.forEach((cov,i)=>{
+        const dm=rows[1+2*i]!,dh=rows[2+2*i]!;
+        if(cut && dm.z===.706)return;
+        const rho=cov/(dm.sigma*dh.sigma);
+        chi2+=(dm.standardized**2+dh.standardized**2-2*rho*dm.standardized*dh.standardized)/(1-rho**2);
+      });
+      const profile=evaluateProfile(referenceModel.omegaM,147.5,cut);
+      expect(Math.abs(chi2-baoDelta(profile,referenceModel.h0,0))).toBeLessThan(.0002);
+    }
+  });
+});

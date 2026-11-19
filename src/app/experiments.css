@@ -107,3 +107,7 @@ html[data-lab-motion] .primary-nav a[aria-current] {text-decoration:underline;te
   .cosmic-field[data-quality=composited] canvas {animation:sky-drift 38s ease-in-out infinite alternate !important}
   .cosmic-field[data-running=false] canvas {animation-play-state:paused !important}
 }
+.residual-disclosure {margin-top:1.2rem;border-block:1px solid var(--line);padding:.45rem 0}
+.residual-disclosure>summary {padding:.45rem .1rem;min-height:42px;font-weight:600;cursor:pointer}
+.bao-residuals {padding-block:.75rem}.bao-residuals>p {max-width:78ch;color:var(--muted);font-size:.91rem}
+.bao-residuals .lab-select {max-width:18rem}

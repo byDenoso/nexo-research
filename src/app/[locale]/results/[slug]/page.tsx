@@ -225,7 +225,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
       </div>
       {(item.id === desiTracerId || dossier?.nonPhantomProfile) && (
         <div className="wrap pb-12">
-          {item.id === desiTracerId && <><DesiTracerComparison locale={locale} /><ModelCurves locale={locale} /></>}
+          {item.id === desiTracerId && <><DesiTracerComparison locale={locale} /><ModelCurves locale={locale} desi /></>}
           {dossier?.nonPhantomProfile && <NonPhantomProfile profile={dossier.nonPhantomProfile} locale={locale} />}
         </div>
       )}
