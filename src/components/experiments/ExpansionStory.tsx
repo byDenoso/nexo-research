@@ -55,13 +55,11 @@ export function ExpansionStory({locale}:{locale:Locale}) {
   useEffect(()=>{if(age>=end)play(false);},[age]);
   function seek(next:number){setFollow(false);play(false);setAge(next);}
   const svgWave=Array.from({length:240},(_,i)=>[42+i*1.65,167+8*Math.sin(i*1.65/(12*a))].join(',')).join(' ');
-  return <section className="expansion-story wrap" ref={section} aria-labelledby="expansion-story-title" id="expansao-em-etapas">
+  return <section className="expansion-story wrap" ref={section} aria-labelledby="expansion-story-title">
     <header><p className="nx-eyebrow">{pt?'Experimento de expansão':'Expansion experiment'}</p>
       <h2 id="expansion-story-title">{pt?'O que acontece com a luz no caminho?':'What happens to light along the way?'}</h2>
       <p>{pt?'Acompanhe uma linha espectral emitida em z = 2. O diagrama usa ΛCDM plano, Ωₘ = 0,3 e H₀ = 70 km/s/Mpc.':'Follow a spectral line emitted at z = 2. The diagram uses flat ΛCDM, Ωₘ = 0.3 and H₀ = 70 km/s/Mpc.'}</p></header>
-    <div className="story-grid"><div className="story-steps">{stages.map((s,i)=><article key={i} data-epoch={i} data-selected={current===i}>
-      <button type="button" aria-pressed={current===i} onClick={()=>seek(ageAtScale(s.a))}>{s[locale][0]}</button><p>{s[locale][1]}</p>
-    </article>)}</div>
+    <div className="story-grid">
     <figure className="story-figure"><figcaption><strong>{pt?'Expansão de um volume comóvel':'Expansion of a comoving volume'}</strong>
       <button className="experiment-mode" type="button" aria-pressed={orbit} onClick={()=>setOrbit(!orbit)}>{orbit?(pt?'Voltar a 2D':'Back to 2D'):'3D · '+(pt?'Volume':'Volume')}</button></figcaption>
       <ExperimentFrame name="nexo-expansion" label={pt?'Volume em expansão 3D':'Expanding 3D volume'} active={orbit} locale={locale} scene={{kind:'flow',scale:a}}
@@ -88,6 +86,10 @@ export function ExpansionStory({locale}:{locale:Locale}) {
       <table className="lab-table"><caption>{pt?'Época selecionada':'Selected epoch'}</caption><thead><tr><th>a</th><th>z</th><th>{pt?'Distância¹':'Distance¹'}</th><th>λ</th></tr></thead>
         <tbody><tr><td>{format(a,3)}</td><td>{format(z,3)}</td><td>{format(10*a)} Mpc</td><td>{format(wavelength,1)} nm</td></tr></tbody></table>
       <p className="lab-sources">{pt?'¹ Par com separação comóvel de 10 Mpc.':'¹ Pair with comoving separation of 10 Mpc.'} <a href="https://arxiv.org/abs/astro-ph/9905116">Hogg (1999)</a></p>
-    </figure></div>
+    </figure>
+    <div className="story-steps">{stages.map((s,i)=><article key={i} data-epoch={i} data-selected={current===i}>
+      <button type="button" aria-pressed={current===i} onClick={()=>seek(ageAtScale(s.a))}>{s[locale][0]}</button><p>{s[locale][1]}</p>
+    </article>)}</div>
+    </div>
   </section>;
 }

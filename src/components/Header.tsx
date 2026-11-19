@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {D, tr} from '@/lib/dict';
 import {NAV_ROUTES, type Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
+import {SiteMenu} from './SiteMenu';
 import {ThemeToggle} from './ThemeToggle';
 import {LanguageSwitch} from './LanguageSwitch';
 
@@ -15,6 +16,17 @@ function label(route: typeof NAV_ROUTES[number], locale: Locale) {
 
 export function Header({locale}: {locale: Locale}) {
   const living = locale === 'pt' ? 'Resultado vivo' : 'Living result';
+  const pt = locale === 'pt';
+  const sections = [
+    {href: href(locale), label: pt ? 'Início' : 'Home'},
+    {href: href(locale, '/resultado-vivo'), label: living},
+    ...NAV_ROUTES.map(route => ({href: href(locale, '/' + route), label: label(route, locale)})),
+  ];
+  const shortcuts = [
+    {href: href(locale, '/resultado-vivo#expansao-em-etapas'), label: pt ? 'Experimento de expansão' : 'Expansion experiment'},
+    {href: href(locale, '/data#atlas'), label: pt ? 'Atlas de supernovas' : 'Supernova atlas'},
+    {href: 'https://cosmos-do-zero.vercel.app/', label: 'Cosmos do Zero'},
+  ];
   return (
     <header className="site-header">
       <div className="wrap header-inner">
@@ -30,23 +42,7 @@ export function Header({locale}: {locale: Locale}) {
           <Link className="header-living" href={href(locale, '/resultado-vivo')} prefetch={false}>{living} <span aria-hidden="true">→</span></Link>
           <LanguageSwitch locale={locale} />
           <ThemeToggle label={tr(D.theme, locale)} />
-          <details className="site-menu">
-            <summary className="btn header-control" aria-label={tr(D.menu, locale)}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path className="menu-stroke top" d="M3 6L21 6" /><path className="menu-stroke middle" d="M3 12L21 12"/><path className="menu-stroke bottom" d="M3 18L21 18"/></svg>
-              <span className="site-menu-label">{tr(D.menu, locale)}</span>
-            </summary>
-            <nav className="card site-menu-panel" aria-label={tr(D.moreNavigation, locale)}>
-              <ul role="list">
-                <li className="menu-living"><a href={href(locale, '/resultado-vivo')}>{living}</a></li>
-                {NAV_ROUTES.filter(route => route !== 'publications').map(route => (
-                  <li key={route} className={primary.some(item => item === route) ? 'site-menu-primary' : undefined}>
-                    <a href={href(locale, '/' + route)}>{label(route, locale)}</a>
-                  </li>
-                ))}
-                <li><a href="https://cosmos-do-zero.vercel.app/">Cosmos do Zero <span aria-hidden="true">→</span></a></li>
-              </ul>
-            </nav>
-          </details>
+          <SiteMenu locale={locale} sections={sections} tools={shortcuts} />
         </div>
       </div>
     </header>

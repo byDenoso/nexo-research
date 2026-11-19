@@ -14,7 +14,7 @@ async function disableGpu(page:Page){
 test('timeline uses cosmic time, remains keyboard operable and exports calculated values',async({page,isMobile})=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.setViewportSize({width:295,height:850});
-  await page.goto('/pt#expansao-em-etapas');
+  await page.goto('/pt/resultado-vivo#expansao-em-etapas');
   const story=page.locator(storyId);
   const end=story.getByRole('button',{name:'Observação',exact:true});
   if(isMobile) await end.tap(); else {await end.focus();await end.press('Enter');}
@@ -105,7 +105,9 @@ test('BAO fallback exposes the exact minimum and posterior with its prior and ex
 
 test('3D expansion exports a frame and recovers after losing the graphics context',async({page,isMobile})=>{
   await page.goto('/pt');
-  await page.getByRole('navigation',{name:'Capítulos'}).getByRole('link',{name:'Luz e redshift'}).click();
+  await expect(page.locator('.expansion-story')).toHaveCount(0);
+  await page.getByRole('navigation',{name:'Capítulos'}).getByRole('link',{name:'Experimento de expansão'}).click();
+  await expect(page).toHaveURL(/\/pt\/resultado-vivo#expansao-em-etapas$/);
   const story=page.locator('#expansao-em-etapas'),stage=story.locator('.experiment-viewport');
   const supported=await page.evaluate(()=>{const gl=document.createElement('canvas').getContext('webgl2');gl?.getExtension('WEBGL_lose_context')?.loseContext();return !!gl;});
   const mode=story.getByRole('button',{name:'3D · Volume'});

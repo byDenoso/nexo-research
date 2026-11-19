@@ -1,5 +1,5 @@
 import {CosmicCover} from '@/components/CosmicCover';
-import {ExpansionStory} from '@/components/experiments/ExpansionStory';
+import {PantheonPlate} from '@/components/PantheonPlate';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -34,7 +34,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <CosmicCover locale={locale}/>
         <div className="wrap cover-grid">
           <div className="cover-copy">
-            <p className="cover-label">NEXO Research Institute</p>
+            <p className="cover-label">{pt ? 'Cosmologia observacional' : 'Observational cosmology'}</p>
             <h1 id="institute-title">{pt ? 'Como o Universo se expande?' : 'How does the Universe expand?'}</h1>
             <p>{pt ? 'Investigamos a energia escura, a formação de estruturas e as primeiras galáxias. Cada análise pública liga a hipótese aos dados e aos limites do resultado.' : 'We investigate dark energy, the growth of structure and the earliest galaxies. Each public analysis connects a hypothesis to its data and the limits of its findings.'}</p>
             <div className="cover-actions">
@@ -42,11 +42,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
               <Link href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link>
             </div>
           </div>
-          <figure className="volume-plate">
-            <Image src="/images/pantheon-volume.jpg" width={2560} height={1440} sizes="(min-width: 56rem) 54vw, 96vw" preload alt={pt ? 'Distribuição tridimensional das supernovas do Pantheon+ em quatro cascas de redshift' : 'Three-dimensional distribution of Pantheon+ supernovae inside four redshift shells'} />
-            <figcaption><strong>Pantheon+</strong><span>{pt ? '1.543 supernovas · geometria da amostra' : '1,543 supernovae · sample geometry'}</span></figcaption>
-            <details><summary>{pt ? 'Escala e fonte' : 'Scale and source'}</summary><p>{pt ? 'As cascas marcam z = 0,1, 0,5, 1 e 2. As distâncias comóveis usam ΛCDM plano, Ωₘ = 0,3 e H₀ = 70 km/s/Mpc. Cor e brilho são ilustrativos.' : 'Shells mark z = 0.1, 0.5, 1 and 2. Comoving distances assume flat ΛCDM, Ωₘ = 0.3 and H₀ = 70 km/s/Mpc. Colour and brightness are illustrative.'} <a href="https://arxiv.org/abs/2112.03863">Scolnic et al. (2022)</a>.</p></details>
-          </figure>
+          <PantheonPlate locale={locale} />
         </div>
       </section>
       <ChapterNav locale={locale}/>
@@ -64,8 +60,6 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         </div>
         <RedshiftFigure locale={locale} />
       </section>
-
-      <ExpansionStory locale={locale} />
 
       <section id="galaxias" className="wrap nx-observation" aria-labelledby="galaxies-title">
         <figure>

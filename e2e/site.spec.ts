@@ -10,7 +10,7 @@ test('root redirects to the visitor language', async ({request}) => {
   expect(en.headers().location).toMatch(/\/en$/);
 });
 
-test('institutional home links to results in the cover and menus and to publications in the footer', async ({page, request}) => {
+test('institutional home links to results in the cover and menus and to publications in the secondary menu and footer', async ({page, request}) => {
   for (const locale of ['pt', 'en']) {
     await page.goto(`/${locale}`);
     const resultsLabel = locale === 'pt' ? 'Explorar resultados' : 'Explore results';
@@ -19,7 +19,8 @@ test('institutional home links to results in the cover and menus and to publicat
       await expect(link).toHaveCount(1);
       await expect(link).toContainText(resultsLabel);
     }
-    await expect(page.locator(`header a[href="/${locale}/publications"]`)).toHaveCount(0);
+    await expect(page.locator(`.primary-nav a[href="/${locale}/publications"]`)).toHaveCount(0);
+    await expect(page.locator(`.site-menu-panel a[href="/${locale}/publications"]`)).toHaveCount(1);
     await expect(page.locator(`footer a[href="/${locale}/publications"]`)).toBeAttached();
     const scope = page.locator('.catalogue-note');
     await expect(scope).toBeVisible();

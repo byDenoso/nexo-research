@@ -1,4 +1,6 @@
 import {notFound} from 'next/navigation';
+import {LivingSections} from '@/components/LivingSections';
+import {ExpansionStory} from '@/components/experiments/ExpansionStory';
 import {LiveResult} from '@/components/LiveResult';
 import {PageHead} from '@/components/ui';
 import {isLocale, type Locale} from '@/lib/i18n';
@@ -29,6 +31,6 @@ export default async function LivingResultPage({params}: {params: Promise<{local
   const {title,lead,section} = copy[locale];
   return <>
     <PageHead kicker={section} title={title} lead={lead} />
-    <div className="wrap page-body"><LiveResult locale={locale}/></div>
+    <LivingSections locale={locale} comparison={<div className="wrap page-body"><LiveResult locale={locale}/></div>} experiment={<ExpansionStory locale={locale}/>}/>
   </>;
 }

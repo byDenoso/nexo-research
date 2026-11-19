@@ -1,0 +1,201 @@
+@font-face {
+  font-family: 'Barlow Semi Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('@fontsource/barlow-semi-condensed/files/barlow-semi-condensed-latin-600-normal.woff2') format('woff2');
+}
+:root { --heading: 'Barlow Semi Condensed', var(--font-sans); }
+:root[data-theme=light] body:not(:has(main .external-references, main .bibliography)) {
+  --bg: #f7f6f2;
+  --raised: #eeefeb;
+  background-color: var(--bg);
+}
+
+/* The header keeps the same controls and contrast across both site themes. */
+.site-header {backdrop-filter: none; -webkit-backdrop-filter: none}
+.site-header .site-menu {display: block}
+.site-header .site-menu-label {display: none}
+.site-header .header-controls {gap: .25rem}
+.site-header .header-control, body .site-header .header-living {border-radius: .4rem}
+body .site-header .header-living, body:has(.nexo-editorial) .site-header .header-living {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 40px; white-space: nowrap;
+  color: #e8f1ff; border: 1px solid #405471; background: #111e30;
+}
+body .site-header .header-living:is(:hover,:focus-visible,[aria-current]) {background: #203859; border-color: #9bbcff; text-decoration: none}
+.site-header .primary-nav a::after {background: #8cb6ff; height: 2px}
+html[data-lab-motion] .primary-nav a[aria-current] {text-decoration: none}
+.site-header .primary-nav a[aria-current]::after {transform: scaleX(1)}
+.site-header .site-menu[open] summary {border-color: #879bb7}
+.site-header .site-menu-panel {
+  z-index: 2; width: min(35rem, calc(100vw - 2 * var(--gutter))); max-height: min(75dvh, 37rem);
+  overflow-y: auto; overscroll-behavior: contain; padding: .9rem; border: 1px solid #41516a;
+  border-radius: .65rem; background: #0c1523; color: #ecf1fa; box-shadow: 0 16px 45px #02050b36;
+}
+.menu-search {display: none}
+html[data-js] .menu-search {
+  display: flex; align-items: center; gap: .65rem; background: #162438; border: 1px solid #435775;
+  padding: .42rem .65rem; border-radius: .35rem;
+}
+.menu-search input {min-width: 0; flex: 1; color: #fff; background: transparent; min-height: 2rem; font-size: 1rem}
+.menu-search input::placeholder {color: #bfcfe5}
+.menu-search:focus-within {outline: 2px solid #9ec2ff; outline-offset: 1px}
+.menu-search input:focus {outline: none}
+.menu-search kbd {color: #b9c9dc; font: 400 .68rem var(--font-mono); white-space: nowrap}
+.menu-groups {display: grid; grid-template-columns: 1fr 1.1fr; gap: 1.25rem; padding-top: .45rem}
+.menu-groups > div > p {font: 500 .72rem/1.5 var(--font-mono); color: #9cb7da; margin: .6rem .4rem .25rem}
+.site-menu-panel .menu-groups ul {display: grid; grid-template-columns: 1fr; gap: 0}
+.site-menu-panel .menu-groups a {display: flex; min-block-size: 2.55rem; padding: .45rem; border-block-end: 1px solid #2c384a; border-radius: 0; color: #edf3ff}
+.site-menu-panel .menu-groups a:is(:hover,:focus-visible,[aria-current]) {background: #1b304d; text-decoration: none}
+.menu-empty {margin: 1rem .45rem; color: #cbd6e6}
+@media (min-width: 70rem) {.site-header .site-menu-label {display: inline}}
+@media (max-width: 34rem) {
+  .site-header .site-menu-panel {position: fixed; inset: calc(var(--header-size) + .2rem) var(--gutter) auto; width: auto; max-height: calc(100dvh - var(--header-size) - 1rem)}
+  .menu-groups {grid-template-columns: 1fr; gap: .45rem}
+  .menu-search kbd {display: none}
+}
+@media (max-width: 416px) {
+  .site-header .header-inner {width: calc(100% - 1rem); gap: .2rem}
+  .site-header .wordmark {font-size: 1.35rem; gap: .2rem}
+  .site-header .wordmark::before {inline-size: 1.05rem; block-size: 1.05rem}
+  .site-header .wordmark .wordmark-rest {display: none}
+  .site-header .header-controls {gap: .12rem}
+  .site-header .header-controls .header-control {min-inline-size: 34px; min-height: 44px; padding-inline: .2rem}
+  body .site-header .header-living, body:has(.nexo-editorial) .site-header .header-living {gap: .12rem; padding-inline: .35rem; font-size: .75rem}
+  .header-living span {display: none}
+}
+
+/* A catalogue plate with two views of the same published sample. */
+.nx-home .cover-grid {gap: clamp(1.3rem, 3.5vw, 3.6rem); padding-block: clamp(2rem, 5vw, 5.25rem) 3.2rem}
+.nx-home .cover-copy h1 {
+  font: 600 clamp(3.25rem, 5.5vw, 5.7rem)/.94 var(--heading);
+  max-inline-size: 16ch; letter-spacing: -.038em; text-wrap: balance; margin-block: .9rem 1.35rem;
+}
+.cover-copy .cover-label {color: #b1caee; font-size: .75rem; text-transform: uppercase; letter-spacing: .11em}
+.cover-label::before {width: 1.5rem; height: 2px}
+.cover-copy > p:last-of-type {max-width: 41ch}
+.nx-home .cover-actions a:first-child {border-radius: .35rem; padding-inline: 1.05rem; box-shadow: none}
+.cover-actions a:last-child {border-block-end: 1px solid #57718f}
+.nx-home .volume-plate {
+  position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center;
+  min-width: 0; overflow: hidden; color: #dae5f7; background: #060d18;
+  border: 1px solid #34445d; border-radius: .65rem; box-shadow: 0 12px 35px #0002;
+}
+.nx-home .volume-plate figcaption {display: flex; gap: .15rem .7rem; align-items: baseline; padding: .75rem 0 .75rem 1rem; margin: 0; border: 0}
+.volume-plate figcaption strong {font: 600 1.3rem/1 var(--heading); letter-spacing: -.01em}
+.volume-plate figcaption span {color: #b8cce8; font: 400 .73rem var(--font-mono)}
+.plate-modes {display: none}
+html[data-js] .plate-modes {display: flex; margin: .4rem .6rem; padding: .16rem; border: 1px solid #415471; border-radius: .4rem; gap: .15rem}
+.plate-modes button {min-height: 32px; color: #c8d6ea; border-radius: .23rem; padding: .2rem .7rem; cursor: pointer; font: 500 .79rem var(--font-sans)}
+.plate-modes button[aria-pressed=true] {background: #c8dbfa; color: #0a182b}
+.plate-stage {grid-column: 1 / -1; display: grid; width: 100%; grid-template: minmax(0,1fr) / minmax(0,1fr); aspect-ratio: 16/9; min-height: 12rem; overflow: hidden; background: #02050b; border-block: 1px solid #34445d}
+.nx-home .plate-stage img {display: block; width: 100%; height: 100%; min-height: 0; max-height: none; object-fit: contain; border-radius: 0; background: transparent}
+.plate-distribution {height: 100%; min-height: 0; display: flex; flex-direction: column; padding: .35rem .9rem .5rem; background: #08111d}
+.plate-distribution svg {display: block; flex: 1; width: 100%; height: 0; min-height: 0}
+.plate-distribution text {font: 12px var(--font-mono); fill: #cddef2}
+.plate-bin {cursor: pointer}
+.plate-range {display: grid; grid-template-columns: minmax(0,1fr) auto; gap: .1rem .6rem; align-items: center; font: 500 .76rem/1.3 var(--font-mono); color: #d7e8ff}
+.plate-range > span {grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .1rem .55rem}
+.plate-range input {accent-color: #aac9fb; width: 100%; min-width: 0; min-height: 28px}
+.plate-range output {font-variant-numeric: tabular-nums}
+.plate-foot {grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: .35rem .7rem; padding: .25rem 1rem; align-items: start}
+.nx-home .volume-plate details {position: static; font-size: .84rem}
+.plate-foot a, .plate-foot summary {color: #cbdcf5; text-underline-offset: .22em}
+.plate-foot > a, .volume-plate .plate-foot summary {display: inline-flex; align-items: center; gap: .5rem; min-height: 38px; font-size: .82rem}
+.plate-foot > a:hover {text-decoration: underline}
+.plate-foot:has(details[open]) {grid-template-columns: minmax(0,1fr)}
+.plate-foot details[open] {padding-bottom: .6rem}
+.plate-foot table {border-collapse: collapse; width: 100%; margin-top: .6rem; font: 400 .76rem var(--font-mono)}
+.plate-foot :is(caption,td,th) {text-align: start; padding: .3rem; border-bottom: 1px solid #34445d}
+.chapter-nav {gap: .25rem clamp(.8rem,3vw,2.7rem); padding-block: .7rem; align-items: center}
+.chapter-nav .chapter-experiment {margin-inline-start: auto; color: var(--accent); font-weight: 500}
+.chapter-experiment span {display: inline-block; margin-inline-start: .35rem}
+@media (max-width: 47.99rem) {
+  .nx-home .cover-copy h1 {max-width: 15ch}
+  .nx-home .cover-grid {padding-top: 1.8rem}
+  .chapter-nav .chapter-experiment {margin-inline-start: 0}
+}
+@media (max-width: 34rem) {
+  .nx-home .volume-plate figcaption {padding: .6rem .5rem}
+  .volume-plate figcaption span {font-size: .7rem}
+  .plate-modes button {padding-inline: .42rem; min-height: 36px}
+  .plate-stage {aspect-ratio: 1.75}
+  .plate-distribution {padding-inline: .35rem}
+  .plate-distribution text {font-size: 19px}
+  .plate-foot {padding-inline: .6rem}
+}
+@media (max-width: 340px) {
+  .nx-home .cover-copy h1 {font-size: 3.15rem}
+  .nx-home .volume-plate figcaption {display: grid; gap: .2rem}
+}
+
+/* Mastheads, reference numbers, and reading links follow the same hierarchy. */
+main:not(:has(.external-references,.bibliography)) > .section-intro {
+  background: #0033a0; color: #fff; border-bottom: 0;
+}
+main:not(:has(.external-references,.bibliography)) .section-intro .page-head-inner {padding-block: clamp(1.75rem,3.8vw,3.5rem)}
+main:not(:has(.external-references,.bibliography)) .section-intro h1,
+.nx-catalogue .nx-catalogue-head h1, .nx-record .nx-record-header h1, .record-head .record-head-inner h1 {
+  font: 600 clamp(2.8rem,5.2vw,5rem)/.98 var(--heading); letter-spacing: -.032em; text-wrap: balance; overflow-wrap: anywhere;
+}
+main:not(:has(.external-references,.bibliography)) .section-intro .kicker {color: #cbddff; font: 500 .77rem var(--font-mono)}
+main:not(:has(.external-references,.bibliography)) .section-intro .page-lead {color: #ebf2ff; font-size: clamp(1rem,1.42vw,1.18rem); line-height: 1.52}
+@media (min-width: 48rem) {
+  main:not(:has(.external-references,.bibliography)) .section-intro .page-lead {padding-left: clamp(1.1rem,2.2vw,2rem); border-left: 1px solid #829dd7}
+}
+:is(.nx-home,.nx-catalogue,.expansion-story,.model-lab,.research-question,.inst-prose,.methods-article,.source-access-section,.atlas-intro,.inst-projects,.inst-log,.family-entry) h2,
+.nx-home #cover-title, .nx-home .section-masthead h2, .nx-question-index h3 {
+  font-family: var(--heading); font-weight: 600; letter-spacing: -.022em; line-height: 1.08;
+}
+.nx-catalogue .nx-catalogue-head {padding-block: clamp(2rem,4.5vw,4rem) 1.5rem; gap: 1.1rem 2rem}
+.nx-catalogue-head dl {grid-template-columns: 1fr 1fr; gap: .8rem 1rem; align-self: end}
+.nx-catalogue-head dl div {display: grid; align-content: start; gap: .15rem; border-bottom: 0; border-left: 2px solid var(--line); padding: 0 0 0 .65rem; font-size: .8rem}
+.nx-catalogue-head dl div:last-child {border-left: 2px solid var(--line)}
+.nx-catalogue-head dl div:nth-child(-n+2) {border-color: var(--accent)}
+.nx-catalogue-head dl div:nth-child(-n+2) dd {font: 600 2.3rem/1 var(--heading)}
+.nx-catalogue-head dd {white-space: normal; line-height: 1.4; font-size: .78rem}
+.nx-catalogue-content .nx-filters :is(input,select) {border: 1px solid var(--control-line); border-radius: .3rem; background-color: var(--surface); padding-inline: .6rem}
+.nx-question-index h3 a {text-decoration: none}
+.nx-question-index article:focus-within h3 a, .nx-question-index h3 a:hover {text-decoration: underline; text-underline-offset: .14em}
+.nx-question-index article {padding-inline: .6rem; border-inline-start: 2px solid transparent}
+.nx-question-index article:is(:hover,:focus-within) {border-inline-start-color: var(--accent); background-color: var(--raised)}
+:is(.methods-index,.research-index,.about-layout nav) a[aria-current=location] {color: var(--accent); text-decoration: underline; text-underline-offset: .24em; text-decoration-thickness: 2px}
+.site-footer .footer-links a:is(:hover,:focus-visible), .resource-routes a:is(:hover,:focus-visible) {text-decoration: underline; text-underline-offset: .23em}
+
+/* Both panels remain readable as ordinary document sections without JavaScript. */
+.living-tabs {display: flex; gap: .25rem 1rem; border-bottom: 1px solid var(--line); flex-wrap: wrap}
+.living-tabs a {position: relative; display: inline-flex; align-items: center; gap: .55rem; min-height: 3.5rem; padding: .55rem .35rem; color: var(--muted); font-weight: 600}
+.living-tabs a::after {content: ''; position: absolute; inset: auto 0 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left}
+.living-tabs a:is([aria-selected=true],:hover,:focus-visible) {color: var(--accent)}
+.living-tabs a[aria-selected=true]::after {transform: scaleX(1)}
+html[data-js] .living-sections:not([data-enhanced]):not(:has(#expansao-em-etapas:target)) a[href="#comparar-sondas"]::after,
+html[data-js] .living-sections:not([data-enhanced]):has(#expansao-em-etapas:target) a[href="#expansao-em-etapas"]::after {transform: scaleX(1)}
+.living-panel[hidden] {display: none}
+html[data-js] .living-sections:not([data-enhanced]):not(:has(#expansao-em-etapas:target)) #expansao-em-etapas,
+html[data-js] .living-sections:not([data-enhanced]):has(#expansao-em-etapas:target) #comparar-sondas {display: none}
+.living-panel > .page-body {margin-block-start: 0; padding-block-start: 1.3rem}
+.living-panel .expansion-story {border: 0; margin-block: 0 2.5rem; padding-block-start: 1.5rem}
+.living-panel .expansion-story > header > .nx-eyebrow {display: none}
+@media (max-width: 34rem) {
+  .living-tabs {gap: 0; flex-wrap: nowrap}
+  .living-tabs a {flex: 1; gap: .4rem; font-size: .9rem; line-height: 1.15}
+  .living-tabs svg {flex: none; width: 16px}
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes workspace-enter {from {transform: translateY(.38rem)} to {transform: translateY(0)}}
+  main:not(:has(.external-references,.bibliography)) .section-intro h1, .nx-catalogue-head h1, .nx-record-header h1,
+  .record-head h1, .living-panel:not([hidden]) > section > header, .plate-stage > .plate-distribution {
+    animation: workspace-enter .3s var(--lab-ease) both !important;
+  }
+  .living-tabs a::after, :is(.chapter-experiment span,.site-footer .footer-links a,.menu-groups a,.plate-modes button,.nx-question-index article) {
+    transition: transform .2s var(--lab-ease), background-color .18s, color .18s, border-color .18s;
+  }
+  .chapter-experiment:is(:hover,:focus-visible) span, .site-footer .footer-links a:is(:hover,:focus-visible) {transform: translateX(3px)}
+  .plate-modes button:active {transform: scale(.96)}
+  @supports (animation-timeline: scroll(root block)) {
+    html[data-lab-motion] body .site-header::after {
+      animation: reading-progress 1s linear both !important; animation-timeline: scroll(root block) !important;
+      animation-range: normal; background: #83b3ff;
+    }
+  }
+}
