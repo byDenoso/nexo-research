@@ -4,7 +4,7 @@ import {BibtexButton} from '@/components/Bibtex';
 import {ScienceAtlas} from '@/components/ScienceAtlas';
 import {DataSequence} from '@/components/EditorialFigures';
 import {PageHead} from '@/components/ui';
-import {datasetMentions, getManifest, getResults} from '@/lib/data';
+import {datasetMentions, getManifest, getPageDates, getResults} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
 import {fmtDate, isLocale} from '@/lib/i18n';
 import {SITE_URL, datasetMentionId, href, pageMeta} from '@/lib/seo';
@@ -22,6 +22,7 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
   const mentions = datasetMentions(getResults());
   const d = D.data;
   const pt = locale === 'pt';
+  const editorialDate = getPageDates()['/data']!;
   const day = source.latestUpdate.slice(0, 10), year = day.slice(0, 4);
   const file = `${SITE_URL}/atlas-public.json`;
   const citation = pt
@@ -60,7 +61,8 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
             <dt className="text-muted">{tr(d.contract, locale)}</dt><dd className="font-mono">{source.contract}</dd>
             <dt className="text-muted">{tr(d.tests, locale)}</dt><dd className="font-mono">{source.tests}</dd>
             <dt className="text-muted">{tr(d.visuals, locale)}</dt><dd className="font-mono">{source.visuals}</dd>
-            <dt className="text-muted">{tr(D.updates.latest, locale)}</dt><dd className="font-mono">{fmtDate(source.latestUpdate, locale)}</dd>
+            <dt className="text-muted">{pt ? 'Versão do catálogo (data do último registro)' : 'Catalogue version (date of latest record)'}</dt><dd className="font-mono"><time dateTime={source.latestUpdate}>{fmtDate(source.latestUpdate, locale)}</time></dd>
+            <dt className="text-muted">{pt ? 'Última revisão editorial desta página' : 'Last editorial revision of this page'}</dt><dd className="font-mono"><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd>
             <dt className="text-muted">{tr(d.sha, locale)}</dt><dd className="break-all font-mono text-xs">{source.snapshotSha256}</dd>
           </dl>
           <p className="mt-4"><a className="text-link" href="/atlas-public.json" download>{pt ? 'Baixar o snapshot (JSON)' : 'Download the snapshot (JSON)'}</a></p>

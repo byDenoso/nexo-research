@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import {redshiftQuestion} from '@/lib/editorial';
-import {getManifest} from '@/lib/data';
+import {getManifest, lastDossierCorrection} from '@/lib/data';
 import {D, tr} from '@/lib/dict';
 import {fmtDate, pick, type Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
 import type {Dossier, Result} from '@/lib/schemas';
+import {NonPhantomProfile} from './DossierFitComparisons';
 import {RedshiftFigure, RedshiftFinding, RedshiftLimit} from './RedshiftFigure';
 import {StatusBadge} from './ui';
 
@@ -12,6 +13,7 @@ export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: 
   const pt = locale === 'pt';
   const familyUrl = href(locale, '/results/families/redshift-exclusion');
   const snapshot = getManifest().generatedFrom;
+  const correction = lastDossierCorrection(dossier);
 
   return (
     <article className="nexo-editorial nx-record">
@@ -90,13 +92,15 @@ export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: 
               {dossier.artefacts?.map(entry => <li key={entry.url}><a className="text-link" href={entry.url}>{entry.label}</a></li>)}
               <li><a className="text-link" href="/atlas-public.json">{pt ? 'Manifesto público' : 'Public manifest'} · atlas-public.json</a></li>
             </ul>
-            <p className="nx-source-technical">{item.id} · {snapshot.contract}<br />SHA-256 {snapshot.snapshotSha256.slice(0, 12)}…</p>
+            <p className="nx-source-technical">{pt ? 'Versão do catálogo' : 'Catalogue version'} · <time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time><br />{item.id} · {snapshot.contract} · SHA-256 {snapshot.snapshotSha256.slice(0, 12)}…</p>
+            {correction && <p className="nx-source-technical">{pt ? 'Última correção editorial' : 'Last editorial correction'} · <time dateTime={correction}>{fmtDate(correction, locale)}</time></p>}
             <p className="nx-source-technical">{pt ? 'Data da análise' : 'Analysis date'} · {dossier.analysisDate ? <time dateTime={dossier.analysisDate}>{fmtDate(dossier.analysisDate, locale)}</time> : (pt ? 'Não consta no resumo público.' : 'Not stated in the public summary.')}</p>
             {item.publishedAt && <p className="nx-source-technical">{tr(D.results.publicRecordDate, locale)} · <time dateTime={item.publishedAt}>{fmtDate(item.publishedAt, locale)}</time></p>}
             <p className="nx-source-technical">{tr(D.results.updated, locale)} · <time dateTime={item.updatedAt}>{fmtDate(item.updatedAt, locale)}</time></p>
             <Link className="text-link arrow-link" href={href(locale, '/data')}>{tr(D.data.title, locale)}</Link>
           </aside>
         </div>
+        {dossier.nonPhantomProfile && <NonPhantomProfile profile={dossier.nonPhantomProfile} locale={locale} />}
       </div>
     </article>
   );

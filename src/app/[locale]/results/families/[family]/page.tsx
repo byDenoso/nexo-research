@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {CatalogueHeading} from '@/components/CatalogueHeading';
 import {CatalogueTitle} from '@/components/CatalogueTitle';
+import {desiTracerAnchor, desiTracerId} from '@/components/DossierFitComparisons';
 import {FamilyFigure} from '@/components/FamilyFigure';
 import {StatusBadge} from '@/components/ui';
 import {familyQuestion, familyEntry, readResult} from '@/lib/editorial';
@@ -47,6 +48,9 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
           'Editorial grouping by research question. Each record preserves its original identifier, priors, method, result and status. Values have not been combined, and a signal in a single run is not a global detection.'}</p>
         <section className="family-entry"><div><p className="kicker">{pt ? 'Uma execução para começar' : 'One run to start with'}</p><h2>{reading.finding}</h2><p>{reading.why}</p><Link className="journal-button" href={href(locale, '/results/'+entry.slug)}>{pt ? 'Entenda este resultado' : 'Understand this result'} →</Link></div><div className="visible-limit"><strong>{pt ? 'Limite desta execução' : 'Limit of this run'}</strong><p>{reading.limit}</p><StatusBadge status={entry.status} locale={locale}/></div></section>
         <nav className="reading-jumps" aria-label={pt ? 'Nesta família' : 'In this family'}><a href="#family-figure">{pt ? 'Compare os valores' : 'Compare the values'} ↓</a><a href="#variants-heading">{pt ? 'Todas as execuções' : 'All runs'} ↓</a></nav>
+        {family.slug === 'bao-tracer-exclusion' && (
+          <p><Link className="text-link arrow-link" href={href(locale, '/results/' + desiTracerId.toLowerCase()) + '#' + desiTracerAnchor}>{pt ? 'Comparar o Δχ² após retirar cada traçador do DESI DR2' : 'Compare Δχ² after removing each DESI DR2 tracer'}</Link></p>
+        )}
         <div id="family-figure"><FamilyFigure family={family} locale={locale} /></div>
         <section aria-labelledby="variants-heading">
           <h2 id="variants-heading" className="family-section-title">{locale === 'pt' ? 'Execuções e variações' : 'Runs and variants'}</h2>

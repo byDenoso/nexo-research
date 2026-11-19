@@ -322,7 +322,8 @@
 @media (min-width: 56rem) {
   .inst-feature { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 4.5vw, 4.8rem); }
   .observation-grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.25fr); }
-  .journal-stories { grid-template-columns: minmax(0, 1.18fr) repeat(2, minmax(0, 1fr)); }
+  .journal-stories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .journal-stories .journal-erosita { grid-column: 1 / -1; }
   .catalogue-note { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
 }
 

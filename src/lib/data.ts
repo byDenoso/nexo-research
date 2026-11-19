@@ -22,6 +22,10 @@ export function getDossier(id: string): Dossier | undefined {
   return dossierCache.get(id);
 }
 
+export function lastDossierCorrection(dossier: Dossier | undefined): string | undefined {
+  return dossier?.corrections?.map(entry => entry.date).sort().at(-1);
+}
+
 // Date of the last editorial revision of each static route, maintained by hand in pages.json.
 const pageDates = z.record(z.string(), z.string().regex(/^\d{4}-\d{2}-\d{2}$/));
 export const getPageDates = (): Record<string, string> => pageDates.parse(json('curated/pages.json'));

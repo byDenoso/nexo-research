@@ -89,6 +89,13 @@ export const dossier = z.object({
   // needs a dated entry in `corrections` saying what changed.
   method: localized.optional(),
   corrections: z.array(z.object({date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), note: localized})).optional(),
+  nonPhantomProfile: z.object({
+    publicAuthorized: z.literal(true),
+    scope: localized,
+    source: z.object({label: localized, url}),
+    rows: z.array(z.object({omegaM: z.number().min(0).max(1), deltaChi2: z.number().nonnegative()})).min(1)
+      .refine(rows => new Set(rows.map(row => row.omegaM)).size === rows.length, 'duplicate fixed Omega_m')
+  }).optional(),
   // Values returned when the published script was run again.
   rerun: z.object({
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

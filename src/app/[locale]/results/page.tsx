@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {ResultsBrowser} from '@/components/ResultsBrowser';
-import {getResults, getManifest} from '@/lib/data';
+import {getResults, getManifest, getPageDates} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
 import {D, tr} from '@/lib/dict';
 import {fmtDate, isLocale} from '@/lib/i18n';
@@ -20,7 +20,8 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
   const pt = locale === 'pt';
   const results = getResults();
   const rows = toFamilyRows(getFamilies(results), locale);
-  const latest = getManifest().generatedFrom.latestUpdate;
+  const snapshot = getManifest().generatedFrom;
+  const editorialDate = getPageDates()['/results']!;
 
   return (
     <div className="nexo-editorial nx-catalogue">
@@ -33,7 +34,8 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
         <dl>
           <div><dt>{pt ? 'Famílias de testes' : 'Test families'}</dt><dd>{rows.length}</dd></div>
           <div><dt>{pt ? 'Execuções públicas' : 'Public runs'}</dt><dd>{results.length}</dd></div>
-          <div><dt>{pt ? 'Atualizado em' : 'Updated on'}</dt><dd><time dateTime={latest}>{fmtDate(latest, locale)}</time></dd></div>
+          <div><dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt><dd><Link className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
+          <div><dt>{pt ? 'Última revisão editorial' : 'Last editorial revision'}</dt><dd><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd></div>
         </dl>
       </header>
       <div className="wrap nx-catalogue-content">

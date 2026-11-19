@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {LOCALES, fmtDate, isLocale, pick, type Locale} from '@/lib/i18n';
+import {DesiTracerComparison, NonPhantomProfile, desiTracerAnchor, desiTracerId} from '@/components/DossierFitComparisons';
 import {PairChart, pairOf} from '@/components/PairChart';
 import {SensitivityChart} from '@/components/SensitivityChart';
 import {StatusBadge} from '@/components/ui';
 import {redshiftId} from '@/components/RedshiftFigure';
 import {RedshiftRecord} from '@/components/RedshiftRecord';
-import {DATASETS, getDossier, getManifest, getResult, getResults} from '@/lib/data';
+import {DATASETS, getDossier, getManifest, getResult, getResults, lastDossierCorrection} from '@/lib/data';
 import {familyFor} from '@/lib/families';
 import {scientificText, sameText} from '@/lib/format';
 import {D, tr} from '@/lib/dict';
@@ -81,6 +82,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
   const strip = sensitivityPoints(getResults());
   const inStrip = strip.some(point => point.id === item.id);
   const snapshot = getManifest().generatedFrom;
+  const correction = lastDossierCorrection(dossier);
   const mentioned = DATASETS.filter(([, pattern]) => pattern.test(`${item.question.en} ${item.method.en} ${item.result.en}`)).map(([name]) => name);
   const missing = pt ? 'Não consta no resumo público.' : 'Not stated in the public summary.';
   const limitCount = item.figure?.limitations.length ?? 0;
@@ -157,6 +159,8 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
             <a href="#question">{tr(R.question, locale)}</a>
             <a href="#method">{tr(R.method, locale)}</a>
             <a href="#result">{tr(R.result, locale)}</a>
+            {item.id === desiTracerId && <a href={'#' + desiTracerAnchor}>{pt ? 'Retirada por traçador' : 'Tracer exclusions'}</a>}
+            {dossier?.nonPhantomProfile && <a href="#non-phantom-profile">{pt ? 'Restrição w ≥ −1' : 'Constraint w ≥ −1'}</a>}
             {limitCount > 0 && <a href="#limits">{tr(R.limits, locale)} ({limitCount})</a>}
           </nav>
           <dl>
@@ -183,9 +187,9 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
               </dd>
             </div>
             <div>
-              <dt>{pt ? 'Versão do registro' : 'Record version'}</dt>
+              <dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt>
               <dd>
-                <span className="font-mono">{item.id}</span> · {snapshot.contract}
+                <time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time> · {snapshot.contract}
                 <span className="dossier-note">SHA-256 {snapshot.snapshotSha256.slice(0, 12)}… · <a className="text-link" href="/atlas-public.json">atlas-public.json</a></span>
               </dd>
             </div>
@@ -203,6 +207,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
               <dt>{pt ? 'Data da análise' : 'Analysis date'}</dt>
               <dd>{dossier?.analysisDate ? <time dateTime={dossier.analysisDate}>{fmtDate(dossier.analysisDate, locale)}</time> : missing}</dd>
             </div>
+            {correction && <div><dt>{pt ? 'Última correção editorial' : 'Last editorial correction'}</dt><dd><time dateTime={correction}>{fmtDate(correction, locale)}</time></dd></div>}
             {rows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
           </dl>
           {approval?.parameters && approval.parameters.length > 0 && (
@@ -217,6 +222,12 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
           <Link href={href(locale, '/data')} prefetch={false} className="text-link arrow-link">{tr(D.data.title, locale)}</Link>
         </aside>
       </div>
+      {(item.id === desiTracerId || dossier?.nonPhantomProfile) && (
+        <div className="wrap pb-12">
+          {item.id === desiTracerId && <DesiTracerComparison locale={locale} />}
+          {dossier?.nonPhantomProfile && <NonPhantomProfile profile={dossier.nonPhantomProfile} locale={locale} />}
+        </div>
+      )}
     </article>
   );
 }

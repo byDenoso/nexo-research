@@ -4,7 +4,7 @@ import {buildManifest} from '../src/lib/build.ts';
 import {getFamilies} from '../src/lib/families.ts';
 import {ROUTES} from '../src/lib/i18n.ts';
 import {toFamilyRows} from '../src/lib/rows.ts';
-import {dossiers, towerPublic} from '../src/lib/schemas.ts';
+import {dossier, dossiers, towerPublic} from '../src/lib/schemas.ts';
 import {fold, matches} from '../src/lib/search.ts';
 import {compilations, sensitivityPoints, sensitivityRows} from '../src/lib/sensitivity.ts';
 
@@ -59,6 +59,18 @@ describe('curated editorial files', () => {
     const ids = new Set(manifest.results.map(item => item.id));
     expect(entries.every(entry => ids.has(entry.id))).toBe(true);
     expect(new Set(entries.map(entry => entry.id)).size).toBe(entries.length);
+  });
+
+  it('accepts a fixed-matter-density profile only with explicit public authorization', () => {
+    const label = {'pt-BR': 'Fonte de teste', en: 'Test source'};
+    const entry = {
+      id: 'T-05ae703af393',
+      datasets: [{name: 'Example', role: label}],
+      nonPhantomProfile: {scope: label, source: {label, url: 'https://example.com/'}, rows: [{omegaM: 0.3, deltaChi2: 1}]},
+    };
+    expect(dossier.safeParse(entry).success).toBe(false);
+    expect(dossier.safeParse({...entry, nonPhantomProfile: {...entry.nonPhantomProfile, publicAuthorized: false}}).success).toBe(false);
+    expect(dossier.safeParse({...entry, nonPhantomProfile: {...entry.nonPhantomProfile, publicAuthorized: true}}).success).toBe(true);
   });
 
   it('every static route has a revision date that is not in the future', () => {

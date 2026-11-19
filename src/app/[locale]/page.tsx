@@ -2,10 +2,10 @@ import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {PairChart} from '@/components/PairChart';
+import {ErositaFigure, erositaId} from '@/components/ErositaFigure';
 import {RedshiftFigure, RedshiftFinding, RedshiftLimit, redshiftSlug} from '@/components/RedshiftFigure';
 import {StatusBadge} from '@/components/ui';
-import {getManifest, getResult, getResults, getPublications} from '@/lib/data';
+import {getManifest, getPageDates, getResult, getResults, getPublications} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
 import {readResult, selectedIds, isNegative} from '@/lib/editorial';
 import {fmtDate, isLocale} from '@/lib/i18n';
@@ -18,7 +18,8 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
   const pt = locale === 'pt';
   const results = getResults();
   const publications = getPublications();
-  const latest = getManifest().generatedFrom.latestUpdate;
+  const snapshot = getManifest().generatedFrom;
+  const editorialDate = getPageDates()['']!;
   const lead = getResult(redshiftSlug);
   const stories = selectedIds.slice(1).flatMap(id => {
     const item = results.find(result => result.id === id);
@@ -33,7 +34,10 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
             <p className="cover-label">NEXO Research Institute</p>
             <h1 id="institute-title">{pt ? 'Como o Universo se expande?' : 'How does the Universe expand?'}</h1>
             <p>{pt ? 'Investigamos a energia escura, a formação de estruturas e as primeiras galáxias. Cada análise pública liga a hipótese aos dados e aos limites do resultado.' : 'We investigate dark energy, the growth of structure and the earliest galaxies. Each public analysis connects a hypothesis to its data and the limits of its findings.'}</p>
-            <div className="cover-actions"><Link href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link><Link href={href(locale, '/publications')}>{pt ? 'Publicações' : 'Publications'} <span aria-hidden="true">→</span></Link></div>
+            <div className="cover-actions">
+              <Link href={href(locale, '/results')}>{pt ? 'Explorar resultados' : 'Explore results'} <span aria-hidden="true">→</span></Link>
+              <Link href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link>
+            </div>
           </div>
           <figure className="volume-plate">
             <Image src="/images/pantheon-volume.jpg" width={2560} height={1440} sizes="(min-width: 56rem) 54vw, 96vw" preload alt={pt ? 'Distribuição tridimensional das supernovas do Pantheon+ em quatro cascas de redshift' : 'Three-dimensional distribution of Pantheon+ supernovae inside four redshift shells'} />
@@ -77,17 +81,18 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           <Link className="text-link arrow-link" href={href(locale, '/results')}>{pt ? 'Ver todas as famílias' : 'See all test families'}</Link>
         </div>
         <div className="journal-stories">
-          {stories.map((item, index) => {
+          {stories.map(item => {
             const story = readResult(item, locale);
+            const isErosita = item.id === erositaId;
             return (
-              <article key={item.id}>
+              <article key={item.id} className={isErosita ? 'journal-erosita' : undefined}>
                 <div className="showcase-meta">
                   <StatusBadge status={item.status} locale={locale} />
                   {isNegative(item.id) && <span className="outcome-tag">{pt ? 'Resultado negativo' : 'Negative result'}</span>}
                 </div>
                 <h3><Link href={href(locale, '/results/' + item.slug)}>{story.question}</Link></h3>
                 <p>{story.finding}</p>
-                {index === 0 && <PairChart item={item} locale={locale} compact />}
+                {isErosita && <ErositaFigure item={item} locale={locale} />}
                 <p className="story-limit">{story.limit}</p>
               </article>
             );
@@ -112,7 +117,8 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           <dl className="inst-facts">
             <div><dt>{pt ? 'Famílias no catálogo' : 'Families in the catalogue'}</dt><dd>{getFamilies(results).length}</dd></div>
             <div><dt>{pt ? 'Execuções documentadas' : 'Documented runs'}</dt><dd>{results.length}</dd></div>
-            <div><dt>{pt ? 'Catálogo atualizado em' : 'Catalogue updated on'}</dt><dd><time dateTime={latest}>{fmtDate(latest, locale)}</time></dd></div>
+            <div><dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt><dd><Link className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
+            <div><dt>{pt ? 'Última revisão editorial da home' : 'Last home editorial revision'}</dt><dd><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd></div>
           </dl>
         </div>
       </section>

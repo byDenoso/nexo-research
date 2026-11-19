@@ -54,9 +54,20 @@ against the run that produced the number; a field left out is shown as "Not stat
 A paper reference identifies the compilation, not the file version that was fitted.
 The build fails if a dossier names an identifier that is not in the snapshot or repeats one.
 
+For an authorized fixed-Ωm dark-energy profile, add `nonPhantomProfile` to its dossier.
+Set `publicAuthorized: true` after release approval. Provide localized `scope` (data, model and
+redshift domain of the constraint), a public `source` with localized label and URL, and
+`rows` with one `{omegaM, deltaChi2}` per fixed Ωm. Use the constrained minus unconstrained minimum
+χ² from matched fits at the same Ωm. Keep unreleased values out of the repository.
+
+The DESI DR2 tracer diagnostic at T-28160180cded is a supplementary fit using the public
+T-05ae703af393 recipe. The linked JSON holds the pinned recipe, input hashes, parameters, environment
+and fit outputs. Extract `parameters` into the file named by `PARAMS_PATH` and run the linked Python
+recipe with `RESULT_PATH` set to the desired output file.
+
 ## Figures
 
-The figures on the site are drawn from `figure` entries of the public manifest and from nothing else.
+Figures use the public manifest or a linked, reproducible public artefact.
 `src/lib/sensitivity.ts` reads runs whose key figure is "Reduction in fit improvement" (%) for one removed
 redshift range; a run with a different label format is left out of the figure, never guessed.
 

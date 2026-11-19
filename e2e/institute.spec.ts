@@ -21,7 +21,7 @@ test('the atlas switches from the observed sky to counts, models and a movable l
   expect(audit.violations.map(v => v.id)).toEqual([]);
 });
 
-test('measure the cover and its publication navigation in Chromium', async ({page}, info) => {
+test('measure the cover and its results navigation in Chromium', async ({page}, info) => {
   await page.addInitScript(() => {
     const data = {lcpMs: 0, cls: 0, longestInteractionMs: 0};
     Object.assign(window, {nexoLab: data});
@@ -47,8 +47,12 @@ test('measure the cover and its publication navigation in Chromium', async ({pag
   const metrics = await page.evaluate(() => (window as Window & {nexoLab?: unknown}).nexoLab);
   console.log('NEXO lab sample', info.project.name, JSON.stringify(metrics));
   await info.attach('lab-sample.json', {body: JSON.stringify(metrics), contentType: 'application/json'});
-  await page.locator('.cover-actions').getByRole('link',{name:'Publicações'}).click();
-  await expect(page).toHaveURL(/\/pt\/publications$/);
+  await page.locator('.cover-actions').getByRole('link', {name:'Explorar resultados'}).click();
+  await expect(page).toHaveURL(/\/pt\/results$/);
+  const header = page.locator('.site-header');
+  const menu = header.locator('.site-menu > summary');
+  if (await menu.isVisible()) await menu.click();
+  await expect(header.getByRole('link', {name: 'Publicações'}).filter({visible: true})).toHaveAttribute('href', '/pt/publications');
 });
 
 test('atlas chapters, research selection and persistent catalogue sort',async({page})=>{
