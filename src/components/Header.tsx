@@ -5,10 +5,10 @@ import {href} from '@/lib/seo';
 import {ThemeToggle} from './ThemeToggle';
 import {LanguageSwitch} from './LanguageSwitch';
 
-const primary = ['research', 'publications', 'results', 'data', 'about'] as const;
+const primary = ['research', 'results', 'data', 'about'] as const;
 function label(route: typeof NAV_ROUTES[number], locale: Locale) {
   if (route === 'data') return locale === 'pt' ? 'Dados e métodos' : 'Data & Methods';
-  if (route === 'results') return locale === 'pt' ? 'Descobertas' : 'Discoveries';
+  if (route === 'results') return locale === 'pt' ? 'Explorar resultados' : 'Explore results';
   if (route === 'about') return locale === 'pt' ? 'Instituto' : 'Institute';
   return tr(D.nav[route], locale);
 }
@@ -38,7 +38,7 @@ export function Header({locale}: {locale: Locale}) {
             <nav className="card site-menu-panel" aria-label={tr(D.moreNavigation, locale)}>
               <ul role="list">
                 <li className="menu-living"><a href={href(locale, '/resultado-vivo')}>{living}</a></li>
-                {NAV_ROUTES.map(route => (
+                {NAV_ROUTES.filter(route => route !== 'publications').map(route => (
                   <li key={route} className={primary.some(item => item === route) ? 'site-menu-primary' : undefined}>
                     <a href={href(locale, '/' + route)}>{label(route, locale)}</a>
                   </li>

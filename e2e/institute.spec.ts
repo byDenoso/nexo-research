@@ -52,7 +52,8 @@ test('measure the cover and its results navigation in Chromium', async ({page}, 
   const header = page.locator('.site-header');
   const menu = header.locator('.site-menu > summary');
   if (await menu.isVisible()) await menu.click();
-  await expect(header.getByRole('link', {name: 'Publicações'}).filter({visible: true})).toHaveAttribute('href', '/pt/publications');
+  await expect(header.getByRole('link', {name: 'Explorar resultados', exact: true})).toHaveAttribute('href', '/pt/results');
+  await expect(header.getByRole('link', {name: 'Publicações', exact: true})).toHaveCount(0);
 });
 
 test('atlas chapters, research selection and persistent catalogue sort',async({page})=>{
