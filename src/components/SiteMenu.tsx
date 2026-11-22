@@ -13,9 +13,10 @@ export function SiteMenu({locale, sections, tools}: {locale: Locale; sections: D
   const details = useRef<HTMLDetailsElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
+  const knowledge = {href: `/${locale}/conhecimento`, label: pt ? 'Atlas de conhecimento' : 'Knowledge atlas'};
   const groups = [
     {title: pt ? 'Acessos diretos' : 'Shortcuts', links: tools},
-    {title: pt ? 'Páginas' : 'Pages', links: sections},
+    {title: pt ? 'Páginas' : 'Pages', links: [...sections, knowledge]},
   ].map(group => ({...group, links: group.links.filter(item => matches(fold(item.label), query))}));
   const total = groups.reduce((n, group) => n + group.links.length, 0);
 
