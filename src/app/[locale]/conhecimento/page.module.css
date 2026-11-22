@@ -1,0 +1,21 @@
+.atlas { padding-block: clamp(2rem, 7vw, 6rem); }
+.head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.8rem; border-bottom: 2px solid var(--ink); padding-bottom: 2rem; }
+.head h1 { max-width: 16ch; font-size: clamp(2.6rem, 6.4vw, 5.8rem); line-height: 1.04; letter-spacing: -.045em; margin: 0; }
+.head p { color: var(--muted); max-width: 52ch; font-size: 1.18rem; margin-top: 1.2rem; }
+.access { display: grid; gap: .4rem; }
+.access small, .index h2 { font: 500 .88rem/1.5 var(--font-mono); color: var(--muted); }
+.body { display: grid; grid-template-columns: minmax(13rem, 1fr) minmax(0, 3fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+.index { display: grid; gap: .85rem; padding-block: 2.5rem; }
+.index a:hover { text-decoration: underline; }
+.index a:last-child { margin-top: 1rem; }
+.study { scroll-margin-top: 6rem; padding-block: 2.5rem; border-bottom: 1px solid var(--line); }
+.study h2 { max-width: 34ch; margin-block: .55rem .8rem; font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.14; }
+.study > p:not(:first-child) { max-width: 69ch; line-height: 1.65; }
+.sources { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin-top: 1rem; }
+@media (max-width: 44rem) {
+  .body { grid-template-columns: 1fr; gap: 0; }
+  .index { display: flex; flex-wrap: wrap; gap: .7rem 1rem; padding-block: 1.5rem; border-bottom: 1px solid var(--line); }
+  .index h2 { flex-basis: 100%; }
+  .index a:last-child { margin-top: 0; }
+  .study { padding-block: 1.6rem; }
+}
