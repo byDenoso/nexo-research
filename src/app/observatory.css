@@ -515,3 +515,16 @@ html:not([data-js]) .desi-activate { display: none; }
 @media (max-width: 55.99rem) {
   [data-observatory] .cover-copy > :is(h1, p, .cover-actions) { animation: none !important; }
 }
+
+@media (max-width: 40rem) {
+  html:has(.nx-home) {
+    --font-plex-sans: system-ui;
+    --font-plex-mono: ui-monospace;
+  }
+  .nx-home [data-observatory] .cover-copy h1 {
+    max-inline-size: none;
+    font-size: clamp(2.15rem, 9.8vw, 3.1rem);
+    line-height: 1.02;
+  }
+  [data-observatory] .cover-copy > p:last-of-type { font-size: .94rem; line-height: 1.48; }
+}
