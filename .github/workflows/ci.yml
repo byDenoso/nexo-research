@@ -77,7 +77,7 @@ jobs:
             import fs from "node:fs";
             for (const name of ["pt", "en", "pt-simulated", "en-simulated", "pt-baseline", "en-baseline"]) {
               const path = "lighthouse-report/" + name + ".report.json";
-              if (!fs.existsSync(path)) continue;
+              if (name.endsWith("-baseline") && !fs.existsSync(path)) continue;
               const r = JSON.parse(fs.readFileSync(path, "utf8"));
               const performance = r.categories.performance.score * 100;
               const accessibility = r.categories.accessibility.score * 100;
