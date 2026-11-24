@@ -15,8 +15,9 @@ gl_FragColor=vec4(color,a);}`;
 
 export type VolumeRenderer = { draw:(v:View)=>void; count:(v:View)=>[number,number]; dispose:()=>void };
 export async function createVolume(canvas:HTMLCanvasElement, signal:AbortSignal):Promise<VolumeRenderer>{
-  const gl=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
-  if(!gl)throw Error('WebGL unavailable');
+  const context=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+  if(!context)throw Error('WebGL unavailable');
+  const gl:WebGLRenderingContext=context;
   const path='/data/desi-erosita/';
   const data=await Promise.all(['galaxies.bin','clusters.bin'].map(async (name,i)=>{
     const response=await fetch(path+name,{signal});
