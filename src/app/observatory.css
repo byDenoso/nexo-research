@@ -529,9 +529,15 @@ html:not([data-js]) .desi-activate { display: none; }
   [data-observatory] .cover-copy > p:last-of-type { font-size: .94rem; line-height: 1.48; }
 }
 
+.desi-mobile-poster { display: none; }
 @media (max-width: 40rem) {
-  .nx-home :is(#galaxias, #perguntas, #fontes, .publication-strip) {
-    content-visibility: auto;
-    contain-intrinsic-block-size: auto 48rem;
+  .desi-stage picture { display: none; }
+  .desi-mobile-poster {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }

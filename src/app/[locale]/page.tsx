@@ -1,5 +1,3 @@
-import {readFileSync} from 'node:fs';
-import {join} from 'node:path';
 import {DesiObservatory} from '@/components/DesiObservatory';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
@@ -14,8 +12,6 @@ import {readResult, selectedIds, isNegative} from '@/lib/editorial';
 import {fmtDate, isLocale} from '@/lib/i18n';
 import {goodsSouth} from '@/lib/observations';
 import {href} from '@/lib/seo';
-
-const mobilePoster = 'data:image/webp;base64,' + readFileSync(join(process.cwd(), 'public/observatory/observatory-opening.webp')).toString('base64');
 
 export default async function Home({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -44,7 +40,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
               <Link prefetch={false} href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link>
             </div>
           </div>
-          <DesiObservatory locale={locale} mobilePoster={mobilePoster} />
+          <DesiObservatory locale={locale} />
         </div>
       </section>
       <ChapterNav locale={locale}/>
