@@ -12,3 +12,8 @@
 - Passed: TypeScript, build, private-material scan, 50 unit and 270 E2E tests. WebGL ANGLE/Vulkan SwiftShader produced 62,889 luminous pixels desktop and 71,185 mobile, zero GL errors. This is software WebGL, not hardware acceleration evidence.
 - Failed: Lighthouse PT 3178.576875 ms, EN 2637.57585 ms; performance 93/96, accessibility 100/100. Combining CSS entrypoints and removing font preload did not improve the gate. Reverted both changes; kept renderer and controls changes.
 - Next experiment: Next.js inlineCss for SSR static documents to remove the external stylesheet render-blocking round trip (Lighthouse estimated ~600 ms). This is an experimental Next option; release still requires the full regression suite and unchanged Lighthouse thresholds.
+
+## Follow-up CI #81 (e5d9013)
+- TypeScript, build, unit and E2E passed; Lighthouse failed: PT 3265.0716 ms (performance 91), EN 2715.7546 ms (performance 95); accessibility 100 both, CLS 0. External CSS requests fell to zero, yet LCP regressed further. Reverted experimental inlineCss.
+- Keep the initial CSS/font loading strategy from c9a8419, the best measured candidate (PT 2808.8908 ms, EN 2565.6116 ms), and the tested WebGL improvements. This combination must be retested; do not attribute prior measurements to the new head.
+- Production remains at 154569e. The PR must not be merged until the original release gates pass. Physical GPU and full device memory measurement remain unverified.
