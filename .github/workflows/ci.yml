@@ -40,16 +40,51 @@ jobs:
           export CHROME_PATH="$(node -e "console.log(require('@playwright/test').chromium.executablePath())")"
           npm run start -- -p 3100 > lighthouse-report/server.log 2>&1 &
           server=$!
-          trap 'kill "$server" 2>/dev/null || true' EXIT
-          for i in $(seq 1 60); do
-            if curl -fsS http://localhost:3100/pt >/dev/null; then break; fi
-            sleep 1
-          done
-          curl -fsS http://localhost:3100/pt >/dev/null
+          cleanup() {
+            kill "$server" 2>/dev/null || true
+            if [[ -n "${baseline_server:-}" ]]; then kill "$baseline_server" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+          wait_for_home() {
+            for i in $(seq 1 60); do
+              if curl -fsS "http://localhost:$1/pt" >/dev/null; then return; fi
+              sleep 1
+            done
+            return 1
+          }
+          wait_for_home 3100
+          if [[ "${GITHUB_HEAD_REF:-}" == "observatory/desi-erosita" ]]; then
+            baseline="$(mktemp -d)"
+            git fetch --depth=1 --no-tags origin 154569e2b6ab13cd612238929e3e50bed4d78f34
+            git archive FETCH_HEAD | tar -x -C "$baseline"
+            npm ci --prefix "$baseline" --no-audit --no-fund > lighthouse-report/baseline-install.log 2>&1
+            (cd "$baseline" && npm run build) > lighthouse-report/baseline-build.log 2>&1
+            (cd "$baseline" && exec npm run start -- -p 3101) > lighthouse-report/baseline-server.log 2>&1 &
+            baseline_server=$!
+            wait_for_home 3101
+          fi
+          audit() {
+            npx --yes lighthouse@13.6.0 "$1" --form-factor=mobile --throttling-method="$2" --only-categories=performance,accessibility --chrome-flags="--headless --no-sandbox" --output=json --output=html --output-path="lighthouse-report/$3" --quiet
+          }
           for lang in pt en; do
-            npx --yes lighthouse@13.6.0 "http://localhost:3100/$lang" --form-factor=mobile --only-categories=performance,accessibility --chrome-flags="--headless --no-sandbox" --output=json --output=html --output-path="lighthouse-report/$lang" --quiet
+            audit "http://localhost:3100/$lang" devtools "$lang"
+            audit "http://localhost:3100/$lang" simulate "$lang-simulated"
+            if [[ -n "${baseline_server:-}" ]]; then
+              audit "http://localhost:3101/$lang" devtools "$lang-baseline"
+            fi
           done
-          node --input-type=module -e 'import fs from "node:fs"; for (const lang of ["pt","en"]) { const r=JSON.parse(fs.readFileSync("lighthouse-report/"+lang+".report.json","utf8")); const p=r.categories.performance.score*100,a=r.categories.accessibility.score*100,l=r.audits["largest-contentful-paint"].numericValue; console.log(JSON.stringify({lang,performance:p,accessibility:a,lcpMs:l})); if(p<90||a<90||l>=2500)process.exitCode=1; }'
+          node --input-type=module -e '
+            import fs from "node:fs";
+            for (const name of ["pt", "en", "pt-simulated", "en-simulated", "pt-baseline", "en-baseline"]) {
+              const path = "lighthouse-report/" + name + ".report.json";
+              if (!fs.existsSync(path)) continue;
+              const r = JSON.parse(fs.readFileSync(path, "utf8"));
+              const performance = r.categories.performance.score * 100;
+              const accessibility = r.categories.accessibility.score * 100;
+              const lcpMs = r.audits["largest-contentful-paint"].numericValue;
+              console.log(JSON.stringify({name, method: r.configSettings.throttlingMethod, performance, accessibility, lcpMs}));
+              if ((name === "pt" || name === "en") && (performance < 90 || accessibility < 90 || lcpMs >= 2500)) process.exitCode = 1;
+            }'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
