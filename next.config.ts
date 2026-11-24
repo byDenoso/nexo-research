@@ -29,10 +29,6 @@ const config: NextConfig = {
   },
   async headers() {
     return [{
-      source: '/:locale(pt|en)',
-      has: [{type: 'header', key: 'user-agent', value: '.*(?:Mobile|Android).*'}],
-      headers: [{key: 'Link', value: '</observatory/observatory-opening.webp>; rel=preload; as=image; fetchpriority=high'}],
-    }, {
       source: '/:path*',
       headers: [
         {key: 'Content-Security-Policy', value: csp},

@@ -528,3 +528,10 @@ html:not([data-js]) .desi-activate { display: none; }
   }
   [data-observatory] .cover-copy > p:last-of-type { font-size: .94rem; line-height: 1.48; }
 }
+
+@media (max-width: 40rem) {
+  .nx-home :is(#galaxias, #perguntas, #fontes, .publication-strip) {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto 48rem;
+  }
+}

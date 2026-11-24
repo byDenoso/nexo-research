@@ -62,7 +62,7 @@ function Tool({icon, label, onClick, disabled, pressed}: {
   </button>;
 }
 
-export function DesiObservatory({locale}: {locale: Locale}) {
+export function DesiObservatory({locale, mobilePoster}: {locale: Locale; mobilePoster: string}) {
   const t = words[locale];
   const pt = locale === 'pt';
   const number = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-US');
@@ -237,7 +237,6 @@ export function DesiObservatory({locale}: {locale: Locale}) {
 
   return <figure ref={figure} className="desi-observatory" data-mode={mode} data-expanded={localFull || undefined}
     role={localFull ? 'dialog' : undefined} aria-modal={localFull || undefined} aria-labelledby="desi-title">
-    <link rel="preload" as="image" href="/observatory/observatory-opening.webp" media="(max-width: 40rem)" fetchPriority="high" />
     <div className="desi-heading">
       <h2 id="desi-title">{t.title}</h2>
       <span translate="no">DESI × eROSITA</span>
@@ -247,7 +246,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
       onKeyDown={onMapKey} onPointerDown={onPointerDown} onPointerMove={onPointerMove}
       onPointerUp={pointerUp} onPointerCancel={pointerUp} onLostPointerCapture={pointerUp}>
       <picture>
-        <source media="(max-width: 40rem)" srcSet="/observatory/observatory-opening.webp" />
+        <source media="(max-width: 40rem)" srcSet={mobilePoster} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/observatory/observatory.webp"
           srcSet="/observatory/observatory-small.webp 720w, /observatory/observatory.webp 1440w"
