@@ -359,3 +359,15 @@ html:not([data-js]) .survey-js { display: none; }
 .survey-controls button[aria-pressed="true"], .survey-controls .survey-start {background:#79d3e8;}
 .survey-controls button:focus-visible {outline:2px solid #b3e9f5;outline-offset:3px;}
 @media(prefers-reduced-motion:no-preference){.survey-controls button{transition:background-color .18s,border-color .18s,box-shadow .18s,transform .18s;}.survey-controls button:hover:not(:disabled){box-shadow:0 3px 16px #79d3e822;}.survey-controls button:active:not(:disabled){transform:scale(.97);}}
+
+/* Observatory performance: defer distant home chapters */
+/* CI #82: the 13.4 kB mobile poster is the LCP element. Preserve its eager
+   paint and defer layout/paint of distant editorial chapters, not their HTML,
+   semantics, anchors or assets. The auto intrinsic block size remembers the
+   actual measured height once rendered. Screen-only; print stays complete. */
+@media screen and (max-width: 55.99rem) {
+  .nx-home > .nx-observation { content-visibility: auto; contain-intrinsic-block-size: auto 48rem; }
+  .nx-home > .nx-more-research { content-visibility: auto; contain-intrinsic-block-size: auto 64rem; }
+  .nx-home > .publication-strip { content-visibility: auto; contain-intrinsic-block-size: auto 18rem; }
+  .nx-home > .catalogue-chapter { content-visibility: auto; contain-intrinsic-block-size: auto 32rem; }
+}
