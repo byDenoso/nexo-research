@@ -474,7 +474,7 @@ html:not([data-js]) .desi-activate { display: none; }
   border: 0;
   border-radius: 100px;
   background: linear-gradient(90deg,#466275 20%,#b8edff 48%,#466275 76%) 100% / 220% 100%;
-  animation: desi-loading-sweep 1.15s ease-in-out infinite;
+  animation: desi-loading-sweep 1.15s ease-in-out infinite !important;
 }
 
 @keyframes desi-loading-sweep { to { background-position: -100% 0; } }
@@ -484,14 +484,13 @@ html:not([data-js]) .desi-activate { display: none; }
 
 @media (prefers-reduced-motion: no-preference) {
   main [data-scroll-enter] {
-    animation: nx-section-entry 300ms var(--lab-ease) backwards;
-    animation-delay: var(--section-delay, 0ms);
+    animation: nx-section-entry 300ms var(--lab-ease) backwards !important;
+    animation-delay: var(--section-delay, 0ms) !important;
   }
   main [data-scroll-enter="1"] { --section-delay: 32ms; }
   main [data-scroll-enter="2"] { --section-delay: 64ms; }
   :is(main, .site-header, footer) :is(.btn, .icon-btn, .arrow-link, .text-link, summary, [role="tab"]) {
-    transition: color 160ms ease, background-color 170ms ease, border-color 170ms ease,
-      text-decoration-color 170ms ease, translate 220ms cubic-bezier(.2,.85,.32,1.24);
+    transition: translate 220ms cubic-bezier(.2,.85,.32,1.24);
   }
   :is(main, .site-header, footer) :is(.btn, .icon-btn, [role="tab"]):active { translate: 0 1px; }
   :is(main, .site-header, footer) :is(.arrow-link, .resource-routes a) > span[aria-hidden] {
@@ -509,5 +508,5 @@ html:not([data-js]) .desi-activate { display: none; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .desi-loading > span { animation: none; }
+  .desi-loading > span { animation: none !important; }
 }

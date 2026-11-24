@@ -82,7 +82,7 @@ test('reads in both themes and survives browsers without GPU support', async ({p
   for (const theme of ['dark','light']) {
     await expect(page.locator('html')).toHaveAttribute('data-theme',theme);
     const findings = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
-    expect(findings.violations.map(item=>item.id)).toEqual([]);
+    expect(findings.violations.map(item=>({id:item.id, targets:item.nodes.map(node=>node.target)})), theme).toEqual([]);
     if (theme==='dark') await page.locator('button.theme-toggle').click();
   }
   await page.getByRole('link',{name:'Idioma: EN'}).click();
