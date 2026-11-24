@@ -1,7 +1,9 @@
+@import './plex-fonts.css';
 @import './globals.css';
 @import './editorial.css';
 @import './research-preview.css';
 @import './institute.css';
 @import './experiments.css';
 @import './interface.css';
+@import './fit-comparison.css';
 @import './observatory.css';

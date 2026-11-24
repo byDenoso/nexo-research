@@ -1,5 +1,4 @@
 import type {Metadata, Viewport} from 'next';
-import {IBM_Plex_Mono, IBM_Plex_Sans} from 'next/font/google';
 import {notFound} from 'next/navigation';
 import type {ReactNode} from 'react';
 import '../site.css';
@@ -12,8 +11,6 @@ import {SITE_URL, pageMeta} from '@/lib/seo';
 import {BRAND_NAME, BRAND_SIGNATURE, BRAND_FULL_NAME} from '@/lib/brand';
 import {getProfile} from '@/lib/data';
 
-const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'optional', preload: false});
-const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'optional', preload: false});
 
 export const dynamicParams = false;
 export const generateStaticParams = () => LOCALES.map(locale => ({locale}));
@@ -39,7 +36,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
     ]
   };
   return (
-    <html lang={HTML_LANG[locale]} className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning data-theme="dark">
+    <html lang={HTML_LANG[locale]} suppressHydrationWarning data-theme="dark">
       <head>
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} />
