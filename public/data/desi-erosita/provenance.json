@@ -1,0 +1,48 @@
+{
+  "kind": "observational visualization, not a reconstructed matter density field",
+  "desi_catalog": "DR1 LSS v1.5 BGS_BRIGHT-21.5 NGC and SGC clustering catalogs",
+  "erosita_catalog": "eRASS1 primary v3.2, Bulbul et al. 2024",
+  "redshift": [
+    0.1,
+    0.4
+  ],
+  "declination_deg": [
+    -10,
+    10
+  ],
+  "cosmology": {
+    "H0_km_s_Mpc": 70,
+    "Omega_m": 0.3,
+    "flat": true
+  },
+  "counts": {
+    "DESI": 143633,
+    "eROSITA": 941
+  },
+  "projection": "orthographic comoving positions; principal horizontal axis, 48 degree elevation; no crossmatching",
+  "pixel_per_Mpc": 0.6104177224968944,
+  "smoothing": "Gaussian pixel display kernels only; fixed eROSITA center symbols",
+  "source_sha256": {
+    "BGS_BRIGHT-21.5_NGC_clustering.dat.fits": "b67e8e3ee579d9673089f2c9c6930b793a2bf1895f85198472fb7fc5aa392825",
+    "BGS_BRIGHT-21.5_SGC_clustering.dat.fits": "4daf878cc5bfce71c3ee67f91882bd70179643033741af1f1324bdf655c5d98f",
+    "erass1cl_primary_v3.2.fits.tgz.gz": "f9e9e8f750a2831ac68dad1fb24a028b024c00d3b5879f7a5760af81fc9a40ca"
+  },
+  "format": "3D positions in comoving Mpc, float32 x,y,z and measured/catalog redshift; no density reconstruction or crossmatch",
+  "coordinate_formula": "D_C(z)(cos DEC cos RA, cos DEC sin RA, sin DEC)",
+  "distance_range_Mpc": [
+    418.45448762450724,
+    1551.5461950951637
+  ],
+  "camera_center_Mpc": [
+    -0.6148681640625,
+    -10.98931884765625,
+    0.826904296875
+  ],
+  "initial_yaw_rad": 0.06977550044982518,
+  "initial_pitch_deg": 60,
+  "validation": "input SHA256 identical to previous rendering; counts identical; numerical integration checked against independent adaptive quadrature; Cartesian radii checked against chi",
+  "payload_sha256": [
+    "923c22e3893c2173ecbdb657af441119b44c069c27834fc39cea60bda4bbcce8",
+    "dd6ac6bc3e81b3ce3716c7384538544d61df5a528216d9c80b28254d4dc90c20"
+  ]
+}

@@ -58,7 +58,7 @@ export function CosmicCover({locale}:{locale:Locale}) {
         try {
           await cover!.querySelector('img')?.decode().catch(()=>{});
           // Give the pre-rendered scientific plate and heading priority over optional GPU decoration.
-          await new Promise<void>(resolve => setTimeout(resolve, low ? 1000 : 120));
+          await new Promise<void>(resolve => setTimeout(resolve, low ? 2800 : 120));
           if(!canRun()){initializing=false;return;}
           const mod=await import('./experiments/cosmic-renderer');
           renderer=await mod.createField();

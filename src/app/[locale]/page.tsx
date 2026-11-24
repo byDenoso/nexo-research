@@ -1,5 +1,5 @@
 import {CosmicCover} from '@/components/CosmicCover';
-import {PantheonPlate} from '@/components/PantheonPlate';
+import {SurveyVolume} from '@/components/SurveyVolume';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -30,6 +30,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
 
   return (
     <div className="nexo-editorial nx-home">
+      <link rel="preload" as="image" href="/data/desi-erosita/poster-480.webp" media="(max-width:55.99rem)" fetchPriority="high" />
       <section className="institute-cover" aria-labelledby="institute-title">
         <CosmicCover locale={locale}/>
         <div className="wrap cover-grid">
@@ -42,7 +43,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
               <Link prefetch={false} href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link>
             </div>
           </div>
-          <PantheonPlate locale={locale} />
+          <SurveyVolume locale={locale} />
         </div>
       </section>
       <ChapterNav locale={locale}/>

@@ -292,3 +292,82 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
   .site-header .institutional-wordmark .brand-signature { font-size: .625rem; }
   .site-header .institutional-wordmark .brand-descriptor { font-size: .69rem; }
 }
+
+/* The same measured point cloud as the standalone NEXO observatory. */
+.survey-volume { min-width: 0; margin: 0; color: #c8d6e3; font-variant-numeric: tabular-nums; }
+.survey-volume figcaption { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .35rem 1rem; margin-bottom: .65rem; }
+.survey-volume figcaption strong { color: #eaf1f8; font: 600 clamp(1.05rem,1.6vw,1.4rem)/1.2 var(--font-sans); letter-spacing: -.025em; }
+.survey-volume .survey-range { font: 400 .75rem/1.4 var(--font-mono); color: #b0c1d3; }
+.survey-stage { position: relative; display: grid; aspect-ratio: 16/9; background: #05070d; border-block: 1px solid #33475d; overflow: hidden; }
+.survey-stage > picture, .survey-stage > canvas { grid-area: 1 / 1; width: 100%; height: 100%; min-width: 0; min-height: 0; display: block; }
+.survey-stage img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.survey-stage canvas { visibility: hidden; }
+.survey-volume[data-backend="webgl"] .survey-stage canvas { visibility: visible; touch-action: none; cursor: grab; }
+.survey-volume[data-backend="webgl"] .survey-stage canvas:active { cursor: grabbing; }
+.survey-volume[data-backend="webgl"] .survey-stage picture { visibility: hidden; }
+.survey-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .65rem; padding-top: .6rem; }
+.survey-controls button, .survey-controls a { font: 500 .75rem/1.25 var(--font-sans); padding: .35rem .65rem; min-height: 40px; border: 1px solid #536f83; border-radius: .2rem; color: #dceaf4; background: #0b1020; display: inline-flex; align-items: center; }
+.survey-controls button:hover, .survey-controls a:hover { border-color: #79d3e8; }
+.survey-controls button[aria-pressed="true"], .survey-controls .survey-start { color: #08141c; background: #79d3e8; }
+.survey-controls button:disabled { opacity: .75; cursor: default; }
+html:not([data-js]) .survey-js { display: none; }
+.survey-legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; align-items: center; font-size: .75rem; line-height: 1.35; margin-top: .7rem; }
+.survey-legend label { min-height: 32px; display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; }
+.survey-legend input, .survey-filters input { accent-color: #79d3e8; }
+.survey-legend label:last-child input { accent-color: #f0c47c; }
+.survey-swatch { inline-size: .45rem; block-size: .45rem; background: #79d3e8; display: inline-block; flex: none; border-radius: 100%; }
+.survey-swatch.ero { background: transparent; border: 1.5px solid #f0c47c; }
+.survey-filters { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .6rem; margin: .65rem 0; }
+.survey-filters label { display: grid; gap: .15rem; color: #c8d6e3; font-size: .75rem; }
+.survey-filters input { width: 100%; min-height: 32px; }
+.survey-footer { font: 400 .75rem/1.5 var(--font-sans); color: #b0c1d3; padding-top: .65rem; }
+.survey-footer a, .survey-footer summary { color: #b3e9f5; text-underline-offset: .2em; }
+.survey-footer a { text-decoration: underline; }
+.survey-footer details p { margin-top: .6rem; }
+.survey-footer .survey-counts { margin-bottom: .35rem; font-family: var(--font-mono); }
+.survey-footer .survey-status { color: #f0c47c; }
+.survey-volume:fullscreen, .survey-volume.survey-expanded { padding: clamp(.7rem,2vw,1.8rem); background: #05070d; color: #eaf1f8; display: flex; flex-direction: column; overflow: auto; max-width: none; }
+.survey-volume.survey-expanded { position: fixed; inset: 0; z-index: 1000; }
+.survey-volume:fullscreen .survey-stage, .survey-volume.survey-expanded .survey-stage { flex: 1 0 0; min-height: 35vh; aspect-ratio: auto; }
+.pantheon-retained { border: 1px solid #33475d; padding: clamp(1rem,3vw,2rem); }
+.pantheon-retained h2 { margin-bottom: 1.2rem; }
+.pantheon-retained .volume-plate { max-width: 760px; margin-inline: auto; }
+@media(max-width: 40rem) { .survey-controls button, .survey-controls a { min-height: 44px; } }
+
+/* WCAG target-size and touch spacing; keep the footer source links readable. */
+.survey-footer summary { min-height: 32px; padding-block: .4rem; }
+.survey-footer > a { display: inline-flex; align-items: center; min-height: 32px; margin-block-start: .25rem; }
+.survey-controls button { min-width: 44px; min-height: 44px; }
+.survey-legend label { min-height: 44px; gap: .45rem; }
+.survey-legend input { width: 24px; height: 24px; }
+.survey-filters input { min-height: 44px; }
+.survey-filters { gap: .8rem; }
+@media(max-width:40rem) { .survey-footer summary, .survey-footer > a { min-height: 44px; } }
+
+/* Keep the above-the-fold layout stable even when cold connections use the font fallback. */
+@media (max-width: 55.99rem) {
+  .nx-home .cover-copy h1 { max-inline-size: 100%; text-wrap: wrap; }
+  .nx-home .cover-copy > p:last-of-type { max-inline-size: 100%; }
+  .nx-home .cover-actions { gap: .35rem .7rem; }
+}
+
+/* Instrument finish: keep the measured image independent of decorative effects. */
+.survey-stage {border-block:1px solid #33475d;box-shadow:0 14px 34px #0005;}
+.survey-volume figcaption strong {letter-spacing:-.035em;}
+.survey-credit {margin:.15rem 0;color:#b0c1d3;}
+.survey-controls button {border-radius:.45rem;background:linear-gradient(145deg,#101a29,#0b1020);}
+.survey-controls button[aria-pressed="true"], .survey-controls .survey-start {background:#79d3e8;}
+.survey-controls button:focus-visible {outline:2px solid #b3e9f5;outline-offset:3px;}
+@media(prefers-reduced-motion:no-preference){.survey-controls button{transition:background-color .18s,border-color .18s,box-shadow .18s,transform .18s;}.survey-controls button:hover:not(:disabled){box-shadow:0 3px 16px #79d3e822;}.survey-controls button:active:not(:disabled){transform:scale(.97);}}
+
+/* Observatory performance: defer distant home chapters */
+/* CI #82: the 13.4 kB mobile poster is the LCP element. Preserve its eager
+   paint and defer layout/paint of distant editorial chapters, not their HTML,
+   semantics, anchors or assets. The auto intrinsic block size remembers the
+   actual measured height once rendered. Screen-only; print stays complete. */
+@media screen and (max-width: 55.99rem) {
+  .nx-home > .nx-observation { content-visibility: auto; contain-intrinsic-block-size: auto 48rem; }
+  .nx-home > .nx-more-research { content-visibility: auto; contain-intrinsic-block-size: auto 64rem; }
+  .nx-home > .publication-strip { content-visibility: auto; contain-intrinsic-block-size: auto 18rem; }
+  .nx-home > .catalogue-chapter { content-visibility: auto; contain-intrinsic-block-size: auto 32rem; }
+}

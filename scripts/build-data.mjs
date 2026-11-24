@@ -18,3 +18,6 @@ if (new Set(dossiers.map(entry => entry.id)).size !== dossiers.length) throw new
 mkdirSync(new URL('../data/generated/', import.meta.url), {recursive: true});
 writeFileSync(new URL('../data/generated/manifest.json', import.meta.url), JSON.stringify(manifest));
 console.log(`manifest: ${manifest.results.length} results, ${manifest.results.filter(item => item.figure).length} with figure, ${approvals.length} approvals, ${dossiers.length} dossiers`);
+
+// Verify exact scientific assets and generate responsive static posters before Next compiles.
+await import('./build-desi-erosita.mjs');
