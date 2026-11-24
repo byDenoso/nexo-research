@@ -510,3 +510,8 @@ html:not([data-js]) .desi-activate { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .desi-loading > span { animation: none !important; }
 }
+
+/* Keep the first mobile viewport settled while its font faces are loading. */
+@media (max-width: 55.99rem) {
+  [data-observatory] .cover-copy > :is(h1, p, .cover-actions) { animation: none !important; }
+}

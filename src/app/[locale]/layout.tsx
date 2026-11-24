@@ -12,8 +12,8 @@ import {SITE_URL, pageMeta} from '@/lib/seo';
 import {BRAND_NAME, BRAND_SIGNATURE, BRAND_FULL_NAME} from '@/lib/brand';
 import {getProfile} from '@/lib/data';
 
-const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'swap', preload: false});
-const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'swap', preload: false});
+const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'optional', preload: false});
+const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'optional', preload: false});
 
 export const dynamicParams = false;
 export const generateStaticParams = () => LOCALES.map(locale => ({locale}));
