@@ -9,7 +9,6 @@ export function MotionObserver() {
   useEffect(() => {
     const root = document.documentElement;
     const main = document.querySelector('main');
-    const isPublication = pathname.split('/')[2] === 'publications';
     root.dataset.labMotion = '';
     const nav = document.querySelectorAll<HTMLAnchorElement>('.primary-nav a, .header-living');
     for (const link of nav) {
@@ -47,37 +46,38 @@ export function MotionObserver() {
     }
 
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    const running = new Set<{stop: () => void}>();
     let observer: IntersectionObserver | undefined;
-    let generation = 0;
-    main?.querySelectorAll<HTMLElement>('[data-inview=""]').forEach(el => {el.dataset.inview = 'in';});
-    async function observe() {
-      const version = ++generation;
+    const visited = new Set<HTMLElement>();
+    const selector = '.section-masthead, .nx-observation > div, .nx-lead-copy, .section-heading, .model-lab > header, .research-question h2, .prose-nx h2, .record-block h2, .nx-index-title, .motion-reveal, .inst-log h2, .inst-projects h2, .family-section-title, .atlas-intro h2, .publication-strip, .bibliography > li, .external-references > header, .project-row, .story-steps article, .journal-stories > article, .page-body > section > h2';
+
+    function observe() {
       observer?.disconnect();
-      running.forEach(a => a.stop());
-      running.clear();
-      if (isPublication || motion.matches || !main || !('IntersectionObserver' in window)) return;
-      const {animate} = await import('motion/mini');
-      if (version !== generation) return;
+      if (motion.matches) {
+        for (const element of visited) delete element.dataset.scrollEnter;
+        return;
+      }
+      if (!main || !('IntersectionObserver' in window)) return;
       observer = new IntersectionObserver(entries => {
-        entries.filter(entry => entry.isIntersecting).forEach((entry, i) => {
-          observer?.unobserve(entry.target);
-          const result = animate(entry.target as HTMLElement, {transform: ['translateY(7px)', 'translateY(0)']},
-            {duration: .32, delay: Math.min(i, 2) * .035, ease: [.22, .72, .25, 1]});
-          running.add(result);
-          void result.then(() => running.delete(result));
-        });
-      }, {threshold: .08});
-      const selector = '.section-masthead, .nx-observation > div, .nx-lead-copy, .section-heading, .model-lab > header, .research-question h2, .prose-nx h2, .record-block h2, .nx-index-title, .source-access-section h2, .inst-log h2, .inst-projects h2, .family-section-title, .atlas-intro h2';
-      main.querySelectorAll(selector).forEach(element => observer?.observe(element));
+        let stagger = 0;
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const element = entry.target as HTMLElement;
+          observer?.unobserve(element);
+          visited.add(element);
+          element.dataset.scrollEnter = String(Math.min(stagger++, 2));
+        }
+      }, {threshold: 0, rootMargin: '0px 0px -3% 0px'});
+      for (const element of main.querySelectorAll<HTMLElement>(selector)) {
+        if (!visited.has(element) && element.getBoundingClientRect().top >= window.innerHeight) observer.observe(element);
+      }
     }
-    void observe();
+
+    observe();
     motion.addEventListener('change', observe);
     return () => {
-      generation++;
       motion.removeEventListener('change', observe);
       observer?.disconnect();
-      running.forEach(a => a.stop());
+      for (const element of visited) delete element.dataset.scrollEnter;
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);

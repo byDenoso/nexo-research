@@ -103,3 +103,16 @@ test.describe('the server document without scripts', () => {
     await expect(page.locator('#expansao-em-etapas table')).toBeVisible();
   });
 });
+
+test('section motion starts on entry and respects reduced motion', async ({page}) => {
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  await page.goto('/pt/data');
+  const source = page.locator('.source-access-section');
+  await expect(source).not.toHaveAttribute('data-scroll-enter', /./);
+  await source.scrollIntoViewIfNeeded();
+  await expect(source).toHaveAttribute('data-scroll-enter', /^[0-2]$/);
+  expect(await source.evaluate(node => getComputedStyle(node).animationName)).toBe('nx-section-entry');
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await expect(source).not.toHaveAttribute('data-scroll-enter', /./);
+  await expect(source.getByRole('heading', {name:'Fontes de dados e software'})).toBeVisible();
+});

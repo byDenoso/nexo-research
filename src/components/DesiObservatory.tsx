@@ -69,7 +69,6 @@ export function DesiObservatory({locale}: {locale: Locale}) {
   const zNumber = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   const figure = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const poster = useRef<HTMLImageElement>(null);
   const observer = useRef<Observatory>(null);
   const start = useRef<() => void>(() => {});
   const pointers = useRef(new Map<number, {x: number; y: number}>());
@@ -88,9 +87,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     const frame = figure.current!;
     const abort = new AbortController();
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const saveData = (navigator as Navigator & {connection?: {saveData: boolean}}).connection?.saveData;
-    let timer = 0, started = false, visible = false;
-    let posterReady = false;
+    let started = false;
 
     const fail = () => {
       observer.current = null;
@@ -103,7 +100,6 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     const begin = async () => {
       if (started || abort.signal.aborted) return;
       started = true;
-      clearTimeout(timer);
       setMode('loading');
       try {
         const {mountObservatory} = await import('./experiments/observatory-renderer');
@@ -124,27 +120,9 @@ export function DesiObservatory({locale}: {locale: Locale}) {
       }
     };
 
-    function schedule() {
-      clearTimeout(timer);
-      if (posterReady && visible && !started && !motion.matches && !saveData) {
-        timer = window.setTimeout(begin, 1200);
-      }
-    }
-
     start.current = begin;
-    const intersection = new IntersectionObserver(([entry]) => {
-      visible = Boolean(entry?.isIntersecting);
-      schedule();
-    }, {threshold: 0.05});
-    intersection.observe(host);
-    void poster.current?.decode().catch(() => {}).then(() => {
-      posterReady = true;
-      if (!abort.signal.aborted) schedule();
-    });
-
     const onMotion = () => {
       if (motion.matches) setPlaying(false);
-      schedule();
     };
     const onFullscreen = () => setExpanded(document.fullscreenElement === frame);
     motion.addEventListener('change', onMotion);
@@ -157,8 +135,6 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     host.addEventListener('wheel', wheel, {passive: false});
     return () => {
       abort.abort();
-      clearTimeout(timer);
-      intersection.disconnect();
       motion.removeEventListener('change', onMotion);
       document.removeEventListener('fullscreenchange', onFullscreen);
       host.removeEventListener('wheel', wheel);
@@ -271,7 +247,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
       onPointerUp={pointerUp} onPointerCancel={pointerUp} onLostPointerCapture={pointerUp}>
       {/* The static poster is also the first meaningful paint on clients without WebGL. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img ref={poster} src="/observatory/observatory.webp"
+      <img src="/observatory/observatory.webp"
         srcSet="/observatory/observatory-small.webp 720w, /observatory/observatory.webp 1440w"
         sizes="(min-width: 78rem) 730px, (min-width: 56rem) 58vw, 92vw" width="1440" height="810"
         fetchPriority="high" loading="eager" alt={t.preview} aria-hidden={live || undefined} />

@@ -152,6 +152,7 @@ test('WebGL unavailable retains the true poster and catalogue counts without fet
   const requests: string[] = [];
   page.on('request', request => { if (request.url().endsWith('.bin')) requests.push(request.url()); });
   await page.goto('/en');
+  await page.getByRole('button', {name: 'Enable 3D'}).click();
   await expect(page.getByText('Static preview. The 3D view is unavailable on this device.')).toBeVisible();
   const stage = page.locator('.desi-stage');
   await expect(stage.getByRole('img')).toBeVisible();

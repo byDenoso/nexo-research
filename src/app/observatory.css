@@ -365,7 +365,6 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
 }
 .desi-stage-status .desi-activate:hover { background: #153047; box-shadow: 0 0 1rem #6edeff25; }
 .desi-loading { display: flex; align-items: center; gap: .5rem; }
-.desi-loading > span { width: .75rem; height: .75rem; border: 1px solid #6595aa; border-top-color: var(--desi-cyan); border-radius: 50%; animation: desi-spin 900ms linear infinite; }
 .desi-console { display: grid; gap: .35rem; margin-block: .45rem .3rem; }
 .desi-layers { display: grid; grid-template-columns: 1fr 1fr; gap: .35rem; }
 .desi-layer {
@@ -446,7 +445,6 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
 .pantheon-archive .volume-plate { background: #0b1020; color: #d9e8f3; border: 1px solid #435b70; border-radius: .35rem; }
 .pantheon-archive .volume-plate :focus-visible { outline: 2px solid #b3e9f5; outline-offset: 2px; }
 
-@keyframes desi-spin { to { rotate: 360deg; } }
 @keyframes desi-fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 @media (min-width: 56rem) {
@@ -463,4 +461,52 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
   [data-observatory] .cover-actions a, .desi-stage[data-backend] canvas, .desi-tool, .desi-layer, .desi-stage-status *, .desi-loading > span {
     animation: none; transition: none; translate: none;
   }
+}
+
+.institute-cover[data-observatory]:has(.desi-observatory[data-expanded="true"]) {
+  z-index: 100;
+  overflow: visible;
+}
+.desi-loading > span {
+  width: 1.35rem;
+  height: .44rem;
+  border: 0;
+  border-radius: 100px;
+  background: linear-gradient(90deg,#466275 20%,#b8edff 48%,#466275 76%) 100% / 220% 100%;
+  animation: desi-loading-sweep 1.15s ease-in-out infinite;
+}
+
+@keyframes desi-loading-sweep { to { background-position: -100% 0; } }
+@keyframes nx-section-entry { from { translate: 0 7px; } to { translate: none; } }
+
+:is(main, .site-header, footer) :is(.btn, .icon-btn, .arrow-link, .text-link, summary, [role="tab"]) { -webkit-tap-highlight-color: #58abd62e; }
+
+@media (prefers-reduced-motion: no-preference) {
+  main [data-scroll-enter] {
+    animation: nx-section-entry 300ms var(--lab-ease) backwards;
+    animation-delay: var(--section-delay, 0ms);
+  }
+  main [data-scroll-enter="1"] { --section-delay: 32ms; }
+  main [data-scroll-enter="2"] { --section-delay: 64ms; }
+  :is(main, .site-header, footer) :is(.btn, .icon-btn, .arrow-link, .text-link, summary, [role="tab"]) {
+    transition: color 160ms ease, background-color 170ms ease, border-color 170ms ease,
+      text-decoration-color 170ms ease, translate 220ms cubic-bezier(.2,.85,.32,1.24);
+  }
+  :is(main, .site-header, footer) :is(.btn, .icon-btn, [role="tab"]):active { translate: 0 1px; }
+  :is(main, .site-header, footer) :is(.arrow-link, .resource-routes a) > span[aria-hidden] {
+    display: inline-block;
+    transition: translate 210ms cubic-bezier(.2,.85,.32,1.24);
+  }
+  :is(main, .site-header, footer) :is(.arrow-link, .resource-routes a):focus-visible > span[aria-hidden] { translate: .2rem 0; }
+  html:has(:is(.chapter-nav, .methods-index, .research-index, .resource-routes, .about-layout nav) a[href^="#"]:focus):not(:has(.data-mention:target)) {
+    scroll-behavior: smooth !important;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    :is(main, .site-header, footer) :is(.btn, .icon-btn):enabled:hover { translate: 0 -1px; }
+    :is(main, .site-header, footer) :is(.arrow-link, .resource-routes a):hover > span[aria-hidden] { translate: .2rem 0; }
+    :is(main, .site-header, footer) .text-link:hover { text-decoration-color: currentColor; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .desi-loading > span { animation: none; }
 }
