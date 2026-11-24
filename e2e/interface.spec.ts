@@ -52,9 +52,9 @@ test('the page menu finds accented destinations, handles touch, Escape and direc
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
 });
 
-test('the cover histogram uses all ten catalogue bins, has keyboard selection and an accessible table', async ({page,isMobile}) => {
+test('the Pantheon+ histogram uses all ten catalogue bins, has keyboard selection and an accessible table', async ({page,isMobile}) => {
   await page.setViewportSize({width:isMobile ? 295 : 1440,height:850});
-  await page.goto('/pt');
+  await page.goto('/pt/data');
   const plate = page.locator('.volume-plate');
   await plate.getByRole('button', {name:'Redshift'}).click();
   const slider = plate.getByRole('slider');

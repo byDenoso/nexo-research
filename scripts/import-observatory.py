@@ -1,0 +1,68 @@
+"""Extract the supplied observational bytes and render the static preview."""
+import base64
+import hashlib
+import json
+import math
+import re
+import sys
+from pathlib import Path
+
+import numpy as np
+from PIL import Image
+from scipy.ndimage import gaussian_filter
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT = ROOT / "public" / "observatory"
+OUT.mkdir(exist_ok=True)
+source = Path(sys.argv[1]).read_bytes()
+payload = json.loads(re.search(rb"const PAYLOAD=(\{[^\n]+\});", source).group(1))
+meta = payload["meta"]
+positions = []
+files = []
+for i, (name, key, label) in enumerate((
+    ("desi", "galaxies", "DESI"), ("erosita", "clusters", "eROSITA")
+)):
+    raw = base64.b64decode(payload[key], validate=True)
+    assert hashlib.sha256(raw).hexdigest() == meta["payload_sha256"][i]
+    values = np.frombuffer(raw, dtype="<f4").reshape(-1, 4)
+    assert len(values) == meta["counts"][label] and np.isfinite(values).all()
+    # Keep each shard aligned to the original x/y/z/redshift records.
+    paths = []
+    for start in range(0, len(raw), 574544):
+        path = f"{name}-{meta['payload_sha256'][i][:12]}-{len(paths)}.bin"
+        (OUT / path).write_bytes(raw[start:start + 574544])
+        paths.append(path)
+    files.append(paths)
+    positions.append(values[:, :3].astype(np.float64) - meta["camera_center_Mpc"])
+
+yaw = meta["initial_yaw_rad"]
+pitch = math.radians(meta["initial_pitch_deg"])
+right = np.array([math.cos(yaw), math.sin(yaw), 0])
+up = np.array([-math.sin(yaw) * math.cos(pitch), math.cos(yaw) * math.cos(pitch), math.sin(pitch)])
+projected = [(p @ right, p @ up) for p in positions]
+bounds = [max(np.abs(p[i]).max() for p in projected) for i in range(2)]
+width, height = 1440, 810
+scale = min(width * .94 / (2 * bounds[0]), height * .92 / (2 * bounds[1]))
+image = np.broadcast_to([5, 7, 13], (height, width, 3)).astype(np.float32).copy()
+for layer, (x, y) in enumerate(projected):
+    px = np.rint(width / 2 + x * scale).astype(int)
+    py = np.rint(height / 2 - y * scale).astype(int)
+    points = np.zeros((height, width), dtype=np.float32)
+    np.add.at(points, (py, px), 1.0)
+    if layer == 0:
+        glow = gaussian_filter(points, 1.2) * .18
+        density = gaussian_filter(points, .46) * .41 + glow
+        image += (1 - np.exp(-density[:, :, None])) * [62, 181, 229]
+    else:
+        halo = gaussian_filter(points, 1.45) * 3.5
+        core = gaussian_filter(points, .59) * 1.28
+        image += (1 - np.exp(-(halo + core)[:, :, None])) * [246, 163, 66]
+poster = Image.fromarray(np.uint8(np.clip(image, 0, 255)))
+poster.save(OUT / "observatory.webp", quality=84, method=6)
+poster.resize((720, 405), Image.Resampling.LANCZOS).save(OUT / "observatory-small.webp", quality=82, method=6)
+manifest = dict(meta, source_html_sha256=hashlib.sha256(source).hexdigest(),
+                parts=files, display_half_extents_Mpc=[float(v) for v in bounds],
+                poster_sha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in OUT.glob("*.webp")})
+(OUT / "provenance.json").write_text(json.dumps(manifest, indent=2) + "\n")
+print(json.dumps({"counts": meta["counts"], "camera_pitch_deg": meta["initial_pitch_deg"],
+                  "payloads": meta["payload_sha256"], "html": manifest["source_html_sha256"]}, indent=2))

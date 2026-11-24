@@ -1,5 +1,4 @@
-import {CosmicCover} from '@/components/CosmicCover';
-import {PantheonPlate} from '@/components/PantheonPlate';
+import {DesiObservatory} from '@/components/DesiObservatory';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -30,8 +29,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
 
   return (
     <div className="nexo-editorial nx-home">
-      <section className="institute-cover" aria-labelledby="institute-title">
-        <CosmicCover locale={locale}/>
+      <section className="institute-cover" data-observatory aria-labelledby="institute-title">
         <div className="wrap cover-grid">
           <div className="cover-copy">
             <p className="cover-label">{pt ? 'Cosmologia observacional' : 'Observational cosmology'}</p>
@@ -42,7 +40,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
               <Link prefetch={false} href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link>
             </div>
           </div>
-          <PantheonPlate locale={locale} />
+          <DesiObservatory locale={locale} />
         </div>
       </section>
       <ChapterNav locale={locale}/>

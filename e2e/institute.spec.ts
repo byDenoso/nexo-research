@@ -31,10 +31,10 @@ test('measure the cover and its results navigation in Chromium', async ({page}, 
       m=>{window.nexoLab[name]=m.value;},{reportAllChanges:true,durationThreshold:16});})();`});
   await page.goto('/pt');
   await page.waitForLoadState('networkidle');
-  await page.locator('.volume-plate summary').click();
-  await expect(page.locator('.volume-plate details')).toHaveAttribute('open','');
+  await page.locator('.desi-observatory summary').click();
+  await expect(page.locator('.desi-observatory details')).toHaveAttribute('open','');
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(()=>requestAnimationFrame(()=>resolve(true)))));
-  await page.locator('.volume-plate summary').press('Enter');
+  await page.locator('.desi-observatory summary').press('Enter');
   await page.waitForFunction(()=>Object.keys((window as Window & {nexoLab?:object}).nexoLab ?? {}).length === 3);
   const metrics = await page.evaluate(() => (window as Window & {nexoLab?: unknown}).nexoLab);
   console.log('NEXO lab sample', info.project.name, JSON.stringify(metrics));

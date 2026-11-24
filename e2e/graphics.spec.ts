@@ -1,34 +1,5 @@
 import {expect, test} from '@playwright/test';
 
-test('the cover adds optional motion while scientific values are present immediately', async ({page}) => {
-  await page.emulateMedia({reducedMotion: 'no-preference'});
-  await page.goto('/pt');
-  const title = page.getByRole('heading', {level: 1, name: 'O Universo sob teste.'});
-  await expect(title).toBeVisible();
-  expect(await title.evaluate(node => getComputedStyle(node).animationName)).toBe('cover-enter');
-  await expect(page.locator('.cover-actions a').first()).toHaveText(/Explorar resultados/);
-  await expect(page.locator('.journal-erosita output')).toHaveText('2,18 σ');
-  const gpu=await page.evaluate(()=>{
-    const gl=document.createElement('canvas').getContext('webgl2');
-    gl?.getExtension('WEBGL_lose_context')?.loseContext();
-    return !!gl;
-  });
-  if(gpu){
-    const field=page.locator('.cosmic-field'), canvas=field.locator('canvas');
-    await expect(canvas).toBeVisible();
-    const pixels=await canvas.evaluate(el=>(el as HTMLCanvasElement).width*(el as HTMLCanvasElement).height);
-    expect(pixels).toBeLessThanOrEqual(151000);
-    await page.getByRole('button',{name:'Pausar fundo'}).press('Enter');
-    await expect(field).toHaveAttribute('data-running','false');
-    await page.getByRole('button',{name:'Ativar fundo'}).press('Enter');
-    await expect(field).toHaveAttribute('data-running','true');
-  }
-  await page.emulateMedia({reducedMotion:'reduce'});
-  await expect(page.locator('.cosmic-field canvas:visible')).toHaveCount(0);
-  await expect(page.getByRole('button',{name:'Pausar fundo'})).toHaveCount(0);
-  expect(await title.evaluate(node=>getComputedStyle(node).animationName)).toBe('none');
-});
-
 test('figures are complete and sit on the published values', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/pt');
