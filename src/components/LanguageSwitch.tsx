@@ -7,7 +7,7 @@ export function LanguageSwitch({locale}:{locale:Locale}) {
   const target=locale==='pt'?'en':'pt';
   const current=usePathname();
   const path=current.replace(/^\/(?:pt|en)(?=\/|$)/,'/'+target);
-  return <Link href={path} hrefLang={target==='pt'?'pt-BR':'en'} lang={target==='pt'?'pt-BR':'en'}
+  return <Link prefetch={false} href={path} hrefLang={target==='pt'?'pt-BR':'en'} lang={target==='pt'?'pt-BR':'en'}
     className="btn header-control language-switch" aria-label={(locale==='pt'?'Idioma':'Language')+': '+target.toUpperCase()}
     onClick={event=>{
       if(window.location.search||window.location.hash){

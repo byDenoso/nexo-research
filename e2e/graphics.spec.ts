@@ -3,7 +3,7 @@ import {expect, test} from '@playwright/test';
 test('the cover adds optional motion while scientific values are present immediately', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/pt');
-  const title = page.getByRole('heading', {level: 1, name: 'Como o Universo se expande?'});
+  const title = page.getByRole('heading', {level: 1, name: 'O Universo sob teste.'});
   await expect(title).toBeVisible();
   expect(await title.evaluate(node => getComputedStyle(node).animationName)).toBe('cover-enter');
   await expect(page.locator('.cover-actions a').first()).toHaveText(/Explorar resultados/);

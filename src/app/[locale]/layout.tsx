@@ -8,6 +8,7 @@ import '../research-preview.css';
 import '../institute.css';
 import '../experiments.css';
 import '../interface.css';
+import '../observatory.css';
 import {Footer} from '@/components/Footer';
 import {Header} from '@/components/Header';
 import {MotionObserver} from '@/components/Motion';
@@ -17,11 +18,11 @@ import {SITE_URL, pageMeta} from '@/lib/seo';
 import {getProfile} from '@/lib/data';
 
 const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'swap'});
-const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'swap'});
+const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'swap', preload: false});
 
 export const dynamicParams = false;
 export const generateStaticParams = () => LOCALES.map(locale => ({locale}));
-export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#02050b'}, {media: '(prefers-color-scheme: light)', color: '#ffffff'}]};
+export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#05070d'}, {media: '(prefers-color-scheme: light)', color: '#05070d'}]};
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
@@ -29,7 +30,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
   return {metadataBase: new URL(SITE_URL), ...pageMeta(locale, '', 'NEXO Research Institute', tr(D.tagline, locale)), title: {default: 'NEXO Research Institute', template: '%s · NEXO Research Institute'}};
 }
 
-const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s==='dark'||s==='light'?s:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}`;
+const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s==='dark'||s==='light'?s:'dark';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}`;
 
 export default async function LocaleLayout({children, params}: {children: ReactNode; params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -43,7 +44,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
     ]
   };
   return (
-    <html lang={HTML_LANG[locale]} className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning data-theme="light">
+    <html lang={HTML_LANG[locale]} className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning data-theme="dark">
       <head>
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} />
