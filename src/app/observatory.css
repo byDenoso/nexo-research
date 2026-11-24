@@ -242,6 +242,8 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
 
 /* NEXO institutional lockup: the orbital mark and existing Plex fonts stay unchanged. */
 .institutional-wordmark { flex: none; }
+/* Neutralize the legacy single-span wordmark opacity at every level of the new lockup. */
+.institutional-wordmark span { opacity: 1; margin-inline: 0; font-weight: inherit; }
 .institutional-wordmark .brand-lockup {
   display: grid;
   gap: .2rem;

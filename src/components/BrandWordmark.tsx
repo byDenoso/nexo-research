@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import type {Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
-import {BRAND_FULL_NAME} from '@/lib/brand';
 
 export function BrandWordmark({locale}: {locale: Locale}) {
   return (
-    <Link href={href(locale)} prefetch={false} className="wordmark institutional-wordmark" aria-label={BRAND_FULL_NAME}>
+    <Link href={href(locale)} prefetch={false} className="wordmark institutional-wordmark" lang="en">
       <span className="brand-lockup">
         <span className="brand-main">
           <span className="brand-nexo">NEXO</span>

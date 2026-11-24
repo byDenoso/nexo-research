@@ -34,6 +34,8 @@ for (const locale of ['pt', 'en'] as const) {
       const lockup = header.locator('.brand-signature');
       await expect(lockup).toBeVisible();
       await expect(lockup).toHaveText(signature);
+      expect(await header.locator('.institutional-wordmark span').evaluateAll(nodes => nodes.map(node => getComputedStyle(node).opacity))).not.toContain('0.45');
+      expect(await header.locator('.institutional-wordmark .brand-nexo').evaluate(node => getComputedStyle(node).fontWeight)).toBe('600');
       expect(await header.evaluate(node => node.getBoundingClientRect().height)).toBeLessThanOrEqual(80);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
       const mark = await lockup.boundingBox();
@@ -58,7 +60,6 @@ for (const locale of ['pt', 'en'] as const) {
     }
     const image = await request.get('/opengraph-image');
     expect(image.ok()).toBeTruthy();
-    const path = info.outputPath('social-' + locale + '.png');
     await info.attach('social-' + locale, {body: await image.body(), contentType: 'image/png'});
   });
 }
