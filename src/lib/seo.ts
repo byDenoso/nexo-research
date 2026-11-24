@@ -1,4 +1,5 @@
 import type {Metadata} from 'next';
+import {BRAND_FULL_NAME} from './brand.ts';
 import {HTML_LANG, LOCALES, OG_LOCALE, type Locale} from './i18n.ts';
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nexoresearch.org';
@@ -10,7 +11,7 @@ export function pageMeta(locale: Locale, path: string, title: string, descriptio
   return {
     title, description,
     alternates: {canonical: `${SITE_URL}${href(locale, path)}`, languages: {...languages, 'x-default': `${SITE_URL}${href('pt', path)}`}},
-    openGraph: {title, description, url: `${SITE_URL}${href(locale, path)}`, siteName: 'NEXO Research Institute', locale: OG_LOCALE[locale], type: 'website', images: [{url: SITE_URL + '/opengraph-image', width: 1200, height: 630, alt: 'NEXO Research Institute'}]},
+    openGraph: {title, description, url: `${SITE_URL}${href(locale, path)}`, siteName: BRAND_FULL_NAME, locale: OG_LOCALE[locale], type: 'website', images: [{url: SITE_URL + '/opengraph-image', width: 1200, height: 630, alt: BRAND_FULL_NAME}]},
     twitter: {card: 'summary_large_image', title, description, images: [SITE_URL + '/opengraph-image']}
   };
 }

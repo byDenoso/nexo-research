@@ -239,3 +239,56 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
 @media (prefers-reduced-motion: no-preference) {
   .cover-copy > :is(h1,p,.cover-actions) { animation-duration: .18s !important; animation-delay: 0ms !important; }
 }
+
+/* NEXO institutional lockup: the orbital mark and existing Plex fonts stay unchanged. */
+.institutional-wordmark { flex: none; }
+/* Neutralize the legacy single-span wordmark opacity at every level of the new lockup. */
+.institutional-wordmark span { opacity: 1; margin-inline: 0; font-weight: inherit; }
+.institutional-wordmark .brand-lockup {
+  display: grid;
+  gap: .2rem;
+  color: inherit;
+  min-inline-size: 0;
+}
+.institutional-wordmark .brand-main {
+  display: flex;
+  align-items: baseline;
+  gap: .42rem;
+  color: inherit;
+  white-space: nowrap;
+}
+.institutional-wordmark .brand-nexo { color: inherit; font: inherit; }
+.institutional-wordmark .brand-descriptor,
+.institutional-wordmark .brand-institute {
+  font: 500 .75rem/1.1 var(--font-sans);
+  letter-spacing: 0;
+  color: inherit;
+}
+.institutional-wordmark .brand-signature {
+  font: 400 .6875rem/1.25 var(--font-sans);
+  letter-spacing: .01em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.institutional-wordmark .brand-signature strong {
+  font-weight: 600;
+  color: var(--accent);
+}
+.site-header .institutional-wordmark .brand-signature,
+.site-footer .institutional-wordmark .brand-signature { color: #b0c1d3; }
+.site-header .institutional-wordmark .brand-signature strong,
+.site-footer .institutional-wordmark .brand-signature strong { color: #79d3e8; }
+.site-footer .institutional-wordmark .brand-signature { font-size: .82rem; }
+@media (max-width: 35rem) {
+  .site-header .institutional-wordmark { font-size: 1.45rem; gap: .3rem; }
+  .site-header .institutional-wordmark .brand-main { gap: .35rem; }
+  .site-header .institutional-wordmark .brand-institute { display: none; }
+  .site-header .institutional-wordmark .brand-signature { font-size: .65rem; }
+  /* The full destination remains in the keyboard-accessible SiteMenu. */
+  body .site-header .header-living, body:has(.nexo-editorial) .site-header .header-living { display: none; }
+}
+@media (max-width: 23rem) {
+  .site-header .institutional-wordmark { font-size: 1.3rem; gap: .2rem; }
+  .site-header .institutional-wordmark .brand-signature { font-size: .625rem; }
+  .site-header .institutional-wordmark .brand-descriptor { font-size: .69rem; }
+}

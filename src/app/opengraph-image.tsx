@@ -1,8 +1,9 @@
 import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {ImageResponse} from 'next/og';
+import {BRAND_FULL_NAME} from '@/lib/brand';
 
-export const alt = 'NEXO Research Institute · Computational and observational cosmology';
+export const alt = BRAND_FULL_NAME;
 export const size = {width: 1200, height: 630};
 export const contentType = 'image/png';
 
@@ -15,7 +16,7 @@ export default async function Image() {
   const background = `data:image/jpeg;base64,${field.toString('base64')}`;
   const mark = `data:image/svg+xml;base64,${Buffer.from(icon.replace('color="#0033a0"', 'color="#f7f6f2"')).toString('base64')}`;
   return new ImageResponse(
-    <div style={{position: 'relative', width: '100%', height: '100%', display: 'flex', background: '#02050b', color: '#f7f6f2', fontFamily: 'sans-serif'}}>
+    <div style={{position: 'relative', width: '100%', height: '100%', display: 'flex', background: '#05070d', color: '#eaf1f8', fontFamily: 'sans-serif'}}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={background} alt="" width={1200} height={800} style={{position: 'absolute', top: -120, left: 0, objectFit: 'cover'}} />
       <div style={{position: 'absolute', top: 0, left: 0, width: 1200, height: 630, display: 'flex', background: 'linear-gradient(to top, #02050b 0%, rgba(2,5,11,0.86) 36%, rgba(2,5,11,0.35) 100%)'}} />
@@ -27,9 +28,9 @@ export default async function Image() {
         </div>
         <div style={{display: 'flex', flexDirection: 'column', gap: 22}}>
           <div style={{fontSize: 18, letterSpacing: 5, color: '#cfdcff'}}>INDEPENDENT COSMOLOGY RESEARCH</div>
-          <div style={{display: 'flex', flexDirection: 'column', fontSize: 84, fontWeight: 400, letterSpacing: -3, lineHeight: 1}}>
-            <span>Cosmic expansion</span>
-            <span>and dark energy</span>
+          <div style={{display: 'flex', flexDirection: 'column', fontSize: 76, fontWeight: 400, letterSpacing: -2, lineHeight: 1.06}}>
+            <div style={{display: 'flex'}}><span style={{color: '#79d3e8', fontWeight: 600}}>N</span><span>ature,</span></div>
+            <div style={{display: 'flex', alignItems: 'baseline'}}><span style={{color: '#79d3e8', fontWeight: 600}}>Ex</span><span>ploration&nbsp;&amp;&nbsp;</span><span style={{color: '#79d3e8', fontWeight: 600}}>O</span><span>rigins</span></div>
           </div>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 36, marginTop: 18, borderTop: '1px solid #ffffff38', paddingTop: 17}}>
             <span style={{fontSize: 23}}>nexoresearch.org</span>
