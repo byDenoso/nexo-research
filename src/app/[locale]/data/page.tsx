@@ -1,3 +1,4 @@
+import {PantheonPlate} from '@/components/PantheonPlate';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {BibtexButton} from '@/components/Bibtex';
@@ -45,6 +46,10 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
           <Link href={href(locale, '/code')}>{pt ? 'Código e reprodução' : 'Code and reproduction'} <span>→</span></Link>
         </nav>
         <ScienceAtlas locale={locale} />
+        <section id="pantheon-volume" className="institute-cover pantheon-retained" aria-labelledby="pantheon-volume-title">
+          <h2 id="pantheon-volume-title">{pt ? 'Volume de supernovas Pantheon+' : 'Pantheon+ supernova volume'}</h2>
+          <PantheonPlate locale={locale} />
+        </section>
         <DataSequence locale={locale} />
         <section className="source-access-section motion-reveal" aria-labelledby="public-sources">
           <div><p className="kicker">{locale === 'pt' ? 'Arquivos científicos' : 'Scientific archives'}</p><h2 id="public-sources">{locale === 'pt' ? 'Fontes de dados e software' : 'Data sources and software'}</h2><p>{locale === 'pt' ? 'Acesse os arquivos originais das colaborações e o código público do NEXO. Uma menção no manifesto não constitui prova de utilização de um release específico.' : 'Access original collaboration archives and NEXO public code. A mention in the manifest is not proof that a particular release was used.'}</p></div>
