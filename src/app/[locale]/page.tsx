@@ -50,8 +50,8 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <div className="nx-lead-copy">
           <p className="nx-eyebrow">{pt ? 'Cosmologia observacional / Supernovas Ia' : 'Observational cosmology / Type Ia supernovae'}</p>
           <h2 id="cover-title">{pt ? 'Supernovas próximas pesam no ajuste da energia escura' : 'Nearby supernovae carry weight in the dark-energy fit'}</h2>
-          <p className="nx-deck"><RedshiftFinding locale={locale} /></p>
           {lead && <p className="nx-status"><StatusBadge status={lead.status} locale={locale} /> {pt ? 'Validação independente pendente' : 'Independent validation pending'}</p>}
+          <p className="nx-deck"><RedshiftFinding locale={locale} /></p>
           <RedshiftLimit locale={locale} />
           <div className="nx-actions">
             <Link className="nx-primary" href={href(locale, '/results/' + redshiftSlug)}>{pt ? 'Comparar os cortes de redshift' : 'Compare the redshift cuts'} <span aria-hidden="true">→</span></Link>

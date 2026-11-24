@@ -31,8 +31,33 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: End-to-end and accessibility
         run: npx playwright test
+      - name: Observatory mobile Lighthouse
+        if: always() && !cancelled()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p lighthouse-report
+          export CHROME_PATH="$(node -e "console.log(require('@playwright/test').chromium.executablePath())")"
+          npm run start -- -p 3100 > lighthouse-report/server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:3100/pt >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://localhost:3100/pt >/dev/null
+          for lang in pt en; do
+            npx --yes lighthouse@13.6.0 "http://localhost:3100/$lang" --form-factor=mobile --only-categories=performance,accessibility --chrome-flags="--headless --no-sandbox" --output=json --output=html --output-path="lighthouse-report/$lang" --quiet
+          done
+          node --input-type=module -e 'import fs from "node:fs"; for (const lang of ["pt","en"]) { const r=JSON.parse(fs.readFileSync("lighthouse-report/"+lang+".report.json","utf8")); const p=r.categories.performance.score*100,a=r.categories.accessibility.score*100,l=r.audits["largest-contentful-paint"].numericValue; console.log(JSON.stringify({lang,performance:p,accessibility:a,lcpMs:l})); if(p<90||a<90||l>=2500)process.exitCode=1; }'
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
+        with:
+          name: observatory-lighthouse
+          path: lighthouse-report
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: playwright-report
           path: |

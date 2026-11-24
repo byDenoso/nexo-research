@@ -7,6 +7,10 @@ const PAGES = ['/pt', '/en', '/pt/results', '/en/results', '/en/results/t-05ae70
 for (const scheme of ['dark', 'light'] as const) {
   test.describe(scheme, () => {
     test.use({colorScheme: scheme});
+    // The observatory defaults to dark; explicitly exercise both persisted themes.
+    test.beforeEach(async ({page}) => {
+      await page.addInitScript(theme => localStorage.setItem('nexo-theme', theme), scheme);
+    });
     for (const path of PAGES) {
       test(`${path} has no WCAG 2.2 AA violations`, async ({page}) => {
         await page.goto(path);
