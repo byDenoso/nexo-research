@@ -60,6 +60,7 @@ for layer, (x, y) in enumerate(projected):
 poster = Image.fromarray(np.uint8(np.clip(image, 0, 255)))
 poster.save(OUT / "observatory.webp", quality=84, method=6)
 poster.resize((720, 405), Image.Resampling.LANCZOS).save(OUT / "observatory-small.webp", quality=70, method=6)
+poster.resize((480, 270), Image.Resampling.LANCZOS).save(OUT / "observatory-opening.webp", quality=64, method=6)
 manifest = dict(meta, source_html_sha256=hashlib.sha256(source).hexdigest(),
                 parts=files, display_half_extents_Mpc=[float(v) for v in bounds],
                 poster_sha256={p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in OUT.glob("*.webp")})

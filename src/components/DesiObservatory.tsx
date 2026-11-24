@@ -62,7 +62,7 @@ function Tool({icon, label, onClick, disabled, pressed}: {
   </button>;
 }
 
-export function DesiObservatory({locale}: {locale: Locale}) {
+export function DesiObservatory({locale, mobilePoster}: {locale: Locale; mobilePoster: string}) {
   const t = words[locale];
   const pt = locale === 'pt';
   const number = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-US');
@@ -245,12 +245,14 @@ export function DesiObservatory({locale}: {locale: Locale}) {
       aria-describedby={live ? 'desi-instructions' : undefined} data-backend={live ? 'webgl2' : undefined}
       onKeyDown={onMapKey} onPointerDown={onPointerDown} onPointerMove={onPointerMove}
       onPointerUp={pointerUp} onPointerCancel={pointerUp} onLostPointerCapture={pointerUp}>
-      {/* The static poster is also the first meaningful paint on clients without WebGL. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/observatory/observatory.webp"
-        srcSet="/observatory/observatory-small.webp 720w, /observatory/observatory.webp 1440w"
-        sizes="(min-width: 78rem) 730px, (min-width: 56rem) 58vw, 92vw" width="1440" height="810"
-        fetchPriority="high" loading="eager" alt={t.preview} aria-hidden={live || undefined} />
+      <picture>
+        <source media="(max-width: 40rem)" srcSet={mobilePoster} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/observatory/observatory.webp"
+          srcSet="/observatory/observatory-small.webp 720w, /observatory/observatory.webp 1440w"
+          sizes="(min-width: 78rem) 730px, (min-width: 56rem) 58vw, 92vw" width="1440" height="810"
+          fetchPriority="high" loading="eager" alt={t.preview} aria-hidden={live || undefined} />
+      </picture>
       {!live && <div className="desi-stage-status" role="status">
         {mode === 'preview' && <button type="button" className="desi-activate" onClick={() => start.current()}><span aria-hidden="true">◇</span> {t.activate}</button>}
         {mode === 'loading' && <span className="desi-loading"><span aria-hidden="true" />{t.loading}</span>}
