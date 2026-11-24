@@ -1,12 +1,13 @@
 import type {Locale} from './i18n.ts';
 import type {Line, Status} from './schemas.ts';
+import {BRAND_NAME, BRAND_SIGNATURE} from './brand.ts';
 
 type Pair = {pt: string; en: string};
 const t = (pt: string, en: string): Pair => ({pt, en});
 
 export const D = {
-  site: t('NEXO Research Institute', 'NEXO Research Institute'),
-  tagline: t('Pesquisa independente sobre expansão cósmica e energia escura. O catálogo reúne testes com dados astronômicos públicos.', 'Independent research on cosmic expansion and dark energy. The catalogue covers tests with public astronomical data.'),
+  site: t(BRAND_NAME, BRAND_NAME),
+  tagline: t(`${BRAND_SIGNATURE}. Pesquisa independente sobre as leis da natureza, o setor escuro e as origens cósmicas, com dados observacionais e testes computacionais.`, `${BRAND_SIGNATURE}. Independent research on the laws of nature, the dark sector and cosmic origins, using observational data and computational tests.`),
   mission: t(
     'O NEXO testa modelos cosmológicos contra dados públicos, com hipóteses, critérios e limites registrados antes do resultado. Esta página reúne o que já foi calculado, o que ainda é candidato e o que falta verificar.',
     'NEXO tests cosmological models against public data, with hypotheses, criteria and limits recorded before the result. This site collects what has been computed, what is still a candidate and what remains to be verified.'
@@ -127,9 +128,9 @@ export const D = {
     private: t('Registros internos da Tower permanecem privados e não são lidos por este site.', 'Internal Tower records remain private and are not read by this site.')
   },
   code: {title: t('Código', 'Code'), lead: t('Software público do instituto. As regras de validação e o código deste site estão abertos para leitura e teste.', 'The public software of the institute. The validation rules and the source of this site are open to read and test.'), site: t('Código-fonte deste site', 'Source code of this site'), partial: t('O código das análises é publicado registro a registro, depois de reexecutado. Quando um resultado tem código ou artefatos, o link aparece no próprio registro.', 'Analysis code is published record by record, after it has been run again. When a result has code or artefacts, the link appears on its record.'), none: t('Código de análise ainda não publicado. Cada resultado indica quando há código ou artefatos associados.', 'Analysis code is not yet published. Each result states when associated code or artefacts exist.')},
-  about: {title: t('O instituto', 'The institute'), lead: t('Instituto independente de pesquisa em cosmologia, dirigido por Dener Pereira. Testamos hipóteses com dados públicos e publicamos cada teste com suas condições e seus limites.', 'An independent research institute in cosmology, directed by Dener Pereira. We test hypotheses against public data and publish each test with its conditions and limits.')},
+  about: {title: t('O instituto', 'The institute'), lead: t(`${BRAND_SIGNATURE}. Investigação independente do setor escuro e da evolução cósmica, dirigida por Dener Pereira. Os testes são publicados com suas condições e limites.`, `${BRAND_SIGNATURE}. Independent investigation of the dark sector and cosmic evolution, directed by Dener Pereira. Tests are published with their conditions and limits.`)},
   contact: {title: t('Contato e colaboração', 'Contact and collaboration'), lead: t('Para propor uma verificação independente, indique o registro do catálogo e a análise que pretende repetir.', 'To propose an independent check, identify the catalogue record and the analysis you would repeat.'), none: t('O canal de contato público será divulgado aqui pelo pesquisador.', 'The public contact channel will be published here by the researcher.')},
-  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('O catálogo reúne os testes autorizados para divulgação.', 'The catalogue contains the tests cleared for public release.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados: manifesto público da Tower', 'Data: public Tower manifest')},
+  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('Leis da natureza, exploração observacional e origens cósmicas. O catálogo reúne os testes autorizados para divulgação.', 'Laws of nature, observational exploration and cosmic origins. The catalogue contains the tests cleared for public release.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados: manifesto público da Tower', 'Data: public Tower manifest')},
   notFound: {title: t('Página não encontrada', 'Page not found'), back: t('Voltar ao início', 'Back to home')}
 } as const;
 

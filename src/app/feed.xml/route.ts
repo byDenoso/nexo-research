@@ -1,5 +1,6 @@
 import {getUpdates} from '@/lib/data';
 import {SITE_URL} from '@/lib/seo';
+import {BRAND_FULL_NAME} from '@/lib/brand';
 
 export const dynamic = 'force-static';
 
@@ -22,7 +23,7 @@ export function GET() {
   const body = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>${SITE_URL}/feed.xml</id>
-  <title>NEXO Research Institute · Updates</title>
+  <title>${escape(BRAND_FULL_NAME)} · Updates</title>
   <updated>${updates[0] ? updates[0].date + 'T12:00:00Z' : new Date(0).toISOString()}</updated>
   <author><name>NEXO Research Institute</name></author>
   <link rel="self" href="${SITE_URL}/feed.xml"/>

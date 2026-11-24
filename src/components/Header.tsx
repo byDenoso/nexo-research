@@ -3,6 +3,7 @@ import {D, tr} from '@/lib/dict';
 import {NAV_ROUTES, type Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
 import {SiteMenu} from './SiteMenu';
+import {BrandWordmark} from './BrandWordmark';
 import {ThemeToggle} from './ThemeToggle';
 import {LanguageSwitch} from './LanguageSwitch';
 
@@ -30,9 +31,7 @@ export function Header({locale}: {locale: Locale}) {
   return (
     <header className="site-header">
       <div className="wrap header-inner">
-        <Link href={href(locale)} prefetch={false} className="wordmark" aria-label={tr(D.site, locale)}>
-          NEXO<span className="wordmark-rest">Research Institute</span>
-        </Link>
+        <BrandWordmark locale={locale} />
         <nav aria-label={tr(D.navigation, locale)} className="primary-nav">
           <ul role="list">
             {primary.map(route => <li key={route}><Link href={href(locale, '/' + route)} prefetch={false}>{label(route, locale)}</Link></li>)}

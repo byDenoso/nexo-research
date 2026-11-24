@@ -7,6 +7,7 @@ for (const locale of ['pt', 'en'] as const) {
     ['home', ''],
     ['result', '/results/t-05ae703af393'],
     ['methods', '/methods'],
+    ['about', '/about'],
   ] as const) {
     test(`observatory ${locale} ${label}`, async ({page, isMobile}, info) => {
       await page.setViewportSize({width: isMobile ? 390 : 1440, height: isMobile ? 844 : 1000});

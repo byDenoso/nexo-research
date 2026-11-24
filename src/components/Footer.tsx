@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {D, tr} from '@/lib/dict';
 import type {Locale} from '@/lib/i18n';
 import {href} from '@/lib/seo';
+import {BrandWordmark} from './BrandWordmark';
 
 export function Footer({locale}: {locale: Locale}) {
   const pt = locale === 'pt';
@@ -9,9 +10,7 @@ export function Footer({locale}: {locale: Locale}) {
     <footer className="site-footer dark-chapter">
       <div className="wrap footer-inner">
         <div>
-          <Link href={href(locale)} prefetch={false} className="wordmark" aria-label={tr(D.site, locale)}>
-            NEXO<span className="wordmark-rest">Research Institute</span>
-          </Link>
+          <BrandWordmark locale={locale} />
           <p className="footer-summary">{tr(D.footer.line, locale)}</p>
         </div>
         <nav aria-label={tr(D.footer.navigation, locale)}>

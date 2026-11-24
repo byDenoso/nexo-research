@@ -15,6 +15,7 @@ import {MotionObserver} from '@/components/Motion';
 import {D, tr} from '@/lib/dict';
 import {HTML_LANG, LOCALES, isLocale} from '@/lib/i18n';
 import {SITE_URL, pageMeta} from '@/lib/seo';
+import {BRAND_NAME, BRAND_SIGNATURE, BRAND_FULL_NAME} from '@/lib/brand';
 import {getProfile} from '@/lib/data';
 
 const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'swap'});
@@ -27,7 +28,7 @@ export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
   if (!isLocale(locale)) return {};
-  return {metadataBase: new URL(SITE_URL), ...pageMeta(locale, '', 'NEXO Research Institute', tr(D.tagline, locale)), title: {default: 'NEXO Research Institute', template: '%s · NEXO Research Institute'}};
+  return {metadataBase: new URL(SITE_URL), ...pageMeta(locale, '', BRAND_FULL_NAME, tr(D.tagline, locale)), title: {default: BRAND_FULL_NAME, template: `%s · ${BRAND_NAME}`}};
 }
 
 const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s==='dark'||s==='light'?s:'dark';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}`;
@@ -39,7 +40,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
-      {'@type': 'WebSite', '@id': `${SITE_URL}/#site`, name: 'NEXO Research Institute', url: SITE_URL, inLanguage: LOCALES.map(code => HTML_LANG[code]), description: tr(D.tagline, locale)},
+      {'@type': 'WebSite', '@id': `${SITE_URL}/#site`, name: BRAND_NAME, alternateName: `NEXO — ${BRAND_SIGNATURE}`, url: SITE_URL, inLanguage: LOCALES.map(code => HTML_LANG[code]), description: tr(D.tagline, locale)},
       {'@type': 'Person', '@id': `${SITE_URL}/#director`, name: profile.name, affiliation: {'@type': 'CollegeOrUniversity', name: profile.affiliation}, ...(profile.orcid ? {sameAs: [`https://orcid.org/${profile.orcid}`]} : {})}
     ]
   };
