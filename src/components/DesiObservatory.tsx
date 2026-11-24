@@ -295,7 +295,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
       <details><summary>{t.details}</summary>
         <p>{t.method}</p>
         <p>{t.limits}</p>
-        <p><a href="https://data.desi.lbl.gov/doc/releases/dr1/">DESI Collaboration · DR1</a> · <a href="https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/AllSkySurveyData_dr1_info/">eROSITA-DE · eRASS1</a></p>
+        <p><a href="https://data.desi.lbl.gov/doc/releases/dr1/">DESI Collaboration · DR1</a> · <a href="https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.html">eROSITA-DE · eRASS1</a></p>
         <p><a href="/observatory/provenance.json">{t.provenance}</a> · <a href="/observatory/credits.txt">{t.credits}</a></p>
       </details>
     </figcaption>

@@ -23,6 +23,8 @@ Additional support for DESI was provided by the U.S. National Science Foundation
 The DESI collaboration is honored to be permitted to conduct scientific research on I’oligam Du’ag (Kitt Peak), a mountain with particular significance to the Tohono O’odham Nation. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the U.S. National Science Foundation, the U.S. Department of Energy, or any of the listed funding agencies.
 
 eROSITA eRASS1
+Primary catalogue v3.2 data model:
+https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.html
 Bulbul et al. (2024), A&A 685, A106, first catalog of galaxy clusters and groups
 in the Western Galactic Hemisphere. https://doi.org/10.1051/0004-6361/202348264
 Merloni et al. (2024), A&A 682, A34, first X-ray catalogues and data release.

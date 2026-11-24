@@ -363,6 +363,7 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
   font-weight: 600;
   transition: background-color 160ms, box-shadow 160ms;
 }
+html:not([data-js]) .desi-activate { display: none; }
 .desi-stage-status .desi-activate:hover { background: #153047; box-shadow: 0 0 1rem #6edeff25; }
 .desi-loading { display: flex; align-items: center; gap: .5rem; }
 .desi-console { display: grid; gap: .35rem; margin-block: .45rem .3rem; }
