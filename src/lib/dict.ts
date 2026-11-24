@@ -113,7 +113,7 @@ export const D = {
   filters: {search: t('Buscar', 'Search'), line: t('Linha', 'Line'), status: t('Estado', 'Status'), all: t('Todas', 'All'), year: t('Ano', 'Year'), more: t('Mostrar mais', 'Show more'), records: t('Registros exibidos', 'Displayed records'), shown: t('exibidos', 'shown'), of: t('de', 'of'), none: t('Nenhum registro encontrado.', 'No records found.'), reset: t('Limpar filtros', 'Clear filters')},
   updates: {title: t('Atualizações', 'Updates'), lead: t('Mudanças no catálogo, no software e no site, da mais recente para a mais antiga.', 'Changes to the catalogue, the software and the site, most recent first.'), latest: t('Última atualização do manifesto', 'Latest manifest update')},
   methods: {
-    title: t('Métodos e reprodutibilidade', 'Methods and reproducibility'),
+    title: t('Da hipótese ao teste reproduzível', 'From hypothesis to reproducible test'),
     lead: t('Veja como os testes comparam modelos ao ΛCDM, quais critérios entram antes do ajuste e como o resultado é revisado.', 'See how tests compare models with ΛCDM, which criteria are set before fitting and how results are reviewed.'),
     contents: t('Nesta página', 'On this page'),
     equation: t('Equação', 'Equation')

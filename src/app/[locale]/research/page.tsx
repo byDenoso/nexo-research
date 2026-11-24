@@ -36,8 +36,8 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
     <>
       <PageHead
         kicker={pt ? 'Pesquisa' : 'Research'}
-        title={pt ? 'Perguntas sobre o Universo' : 'Questions about the Universe'}
-        lead={pt ? 'Da expansão cósmica à luz das primeiras galáxias. Encontre a pergunta, os projetos que a investigam e os testes disponíveis para consulta.' : 'From cosmic expansion to the light of the earliest galaxies. Find the question, the projects investigating it and the tests available to explore.'}
+        title={pt ? 'Onde os modelos encontram o céu' : 'Where models meet the sky'}
+        lead={pt ? 'Da expansão cósmica à luz das primeiras galáxias: cada linha conecta uma pergunta física aos projetos e aos testes registrados.' : 'From cosmic expansion to the light of the earliest galaxies, each research area connects a physical question to projects and documented tests.'}
       />
       <ResearchAreas locale={locale} figure={<ResearchObservation locale={locale}/>} areas={LINES.map(line=>{
             const count = results.filter(item => item.lines.includes(line)).length;

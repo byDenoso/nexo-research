@@ -18,7 +18,7 @@ import {SITE_URL, pageMeta} from '@/lib/seo';
 import {getProfile} from '@/lib/data';
 
 const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'swap'});
-const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'swap'});
+const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'swap', preload: false});
 
 export const dynamicParams = false;
 export const generateStaticParams = () => LOCALES.map(locale => ({locale}));

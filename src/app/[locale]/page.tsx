@@ -35,8 +35,8 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <div className="wrap cover-grid">
           <div className="cover-copy">
             <p className="cover-label">{pt ? 'Cosmologia observacional' : 'Observational cosmology'}</p>
-            <h1 id="institute-title">{pt ? 'Como o Universo se expande?' : 'How does the Universe expand?'}</h1>
-            <p>{pt ? 'Investigamos a energia escura, a formação de estruturas e as primeiras galáxias. Cada análise pública liga a hipótese aos dados e aos limites do resultado.' : 'We investigate dark energy, the growth of structure and the earliest galaxies. Each public analysis connects a hypothesis to its data and the limits of its findings.'}</p>
+            <h1 id="institute-title">{pt ? 'O Universo sob teste.' : 'The Universe under test.'}</h1>
+            <p>{pt ? 'Confrontamos modelos de energia escura com medidas da expansão cósmica e investigamos a formação de estruturas e as primeiras galáxias. Cada hipótese tem um teste; cada resultado, um limite.' : 'We confront dark-energy models with measurements of cosmic expansion and investigate the growth of structure and the earliest galaxies. Every hypothesis has a test; every result has a limit.'}</p>
             <div className="cover-actions">
               <Link href={href(locale, '/results')}>{pt ? 'Explorar resultados' : 'Explore results'} <span aria-hidden="true">→</span></Link>
               <Link href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link>
@@ -76,7 +76,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
 
       <section id="perguntas" className="wrap nx-more-research" aria-labelledby="readings-title">
         <div className="section-masthead">
-          <h2 id="readings-title">{pt ? 'Outras perguntas do catálogo' : 'Other questions in the catalogue'}</h2>
+          <h2 id="readings-title">{pt ? 'O que os dados sustentam' : 'What the data support'}</h2>
           <Link className="text-link arrow-link" href={href(locale, '/results')}>{pt ? 'Ver todas as famílias' : 'See all test families'}</Link>
         </div>
         <div className="journal-stories">
@@ -103,7 +103,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
       <section id="fontes" className="catalogue-chapter" aria-labelledby="access-title">
         <div className="wrap catalogue-note">
           <div>
-            <h2 id="access-title">{pt ? 'Métodos, dados e fontes' : 'Methods, data and sources'}</h2>
+            <h2 id="access-title">{pt ? 'Evidência, método e proveniência' : 'Evidence, method and provenance'}</h2>
             <div className="inst-actions">
               <Link className="text-link arrow-link" href={href(locale, '/methods')}>{pt ? 'Consultar o método de avaliação' : 'Read the evaluation method'}</Link>
               <Link className="text-link arrow-link" href={href(locale, '/data')}>{pt ? 'Ver dados e código' : 'View data and software'}</Link>
