@@ -13,17 +13,22 @@ void main(){if(v<0.5)discard;float r=length(gl_PointCoord*2.0-1.0);if(r>1.0)disc
 float a=cluster>0.5?0.82*exp(-23.0*r*r)+0.65*exp(-160.0*(r-0.66)*(r-0.66)):0.62*exp(-5.0*r*r);
 gl_FragColor=vec4(color,a);}`;
 
-export type VolumeRenderer = { draw:(v:View)=>void; count:(v:View)=>[number,number]; dispose:()=>void };
+export type VolumeRenderer = { draw:(v:View)=>void; setQuality:(scale:number)=>void; count:(v:View)=>[number,number]; dispose:()=>void };
 export async function createVolume(canvas:HTMLCanvasElement, signal:AbortSignal):Promise<VolumeRenderer>{
   const context=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
   if(!context)throw Error('WebGL unavailable');
   const gl:WebGLRenderingContext=context;
   const path='/data/desi-erosita/';
+  const hashes=['923c22e3893c2173ecbdb657af441119b44c069c27834fc39cea60bda4bbcce8','dd6ac6bc3e81b3ce3716c7384538544d61df5a528216d9c80b28254d4dc90c20'];
   const data=await Promise.all(['galaxies.bin','clusters.bin'].map(async (name,i)=>{
     const response=await fetch(path+name,{signal});
     if(!response.ok)throw Error('Survey payload unavailable');
     const bytes=await response.arrayBuffer();
     if(bytes.byteLength!==volume.count[i]!*16)throw Error('Survey payload size mismatch');
+    if(globalThis.crypto?.subtle){
+      const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
+      if(digest!==hashes[i])throw Error('Survey payload SHA-256 mismatch');
+    }
     return new Float32Array(bytes);
   }));
   if(signal.aborted)throw Error('Aborted');
@@ -46,12 +51,13 @@ export async function createVolume(canvas:HTMLCanvasElement, signal:AbortSignal)
   const center=new Float32Array(volume.center);
   let radius=0,vertical=0;
   for(const a of data)for(let j=0;j<a.length;j+=4){radius=Math.max(radius,Math.hypot(a[j]!-center[0]!,a[j+1]!-center[1]!));vertical=Math.max(vertical,Math.abs(a[j+2]!-center[2]!));}
+  let quality=1;
   function draw(v:View){
     if(gl.isContextLost())return;
     const rect=canvas.getBoundingClientRect();
     if(!rect.width||!rect.height)return;
     const budget=rect.width<550?300000:720000;
-    const dpr=Math.min(devicePixelRatio||1,1.75,Math.sqrt(budget/(rect.width*rect.height)));
+    const dpr=Math.min(devicePixelRatio||1,1.75,Math.sqrt(budget/(rect.width*rect.height)))*quality;
     const w=Math.max(1,Math.round(rect.width*dpr)),h=Math.max(1,Math.round(rect.height*dpr));
     if(canvas.width!==w)canvas.width=w;if(canvas.height!==h)canvas.height=h;
     const c=Math.cos(v.yaw),s=Math.sin(v.yaw),cp=Math.cos(v.pitch),sp=Math.sin(v.pitch);
@@ -68,5 +74,5 @@ export async function createVolume(canvas:HTMLCanvasElement, signal:AbortSignal)
   }
   const count=(v:View):[number,number]=>data.map((a,i)=>{if(i===0?!v.desi:!v.ero)return 0;let n=0;for(let j=3;j<a.length;j+=4)if(a[j]!>=v.lo-1e-7&&a[j]!<=v.hi+1e-7)n++;return n;}) as [number,number];
   if(gl.getError()!==gl.NO_ERROR)throw Error('WebGL initialization failed');
-  return {draw,count,dispose:()=>{for(const b of buffers)gl.deleteBuffer(b);gl.deleteProgram(program);}};
+  return {draw,setQuality:scale=>{quality=Math.max(.55,Math.min(1,scale));},count,dispose:()=>{for(const b of buffers)gl.deleteBuffer(b);gl.deleteProgram(program);}};
 }

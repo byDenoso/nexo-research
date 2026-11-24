@@ -24,6 +24,9 @@ test('native WebGL controls, rendering, exact counts and keyboard',async({page},
   await expect(figure).toHaveAttribute('data-backend','webgl',{timeout:20000});
   const canvas=figure.locator('canvas');
   await expect(canvas).toBeVisible();
+  const evidence=await canvas.evaluate(c=>{const cv=c as HTMLCanvasElement,gl=cv.getContext('webgl')!;const debug=gl.getExtension('WEBGL_debug_renderer_info');const pixels=new Uint8Array(cv.width*cv.height*4);gl.readPixels(0,0,cv.width,cv.height,gl.RGBA,gl.UNSIGNED_BYTE,pixels);let luminous=0;for(let i=0;i<pixels.length;i+=4)if(pixels[i+1]!>20||pixels[i+2]!>25)luminous++;return {renderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),luminous,pixels:cv.width*cv.height,error:gl.getError()};});
+  console.log('Survey WebGL evidence',JSON.stringify(evidence));
+  expect(evidence.error).toBe(0);expect(evidence.luminous).toBeGreaterThan(100);
   const first=await canvas.evaluate(c=>(c as HTMLCanvasElement).toDataURL());
   await canvas.press('ArrowRight');
   await expect.poll(()=>canvas.evaluate(c=>(c as HTMLCanvasElement).toDataURL())).not.toBe(first);
@@ -31,6 +34,10 @@ test('native WebGL controls, rendering, exact counts and keyboard',async({page},
   await expect(figure.locator('.survey-counts')).toHaveText('0 galáxias · 941 aglomerados/grupos');
   await figure.getByRole('button',{name:'Restaurar'}).click();
   await expect(figure.locator('.survey-counts')).toHaveText('143.633 galáxias · 941 aglomerados/grupos');
+  await figure.getByRole('slider',{name:'Redshift mínimo'}).fill('0.2');
+  await figure.getByRole('slider',{name:'Redshift máximo'}).fill('0.3');
+  await expect(figure.locator('.survey-counts')).toHaveText('45.485 galáxias · 309 aglomerados/grupos');
+  await figure.getByRole('button',{name:'Restaurar'}).click();
   await figure.getByRole('slider',{name:'Redshift máximo'}).press('Home');
   await expect(figure.locator('.survey-counts')).not.toHaveText('143.633 galáxias · 941 aglomerados/grupos');
   await figure.getByRole('button',{name:'Restaurar'}).click();

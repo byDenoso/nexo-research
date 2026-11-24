@@ -350,3 +350,12 @@ html:not([data-js]) .survey-js { display: none; }
   .nx-home .cover-copy > p:last-of-type { max-inline-size: 100%; }
   .nx-home .cover-actions { gap: .35rem .7rem; }
 }
+
+/* Instrument finish: keep the measured image independent of decorative effects. */
+.survey-stage {border-block:1px solid #33475d;box-shadow:0 14px 34px #0005;}
+.survey-volume figcaption strong {letter-spacing:-.035em;}
+.survey-credit {margin:.15rem 0;color:#b0c1d3;}
+.survey-controls button {border-radius:.45rem;background:linear-gradient(145deg,#101a29,#0b1020);}
+.survey-controls button[aria-pressed="true"], .survey-controls .survey-start {background:#79d3e8;}
+.survey-controls button:focus-visible {outline:2px solid #b3e9f5;outline-offset:3px;}
+@media(prefers-reduced-motion:no-preference){.survey-controls button{transition:background-color .18s,border-color .18s,box-shadow .18s,transform .18s;}.survey-controls button:hover:not(:disabled){box-shadow:0 3px 16px #79d3e822;}.survey-controls button:active:not(:disabled){transform:scale(.97);}}

@@ -2,13 +2,7 @@ import type {Metadata, Viewport} from 'next';
 import {IBM_Plex_Mono, IBM_Plex_Sans} from 'next/font/google';
 import {notFound} from 'next/navigation';
 import type {ReactNode} from 'react';
-import '../globals.css';
-import '../editorial.css';
-import '../research-preview.css';
-import '../institute.css';
-import '../experiments.css';
-import '../interface.css';
-import '../observatory.css';
+import '../site.css';
 import {Footer} from '@/components/Footer';
 import {Header} from '@/components/Header';
 import {MotionObserver} from '@/components/Motion';
@@ -18,7 +12,7 @@ import {SITE_URL, pageMeta} from '@/lib/seo';
 import {BRAND_NAME, BRAND_SIGNATURE, BRAND_FULL_NAME} from '@/lib/brand';
 import {getProfile} from '@/lib/data';
 
-const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'optional', preload: true});
+const sans = IBM_Plex_Sans({subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-plex-sans', display: 'optional', preload: false});
 const mono = IBM_Plex_Mono({subsets: ['latin'], weight: ['400', '500'], variable: '--font-plex-mono', display: 'optional', preload: false});
 
 export const dynamicParams = false;

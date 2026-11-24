@@ -41,19 +41,31 @@ export function SurveyVolume({locale}:{locale:Locale}){
     if(!requested||!canvas.current)return;
     const el=canvas.current,abort=new AbortController();let live=true,renderer:VolumeRenderer|undefined;
     setBackend('loading');
-    const lost=(event:Event)=>{event.preventDefault();setBackend('fallback');setSpin(false);};
+    const lost=(event:Event)=>{event.preventDefault();abort.abort();renderer?.dispose();renderer=undefined;engine.current=null;view.current=initial();setFilter({lo:.1,hi:.4,desi:true,ero:true});setCounts([143633,941]);setBackend('fallback');setSpin(false);};
     el.addEventListener('webglcontextlost',lost);
     void import('./experiments/survey-volume-renderer').then(m=>m.createVolume(el,abort.signal)).then(r=>{
-      if(!live){r.dispose();return;}renderer=r;engine.current=r;r.draw(view.current);setCounts(r.count(view.current));setBackend('webgl');
+      if(!live||abort.signal.aborted){r.dispose();return;}renderer=r;engine.current=r;r.draw(view.current);setCounts(r.count(view.current));setBackend('webgl');
     }).catch(()=>{if(live){setBackend('fallback');setSpin(false);}});
     const resize=new ResizeObserver(()=>engine.current?.draw(view.current));resize.observe(el);
     return()=>{live=false;abort.abort();resize.disconnect();el.removeEventListener('webglcontextlost',lost);renderer?.dispose();engine.current=null;};
   },[requested]);
   useEffect(()=>{
     if(backend!=='webgl'||!spin||!visible)return;
-    let frame=0,last=0;
-    const draw=(now:number)=>{if(!document.hidden&&now-last>=33){view.current.yaw+=last?Math.min(now-last,50)*.00018:.003;engine.current?.draw(view.current);last=now;}frame=requestAnimationFrame(draw);};
-    frame=requestAnimationFrame(draw);return()=>cancelAnimationFrame(frame);
+    let frame=0,last=0,quality=1,slow=0,stable=0;
+    const draw=(now:number)=>{
+      if(document.hidden)return;
+      if(now-last>=33){
+        const dt=last?now-last:33;
+        if(dt>65){slow++;stable=0;}else{stable++;slow=0;}
+        if(slow>=6){quality=Math.max(.55,quality*.85);engine.current?.setQuality(quality);slow=0;}
+        if(stable>=120&&quality<1){quality=Math.min(1,quality+.05);engine.current?.setQuality(quality);stable=0;}
+        view.current.yaw+=Math.min(dt,50)*.00018;engine.current?.draw(view.current);last=now;
+      }
+      frame=requestAnimationFrame(draw);
+    };
+    const visibility=()=>{cancelAnimationFrame(frame);last=0;if(!document.hidden)frame=requestAnimationFrame(draw);};
+    document.addEventListener('visibilitychange',visibility);visibility();
+    return()=>{cancelAnimationFrame(frame);document.removeEventListener('visibilitychange',visibility);};
   },[backend,spin,visible]);
   useEffect(()=>{
     const el=canvas.current;if(!el||backend!=='webgl')return;
@@ -120,8 +132,9 @@ export function SurveyVolume({locale}:{locale:Locale}){
     <div className="survey-footer">
       <p className="survey-counts" aria-live="polite">{countLabel}</p>
       {backend==='fallback'&&<p role="status" className="survey-status">{t('WebGL indisponível. Exibição estática preservada.','WebGL unavailable. Static view preserved.')}</p>}
+      <p className="survey-credit">{t('Dados observacionais','Observational data')}: <a href="https://data.desi.lbl.gov/doc/releases/dr1/">DESI DR1</a> · <a href="https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.html">eROSITA eRASS1</a></p>
       <details><summary>{t('Escala, fontes e créditos','Scale, sources and credits')}</summary>
-        <p>{t('Recorte observacional: −10° ≤ declinação ≤ +10°. Posições comóveis em ΛCDM plano, H₀ = 70 km/s/Mpc, Ωₘ = 0,3. Cor e tamanho são escolhas de visualização; a cobertura difere entre levantamentos. Sem reconstrução da densidade ou cruzamento de catálogos.','Observational slice: −10° ≤ declination ≤ +10°. Comoving positions in flat ΛCDM, H₀ = 70 km/s/Mpc, Ωₘ = 0.3. Colour and size are display choices; survey coverage differs. No density reconstruction or catalogue crossmatch.')}</p>
+        <p>{t('Recorte observacional: −10° ≤ declinação ≤ +10°. Posições comóveis em ΛCDM plano, H₀ = 70 km/s/Mpc, Ωₘ = 0,3. A contagem inclui os objetos selecionados por redshift e camada, inclusive fora do enquadramento após zoom. Cor e tamanho são escolhas de visualização; a cobertura difere entre levantamentos. Sem reconstrução da densidade ou cruzamento de catálogos.','Observational slice: −10° ≤ declination ≤ +10°. Comoving positions in flat ΛCDM, H₀ = 70 km/s/Mpc, Ωₘ = 0.3. Counts include all objects selected by redshift and layer, including those outside the zoomed viewport. Colour and size are display choices; survey coverage differs. No density reconstruction or catalogue crossmatch.')}</p>
         <p><a href="https://data.desi.lbl.gov/doc/releases/dr1/">DESI Collaboration · DR1 LSS v1.5 BGS</a> · <a href="https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.html">eROSITA-DE · Bulbul et al. (2024), eRASS1 v3.2</a>. {t('Seleção, transformação para coordenadas cartesianas e visualização: NEXO Research.','Selection, Cartesian coordinate transformation and visualisation: NEXO Research.')}</p>
         <p><a href={root+'provenance.json'}>{t('Proveniência e hashes','Provenance and hashes')}</a> · <a href={root+'acknowledgments.txt'}>{t('Créditos completos e licença','Full acknowledgments and license')}</a> · <a href={root+'poster.webp'}>{t('Imagem original','Original image')}</a></p>
       </details>
