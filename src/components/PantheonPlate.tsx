@@ -47,7 +47,7 @@ export function PantheonPlate({locale}: {locale: Locale}) {
     </div>
     <div className="plate-stage" data-view={distribution ? 'distribution' : 'volume'}>
       {distribution ? <SampleDistribution locale={locale}/> : <Image src="/images/pantheon-volume.jpg" width={2560} height={1440}
-        sizes="(min-width: 90rem) 710px, (min-width: 56rem) 52vw, 94vw" preload
+        sizes="(min-width: 90rem) 710px, (min-width: 56rem) 52vw, 94vw" loading="eager" fetchPriority="high"
         alt={pt ? 'Distribuição tridimensional das supernovas do Pantheon+ em quatro cascas de redshift' : 'Three-dimensional distribution of Pantheon+ supernovae inside four redshift shells'}/>}
     </div>
     <div className="plate-foot">
