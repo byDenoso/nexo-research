@@ -343,3 +343,10 @@ html:not([data-js]) .survey-js { display: none; }
 .survey-filters input { min-height: 44px; }
 .survey-filters { gap: .8rem; }
 @media(max-width:40rem) { .survey-footer summary, .survey-footer > a { min-height: 44px; } }
+
+/* Keep the above-the-fold layout stable even when cold connections use the font fallback. */
+@media (max-width: 55.99rem) {
+  .nx-home .cover-copy h1 { max-inline-size: 100%; text-wrap: wrap; }
+  .nx-home .cover-copy > p:last-of-type { max-inline-size: 100%; }
+  .nx-home .cover-actions { gap: .35rem .7rem; }
+}

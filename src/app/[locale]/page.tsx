@@ -30,6 +30,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
 
   return (
     <div className="nexo-editorial nx-home">
+      <link rel="preload" as="image" href="/data/desi-erosita/poster-480.webp" media="(max-width:55.99rem)" fetchPriority="high" />
       <section className="institute-cover" aria-labelledby="institute-title">
         <CosmicCover locale={locale}/>
         <div className="wrap cover-grid">
