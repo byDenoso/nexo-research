@@ -19,6 +19,7 @@ test('native WebGL controls, rendering, exact counts and keyboard',async({page},
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto('/pt');const figure=page.locator('.survey-volume');
   await expect(figure).toHaveAttribute('data-backend','poster');
+  await expect(figure.locator('canvas')).toHaveCount(0);
   await figure.getByRole('button',{name:'Explorar em 3D'}).click();
   await expect(figure).toHaveAttribute('data-backend','webgl',{timeout:20000});
   const canvas=figure.locator('canvas');
@@ -42,7 +43,7 @@ test('native WebGL controls, rendering, exact counts and keyboard',async({page},
   await figure.getByRole('button',{name:'Fechar tela cheia'}).click();
   await expect(figure.getByRole('button',{name:'Tela cheia'})).toBeVisible();
   const findings=await new AxeBuilder({page}).include('.survey-volume').withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
-  expect(findings.violations.map(x=>x.id)).toEqual([]);
+  expect(findings.violations.flatMap(x=>x.nodes.map(n=>x.id+': '+n.target.join(' ')))).toEqual([]);
   const shot=info.outputPath('survey-active.png');await figure.screenshot({path:shot});await info.attach('survey-active',{path:shot,contentType:'image/png'});
   expect(await canvas.evaluate(c=>(c as HTMLCanvasElement).width*(c as HTMLCanvasElement).height)).toBeLessThanOrEqual(725000);
 });

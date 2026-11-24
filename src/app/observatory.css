@@ -333,3 +333,13 @@ html:not([data-js]) .survey-js { display: none; }
 .pantheon-retained h2 { margin-bottom: 1.2rem; }
 .pantheon-retained .volume-plate { max-width: 760px; margin-inline: auto; }
 @media(max-width: 40rem) { .survey-controls button, .survey-controls a { min-height: 44px; } }
+
+/* WCAG target-size and touch spacing; keep the footer source links readable. */
+.survey-footer summary { min-height: 32px; padding-block: .4rem; }
+.survey-footer > a { display: inline-flex; align-items: center; min-height: 32px; margin-block-start: .25rem; }
+.survey-controls button { min-width: 44px; min-height: 44px; }
+.survey-legend label { min-height: 44px; gap: .45rem; }
+.survey-legend input { width: 24px; height: 24px; }
+.survey-filters input { min-height: 44px; }
+.survey-filters { gap: .8rem; }
+@media(max-width:40rem) { .survey-footer summary, .survey-footer > a { min-height: 44px; } }

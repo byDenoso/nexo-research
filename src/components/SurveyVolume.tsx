@@ -88,16 +88,16 @@ export function SurveyVolume({locale}:{locale:Locale}){
   return <figure ref={figure} className={'survey-volume'+(expanded?' survey-expanded':'')} data-backend={backend} data-running={String(ready&&spin&&visible)} aria-label="DESI × eROSITA">
     <figcaption><strong>DESI × eROSITA</strong><span className="survey-range">0.1 ≤ z ≤ 0.4 · 418–1552 Mpc</span></figcaption>
     <div className="survey-stage" ref={stage}>
-      <picture><source srcSet={root+'poster-640.webp 640w, '+root+'poster-1280.webp 1280w, '+root+'poster.webp 2560w'} sizes="(min-width:90rem) 710px, (min-width:56rem) 54vw, 94vw" type="image/webp"/>
+      <picture><source media="(max-width:55.99rem)" srcSet={root+'poster-480.webp'} type="image/webp"/><source srcSet={root+'poster-640.webp 640w, '+root+'poster-1280.webp 1280w, '+root+'poster.webp 2560w'} sizes="(min-width:90rem) 710px, 54vw" type="image/webp"/>
         {/* The supplied static poster is generated and hashed at build time. No image optimization request on the critical path. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={root+'poster-640.webp'} width={2560} height={1440} loading="eager" fetchPriority="high" alt={t('Volume observacional: galáxias DESI em ciano e grupos e aglomerados eROSITA em âmbar.','Observational volume: DESI galaxies in cyan and eROSITA groups and clusters in amber.')}/>
+        <img src={root+'poster-480.webp'} width={2560} height={1440} loading="eager" fetchPriority="high" alt={t('Volume observacional: galáxias DESI em ciano e grupos e aglomerados eROSITA em âmbar.','Observational volume: DESI galaxies in cyan and eROSITA groups and clusters in amber.')}/>
       </picture>
-      <canvas ref={canvas} role="img" aria-label={t('Volume tridimensional interativo. ','Interactive three-dimensional volume. ')+help} aria-hidden={!ready} tabIndex={ready?0:-1}
+      {requested&&<canvas ref={canvas} role="img" aria-label={t('Volume tridimensional interativo. ','Interactive three-dimensional volume. ')+help} aria-hidden={!ready} tabIndex={ready?0:-1}
         onPointerDown={e=>{if(!ready)return;e.currentTarget.focus();e.currentTarget.setPointerCapture(e.pointerId);pointers.current.set(e.pointerId,{x:e.clientX,y:e.clientY});setSpin(false);}}
         onPointerMove={e=>{const old=pointers.current.get(e.pointerId);if(!old)return;const other=[...pointers.current].find(([id])=>id!==e.pointerId)?.[1];if(other){const a=Math.hypot(old.x-other.x,old.y-other.y),b=Math.hypot(e.clientX-other.x,e.clientY-other.y);if(a>0)zoom(b/a);}else tilt((e.clientX-old.x)*.006,(e.clientY-old.y)*.006);pointers.current.set(e.pointerId,{x:e.clientX,y:e.clientY});}}
         onPointerUp={e=>pointers.current.delete(e.pointerId)} onPointerCancel={e=>pointers.current.delete(e.pointerId)} onLostPointerCapture={e=>pointers.current.delete(e.pointerId)}
-        onKeyDown={e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-'].includes(e.key))return;e.preventDefault();setSpin(false);if(e.key==='ArrowLeft')tilt(-.08,0);else if(e.key==='ArrowRight')tilt(.08,0);else if(e.key==='ArrowUp')tilt(0,-.08);else if(e.key==='ArrowDown')tilt(0,.08);else zoom(e.key==='-'?.89:1.12);}}/>
+        onKeyDown={e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-'].includes(e.key))return;e.preventDefault();setSpin(false);if(e.key==='ArrowLeft')tilt(-.08,0);else if(e.key==='ArrowRight')tilt(.08,0);else if(e.key==='ArrowUp')tilt(0,-.08);else if(e.key==='ArrowDown')tilt(0,.08);else zoom(e.key==='-'?.89:1.12);}}/>}
     </div>
     <div className="survey-controls survey-js">
       {!ready&&backend!=='fallback'&&<button type="button" className="survey-start" disabled={backend==='loading'} onClick={()=>{setSpin(!matchMedia('(prefers-reduced-motion:reduce)').matches);request(true);}}>{backend==='loading'?t('Carregando 3D…','Loading 3D…'):t('Explorar em 3D','Explore in 3D')}</button>}

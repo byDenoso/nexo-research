@@ -18,8 +18,8 @@ for(const [i,name,n] of [[0,'galaxies.bin',143633],[1,'clusters.bin',941]]){
 const poster=inflateRawSync(read('poster.webp.deflate'));
 if(sha(poster)!=='aaba12998089824e9adaa7bd2544d99c595ebaebff9af44366f682ba3829d75d')throw Error('NEXO supplied poster integrity');
 writeFileSync(new URL('poster.webp',root),poster);
-for(const width of [640,1280]){
-  const small=await sharp(poster).resize({width}).webp({quality:76}).toBuffer();
+for(const width of [480,640,1280]){
+  const small=await sharp(poster).resize({width}).webp({quality:width===480?65:76}).toBuffer();
   writeFileSync(new URL('poster-'+width+'.webp',root),small);
   console.log('DESI × eROSITA poster',width,small.length,'bytes');
 }
