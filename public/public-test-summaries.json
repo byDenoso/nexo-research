@@ -1,0 +1,78 @@
+[
+  {
+    "question": {
+      "pt-BR": "A implementação rígida altera a previsão de aproximações entre a Via Láctea e Andrômeda?",
+      "en": "Does rigid-model implementation alter Milky Way–Andromeda close-encounter forecasts?"
+    },
+    "answer": {
+      "pt-BR": "Sim, no lote selecionado de 60 estados. A comparação não isola a causa.",
+      "en": "Yes, in the selected batch of 60 states. The comparison does not isolate the cause."
+    },
+    "method": {
+      "pt-BR": "Comparação pareada de dois integradores rígidos nos mesmos 60 estados, ingresso em 20 kpc em janela de 10 Gyr; lei working, variante matched.",
+      "en": "Paired comparison of two rigid integrators on the same 60 states, entry within 20 kpc over 10 Gyr; working law, matched variant."
+    },
+    "result": {
+      "pt-BR": "43/60 ingressos no integrador principal e 36/60 no controlado; diferença de +11,7 pontos percentuais. Entre 36 pares com ingresso nos dois, ΔT = −1,047 ± 0,193 Gyr (erro-padrão). Descritivo do lote selecionado, não estimativa populacional; nenhum mecanismo causal isolado. Entradas recriadas numericamente, sem identidade byte a byte do NPZ.",
+      "en": "43/60 entries in the main integrator versus 36/60 in the controlled one (+11.7 percentage points). For 36 pairs with entry in both, ΔT = −1.047 ± 0.193 Gyr (standard error). Descriptive of this selected batch only, not a population estimate; no isolated causal mechanism. Numerical regeneration of inputs does not establish byte-identical NPZ reconstruction."
+    },
+    "lines": [
+      "local-group",
+      "reproducibility"
+    ],
+    "updatedAt": "2026-11-25",
+    "provenance": {
+      "publicAuthorized": true,
+      "sourceDate": "2026-11-23",
+      "source": {
+        "label": {
+          "pt-BR": "Pacote reprodutível F32 v18 (Zenodo)",
+          "en": "F32 v18 reproducibility package (Zenodo)"
+        },
+        "url": "https://doi.org/10.5281/zenodo.24455170"
+      },
+      "review": {
+        "pt-BR": "Resumo editorial conferido nas tabelas e no relatório do pacote público. Não constitui revisão por pares nem reexecução independente.",
+        "en": "Editorial summary checked against the public package report and tables. This is neither peer review nor an independent rerun."
+      }
+    }
+  },
+  {
+    "question": {
+      "pt-BR": "Há uma feição localizada robusta nos resíduos de supernovas do Pantheon+?",
+      "en": "Is there a robust localized feature in Pantheon+ supernova residuals?"
+    },
+    "answer": {
+      "pt-BR": "Não sob a estatística e a hierarquia nula testadas.",
+      "en": "No under the tested statistic and null hierarchy."
+    },
+    "method": {
+      "pt-BR": "Amostra fiducial sem calibradores, zHD > 0,0233 (N = 1365); varredura cega e calibração nula global com 10.000 simulações.",
+      "en": "Fiducial non-calibrator sample, zHD > 0.0233 (N = 1365); blind scan and global covariance-null calibration using 10,000 mocks."
+    },
+    "result": {
+      "pt-BR": "Δχ² máximo = 2,224 em zt = 0,03; p global = 0,8378. O diagnóstico histórico em zt = 0,36 teve Δχ² = 1,841. Não houve detecção robusta; números reportados pelo pacote público, sem reexecução independente nesta revisão.",
+      "en": "Maximum Δχ² = 2.224 at zt = 0.03; global p = 0.8378. The historical zt = 0.36 diagnostic yielded Δχ² = 1.841. No robust detection; checkpoints reported by the public package, not independently rerun in this review."
+    },
+    "lines": [
+      "probes",
+      "reproducibility"
+    ],
+    "updatedAt": "2026-11-25",
+    "provenance": {
+      "publicAuthorized": true,
+      "sourceDate": "2026-11-02",
+      "source": {
+        "label": {
+          "pt-BR": "Pacote público de reprodução Pantheon+",
+          "en": "Public Pantheon+ reproducibility package"
+        },
+        "url": "https://github.com/byDenoso/AAS77733-Reproducibility"
+      },
+      "review": {
+        "pt-BR": "Resumo editorial conferido nos números reportados pelo repositório público. A conferência dos arquivos não demonstra execução de todos os testes nem validação independente.",
+        "en": "Editorial summary checked against reported checkpoints in the public repository. File-level verification does not establish execution of all tests or independent validation."
+      }
+    }
+  }
+]

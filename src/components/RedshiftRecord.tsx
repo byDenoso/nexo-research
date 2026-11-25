@@ -21,7 +21,7 @@ export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: 
       <div className="wrap">
         <nav className="nx-crumbs" aria-label={pt ? 'Localização' : 'Breadcrumb'}>
           <Link href={href(locale, '/results')}>{tr(D.results.title, locale)}</Link>
-          <Link href={familyUrl}>{pt ? 'Família de exclusão por redshift' : 'Redshift exclusion family'}</Link>
+          <Link href={familyUrl}>{pt ? 'Cortes por redshift' : 'Redshift cuts'}</Link>
         </nav>
         <header className="nx-record-header" id="question">
           <p className="nx-eyebrow">{pt ? 'Exclusão por redshift / Supernovas Ia' : 'Redshift exclusion / Type Ia supernovae'}</p>
@@ -69,9 +69,9 @@ export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: 
               <p>{pick(item.question, locale)}</p>
               <p>{pick(item.result, locale)}</p>
               {item.figure && <ul>{item.figure.limitations.map(entry => <li key={entry.en}>{pick(entry, locale)}</li>)}</ul>}
-              <Link className="text-link" href={href(locale, '/data')}>{pt ? 'Consultar o snapshot público da Tower' : 'View the Tower public snapshot'}</Link>
+              <Link className="text-link" href={href(locale, '/data')}>{pt ? 'Consultar o catálogo público' : 'View the public catalogue'}</Link>
             </details>
-            <p><Link className="text-link arrow-link" href={familyUrl}>{pt ? 'Comparar as demais execuções da família' : 'Compare the other runs in this family'}</Link></p>
+            <p><Link className="text-link arrow-link" href={familyUrl}>{pt ? 'Comparar análises com outros cortes' : 'Compare analyses with other cuts'}</Link></p>
           </section>
 
           <aside className="nx-sources" aria-labelledby="record-provenance-title">
@@ -91,7 +91,7 @@ export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: 
             <ul role="list">
               {dossier.code?.map(entry => <li key={entry.url}><a className="text-link" href={entry.url}>{pt ? 'Código da análise' : 'Analysis code'}</a></li>)}
               {dossier.artefacts?.map(entry => <li key={entry.url}><a className="text-link" href={entry.url}>{entry.label}</a></li>)}
-              <li><a className="text-link" href="/atlas-public.json">{pt ? 'Manifesto público' : 'Public manifest'} · atlas-public.json</a></li>
+              <li><a className="text-link" href="/atlas-public.json">{pt ? 'Catálogo público (JSON)' : 'Public catalogue (JSON)'} · atlas-public.json</a></li>
             </ul>
             <p className="nx-source-technical">{pt ? 'Versão do catálogo' : 'Catalogue version'} · <time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time><br />{item.id} · {snapshot.contract} · SHA-256 {snapshot.snapshotSha256.slice(0, 12)}…</p>
             {correction && <p className="nx-source-technical">{pt ? 'Última correção editorial' : 'Last editorial correction'} · <time dateTime={correction}>{fmtDate(correction, locale)}</time></p>}

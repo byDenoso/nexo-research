@@ -39,7 +39,7 @@ export function PantheonPlate({locale}: {locale: Locale}) {
   const number = new Intl.NumberFormat(pt ? 'pt-BR' : 'en-GB');
   return <figure className="volume-plate">
     <figcaption><strong>Pantheon+</strong>
-      <span>{number.format(sample.uniqueCID)} {pt ? 'supernovas' : 'supernovae'}</span>
+      <span>{number.format(sample.uniqueCID)} {pt ? 'supernovas nesta amostra' : 'supernovae in this sample'}</span>
     </figcaption>
     <div className="plate-modes" role="group" aria-label={pt ? 'Vista da amostra Pantheon+' : 'Pantheon+ sample view'}>
       <button type="button" aria-pressed={!distribution} onClick={() => setDistribution(false)}>Volume</button>
@@ -47,14 +47,14 @@ export function PantheonPlate({locale}: {locale: Locale}) {
     </div>
     <div className="plate-stage" data-view={distribution ? 'distribution' : 'volume'}>
       {distribution ? <SampleDistribution locale={locale}/> : <Image src="/images/pantheon-volume.jpg" width={2560} height={1440}
-        sizes="(min-width: 90rem) 710px, (min-width: 56rem) 52vw, 94vw" loading="lazy"
-        alt={pt ? 'Distribuição tridimensional das supernovas do Pantheon+ em quatro cascas de redshift' : 'Three-dimensional distribution of Pantheon+ supernovae inside four redshift shells'}/>}
+        sizes="(min-width: 59rem) 848px, 92vw" loading="lazy"
+        alt={pt ? 'Supernovas do Pantheon+ projetadas em três dimensões com quatro superfícies de referência de redshift' : 'Pantheon+ supernovae projected in three dimensions with four reference redshift surfaces'}/>}
     </div>
     <div className="plate-foot">
-      <details><summary>{pt ? 'Escala e fonte' : 'Scale and source'}</summary>
+      <details><summary>{pt ? 'Como interpretar e fonte' : 'Interpretation and source'}</summary>
         <p>{distribution
           ? (pt ? 'Cada objeto entra uma vez, pelo CID. As faixas têm largura de 0,25 em redshift no referencial do CMB e incluem o limite inferior.' : 'Each CID is counted once. CMB-frame redshift bins have width 0.25 and include their lower edge.')
-          : (pt ? 'As cascas marcam z = 0,1, 0,5, 1 e 2. As distâncias comóveis usam ΛCDM plano, Ωₘ = 0,3 e H₀ = 70 km/s/Mpc. Cor e brilho são ilustrativos.' : 'Shells mark z = 0.1, 0.5, 1 and 2. Comoving distances assume flat ΛCDM, Ωₘ = 0.3 and H₀ = 70 km/s/Mpc. Colour and brightness are illustrative.')}
+          : (pt ? 'As cascas marcam z = 0,1, 0,5, 1 e 2. As distâncias comóveis usam ΛCDM plano, Ωₘ = 0,3 e H₀ = 70 km/s/Mpc. Cor e brilho são ilustrativos, sem codificar medições. A renderização mostra a geometria do catálogo, não um resultado do NEXO.' : 'Shells mark z = 0.1, 0.5, 1 and 2. Comoving distances assume flat ΛCDM, Ωₘ = 0.3 and H₀ = 70 km/s/Mpc. Colour and brightness are illustrative and encode no measurements. The rendering shows the sample geometry rather than a NEXO result.')}
           {' '}<a href={sample.source}>{pt ? 'Dados Pantheon+' : 'Pantheon+ data'}</a> · <a href="https://arxiv.org/abs/2112.03863">Scolnic et al. (2022)</a>.
         </p>
         {distribution && <table><caption>{pt ? 'Supernovas por faixa de redshift' : 'Supernovae per redshift bin'}</caption>
@@ -62,7 +62,7 @@ export function PantheonPlate({locale}: {locale: Locale}) {
           <tbody>{sample.redshiftCounts.map((n,i) => <tr key={i}><th scope="row">{number.format(i*sample.redshiftBinWidth)} ≤ z &lt; {number.format((i+1)*sample.redshiftBinWidth)}</th><td>{number.format(n)}</td></tr>)}</tbody>
         </table>}
       </details>
-      <a href={'/'+locale+'/data#atlas'}>{pt ? 'Abrir no atlas' : 'Open in atlas'} <span aria-hidden="true">→</span></a>
+      <a href={'/'+locale+'/data#atlas'}>{pt ? 'Explorar observáveis' : 'Explore observables'} <span aria-hidden="true">→</span></a>
     </div>
   </figure>;
 }

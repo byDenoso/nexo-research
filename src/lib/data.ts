@@ -51,13 +51,18 @@ export type Update = z.infer<typeof update>;
 // derived from the manifest, so it cannot drift from the data in use.
 export function getUpdates(): Update[] {
   const curated = z.array(update).parse(json('curated/updates.json'));
-  const source = getManifest().generatedFrom;
+  const {generatedFrom: source, catalogue} = getManifest();
   const snapshot: Update = {
     date: source.latestUpdate.slice(0, 10), kind: 'catalogue',
-    title: {'pt-BR': 'Snapshot do catálogo', en: 'Catalogue snapshot'},
+    title: {'pt-BR': 'Snapshot público da Tower', en: 'Public Tower snapshot'},
     body: {'pt-BR': `O snapshot em uso reúne ${source.tests} registros de testes. Esta é a data do registro mais recente.`, en: `The snapshot in use holds ${source.tests} test records. This is the date of the most recent record.`}
   };
-  return [...curated, snapshot].sort((a, b) => b.date.localeCompare(a.date));
+  const supplement: Update = {
+    date: catalogue.latestUpdate.slice(0, 10), kind: 'catalogue',
+    title: {'pt-BR': 'Resumos de fontes públicas adicionados', en: 'Public-source summaries added'},
+    body: {'pt-BR': `${catalogue.supplements} resumos editoriais foram acrescentados ao catálogo sem atualizar o snapshot da Tower nem promover o estado científico.`, en: `${catalogue.supplements} editorial summaries were added to the catalogue without updating the Tower snapshot or promoting scientific status.`}
+  };
+  return [...curated, snapshot, ...(catalogue.supplements ? [supplement] : [])].sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nexoresearch.org';

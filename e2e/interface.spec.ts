@@ -72,7 +72,7 @@ test('the Pantheon+ histogram uses all ten catalogue bins, has keyboard selectio
   const audit = await new AxeBuilder({page}).include('.volume-plate').withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
   expect(audit.violations.map(v => v.id)).toEqual([]);
   await plate.getByRole('button',{name:'Volume'}).click();
-  await expect(plate.getByRole('img',{name:/quatro cascas/})).toBeVisible();
+  await expect(plate.getByRole('img',{name:/quatro superfícies de referência de redshift/})).toBeVisible();
 });
 
 test('route navigation, document outline and the reading indicator follow user navigation', async ({page}) => {

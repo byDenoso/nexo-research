@@ -74,7 +74,7 @@ const standalone: Record<string, [string, string, string]> = {
 };
 const individualBao = new Set(['T-2666d450a769','T-28160180cded','T-44aff9f2cbb1','T-6b374d4280fa','T-8de9463d750d','T-9149c53edf29','T-d9c9e3fb1f2f','T-dcb222351488']);
 export const selectedIds = Object.keys(stories);
-export const isNegative = (id: string) => id === 'T-979f49b40eea';
+export const isNegative = (id: string) => id === 'T-979f49b40eea' || id === 'T-6b4cb4922cd0';
 export function readResult(item: Result, locale: Locale): Reading {
   if (stories[item.id]) return stories[item.id]![locale];
   const family = getFamilies([item])[0]!.slug;

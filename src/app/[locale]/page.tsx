@@ -19,7 +19,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
   const pt = locale === 'pt';
   const results = getResults();
   const publications = getPublications();
-  const snapshot = getManifest().generatedFrom;
+  const snapshot = getManifest().catalogue;
   const editorialDate = getPageDates()['']!;
   const lead = getResult(redshiftSlug);
   const stories = selectedIds.slice(1).flatMap(id => {
@@ -112,9 +112,9 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
             <p><a className="text-link" href="https://arxiv.org/abs/2112.03863">{pt ? 'Fonte do catálogo Pantheon+' : 'Pantheon+ catalogue source'} · Scolnic et al. (2022)</a></p>
           </div>
           <dl className="inst-facts">
-            <div><dt>{pt ? 'Famílias no catálogo' : 'Families in the catalogue'}</dt><dd>{getFamilies(results).length}</dd></div>
-            <div><dt>{pt ? 'Execuções documentadas' : 'Documented runs'}</dt><dd>{results.length}</dd></div>
-            <div><dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt><dd><Link prefetch={false} className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
+            <div><dt>{pt ? 'Perguntas científicas' : 'Research questions'}</dt><dd>{getFamilies(results).length}</dd></div>
+            <div><dt>{pt ? 'Registros públicos' : 'Public records'}</dt><dd>{results.length}</dd></div>
+            <div><dt>{pt ? 'Última entrada no catálogo' : 'Latest catalogue entry'}</dt><dd><Link prefetch={false} className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
             <div><dt>{pt ? 'Revisão desta página' : 'Page revision'}</dt><dd><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd></div>
           </dl>
         </div>

@@ -188,16 +188,20 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
               </dd>
             </div>
             <div>
-              <dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt>
-              <dd>
+              <dt>{pt ? 'Origem do registro' : 'Record origin'}</dt>
+              <dd>{item.publicSource ? <>
+                {pt ? 'Resumo editorial de uma fonte pública, independente do snapshot da Tower.' : 'Editorial summary of a public source, separate from the Tower snapshot.'}
+                <span className="dossier-note"><a className="text-link" href={item.publicSource.source.url} target="_blank" rel="noopener noreferrer">{pick(item.publicSource.source.label, locale)} ↗</a> · <time dateTime={item.publicSource.sourceDate}>{fmtDate(item.publicSource.sourceDate, locale)}</time></span>
+                <span className="dossier-note">{pick(item.publicSource.review, locale)}</span>
+              </> : <>
                 <time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time> · {snapshot.contract}
                 <span className="dossier-note">SHA-256 {snapshot.snapshotSha256.slice(0, 12)}… · <a className="text-link" href="/atlas-public.json">atlas-public.json</a></span>
-              </dd>
+              </>}</dd>
             </div>
             <div>
               <dt>{tr(R.code, locale)}</dt>
               <dd>
-                {dossier?.code?.length || dossier?.artefacts?.length ? (
+                {item.publicSource ? <a className="text-link" href={item.publicSource.source.url} target="_blank" rel="noopener noreferrer">{pick(item.publicSource.source.label, locale)} ↗</a> : dossier?.code?.length || dossier?.artefacts?.length ? (
                   <ul role="list" className="dossier-data">
                     {[...(dossier.code ?? []), ...(dossier.artefacts ?? [])].map(entry => <li key={entry.url}><a className="text-link" href={entry.url} target="_blank" rel="noopener noreferrer">{entry.label} ↗</a></li>)}
                   </ul>

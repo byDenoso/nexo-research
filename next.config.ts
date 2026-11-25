@@ -1,5 +1,6 @@
 import createMDX from '@next/mdx';
 import type {NextConfig} from 'next';
+import observatory from './public/observatory/provenance.json';
 
 const csp = [
   "default-src 'self'",
@@ -28,7 +29,10 @@ const config: NextConfig = {
     ];
   },
   async headers() {
-    return [{
+    return [...observatory.parts.flat().flatMap(part => [part, 'packed-v1/' + part].map(path => ({
+      source: '/observatory/' + path,
+      headers: [{key: 'Cache-Control', value: 'public, max-age=31536000, immutable'}]
+    }))), {
       source: '/:path*',
       headers: [
         {key: 'Content-Security-Policy', value: csp},

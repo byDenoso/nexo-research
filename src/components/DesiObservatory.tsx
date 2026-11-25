@@ -91,6 +91,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     let paintFrame = 0;
     let loadFrame = 0;
     let idleTimer = 0;
+    let nearViewport = false;
 
     const fail = () => {
       observer.current = null;
@@ -125,7 +126,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
 
     start.current = begin;
     const schedule = () => {
-      if (motion.matches || started || document.hidden || paintFrame || loadFrame || idleTimer || document.readyState !== 'complete') return;
+      if (!nearViewport || motion.matches || started || document.hidden || paintFrame || loadFrame || idleTimer || document.readyState !== 'complete') return;
       paintFrame = requestAnimationFrame(() => {
         paintFrame = 0;
         loadFrame = requestAnimationFrame(() => {
@@ -133,7 +134,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
           // Keep initial content responsive while the browser finishes its startup work.
           idleTimer = window.setTimeout(() => {
             idleTimer = 0;
-            if (!motion.matches && !document.hidden) void begin();
+            if (nearViewport && !motion.matches && !document.hidden) void begin();
           }, 350);
         });
       });
@@ -142,6 +143,11 @@ export function DesiObservatory({locale}: {locale: Locale}) {
       if (motion.matches) setPlaying(false);
       else schedule();
     };
+    const visibility = new IntersectionObserver(([entry]) => {
+      nearViewport = Boolean(entry?.isIntersecting);
+      schedule();
+    }, {rootMargin: "120px 0px"});
+    visibility.observe(host);
     schedule();
     document.addEventListener('visibilitychange', schedule);
     window.addEventListener('load', schedule, {once: true});
@@ -156,6 +162,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     host.addEventListener('wheel', wheel, {passive: false});
     return () => {
       abort.abort();
+      visibility.disconnect();
       cancelAnimationFrame(paintFrame);
       cancelAnimationFrame(loadFrame);
       clearTimeout(idleTimer);
@@ -276,7 +283,7 @@ export function DesiObservatory({locale}: {locale: Locale}) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/observatory/observatory.webp"
           srcSet="/observatory/observatory-small.webp 720w, /observatory/observatory.webp 1440w"
-          sizes="(min-width: 78rem) 730px, (min-width: 56rem) 58vw, 92vw" width="1440" height="810"
+          sizes="(min-width: 78rem) 720px, (min-width: 56rem) 52vw, 92vw" width="1440" height="810"
           fetchPriority="high" loading="eager" alt={t.preview} aria-hidden={live || undefined} />
       </picture>
       <div className="desi-mobile-poster" role="img" aria-label={t.preview} aria-hidden={live || undefined} />

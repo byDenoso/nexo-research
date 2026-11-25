@@ -187,3 +187,31 @@ test('WebGL unavailable retains the true poster and catalogue counts without fet
   await expect(page.locator('.desi-layers output')).toHaveText(['143,633', '941']);
   expect(requests).toHaveLength(0);
 });
+
+test('offscreen observatory avoids downloading the catalogue until it approaches the viewport', async ({page}) => {
+  await page.setViewportSize({width: 390, height: 240});
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  const requests: string[] = [];
+  page.on('request', request => {if (/\/observatory\/.*\.bin$/.test(request.url())) requests.push(request.url());});
+  await page.goto('/pt');
+  const stage = page.locator('.desi-stage');
+  await page.waitForLoadState('load');
+  await page.waitForTimeout(600);
+  expect(requests).toHaveLength(0);
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute('data-backend', 'webgl2', {timeout: 30_000});
+  expect(requests).toHaveLength(5);
+  expect(requests.every(url => url.includes('/packed-v1/'))).toBe(true);
+});
+
+test('packed catalogue failure falls back to the exact canonical coordinates', async ({page}) => {
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await page.route('**/observatory/packed-v1/**', route => route.fulfill({status: 503, body: ''}));
+  const raw: string[] = [];
+  page.on('request', request => {if (/\/observatory\/(desi|erosita)-.*\.bin$/.test(request.url())) raw.push(request.url());});
+  await page.goto('/pt');
+  await page.getByRole('button', {name: 'Ativar 3D'}).click();
+  await expect(page.locator('.desi-stage')).toHaveAttribute('data-backend', 'webgl2', {timeout: 30_000});
+  await expect(page.locator('.desi-layers output')).toHaveText(['143.633', '941']);
+  expect(raw).toHaveLength(5);
+});

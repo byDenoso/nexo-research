@@ -9,7 +9,7 @@ const DATA_DRIVEN = new Set(['', '/research', '/results', '/data', '/updates']);
 const later = (a: string, b: string): string => (a > b ? a : b);
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const snapshot = getManifest().generatedFrom.latestUpdate;
+  const snapshot = getManifest().catalogue.latestUpdate;
   const editorial = getPageDates();
   // Editorial pages carry the date of their last revision; family pages the date of their
   // latest record. The snapshot date only raises pages that actually render snapshot data.

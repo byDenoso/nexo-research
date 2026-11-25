@@ -20,7 +20,7 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
   const pt = locale === 'pt';
   const results = getResults();
   const rows = toFamilyRows(getFamilies(results), locale);
-  const snapshot = getManifest().generatedFrom;
+  const snapshot = getManifest().catalogue;
   const editorialDate = getPageDates()['/results']!;
 
   return (
@@ -34,14 +34,14 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
         <dl>
           <div><dt>{pt ? 'Perguntas científicas' : 'Research questions'}</dt><dd>{rows.length}</dd></div>
           <div><dt>{pt ? 'Registros públicos' : 'Public records'}</dt><dd>{results.length}</dd></div>
-          <div><dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt><dd><Link className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
+          <div><dt>{pt ? 'Última entrada no catálogo' : 'Latest catalogue entry'}</dt><dd><Link className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
           <div><dt>{pt ? 'Última revisão editorial' : 'Last editorial revision'}</dt><dd><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd></div>
         </dl>
       </header>
       <div className="wrap nx-catalogue-content">
         <ResultsBrowser rows={rows} locale={locale} />
         <p className="snapshot-disclosure">
-          {pt ? 'O estado Candidato indica um resultado interno, sem validação independente. Consulte os ' : 'Candidate marks an internal result without independent validation. See the '}
+          {pt ? 'O estado Candidato indica uma análise sem validação independente confirmada. Consulte os ' : 'Candidate marks an analysis without confirmed independent validation. See the '}
           <Link className="text-link" href={href(locale, '/methods') + '#result'}>{pt ? 'estados de evidência' : 'evidence statuses'}</Link>.
         </p>
       </div>

@@ -52,6 +52,20 @@ export type Line = z.infer<typeof line>;
 
 const url = z.string().url().refine(value => value.startsWith('https://'), 'https only');
 
+// Editorial supplements are sourced from explicitly public evidence, not the Tower snapshot.
+export const publicTestProvenance = z.strictObject({
+  publicAuthorized: z.literal(true),
+  sourceDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  source: z.strictObject({label: localized, url}),
+  review: localized
+});
+export const publicTestSummary = z.strictObject({
+  question: localized, answer: localized, method: localized, result: localized,
+  lines: z.array(line).min(1), updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  provenance: publicTestProvenance
+});
+export const publicTestSummaries = z.array(publicTestSummary);
+
 // Editorial approvals: the only place where a status can be raised.
 export const approval = z.object({
   id: z.string().regex(/^T-[0-9a-f]{12}$/),
@@ -152,6 +166,7 @@ export const result = z.object({
   status,
   statusSource: z.enum(['default', 'approval']),
   lines: z.array(line).min(1),
+  publicSource: publicTestProvenance.optional(),
   approval: approval.omit({id: true, status: true, lines: true}).optional(),
   figure: z.object({
     id: z.string(), caption: localized, limitations: z.array(localized),
@@ -164,6 +179,7 @@ export type Result = z.infer<typeof result>;
 export const manifest = z.object({
   contract: z.literal('NEXO_RESEARCH_MANIFEST_V1'),
   generatedFrom: z.object({contract: z.string(), tests: z.number(), visuals: z.number(), snapshotSha256: z.string(), latestUpdate: z.string()}),
+  catalogue: z.object({tests: z.number(), supplements: z.number(), latestUpdate: z.string()}),
   results: z.array(result)
 });
 export type Manifest = z.infer<typeof manifest>;

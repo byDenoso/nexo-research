@@ -27,15 +27,15 @@ export const D = {
   hero: {
     kicker: t('Cosmologia', 'Cosmology'),
     headline: t('Testes observacionais de modelos cosmológicos', 'Observational tests of cosmological models'),
-    caption: t('Número de resumos públicos que mencionam cada conjunto de dados. Fonte: catálogo público do NEXO (Tower).', 'Number of public summaries mentioning each dataset. Source: NEXO public catalogue (Tower).'),
+    caption: t('Número de resumos públicos que mencionam cada conjunto de dados. Fonte: catálogo público do NEXO.', 'Number of public summaries mentioning each dataset. Source: NEXO public catalogue.'),
     chartTitle: t('Conjuntos de dados nos resultados públicos', 'Data sets in the public results'),
     viewData: t('Ver dados', 'View data'),
     unit: t('resumos', 'summaries')
   },
   institute: {
     scope: t('A pesquisa em números', 'Research in numbers'),
-    families: t('Perguntas e famílias científicas', 'Scientific questions and families'),
-    executions: t('Registros de execução', 'Execution records'),
+    families: t('Perguntas científicas', 'Research questions'),
+    executions: t('Análises documentadas', 'Documented analyses'),
     lines: t('Linhas com registros públicos', 'Research lines with records'),
     explore: t('Áreas de pesquisa e métodos', 'Research areas and methods'),
     research: t('Linhas de pesquisa e projetos em andamento.', 'Research areas and ongoing projects.'),
@@ -92,10 +92,10 @@ export const D = {
     plain: t('Em linguagem direta', 'In plain language'),
     back: t('Todos os resultados', 'All results'),
     notFound: t('Resultado não encontrado.', 'Result not found.'),
-    defaultNote: t('Resumo público de um teste interno, ainda sem validação independente nem publicação.', 'Public summary of an internal test, not yet independently validated or published.')
+    defaultNote: t('Resumo público de uma análise sem validação independente confirmada.', 'Public summary of an analysis without confirmed independent validation.')
   },
   status: {
-    CANDIDATE: {n: t('Candidato', 'Candidate'), d: t('Resultado interno ainda sem validação independente.', 'Internal result without independent validation yet.')},
+    CANDIDATE: {n: t('Candidato', 'Candidate'), d: t('Análise ainda sem validação independente confirmada.', 'Analysis without confirmed independent validation.')},
     TESTING: {n: t('Em teste', 'Testing'), d: t('Em verificação por testes adicionais.', 'Under verification by additional tests.')},
     VALIDATED: {n: t('Validado', 'Validated'), d: t('Reproduzido e revisado dentro do critério do projeto.', 'Reproduced and reviewed within the project criteria.')},
     REFUTED: {n: t('Refutado', 'Refuted'), d: t('Contrariado por um teste posterior.', 'Contradicted by a later test.')},
@@ -112,7 +112,7 @@ export const D = {
   projects: {title: t('Projetos', 'Projects'), lead: t('Projetos organizados pela pergunta investigada, com os resultados disponíveis no catálogo.', 'Projects organised by research question, with available results from the catalogue.'), state: {active: t('Em andamento', 'Active'), planned: t('Em preparação', 'In preparation'), paused: t('Pausado', 'Paused')}},
   research: {title: t('Pesquisa', 'Research'), lead: t('Testes da expansão cósmica, comparações entre sondas e buscas em catálogos de galáxias.', 'Tests of cosmic expansion, comparisons across probes and searches in galaxy catalogues.')},
   filters: {search: t('Buscar', 'Search'), line: t('Linha', 'Line'), status: t('Estado', 'Status'), all: t('Todas', 'All'), year: t('Ano', 'Year'), more: t('Mostrar mais', 'Show more'), records: t('Registros exibidos', 'Displayed records'), shown: t('exibidos', 'shown'), of: t('de', 'of'), none: t('Nenhum registro encontrado.', 'No records found.'), reset: t('Limpar filtros', 'Clear filters')},
-  updates: {title: t('Atualizações', 'Updates'), lead: t('Mudanças no catálogo, no software e no site, da mais recente para a mais antiga.', 'Changes to the catalogue, the software and the site, most recent first.'), latest: t('Última atualização do manifesto', 'Latest manifest update')},
+  updates: {title: t('Atualizações', 'Updates'), lead: t('Mudanças no catálogo, no software e no site, da mais recente para a mais antiga.', 'Changes to the catalogue, the software and the site, most recent first.'), latest: t('Última atualização do catálogo', 'Latest catalogue update')},
   methods: {
     title: t('Métodos de análise', 'Methods of analysis'),
     lead: t('Comparação de modelos com ΛCDM, critérios definidos antes do ajuste e revisão dos resultados.', 'Model comparisons with ΛCDM, criteria set before fitting and review of the results.'),
@@ -122,7 +122,7 @@ export const D = {
   data: {
     title: t('Dados e fontes', 'Data and sources'),
     lead: t('Os resultados públicos provêm de uma versão identificada do catálogo. Estão disponíveis o arquivo para download, sua referência bibliográfica e os conjuntos de dados citados nos resumos.', 'The public results come from an identified release of the catalogue. The file is available for download, together with its citation and the datasets mentioned in the summaries.'),
-    snapshot: t('Versão do catálogo público', 'Public catalogue release'), contract: t('Contrato', 'Contract'), tests: t('Testes', 'Tests'), visuals: t('Figuras', 'Figures'), sha: t('SHA-256 do snapshot', 'Snapshot SHA-256'),
+    snapshot: t('Versão do catálogo público', 'Public catalogue release'), contract: t('Formato dos dados', 'Data format'), tests: t('Testes', 'Tests'), visuals: t('Figuras', 'Figures'), sha: t('SHA-256 do catálogo', 'Catalogue SHA-256'),
     mentioned: t('Conjuntos de dados citados nos resumos', 'Data sets named in the summaries'), count: t('resumos', 'summaries'),
     note: t('A contagem considera menções nos resumos. Não identifica uso exclusivo nem a versão de cada conjunto.', 'Counts are based on mentions in the summaries. They do not establish exclusive use or the version of each dataset.'),
     private: t('O catálogo público não contém registros privados da base de pesquisa (Tower).', 'The public catalogue excludes private records from the research database (Tower).')
@@ -130,7 +130,7 @@ export const D = {
   code: {title: t('Código', 'Code'), lead: t('Código público do NEXO, incluindo as regras de validação e o código-fonte do site.', 'NEXO’s public software, including validation rules and the website source code.'), site: t('Código-fonte deste site', 'Source code of this site'), partial: t('O código de análise é liberado após reexecução. Cada resultado indica o material correspondente, quando disponível.', 'Analysis code is released after it has been rerun. Each result links to the corresponding material where available.'), none: t('Código de análise ainda não publicado. Cada resultado indica quando há código ou artefatos associados.', 'Analysis code is not yet published. Each result states when associated code or artefacts exist.')},
   about: {title: t('O instituto', 'The institute'), lead: t(`${BRAND_SIGNATURE}. Investigação independente do setor escuro e da evolução cósmica, dirigida por Dener Pereira. Os testes são publicados com suas condições e limites.`, `${BRAND_SIGNATURE}. Independent investigation of the dark sector and cosmic evolution, directed by Dener Pereira. Tests are published with their conditions and limits.`)},
   contact: {title: t('Contato e colaboração', 'Contact and collaboration'), lead: t('Para propor uma verificação independente, indique o registro do catálogo e a análise que pretende repetir.', 'To propose an independent check, identify the catalogue record and the analysis you would repeat.'), none: t('O canal de contato público será divulgado aqui pelo pesquisador.', 'The public contact channel will be published here by the researcher.')},
-  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('Pesquisa independente em cosmologia com dados observacionais e testes computacionais.', 'Independent cosmology research using observational data and computational tests.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados: manifesto público da Tower', 'Data: public Tower manifest')},
+  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('Pesquisa independente em cosmologia com dados observacionais e testes computacionais.', 'Independent cosmology research using observational data and computational tests.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados e referências', 'Data and references')},
   notFound: {title: t('Página não encontrada', 'Page not found'), back: t('Voltar ao início', 'Back to home')}
 } as const;
 

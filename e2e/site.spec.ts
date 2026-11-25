@@ -49,7 +49,7 @@ test('results page filters, paginates and links to a detail page', async ({page}
   await page.goto('/pt/results');
   await expect(page.getByRole('status').filter({hasText: 'exibidas'})).toContainText('24 de');
   await page.getByRole('button', {name: 'Mostrar mais'}).click();
-  await expect(page.getByRole('status').filter({hasText: 'exibidas'})).toContainText('35 de 35');
+  await expect(page.getByRole('status').filter({hasText: 'exibidas'})).toContainText('37 de 37');
   await page.getByLabel('Buscar').fill('DESI');
   const shown = page.getByRole('status').filter({hasText: 'exibidas'});
   await expect(shown).toContainText('registros de testes');
@@ -77,7 +77,7 @@ test.describe('catalogue without scripts', () => {
     await page.goto('/pt/results');
     await page.getByRole('link', {name: 'Mostrar mais'}).click();
     await expect(page).toHaveURL(/\/pt\/results\/page\/2$/);
-    await expect(page.getByRole('main').getByRole('article')).toHaveCount(11);
+    await expect(page.getByRole('main').getByRole('article')).toHaveCount(13);
     await expect(page.locator('h1')).toHaveCount(1);
     await page.getByRole('link', {name: /Página anterior/}).click();
     await expect(page).toHaveURL(/\/pt\/results$/);
@@ -89,7 +89,7 @@ test('search ignores accents and reads the editorial family titles', async ({pag
   await expect(page.getByRole('button', {name: 'Mostrar mais'})).toBeVisible();
   const shown = page.getByRole('status').filter({hasText: 'exibidas'});
   await page.getByLabel('Buscar').fill('tracadores');
-  await expect(shown).not.toContainText('35 de 35');
+  await expect(shown).not.toContainText('37 de 37');
   await expect(page.locator('h3 a[href="/pt/results/families/bao-tracer-exclusion"]')).toHaveText('Diferentes mapas de galáxias contam a mesma história?');
   await page.getByLabel('Buscar').fill('CONCENTRACAO do sinal');
   await expect(page.locator('h3 a[href="/pt/results/families/redshift-concentration"]')).toHaveText('Em que parte da amostra aparece o sinal?');
@@ -145,12 +145,13 @@ test('institute, projects, data and updates carry the institutional content', as
   for (const name of ['Missão', 'Integridade', 'Direção', 'Como citar']) await expect(page.getByRole('heading', {name, exact: true})).toBeVisible();
   await page.goto('/pt/projects');
   await expect(page.locator('.inst-projects > li')).toHaveCount(8);
-  await expect(page.locator('.inst-projects > li').filter({hasText: 'Grupo Local'})).toContainText('Em preparação');
+  await expect(page.locator('.inst-projects > li').filter({hasText: 'Grupo Local'})).toContainText('Em andamento');
   await page.goto('/en/data');
   await expect(page.locator('#cite')).toContainText('NEXO Research Institute (2026). Public catalogue of cosmological tests');
-  await expect(page.getByRole('link', {name: 'Download the catalogue (JSON)'})).toHaveAttribute('href', '/atlas-public.json');
+  await expect(page.getByRole('link', {name: 'Download Tower snapshot (JSON)'})).toHaveAttribute('href', '/atlas-public.json');
+  await expect(page.getByRole('link', {name: 'Download additional summaries (JSON)'})).toHaveAttribute('href', '/public-test-summaries.json');
   await page.goto('/pt/updates');
-  await expect(page.locator('.inst-log > li')).toHaveCount(6);
+  await expect(page.locator('.inst-log > li')).toHaveCount(7);
   const feed = await request.get('/feed.xml');
   expect(feed.status()).toBe(200);
   expect(feed.headers()['content-type']).toContain('application/atom+xml');
@@ -184,12 +185,13 @@ test('result filters are labelled and operable from the keyboard', async ({page}
   await survey.focus();
   await survey.selectOption('Planck');
   await expect(page).toHaveURL(/survey=Planck/);
-  await expect(page.getByRole('status').filter({hasText: 'exibidas'})).not.toContainText('35 de 35');
+  await expect(page.getByRole('status').filter({hasText: 'exibidas'})).not.toContainText('37 de 37');
 });
 
 test('line filter from the research page is honoured', async ({page}) => {
   await page.goto('/en/results?line=local-group');
-  await expect(page.getByRole('status').filter({hasText: 'shown'})).toContainText('0 of 0');
+  await expect(page.getByRole('status').filter({hasText: 'shown'})).toContainText('1 of 1');
+  await expect(page.getByRole('heading', {name: /Milky Way–Andromeda/})).toBeVisible();
 });
 
 test('methods page renders equations with KaTeX', async ({page}) => {
@@ -220,10 +222,10 @@ test('the methods index opens the existing test section by keyboard', async ({pa
 test('home separates catalogue and editorial dates without implying current research activity', async ({page}) => {
   await page.goto('/pt');
   const facts = page.locator('.inst-facts > div');
-  const version = facts.filter({hasText: 'Versão do catálogo'});
+  const version = facts.filter({hasText: 'Última entrada no catálogo'});
   const revision = facts.filter({hasText: 'Revisão desta página'});
   await expect(version.locator('a')).toHaveAttribute('href', '/pt/data#snap');
-  await expect(version.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
+  await expect(version.locator('time')).toHaveAttribute('datetime', '2026-11-25');
   await expect(revision.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/);
   await expect(page.getByRole('main')).not.toContainText(/em andamento|pesquisa ativa/i);
 });
@@ -317,4 +319,20 @@ test('Open Graph image and favicon resolve without locale redirects', async ({re
   const favicon = await request.get('/favicon.ico', {maxRedirects: 0});
   expect(favicon.status()).toBe(200);
   expect(favicon.headers()['content-type']).toMatch(/image|icon/);
+});
+
+test('public editorial summaries remain distinct from the Tower snapshot', async ({page, request}) => {
+  const tower = await (await request.get('/atlas-public.json')).json();
+  const supplements = await (await request.get('/public-test-summaries.json')).json();
+  expect(tower.tests).toHaveLength(169);
+  expect(supplements).toHaveLength(2);
+  await page.goto('/pt/data');
+  await expect(page.locator('#snap').locator('..')).toContainText('171 registros públicos');
+  await expect(page.locator('#snap').locator('..')).toContainText('169 no snapshot da Tower');
+  await page.goto('/pt/results/t-f468ceab845d');
+  const source = page.getByRole('complementary', {name: 'Dados e proveniência'});
+  await expect(source).toContainText('Resumo editorial de uma fonte pública');
+  await expect(source.getByRole('link', {name: /Zenodo/}).first()).toHaveAttribute('href', 'https://doi.org/10.5281/zenodo.24455170');
+  await expect(source).not.toContainText('atlas-public.json');
+  await expect(page.locator('.record-meta')).toContainText('Candidato');
 });

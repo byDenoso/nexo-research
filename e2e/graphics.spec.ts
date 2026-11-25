@@ -15,8 +15,8 @@ test('figures are complete and sit on the published values', async ({page}) => {
   await expect(erosita.locator('output')).toHaveText('2,18 σ');
 
   const facts = page.locator('.inst-facts dd');
-  await expect(facts.nth(0)).toHaveText('35');
-  await expect(facts.nth(1)).toHaveText('169');
+  await expect(facts.nth(0)).toHaveText('37');
+  await expect(facts.nth(1)).toHaveText('171');
 });
 
 test('reduced motion shows every figure complete at once', async ({page}) => {
@@ -25,7 +25,7 @@ test('reduced motion shows every figure complete at once', async ({page}) => {
   await expect(page.locator('#em-foco .nx-plot')).toBeVisible();
   await expect(page.locator('.journal-erosita output')).toHaveText('2.18 σ');
   expect(await page.locator('.nx-plot-track').first().evaluate(node => getComputedStyle(node).opacity)).toBe('1');
-  await expect(page.locator('.inst-facts dd').nth(1)).toHaveText('169');
+  await expect(page.locator('.inst-facts dd').nth(1)).toHaveText('171');
 });
 
 test.describe('without scripts', () => {
@@ -33,7 +33,7 @@ test.describe('without scripts', () => {
   test('figures and numbers are complete in the served page', async ({page}) => {
     await page.goto('/pt');
     expect(await page.locator('.nx-plot-track').first().evaluate(node => getComputedStyle(node).opacity)).toBe('1');
-    await expect(page.locator('.inst-facts dd').nth(0)).toHaveText('35');
+    await expect(page.locator('.inst-facts dd').nth(0)).toHaveText('37');
     await expect(page.locator('.journal-erosita tbody td')).toHaveText(['2,18', '0,35']);
   });
 });
@@ -75,7 +75,7 @@ test('the eROSITA plot switches with the keyboard and keeps the values and sourc
     await expect(output).toHaveText('0,35 σ');
   }
   await expect(story.getByRole('table')).toBeVisible();
-  const source = story.getByRole('link', {name: 'atlas-public.json'});
+  const source = story.getByRole('link', {name: 'Catálogo (JSON)'});
   await expect(source).toHaveAttribute('href', '/atlas-public.json');
   expect((await page.request.get('/atlas-public.json')).ok()).toBeTruthy();
 });
@@ -107,11 +107,12 @@ test('the DESI dossier exposes all seven omissions and signed changes with their
 test('catalogue version and editorial dates come from their own records', async ({page}) => {
   await page.goto('/pt/results');
   const catalogue = page.locator('.nx-catalogue-head');
-  await expect(catalogue.getByText('Versão do catálogo', {exact: true})).toBeVisible();
+  await expect(catalogue.getByText('Última entrada no catálogo', {exact: true})).toBeVisible();
   await expect(catalogue.getByText('Última revisão editorial', {exact: true})).toBeVisible();
   const dates = await catalogue.locator('time').evaluateAll(nodes => nodes.map(node => node.getAttribute('datetime')));
   const snapshot = await (await page.request.get('/atlas-public.json')).json() as {tests: Array<{updated_at: string}>};
-  expect(dates).toEqual([snapshot.tests.map(row => row.updated_at).sort().at(-1), '2026-11-19']);
+  expect(snapshot.tests.map(row => row.updated_at).sort().at(-1)).toBe('2026-10-09T12:37:10.351Z');
+  expect(dates).toEqual(['2026-11-25', '2026-11-25']);
   await page.goto('/pt/results/t-05ae703af393');
   const sources = page.getByRole('complementary', {name: 'Fontes e código'});
   await expect(sources.getByText(/Última correção editorial/).locator('time')).toHaveAttribute('datetime', '2026-11-12');

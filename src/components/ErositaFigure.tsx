@@ -29,7 +29,7 @@ export function ErositaFigure({item, locale}: {item: Result; locale: Locale}) {
             <thead><tr><th scope="col">{pt ? 'Ajuste' : 'Fit'}</th><th scope="col">σ</th></tr></thead>
             <tbody>{rows.map(row => <tr key={row.label}><th scope="row">{row.label}</th><td>{format.format(row.value)}</td></tr>)}</tbody>
           </table>
-          <p className="nx-fit-sources">{pt ? 'Fonte dos valores' : 'Source of the values'} · <Link className="text-link" href={href(locale, '/results/' + item.slug)}>{item.id}</Link> · <a className="text-link" href="/atlas-public.json">atlas-public.json</a></p>
+          <p className="nx-fit-sources">{pt ? 'Fonte dos valores' : 'Source of the values'} · <Link className="text-link" href={href(locale, '/results/' + item.slug)}>{pt ? 'Análise completa' : 'Full analysis'}</Link> · <a className="text-link" href="/atlas-public.json">{pt ? 'Catálogo (JSON)' : 'Catalogue (JSON)'}</a></p>
         </div>
       </div>
     </figure>

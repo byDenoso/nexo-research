@@ -60,22 +60,32 @@ function createProgram(gl: WebGL2RenderingContext) {
 }
 
 async function readLayer(parts: string[], count: number, hash: string, signal: AbortSignal) {
-  const bytes = new Uint8Array(count * 16);
-  let offset = 0;
-  const chunks = await Promise.all(parts.map(async part => {
-    const response = await fetch('/observatory/' + part, {signal, priority: 'low'});
-    if (!response.ok) throw Error('Observatory data unavailable');
-    return new Uint8Array(await response.arrayBuffer());
-  }));
-  for (const data of chunks) {
-    bytes.set(data, offset);
-    offset += data.byteLength;
+  async function load(packed: boolean) {
+    const bytes = new Uint8Array(count * 16);
+    const chunks = await Promise.all(parts.map(async part => {
+      const response = await fetch('/observatory/' + (packed ? 'packed-v1/' : '') + part, {signal, priority: 'low'});
+      if (!response.ok) throw Error('Observatory data unavailable');
+      if (!packed) return new Uint8Array(await response.arrayBuffer());
+      const body = response.body;
+      if (!body) throw Error('Empty observation payload');
+      const shuffled = new Uint8Array(await new Response(body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+      if (shuffled.length % 16 || shuffled.length > bytes.length) throw Error('Invalid packed observation size');
+      const records = shuffled.length / 16, raw = new Uint8Array(shuffled.length);
+      for (let byte = 0; byte < 16; byte++) for (let i = 0; i < records; i++) raw[i * 16 + byte] = shuffled[byte * records + i]!;
+      return raw;
+    }));
+    let offset = 0;
+    for (const data of chunks) { bytes.set(data, offset); offset += data.byteLength; }
+    if (offset !== bytes.byteLength) throw Error('Unexpected observatory data size');
+    const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
+    if (Array.from(digest, val => val.toString(16).padStart(2, '0')).join('') !== hash) throw Error('Observatory data integrity check failed');
+    return bytes;
   }
-  if (offset !== bytes.byteLength) throw Error('Unexpected observatory data size');
-  const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes));
-  if (Array.from(digest, val => val.toString(16).padStart(2, '0')).join('') !== hash) {
-    throw Error('Observatory data integrity check failed');
-  }
+  let bytes: Uint8Array;
+  if (typeof DecompressionStream === 'function') {
+    try { bytes = await load(true); }
+    catch { signal.throwIfAborted(); bytes = await load(false); }
+  } else bytes = await load(false);
   if (endianness) return new Float32Array(bytes.buffer);
   const view = new DataView(bytes.buffer);
   return Float32Array.from({length: count * 4}, (_, i) => view.getFloat32(i * 4, true));
@@ -114,7 +124,7 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
     let selection: Selection = {min: 0.1, max: 0.4, layers: [true, true]};
     let lastCounts: Counts = [-1, -1], lastCountTime = -Infinity;
     let playing = false, visible = false, running = false, stopped = false;
-    let frame = 0, pendingDraw = 0, lastFrameTime = -Infinity, dpr = 1;
+    let frame = 0, pendingDraw = 0, settleTimer = 0, lastFrameTime = -Infinity, dpr = 1;
     let quality = 1, frameInterval = 33;
     let slowFrames = 0, fastFrames = 0, lastTick = -Infinity;
     const [cx, cy, cz] = manifest.camera_center_Mpc as [number, number, number];
@@ -171,11 +181,15 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
       draw(performance.now());
     }
 
-    function requestDraw() {
-      if (pendingDraw || stopped) return;
+    function requestDraw(exact = false) {
+      if (stopped) return;
+      if (exact) lastCountTime = -Infinity;
+      clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(redraw, 125);
+      if (pendingDraw) return;
       pendingDraw = requestAnimationFrame(() => {
         pendingDraw = 0;
-        redraw();
+        draw(performance.now());
       });
     }
 
@@ -237,6 +251,7 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
       if (stopped) return;
       stopped = true;
       cancelAnimationFrame(pendingDraw);
+      clearTimeout(settleTimer);
       reconcile();
       resizeObserver.disconnect();
       intersection.disconnect();
@@ -278,11 +293,11 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
         yaw = yawStart;
         pitch = pitchStart;
         zoom = 1;
-        requestDraw();
+        requestDraw(true);
       },
       select(next: Selection) {
         selection = next;
-        requestDraw();
+        requestDraw(true);
       },
       play(value: boolean) {
         playing = value;

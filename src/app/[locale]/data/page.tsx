@@ -19,7 +19,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
 export default async function DataPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   if (!isLocale(locale)) notFound();
-  const source = getManifest().generatedFrom;
+  const {generatedFrom: source, catalogue} = getManifest();
   const mentions = datasetMentions(getResults());
   const d = D.data;
   const pt = locale === 'pt';
@@ -60,21 +60,26 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
           </ul>
         </section>
         <section aria-labelledby="snap" className="card motion-reveal p-6">
-          <h2 id="snap" className="text-xl font-semibold">{tr(d.snapshot, locale)}</h2>
+          <h2 id="snap" className="text-xl font-semibold">{pt ? 'Catálogo público e suas fontes' : 'Public catalogue and its sources'}</h2>
+          <p className="mt-3">{pt ? `${catalogue.tests} registros públicos: ${source.tests} no snapshot da Tower e ${catalogue.supplements} resumos editoriais de fontes públicas. Última entrada editorial: ${fmtDate(catalogue.latestUpdate, locale)}.` : `${catalogue.tests} public records: ${source.tests} in the Tower snapshot and ${catalogue.supplements} editorial summaries of public sources. Latest catalogue entry: ${fmtDate(catalogue.latestUpdate, locale)}.`}</p>
+          <h3 className="mt-4 font-semibold">{pt ? 'Snapshot público da Tower' : 'Public Tower snapshot'}</h3>
           <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-[max-content_minmax(0,1fr)] sm:gap-y-2 [&_dd]:mb-3 sm:[&_dd]:mb-0">
             <dt className="text-muted">{tr(d.contract, locale)}</dt><dd className="font-mono">{source.contract}</dd>
             <dt className="text-muted">{tr(d.tests, locale)}</dt><dd className="font-mono">{source.tests}</dd>
             <dt className="text-muted">{tr(d.visuals, locale)}</dt><dd className="font-mono">{source.visuals}</dd>
-            <dt className="text-muted">{pt ? 'Versão do catálogo (data do último registro)' : 'Catalogue version (date of latest record)'}</dt><dd className="font-mono"><time dateTime={source.latestUpdate}>{fmtDate(source.latestUpdate, locale)}</time></dd>
+            <dt className="text-muted">{pt ? 'Data do último registro no snapshot' : 'Latest record date in snapshot'}</dt><dd className="font-mono"><time dateTime={source.latestUpdate}>{fmtDate(source.latestUpdate, locale)}</time></dd>
             <dt className="text-muted">{pt ? 'Revisão desta página' : 'Page revision'}</dt><dd className="font-mono"><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd>
             <dt className="text-muted">{tr(d.sha, locale)}</dt><dd className="break-all font-mono text-xs">{source.snapshotSha256}</dd>
           </dl>
-          <p className="mt-4"><a className="text-link" href="/atlas-public.json" download>{pt ? 'Baixar o catálogo (JSON)' : 'Download the catalogue (JSON)'}</a></p>
+          <p className="mt-4"><a className="text-link" href="/atlas-public.json" download>{pt ? 'Baixar snapshot da Tower (JSON)' : 'Download Tower snapshot (JSON)'}</a></p>
+          <h3 className="mt-4 font-semibold">{pt ? 'Resumos editoriais adicionais' : 'Additional editorial summaries'}</h3>
+          <p className="mt-2 text-sm">{pt ? 'Esses registros vêm de pacotes públicos, não de uma atualização da Tower. A inclusão no catálogo não implica validação científica independente.' : 'These records come from public packages, not a Tower update. Inclusion in the catalogue does not imply independent scientific validation.'}</p>
+          <p className="mt-3"><a className="text-link" href="/public-test-summaries.json" download>{pt ? 'Baixar resumos adicionais (JSON)' : 'Download additional summaries (JSON)'}</a></p>
           <p className="mt-4 text-sm text-muted">{tr(d.private, locale)}</p>
         </section>
         <section id="cite" aria-labelledby="cite-h" className="card p-6 inst-cite">
           <h2 id="cite-h" className="text-xl font-semibold">{pt ? 'Como citar' : 'How to cite'}</h2>
-          <p className="mt-3">{pt ? 'Para citar o catálogo, use a data e o hash do snapshot. Para citar um resultado, acrescente o identificador do registro, por exemplo T-05ae703af393.' : 'To cite the catalogue, use the snapshot date and hash. To cite one result, add the record identifier, for example T-05ae703af393.'}</p>
+          <p className="mt-3">{pt ? 'Para citar o snapshot da Tower, use a data e o hash abaixo. Para um resumo editorial adicional, cite a fonte pública indicada no registro. Para citar um resultado, acrescente o identificador do registro, por exemplo T-05ae703af393.' : 'To cite the Tower snapshot, use the date and hash below. For an additional editorial summary, cite its stated public source. To cite one result, add the record identifier, for example T-05ae703af393.'}</p>
           <p className="inst-citation">{citation}</p>
           <BibtexButton bibtex={bibtex} label={tr(D.pubs.bibtex, locale)} done={tr(D.pubs.copied, locale)} />
         </section>

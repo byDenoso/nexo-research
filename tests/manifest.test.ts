@@ -2,7 +2,8 @@ import {readFileSync} from 'node:fs';
 import {describe, expect, it} from 'vitest';
 import {buildManifest, idOf} from '../src/lib/build.ts';
 import {classify} from '../src/lib/classify.ts';
-import {approval, approvals, manifest as manifestSchema, publication, towerPublic} from '../src/lib/schemas.ts';
+import {getFamilies} from '../src/lib/families.ts';
+import {approval, approvals, manifest as manifestSchema, publication, towerPublic, publicTestSummaries, publicTestSummary} from '../src/lib/schemas.ts';
 
 const bytes = readFileSync('data/source/atlas-public.json');
 const tower = towerPublic.parse(JSON.parse(bytes.toString('utf8')));
@@ -74,5 +75,26 @@ describe('research line classification', () => {
     expect(classify('Does DESI BAO prefer evolving dark energy?')).toContain('expansion');
     expect(classify('JWST little red dots selection')).toContain('galaxies');
     expect(classify('something unrelated')).toEqual(['reproducibility']);
+  });
+});
+
+describe('explicitly public editorial summaries', () => {
+  const entries = publicTestSummaries.parse(JSON.parse(readFileSync('data/curated/public-test-summaries.json', 'utf8')));
+  const baseline = buildManifest(tower, [], bytes);
+  const combined = buildManifest(tower, [], bytes, entries);
+  it('adds two independent records while leaving the Tower evidence and counts unchanged', () => {
+    expect(combined.generatedFrom).toEqual(baseline.generatedFrom);
+    expect(combined.results.filter(item => !item.publicSource)).toEqual(baseline.results);
+    expect(combined.catalogue).toEqual({tests: 171, supplements: 2, latestUpdate: '2026-11-25'});
+    expect(getFamilies(combined.results)).toHaveLength(37);
+    expect(combined.results.filter(item => item.publicSource).every(item => item.status === 'CANDIDATE' && item.publishedAt === null)).toBe(true);
+  });
+  it('rejects unauthorized, insecure, duplicated or promoted summaries', () => {
+    const entry = entries[0]!;
+    expect(publicTestSummary.safeParse({...entry, provenance: {...entry.provenance, publicAuthorized: false}}).success).toBe(false);
+    expect(publicTestSummary.safeParse({...entry, provenance: {...entry.provenance, source: {...entry.provenance.source, url: 'http://example.org'}}}).success).toBe(false);
+    expect(publicTestSummary.safeParse({...entry, status: 'PUBLISHED'}).success).toBe(false);
+    expect(() => buildManifest(tower, [], bytes, [entry, entry])).toThrow(/duplicate test id/);
+    expect(() => buildManifest(tower, [{id: idOf(entry.question), status: 'VALIDATED'}], bytes, [entry])).toThrow(/matches no Tower test/);
   });
 });
