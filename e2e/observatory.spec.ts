@@ -15,7 +15,7 @@ for (const locale of ['pt', 'en'] as const) {
       await page.evaluate(() => document.fonts.ready);
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
       await expect(page.getByRole('heading', {level: 1})).toHaveCount(1);
-      if (label === 'home') await expect(page.getByRole('heading', {level: 1})).toHaveText(locale === 'pt' ? 'O Universo sob teste.' : 'The Universe under test.');
+      if (label === 'home') await expect(page.getByRole('heading', {level: 1})).toHaveText(locale === 'pt' ? 'Expansão cósmica e formação de estruturas' : 'Cosmic expansion and structure formation');
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
       const filename = `${locale}-${label}-${isMobile ? 390 : 1440}.png`;
       const path = info.outputPath(filename);

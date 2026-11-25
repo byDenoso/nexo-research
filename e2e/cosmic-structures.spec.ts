@@ -128,7 +128,7 @@ test('real WebGL2 draw, filtered viewport counts, gestures, export and both loca
       await page.goto('/en');
       await page.getByRole('button', {name: 'Enable 3D'}).click();
       await expect(stage).toHaveAttribute('data-backend', 'webgl2', {timeout: 30_000});
-      await expect(page.getByRole('heading', {level: 1, name: 'The Universe under test.'})).toBeVisible();
+      await expect(page.getByRole('heading', {level: 1, name: 'Cosmic expansion and structure formation'})).toBeVisible();
     } else {
       await page.getByRole('button', {name: 'Restaurar câmera'}).click();
     }
@@ -141,6 +141,33 @@ test('real WebGL2 draw, filtered viewport counts, gestures, export and both loca
   }
 });
 
+test('automatic 3D starts after paint, rotates only while visible and preserves manual pause', async ({page}) => {
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  const requests: string[] = [];
+  page.on('request', request => { if (/\/observatory\/.*\.bin$/.test(request.url())) requests.push(request.url()); });
+  await page.goto('/pt');
+  const stage = page.locator('.desi-stage');
+  await expect(stage).toHaveAttribute('data-backend', 'webgl2', {timeout: 30_000});
+  expect(requests).toHaveLength(5);
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute('data-running', 'true');
+  await page.locator('footer').scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute('data-running', 'false');
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute('data-running', 'true');
+  await page.getByRole('button', {name: 'Pausar rotação'}).click();
+  await expect(stage).toHaveAttribute('data-running', 'false');
+  await page.locator('footer').scrollIntoViewIfNeeded();
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute('data-running', 'false');
+  await page.getByRole('button', {name: 'Retomar rotação'}).click();
+  // On a short viewport the control can scroll the stage out of view; return to the scene.
+  await stage.scrollIntoViewIfNeeded();
+  await expect(stage).toHaveAttribute('data-running', 'true');
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await expect(stage).toHaveAttribute('data-running', 'false');
+});
+
 test('WebGL unavailable retains the true poster and catalogue counts without fetching binaries', async ({page}) => {
   await page.addInitScript(() => {
     const getContext = HTMLCanvasElement.prototype.getContext;
@@ -151,8 +178,8 @@ test('WebGL unavailable retains the true poster and catalogue counts without fet
   });
   const requests: string[] = [];
   page.on('request', request => { if (request.url().endsWith('.bin')) requests.push(request.url()); });
+  await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto('/en');
-  await page.getByRole('button', {name: 'Enable 3D'}).click();
   await expect(page.getByText('Static preview. The 3D view is unavailable on this device.')).toBeVisible();
   const stage = page.locator('.desi-stage');
   await expect(stage.getByRole('img')).toBeVisible();

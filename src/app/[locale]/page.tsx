@@ -33,8 +33,8 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <div className="wrap cover-grid">
           <div className="cover-copy">
             <p className="cover-label">{pt ? 'Cosmologia observacional' : 'Observational cosmology'}</p>
-            <h1 id="institute-title">{pt ? 'O Universo sob teste.' : 'The Universe under test.'}</h1>
-            <p>{pt ? 'Confrontamos modelos de energia escura com medidas da expansão cósmica e investigamos a formação de estruturas e as primeiras galáxias. Cada hipótese tem um teste; cada resultado, um limite.' : 'We confront dark-energy models with measurements of cosmic expansion and investigate the growth of structure and the earliest galaxies. Every hypothesis has a test; every result has a limit.'}</p>
+            <h1 id="institute-title">{pt ? 'Expansão cósmica e formação de estruturas' : 'Cosmic expansion and structure formation'}</h1>
+            <p>{pt ? 'A pesquisa compara modelos de energia escura com medidas da expansão cósmica e estuda a formação de estruturas e as primeiras galáxias.' : 'Our research compares dark energy models with measurements of cosmic expansion and investigates the growth of structure and the earliest galaxies.'}</p>
             <div className="cover-actions">
               <Link prefetch={false} href={href(locale, '/results')}>{pt ? 'Explorar resultados' : 'Explore results'} <span aria-hidden="true">→</span></Link>
               <Link prefetch={false} href={href(locale, '/research')}>{pt ? 'Linhas de pesquisa' : 'Research areas'} <span aria-hidden="true">→</span></Link>
@@ -47,7 +47,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
       <section id="em-foco" className="wrap nx-lead" aria-labelledby="cover-title">
         <div className="nx-lead-copy">
           <p className="nx-eyebrow">{pt ? 'Cosmologia observacional / Supernovas Ia' : 'Observational cosmology / Type Ia supernovae'}</p>
-          <h2 id="cover-title">{pt ? 'Supernovas próximas pesam no ajuste da energia escura' : 'Nearby supernovae carry weight in the dark-energy fit'}</h2>
+          <h2 id="cover-title">{pt ? 'Influência das supernovas próximas no ajuste da energia escura' : 'The influence of nearby supernovae on dark energy fits'}</h2>
           {lead && <p className="nx-status"><StatusBadge status={lead.status} locale={locale} /> {pt ? 'Validação independente pendente' : 'Independent validation pending'}</p>}
           <p className="nx-deck"><RedshiftFinding locale={locale} /></p>
           <RedshiftLimit locale={locale} />
@@ -66,16 +66,16 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         </figure>
         <div>
           <p className="nx-eyebrow">{pt ? 'Primeiras galáxias' : 'First galaxies'}</p>
-          <h2 id="galaxies-title">{pt ? 'Como reconhecer uma galáxia do Universo jovem?' : 'How can we identify a galaxy from the early Universe?'}</h2>
-          <p>{pt ? 'O campo GOODS-Sul do Webb reúne galáxias a várias distâncias. A pesquisa acompanha como fotometria e espectros ajudam a distinguir candidatas distantes de fontes próximas com cores parecidas.' : 'Webb’s GOODS-South field contains galaxies at different distances. The research looks at how photometry and spectra distinguish distant candidates from nearby sources with similar colours.'}</p>
+          <h2 id="galaxies-title">{pt ? 'Identificação de galáxias distantes' : 'Identifying distant galaxies'}</h2>
+          <p>{pt ? 'No campo GOODS-Sul observado pelo Webb, fotometria e espectros ajudam a distinguir candidatas a galáxias distantes de fontes próximas com cores parecidas.' : 'In the GOODS-South field observed by Webb, photometry and spectroscopy help distinguish distant galaxy candidates from nearby sources of similar colour.'}</p>
           <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/research') + '#galaxies'}>{pt ? 'Ver a pesquisa sobre galáxias' : 'Read the galaxy research'}</Link>
         </div>
       </section>
 
       <section id="perguntas" className="wrap nx-more-research" aria-labelledby="readings-title">
         <div className="section-masthead">
-          <h2 id="readings-title">{pt ? 'O que os dados sustentam' : 'What the data support'}</h2>
-          <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/results')}>{pt ? 'Ver todas as famílias' : 'See all test families'}</Link>
+          <h2 id="readings-title">{pt ? 'Resultados em destaque' : 'Selected results'}</h2>
+          <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/results')}>{pt ? 'Consultar todos os resultados' : 'Browse all results'}</Link>
         </div>
         <div className="journal-stories">
           {stories.map(item => {
@@ -101,11 +101,11 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
       <section id="fontes" className="catalogue-chapter" aria-labelledby="access-title">
         <div className="wrap catalogue-note">
           <div>
-            <h2 id="access-title">{pt ? 'Evidência, método e proveniência' : 'Evidence, method and provenance'}</h2>
+            <h2 id="access-title">{pt ? 'Dados e métodos' : 'Data and methods'}</h2>
             <div className="inst-actions">
               <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/methods')}>{pt ? 'Consultar o método de avaliação' : 'Read the evaluation method'}</Link>
               <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/data')}>{pt ? 'Ver dados e código' : 'View data and software'}</Link>
-              <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/research') + '#expansion'}>{pt ? 'Ver a pesquisa em expansão' : 'Read the expansion research'}</Link>
+              <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/research') + '#expansion'}>{pt ? 'Pesquisa sobre a expansão cósmica' : 'Research on cosmic expansion'}</Link>
               <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/research') + '#probes'}>{pt ? 'Ver sondas cosmológicas' : 'See cosmological probes'}</Link>
               <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/resultado-vivo')}>{pt ? 'Abrir o Resultado Vivo' : 'Open Living Result'}</Link>
             </div>
@@ -115,7 +115,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
             <div><dt>{pt ? 'Famílias no catálogo' : 'Families in the catalogue'}</dt><dd>{getFamilies(results).length}</dd></div>
             <div><dt>{pt ? 'Execuções documentadas' : 'Documented runs'}</dt><dd>{results.length}</dd></div>
             <div><dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt><dd><Link prefetch={false} className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
-            <div><dt>{pt ? 'Última revisão editorial da home' : 'Last home editorial revision'}</dt><dd><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd></div>
+            <div><dt>{pt ? 'Revisão desta página' : 'Page revision'}</dt><dd><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd></div>
           </dl>
         </div>
       </section>

@@ -1,0 +1,227 @@
+/* NEXO editorial — institutional typography and a distinct dark optical instrument.
+ * Observational layer colours belong to the data, not to the brand.
+ */
+:root[data-theme="light"] body {
+  --premium-brand: #003087;
+  --premium-hover: #00276e;
+  --premium-on-brand: #fff;
+  --premium-shell: #fff;
+  --premium-panel: #f2f5f9;
+  --premium-line: #d3dce7;
+  --premium-ink: #152131;
+  --premium-muted: #4c5c70;
+}
+:root[data-theme="dark"] body {
+  --premium-brand: #82acff;
+  --premium-hover: #aac7ff;
+  --premium-on-brand: #05070d;
+  --premium-shell: #05070d;
+  --premium-panel: #111a29;
+  --premium-line: #344357;
+  --premium-ink: #f0f4f9;
+  --premium-muted: #bac8dc;
+}
+
+body .site-header, :root[data-theme="light"] body:has(.nexo-editorial) .site-header {
+  --ink: var(--premium-ink);
+  --muted: var(--premium-muted);
+  --surface: var(--premium-shell);
+  --raised: var(--premium-panel);
+  --line: var(--premium-line);
+  --accent: var(--premium-brand);
+  background: var(--premium-shell);
+  border-block-end: 1px solid var(--premium-line);
+  color: var(--premium-ink);
+  color-scheme: inherit;
+}
+.site-header .primary-nav a { color: var(--premium-ink); }
+.site-header .primary-nav a:is(:hover, :focus-visible, [aria-current]) { color: var(--premium-brand); }
+.site-header .primary-nav a::after { background: var(--premium-brand); }
+.site-header .wordmark::before { color: var(--premium-brand); }
+.site-header .institutional-wordmark .brand-signature,
+.site-footer .institutional-wordmark .brand-signature { color: var(--premium-muted); }
+.site-header .institutional-wordmark .brand-signature strong,
+.site-footer .institutional-wordmark .brand-signature strong { color: var(--premium-brand); }
+body .site-header .header-living, body:has(.nexo-editorial) .site-header .header-living {
+  color: var(--premium-brand);
+  border-color: var(--premium-line);
+  background: var(--premium-panel);
+}
+body .site-header .header-living:is(:hover, :focus-visible, [aria-current]),
+body:has(.nexo-editorial) .site-header .header-living:is(:hover, :focus-visible, [aria-current]) {
+  background: var(--premium-panel);
+  border-color: var(--premium-brand);
+}
+.site-header .site-menu-panel {
+  background: var(--premium-shell);
+  border-color: var(--premium-line);
+  color: var(--premium-ink);
+}
+html[data-js] .site-header .menu-search {
+  background: var(--premium-panel);
+  border-color: var(--premium-line);
+}
+.site-header .menu-search input { color: var(--premium-ink); }
+.site-header .menu-search input::placeholder,
+.site-header .menu-search kbd,
+.site-header .menu-groups > div > p,
+.site-header .menu-empty { color: var(--premium-muted); }
+.site-header .menu-search:focus-within { outline-color: var(--premium-brand); }
+.site-header .site-menu-panel .menu-groups a {
+  color: var(--premium-ink);
+  border-block-end-color: var(--premium-line);
+}
+.site-header .site-menu-panel .menu-groups a:is(:hover, :focus-visible, [aria-current]) {
+  color: var(--premium-brand);
+  background: var(--premium-panel);
+}
+.site-header :focus-visible { outline-color: var(--premium-brand); }
+body .site-footer, :root[data-theme="dark"] .site-footer {
+  background: var(--premium-shell);
+  color: var(--premium-ink);
+  border-block-start: 1px solid var(--premium-line);
+}
+.site-footer .wordmark::before { color: var(--premium-brand); }
+.site-footer :is(.footer-links a, .footer-summary, .footer-meta) { color: var(--premium-muted); }
+.site-footer .footer-links a:is(:hover,:focus-visible) { color: var(--premium-brand); }
+
+.nx-home {
+  --accent: var(--premium-brand);
+  --brand: var(--premium-brand);
+  --brand-hover: var(--premium-hover);
+  --on-brand: var(--premium-on-brand);
+  --ink: var(--premium-ink);
+  --muted: var(--premium-muted);
+  --line: var(--premium-line);
+  background: var(--premium-shell);
+  color: var(--premium-ink);
+}
+.nx-home .institute-cover[data-observatory] {
+  --accent: var(--premium-brand);
+  --brand: var(--premium-brand);
+  --on-brand: var(--premium-on-brand);
+  background: var(--premium-shell);
+  border-block-end: 1px solid var(--premium-line);
+  color: var(--premium-ink);
+}
+.nx-home .institute-cover[data-observatory]::before { content: none; }
+.nx-home .cover-grid {
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4.5rem);
+  padding-block: clamp(1.8rem, 4vw, 3.75rem);
+}
+.nx-home [data-observatory] .cover-copy h1 {
+  font: 400 clamp(2.65rem, 5vw, 4.6rem)/1.04 var(--editorial-serif, Georgia, serif);
+  letter-spacing: -.045em;
+  max-inline-size: 15ch;
+  margin-block: .9rem 1.15rem;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+.nx-home .cover-copy .cover-label {
+  color: var(--premium-brand);
+  letter-spacing: .1em;
+}
+.nx-home .cover-label::before { background: var(--premium-brand); }
+.nx-home .cover-copy > p:last-of-type {
+  max-inline-size: 45ch;
+  color: var(--premium-muted);
+  font-size: clamp(1rem, 1.35vw, 1.16rem);
+  line-height: 1.65;
+}
+.nx-home .cover-actions { gap: .45rem 1rem; margin-block-start: 1.35rem; }
+.nx-home .cover-actions a:first-child {
+  color: var(--premium-on-brand);
+  background: var(--premium-brand);
+  border-color: var(--premium-brand);
+}
+.nx-home .cover-actions a:first-child:hover { background: var(--premium-hover); }
+.nx-home .cover-actions a:last-child { color: var(--premium-brand); border-block-end-color: var(--premium-line); }
+.nx-home .cover-copy :focus-visible { outline-color: var(--premium-brand); }
+.nx-home .desi-observatory {
+  background: #05070d;
+  margin: 0;
+  padding: clamp(.6rem, 1.2vw, 1rem);
+  border: 1px solid #344357;
+  border-radius: .25rem;
+}
+.nx-home .desi-observatory :focus-visible { outline-color: #b4ceff; }
+.nx-home .desi-heading { padding-block-end: .65rem; }
+.nx-home .desi-stage { background: #05070d; }
+.nx-home .desi-console { margin-block: .65rem .5rem; gap: .45rem; }
+.nx-home .desi-layer { background: #111a29; border-radius: .25rem; }
+.nx-home .desi-stage-status .desi-activate { color: #e8eeff; border-color: #7895c4; background: #15243c; }
+.nx-home .desi-stage-status .desi-activate:hover { background: #263d60; }
+.nx-home .desi-tool:enabled:hover,
+.nx-home .desi-tool:focus-visible { background: #1d2d47; border-color: #82acff; }
+.nx-home .chapter-nav,
+:root[data-theme="dark"] .nx-home .chapter-nav {
+  background: var(--premium-shell);
+  border-color: var(--premium-line);
+}
+.nx-home .chapter-nav a { color: var(--premium-muted); }
+.nx-home .chapter-nav a:is(:hover,:focus-visible,[aria-current]) { color: var(--premium-brand); }
+.nx-home :is(.nx-lead,.nx-observation,.nx-more-research,.catalogue-note) {
+  padding-block: clamp(2.2rem, 5vw, 4.8rem);
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+.nx-home .nx-eyebrow { color: var(--premium-brand); }
+.nx-home #cover-title,
+.nx-home .nx-observation h2,
+.nx-home .section-masthead h2,
+.nx-home .catalogue-note h2,
+.nx-home .publication-strip h2 {
+  font: 400 clamp(2rem, 3.4vw, 3.4rem)/1.12 var(--editorial-serif, Georgia, serif);
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.nx-home .nx-lead { align-items: start; }
+.nx-home .nx-deck { font-size: clamp(1.05rem, 1.35vw, 1.2rem); line-height: 1.6; }
+.nx-home .nx-primary { background: var(--premium-brand); color: var(--premium-on-brand); }
+.nx-home .nx-primary:hover { background: var(--premium-hover); }
+.nx-home .nx-observation { align-items: center; border-block: 1px solid var(--premium-line); }
+.nx-home .nx-observation img { aspect-ratio: 3 / 2; }
+.nx-home .section-masthead { margin-block-end: 1.65rem; }
+.nx-home .journal-stories, :root[data-theme="dark"] .nx-home .journal-stories { gap: 1rem clamp(1.5rem, 3vw, 3rem); }
+.nx-home .journal-stories article, :root[data-theme="dark"] .nx-home .journal-stories article {
+  background: transparent;
+  border: 0;
+  border-block-start: 1px solid var(--premium-line);
+  padding: 1.2rem 0 0;
+}
+.nx-home .journal-stories h3 {
+  font: 400 clamp(1.45rem, 2vw, 1.9rem)/1.22 var(--editorial-serif, Georgia, serif);
+  letter-spacing: -.02em;
+}
+.nx-home .catalogue-chapter, :root[data-theme="dark"] .nx-home .catalogue-chapter {
+  background: var(--premium-panel);
+  border-block-color: var(--premium-line);
+}
+.nx-home .catalogue-note .inst-facts > div { border-color: var(--premium-line); }
+
+@media (min-width: 56rem) {
+  .nx-home .cover-grid { grid-template-columns: minmax(0,.84fr) minmax(0,1.36fr); }
+}
+@media (max-width: 55.99rem) {
+  .nx-home [data-observatory] .cover-copy h1 { max-inline-size: 22ch; font-size: clamp(2.25rem, 8vw, 3.6rem); }
+  .nx-home .cover-grid { padding-block: 1.8rem 2rem; }
+  .nx-home .desi-observatory { max-inline-size: 100%; }
+}
+@media (max-width: 40rem) {
+  .nx-home [data-observatory] .cover-copy h1 { font-size: clamp(2rem, 8.4vw, 3.05rem); line-height: 1.08; margin-block: .65rem .85rem; }
+  .nx-home .cover-copy > p:last-of-type { font-size: .95rem; line-height: 1.55; }
+  .nx-home .desi-observatory { padding: .5rem; }
+}
+
+/* The legacy dark-chapter class also supplies foreground tokens; keep them theme-aware. */
+:root[data-theme] .site-footer.dark-chapter {
+  --ink: var(--premium-ink); --muted: var(--premium-muted);
+  --accent: var(--premium-brand); --accent-hover: var(--premium-hover);
+  --line: var(--premium-line); --surface: var(--premium-shell);
+  color-scheme: inherit;
+}
+
+:root[data-theme] .site-footer.dark-chapter :focus-visible { outline-color: var(--premium-brand); }
+
+/* Theme changes must update foreground and background together, not interpolate across themes. */
+.site-footer .footer-links a { transition: transform .18s ease; }

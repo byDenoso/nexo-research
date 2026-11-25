@@ -34,19 +34,19 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
       <header className="record-head dark-chapter">
         <div className="wrap record-head-inner">
           <Link className="text-link record-back" href={href(locale, '/results')}>← {locale === 'pt' ? 'Todas as perguntas' : 'All questions'}</Link>
-          <p className="kicker">{locale === 'pt' ? 'Família de investigação' : 'Research family'}</p>
+          <p className="kicker">{locale === 'pt' ? 'Pergunta científica' : 'Research question'}</p>
           <CatalogueTitle slug={family.slug}><CatalogueHeading title={familyQuestion(family, locale)} /></CatalogueTitle>
           <p className="record-status-note">{pick(family.description, locale)}</p>
           <p className="family-subhead">{family.records.length} {locale === 'pt' ?
-            (family.records.length === 1 ? 'registro de execução' : 'registros de execução') :
-            (family.records.length === 1 ? 'execution record' : 'execution records')} · {locale === 'pt' ? 'Último registro' : 'Latest record'}: {fmtDate(family.updatedAt, locale)}</p>
+            (family.records.length === 1 ? 'registro' : 'registros') :
+            (family.records.length === 1 ? 'record' : 'records')} · {locale === 'pt' ? 'Último registro' : 'Latest record'}: {fmtDate(family.updatedAt, locale)}</p>
         </div>
       </header>
       <div className="wrap page-body family-layout">
         <p className="card family-method-note">{locale === 'pt' ?
-          'Agrupamento editorial pela pergunta investigada. Cada registro conserva o identificador, os priors, o método, o resultado e o estado originais. Os valores não foram combinados, e a presença de um sinal em uma execução não prova significância global.' :
-          'Editorial grouping by research question. Each record preserves its original identifier, priors, method, result and status. Values have not been combined, and a signal in a single run is not a global detection.'}</p>
-        <section className="family-entry"><div><p className="kicker">{pt ? 'Uma execução para começar' : 'One run to start with'}</p><h2>{reading.finding}</h2><p>{reading.why}</p><Link className="journal-button" href={href(locale, '/results/'+entry.slug)}>{pt ? 'Entenda este resultado' : 'Understand this result'} →</Link></div><div className="visible-limit"><strong>{pt ? 'Limite desta execução' : 'Limit of this run'}</strong><p>{reading.limit}</p><StatusBadge status={entry.status} locale={locale}/></div></section>
+          'Os testes respondem à mesma pergunta, mas podem adotar dados, priors ou métodos distintos. Cada registro conserva o identificador, os priors, o método, o resultado e o estado originais. Os valores não foram combinados. Um sinal em uma execução não prova significância global.' :
+          'Tests address the same question but may use different data, priors or methods. Each record preserves its original identifier, priors, method, result and status. Values have not been combined. A signal in a single run does not establish global significance.'}</p>
+        <section className="family-entry"><div><p className="kicker">{pt ? 'Resultado selecionado' : 'Selected result'}</p><h2>{reading.finding}</h2><p>{reading.why}</p><Link className="journal-button" href={href(locale, '/results/'+entry.slug)}>{pt ? 'Consultar análise' : 'Read the analysis'} →</Link></div><div className="visible-limit"><strong>{pt ? 'Limite desta execução' : 'Limit of this run'}</strong><p>{reading.limit}</p><StatusBadge status={entry.status} locale={locale}/></div></section>
         <nav className="reading-jumps" aria-label={pt ? 'Nesta família' : 'In this family'}><a href="#family-figure">{pt ? 'Compare os valores' : 'Compare the values'} ↓</a><a href="#variants-heading">{pt ? 'Todas as execuções' : 'All runs'} ↓</a></nav>
         {family.slug === 'bao-tracer-exclusion' && (
           <p><Link className="text-link arrow-link" href={href(locale, '/results/' + desiTracerId.toLowerCase()) + '#' + desiTracerAnchor}>{pt ? 'Comparar o Δχ² após retirar cada traçador do DESI DR2' : 'Compare Δχ² after removing each DESI DR2 tracer'}</Link></p>
@@ -62,7 +62,7 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
                 <p className="family-record-result">{pick(item.result, locale)}</p>
                 <div className="family-record-foot">
                   <time dateTime={item.updatedAt}>{fmtDate(item.updatedAt, locale)}</time>
-                  <Link className="text-link" href={href(locale, '/results/' + item.slug)}>{locale === 'pt' ? 'Método, limites e proveniência' : 'Method, limits and provenance'}<span className="sr-only"> · {item.id}</span></Link>
+                  <Link className="text-link" href={href(locale, '/results/' + item.slug)}>{locale === 'pt' ? 'Detalhes da análise' : 'Analysis details'}<span className="sr-only"> · {item.id}</span></Link>
                 </div>
               </li>
             ))}

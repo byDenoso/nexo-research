@@ -6,7 +6,7 @@ import styles from './page.module.css';
 
 const texts = {
   pt: {
-    title: 'Atlas de conhecimento', lead: 'O que os artigos mediram, com quais dados e sob quais hipóteses.',
+    title: 'Atlas de conhecimento', lead: 'Resultados da literatura de cosmologia e astrofísica, com suas fontes e condições de validade.',
     contents: 'Perguntas', catalogue: 'Catálogo público do NEXO', atlas: 'Abrir o quadro de investigação', access: 'Acesso da equipe',
     studies: [
       {id: 'expansao', area: 'Expansão', title: 'A energia escura varia com o tempo?',
@@ -22,7 +22,7 @@ const texts = {
     ]
   },
   en: {
-    title: 'Knowledge atlas', lead: 'What the studies measured, which data they used and which assumptions shape each result.',
+    title: 'Knowledge atlas', lead: 'Results from the cosmology and astrophysics literature, with sources and the assumptions underlying each finding.',
     contents: 'Questions', catalogue: 'NEXO public catalogue', atlas: 'Open the research board', access: 'Team access',
     studies: [
       {id: 'expansao', area: 'Expansion', title: 'Does dark energy change with time?',

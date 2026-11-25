@@ -61,7 +61,7 @@ function Figure({item, locale}: {item: Result; locale: Locale}) {
         </ul>
       )}
       {!sameText(pick(figure.caption, locale), pick(item.result, locale)) && <p className="record-figure-caption">{scientificText(pick(figure.caption, locale), locale)}</p>}
-      <p className="record-source">{tr(D.results.figureSource, locale)}: <Link className="text-link" href={href(locale, '/data')}>{locale === 'pt' ? 'Snapshot público da Tower' : 'Tower public snapshot'}</Link></p>
+      <p className="record-source">{tr(D.results.figureSource, locale)}: <Link className="text-link" href={href(locale, '/data')}>{locale === 'pt' ? 'Catálogo público de resultados' : 'Public results catalogue'}</Link></p>
     </figure>
   );
 }
@@ -110,8 +110,8 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
           {item.statusSource !== 'default' && <p className="record-status-note">{approval?.statusNote ? pick(approval.statusNote, locale) : tr(D.status[item.status].d, locale)}</p>}
         </div>
       </header>
-      <section className="wrap brief-reading" aria-label={pt ? 'Leitura em dois minutos' : 'Two-minute reading'}>
-        <div><p className="kicker">{pt ? 'A leitura em 2 minutos' : 'The two-minute reading'}</p><h2>{pt ? 'Por que esta pergunta importa' : 'Why this question matters'}</h2><p>{reading.why}</p></div>
+      <section className="wrap brief-reading" aria-label={pt ? 'Contexto da análise' : 'Analysis context'}>
+        <div><h2>{pt ? 'Contexto científico' : 'Scientific context'}</h2><p>{reading.why}</p></div>
         <div className="visible-limit"><strong>{pt ? 'O limite da conclusão' : 'Scope of the conclusion'}</strong><p>{reading.limit}</p>{isNegative(item.id) && <span className="outcome-tag">{pt ? 'Resultado negativo' : 'Negative result'}</span>}<p className="evidence-explained"><StatusBadge status={item.status} locale={locale}/> {tr(D.status[item.status].d, locale)}</p></div>
         <nav className="reading-jumps" aria-label={pt ? 'Aprofundar este resultado' : 'Explore this result'}><a href="#result">{pt ? 'O resultado' : 'The result'} ↓</a><a href="#method">{pt ? 'Como foi testado' : 'How it was tested'} ↓</a><a href="#record-provenance-title">{pt ? 'Dados, código e fontes' : 'Data, code and sources'} ↓</a></nav>
       </section>
@@ -143,8 +143,8 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
           {inStrip && (
             <SensitivityChart
               rows={sensitivityRows(strip)} series={compilations(strip)} locale={locale} highlight={item.id}
-              title={pt ? 'Esta execução entre as demais execuções públicas' : 'This run among the other public runs'}
-              lead={pt ? 'O ponto destacado é este registro. As outras execuções usam outras combinações de dados e priors.' : 'The highlighted dot is this record. The other runs use other combinations of data and priors.'}
+              title={pt ? 'Comparação com outras análises' : 'Comparison with other analyses'}
+              lead={pt ? 'O ponto destacado corresponde a este registro. As demais análises usam diferentes combinações de dados e priors.' : 'The highlighted point is this record; other analyses use different combinations of data and priors.'}
             />
           )}
           {!duplicated && <Block title={tr(R.answer, locale)}><p>{scientificText(interpretation, locale)}</p></Block>}
@@ -155,7 +155,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
           {approval?.code && approval.code.length > 0 && <Block title={tr(R.code, locale)}><ul>{approval.code.map(entry => <li key={entry.url}><a className="text-link" href={entry.url} rel="noopener noreferrer">{entry.label}</a></li>)}</ul></Block>}
         </div>
         <aside className="card record-provenance" aria-labelledby="record-provenance-title">
-          <h2 id="record-provenance-title">{pt ? 'Dossiê de verificação' : 'Verification dossier'}</h2>
+          <h2 id="record-provenance-title">{pt ? 'Dados e proveniência' : 'Data and provenance'}</h2>
           <nav className="dossier-index" aria-label={pt ? 'Neste registro' : 'In this record'}>
             <a href="#question">{tr(R.question, locale)}</a>
             <a href="#method">{tr(R.method, locale)}</a>
@@ -218,8 +218,8 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
             </>
           )}
           <p className="record-provenance-note">{pt
-            ? 'Campos sem confirmação na fonte ficam em branco e aparecem como não declarados. Nenhum campo ausente foi inferido.'
-            : 'Fields not confirmed against the source are left empty and shown as not stated. No missing field has been inferred.'}</p>
+            ? 'O catálogo não infere campos ausentes: eles aparecem como não declarados.'
+            : 'The catalogue does not infer missing fields; they are shown as not stated.'}</p>
           <Link href={href(locale, '/data')} prefetch={false} className="text-link arrow-link">{tr(D.data.title, locale)}</Link>
         </aside>
       </div>

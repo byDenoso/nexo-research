@@ -1,10 +1,10 @@
 <h2 id="hypothesis">Hypothesis</h2>
 
-Tests start from a question with a numerical answer and a result that would refute it. The criterion is written before the calculation, so an unexpected value cannot be reinterpreted afterwards.
+The quantitative question and the outcome that would refute it are defined before the calculation. The criterion is recorded to avoid retrospective changes in interpretation.
 
 <h2 id="data">Data</h2>
 
-Tests use public data sets (BAO, supernovae, cosmic chronometers, the CMB, astronomical catalogues). Each result names the data set, version and selection when the public record contains that information. Missing fields are shown as missing.
+Tests use public data sets (BAO, supernovae, cosmic chronometers, the CMB, astronomical catalogues). Each result identifies the dataset, its version and selection where this information is available in the public record.
 
 <h2 id="model">Modelling</h2>
 
@@ -16,7 +16,7 @@ and the most common extension for evolving dark energy, the CPL parametrisation,
 
 <Tex display tex={String.raw`w(a)=w_0+w_a(1-a),\qquad \frac{\rho_{\rm DE}(z)}{\rho_{\rm DE,0}}=(1+z)^{3(1+w_0+w_a)}\exp\!\left(-\frac{3w_a z}{1+z}\right)`} />
 
-Free parameters, fixed parameters and priors are declared in every test. A fixed calibration that absorbs part of the signal is treated as a model assumption and tested separately.
+Each test specifies its free and fixed parameters, along with their priors. A fixed calibration that absorbs part of the signal is treated as a model assumption and tested separately.
 
 <h2 id="tests">Tests</h2>
 
@@ -28,11 +28,11 @@ and, when nested sampling is used, by the Bayes factor
 
 <Tex display tex={String.raw`\ln B=\ln Z_{\rm model}-\ln Z_{\Lambda{\rm CDM}}`} />
 
-Partial evidences from different runs are not comparable with one another; the comparison holds only for completed runs on the same data, priors and likelihood. Tests include numerical checks (convergence, independent seeds, limiting cases) before the number is recorded.
+Partial estimates of Bayesian evidence cannot be compared across runs. Comparisons require completed calculations using the same data, priors and likelihood. Convergence checks, independent seeds and limiting cases precede the recording of results.
 
 <h2 id="review">Review</h2>
 
-A second reading tries to refute the result: it looks for a hidden assumption, a missing baseline, a reversed causality or a numerical artefact. The result moves on only with an answer to each objection found.
+Review seeks to refute the result by identifying unstated assumptions, missing reference models, unjustified causal interpretations or numerical artefacts. Objections must be addressed before approval.
 
 <h2 id="result">Result</h2>
 
@@ -44,15 +44,15 @@ A result is described with its value, the test conditions and its scientific sta
 - **Refuted:** contradicted by a later test.
 - **Published:** described in an authorised publication.
 
-Appearing in the Tower does not promote a result. A status change is an editorial decision recorded in the public approvals manifest, in this site's repository.
+Inclusion in the catalogue does not imply validation. Each change in status is recorded in the public approvals manifest in the repository.
 
 <h2 id="publication">Publication</h2>
 
-Only what has been cleared for release becomes a paper, note or preprint, and each publication shows its real editorial state. DOI, arXiv identifier and references are added when they exist and are checked at the source.
+Papers, notes and preprints are made public after approval, together with their editorial status. DOIs, arXiv identifiers and references are checked against their sources where available.
 
 <h2 id="repro">Reproducibility</h2>
 
 - Result identifiers are derived from the text of the public question and stay stable while the question does not change.
-- The public Tower snapshot in use, with its SHA-256, is shown on the Data page.
-- If the Tower becomes unavailable, the site keeps showing the last validated snapshot.
+- The Data page identifies the public catalogue release (Tower) and its SHA-256.
+- If Tower is unavailable, the last validated catalogue release remains available.
 - Internal Tower records are neither read nor published by this site.

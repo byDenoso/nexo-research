@@ -27,13 +27,13 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
     <div className="nexo-editorial nx-catalogue">
       <header className="wrap nx-catalogue-head">
         <div>
-          <p className="nx-eyebrow">{pt ? 'Descobertas e candidatos' : 'Discoveries and candidates'}</p>
+          <p className="nx-eyebrow">{pt ? 'Testes e análises' : 'Tests and analyses'}</p>
           <h1>{pt ? 'Catálogo de resultados' : 'Results catalogue'}</h1>
-          <p>{pt ? 'Encontre uma pergunta científica, compare as execuções da família e consulte os dados de cada ajuste.' : 'Find a research question, compare its family of runs and inspect the data for each fit.'}</p>
+          <p>{pt ? 'Os resultados estão agrupados por pergunta científica, com os dados, as condições de cada análise e o estado da evidência.' : 'Results are grouped by research question, with the data, analysis conditions and evidence status.'}</p>
         </div>
         <dl>
-          <div><dt>{pt ? 'Famílias de testes' : 'Test families'}</dt><dd>{rows.length}</dd></div>
-          <div><dt>{pt ? 'Execuções públicas' : 'Public runs'}</dt><dd>{results.length}</dd></div>
+          <div><dt>{pt ? 'Perguntas científicas' : 'Research questions'}</dt><dd>{rows.length}</dd></div>
+          <div><dt>{pt ? 'Registros públicos' : 'Public records'}</dt><dd>{results.length}</dd></div>
           <div><dt>{pt ? 'Versão do catálogo' : 'Catalogue version'}</dt><dd><Link className="text-link" href={href(locale, '/data') + '#snap'}><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></Link></dd></div>
           <div><dt>{pt ? 'Última revisão editorial' : 'Last editorial revision'}</dt><dd><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd></div>
         </dl>

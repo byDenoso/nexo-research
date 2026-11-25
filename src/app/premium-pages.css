@@ -1,0 +1,177 @@
+/* Internal editorial pages. Imported after the shared and observatory layers. */
+main:not(:has(> .nx-home)) {
+  --page-paper: #05070d;
+  --page-panel: #0c111c;
+  --page-subtle: #111a29;
+  --page-rule: #28364a;
+  --page-accent: #82acff;
+  --page-ink: #f4f6fa;
+  --page-muted: #adbcd0;
+  --page-serif: var(--editorial-serif, Georgia, serif);
+  background: var(--page-paper);
+}
+:root[data-theme="light"] main:not(:has(> .nx-home)) {
+  --page-paper: #ffffff;
+  --page-panel: #f8fafc;
+  --page-subtle: #edf3fb;
+  --page-rule: #dbe2ed;
+  --page-accent: #003087;
+  --page-ink: #142035;
+  --page-muted: #4f6076;
+}
+
+/* Report-like opening, in the selected theme rather than a fixed colour banner. */
+main:not(:has(> .nx-home)) > :is(.section-intro,.page-head,.record-head) {
+  --ink: var(--page-ink);
+  --muted: var(--page-muted);
+  --accent: var(--page-accent);
+  --line: var(--page-rule);
+  background: var(--page-paper);
+  color: var(--page-ink);
+  border-block-end: 1px solid var(--page-rule);
+}
+:root[data-theme="light"] main > .record-head.dark-chapter {
+  --ink: var(--page-ink);
+  --muted: var(--page-muted);
+  --accent: var(--page-accent);
+  --line: var(--page-rule);
+  --ok: #136347;
+  --warn: #784807;
+  --bad: #a3203a;
+  color-scheme: light;
+}
+:root[data-theme="light"] main > .record-head.dark-chapter :focus-visible {outline-color: var(--page-accent);}
+main:not(:has(> .nx-home)) :is(.section-intro,.record-head) .page-head-inner,
+main:not(:has(> .nx-home)) > .record-head .record-head-inner {
+  padding-block: clamp(2.8rem,6vw,5.4rem) clamp(2.4rem,5vw,4.4rem);
+}
+main:not(:has(> .nx-home)) :is(.section-intro,.record-head) h1,
+main:not(:has(> .nx-home)) :is(.nx-catalogue .nx-catalogue-head h1,.nx-record .nx-record-header h1) {
+  font: 400 clamp(2.6rem,5.6vw,5.35rem)/1.04 var(--page-serif);
+  letter-spacing: -.034em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+main:not(:has(> .nx-home)) .record-head .record-head-inner h1 {
+  font-size: clamp(2.35rem,4.5vw,4.3rem);
+  max-inline-size: 29ch;
+}
+main:not(:has(> .nx-home)) :is(.section-intro,.record-head) .kicker {color: var(--page-accent);}
+main:not(:has(> .nx-home)) :is(.section-intro,.record-head) .page-lead {
+  color: var(--page-muted);
+  border-inline-start-color: var(--page-rule);
+  max-inline-size: 58ch;
+  font-size: clamp(1.03rem,1.6vw,1.25rem);
+  line-height: 1.65;
+}
+
+/* Catalogue. Its index stays an accessible list, not an array of dashboard tiles. */
+.nx-catalogue .nx-catalogue-head {padding-block: clamp(2.6rem,6vw,5rem) 2rem;}
+.nx-catalogue .nx-catalogue-head dl {gap: 1.2rem;}
+.nx-catalogue .nx-catalogue-head dl div {border-inline-start: 1px solid var(--page-rule); padding-inline-start: .9rem;}
+.nx-catalogue .nx-catalogue-head dl div:nth-child(-n+2) {border-inline-start: 2px solid var(--page-accent);}
+.nx-catalogue .nx-catalogue-head dl div:nth-child(-n+2) dd {font: 400 2.55rem/1.04 var(--page-serif); font-variant-numeric: lining-nums tabular-nums;}
+.nx-catalogue-content .nx-filters {
+  padding: clamp(1rem,2vw,1.5rem);
+  border: 1px solid var(--page-rule);
+  border-radius: .6rem;
+  gap: 1rem;
+  background: var(--page-panel);
+}
+.nx-catalogue-content .nx-filters :is(input,select) {
+  min-block-size: 2.8rem;
+  border-radius: .3rem;
+  background: var(--page-paper);
+  color: var(--page-ink);
+}
+.nx-catalogue-content .nx-filters label {font-size: .82rem; line-height: 1.4; color: var(--page-muted);}
+.nx-catalogue-content .nx-index-title {font: 400 clamp(2rem,3.5vw,3.15rem)/1.12 var(--page-serif);}
+.nx-catalogue .nx-question-index {border-block-start: 1px solid var(--page-rule);}
+.nx-catalogue .nx-question-index article {
+  border-block-end: 1px solid var(--page-rule);
+  padding-block: clamp(1.4rem,2.7vw,2.25rem);
+  padding-inline: 1rem;
+  gap: 1rem;
+}
+.nx-catalogue .nx-question-index article:is(:hover,:focus-within) {
+  background: var(--page-panel);
+  border-inline-start-color: var(--page-accent);
+}
+.nx-catalogue .nx-question-index h3 {font: 400 clamp(1.4rem,2.7vw,2.2rem)/1.16 var(--page-serif); letter-spacing: -.022em;}
+.nx-catalogue .nx-question-index h3 + p {font-size: 1rem; line-height: 1.6;}
+.nx-catalogue .nx-question-run {align-self: start;}
+.nx-catalogue .snapshot-disclosure {padding: 1rem 1.25rem; background: var(--page-panel); border-inline-start: 2px solid var(--page-accent);}
+
+/* Reading hierarchy and controlled width. Data, math and chart labels keep their native fonts. */
+main:not(:has(> .nx-home)) :is(.research-question,.methods-article,.inst-prose,.family-entry,.brief-reading,.inst-projects,.inst-log,.bibliography,.external-references,.source-access-section,.atlas-intro,.living-panel) h2,
+main:not(:has(> .nx-home)) :is(.family-record,.bibliography) h3 {
+  font-family: var(--page-serif);
+  font-weight: 400;
+  line-height: 1.17;
+  letter-spacing: -.018em;
+}
+main:not(:has(> .nx-home)) :is(.research-question,.methods-article,.inst-prose,.source-access-section,.bibliography,.external-references) h2 {
+  font-size: clamp(1.65rem,3vw,2.65rem);
+}
+main:not(:has(> .nx-home)) :is(.methods-article,.inst-prose) :is(p,li) {
+  font-size: clamp(1.03rem,1.5vw,1.12rem);
+  line-height: 1.72;
+}
+main:not(:has(> .nx-home)) :is(.methods-article,.inst-prose) {max-inline-size: 72ch; min-inline-size: 0;}
+main:not(:has(> .nx-home)) :is(.methods-article,.inst-prose) h2 {margin-block: 2.25rem .85rem;}
+main:not(:has(> .nx-home)) :is(.methods-article,.inst-prose) h2:first-child {margin-block-start: 0;}
+main:not(:has(> .nx-home)) :is(.methods-index,.research-index,.about-layout nav) {
+  background: var(--page-panel);
+  border: 1px solid var(--page-rule);
+  border-block-start: 2px solid var(--page-accent);
+  border-radius: .25rem;
+  padding: 1.15rem;
+}
+main:not(:has(> .nx-home)) :is(.methods-index,.research-index,.about-layout nav) a {min-block-size: 2.6rem;}
+main:not(:has(> .nx-home)) .research-question {padding-block: clamp(1.8rem,4vw,3.4rem); border-block-end-color: var(--page-rule);}
+main:not(:has(> .nx-home)) .research-question > div > p:not(.kicker) {line-height: 1.65;}
+main:not(:has(> .nx-home)) :is(.research-projects,.external-references,.resource-routes) {border-color: var(--page-rule);}
+main:not(:has(> .nx-home)) .research-projects summary {font-weight: 600; min-block-size: 2.5rem; align-content: center;}
+main:not(:has(> .nx-home)) :is(.inst-projects,.inst-log,.bibliography) li {padding-block: clamp(1.4rem,3vw,2rem);}
+main:not(:has(> .nx-home)) .bibliography li > p:not(.font-mono) {max-inline-size: 76ch; line-height: 1.66;}
+main:not(:has(> .nx-home)) .external-references {margin-block-start: 3rem; padding-block: 2rem;}
+main:not(:has(> .nx-home)) .resource-routes {padding: 1rem 1.3rem; background: var(--page-panel); border: 1px solid var(--page-rule); border-radius: .5rem;}
+main:not(:has(> .nx-home)) .source-access-section {padding-block: clamp(1.2rem,4vw,2.6rem);}
+main:not(:has(> .nx-home)) .data-mention-name {overflow-wrap: anywhere;}
+
+/* Result and evidence panels. Scientific colours, chart legend and controls remain untouched. */
+main:not(:has(> .nx-home)) :is(.record-evidence,.record-provenance,.family-method-note,.visible-limit,.inst-cite,.contact-card) {
+  border-color: var(--page-rule);
+  border-radius: .45rem;
+  background: var(--page-panel);
+}
+main:not(:has(> .nx-home)) :is(.record-evidence,.record-provenance) {border-block-start: 2px solid var(--page-accent);}
+main:not(:has(> .nx-home)) :is(.family-method-note,.visible-limit) {border-inline-start: 2px solid var(--page-accent);}
+main:not(:has(> .nx-home)) :is(.record-block,.family-record) p {font-size: 1.04rem; line-height: 1.68;}
+main:not(:has(> .nx-home)) .record-block {gap: .8rem;}
+main:not(:has(> .nx-home)) .record-block h2 {font: 500 1.5rem/1.17 var(--page-serif); letter-spacing: -.015em; text-transform: none; color: var(--page-ink);}
+main:not(:has(> .nx-home)) .record-provenance h2 {font: 400 1.45rem/1.2 var(--page-serif); letter-spacing: -.012em; text-transform: none; color: var(--page-ink);}
+main:not(:has(> .nx-home)) .family-record {padding-block: 1.8rem; border-color: var(--page-rule);}
+main:not(:has(> .nx-home)) .record-provenance {min-inline-size: 0; overflow-wrap: anywhere;}
+main:not(:has(> .nx-home)) .living-tabs {border-color: var(--page-rule);}
+main:not(:has(> .nx-home)) .living-tabs a {min-block-size: 3.2rem;}
+main:not(:has(> .nx-home)) .living-tabs a[aria-selected=true] {color: var(--page-accent);}
+main:not(:has(> .nx-home)) .living-panel .expansion-story {border-block-start: none;}
+
+@media (max-width: 42rem) {
+  main:not(:has(> .nx-home)) :is(.section-intro,.record-head) h1,
+  main:not(:has(> .nx-home)) :is(.nx-catalogue .nx-catalogue-head h1,.nx-record .nx-record-header h1) {font-size: clamp(2.3rem,9vw,3.5rem);}
+  .nx-catalogue .nx-question-index article {padding-inline: .5rem;}
+  .nx-catalogue-content .nx-filters {gap: .75rem;}
+  main:not(:has(> .nx-home)) :is(.research-index,.methods-index,.about-layout nav) {padding: .9rem;}
+}
+
+/* Family pages nest their record masthead inside the article rather than directly in main. */
+:root[data-theme='light'] main .record-head.dark-chapter {
+  --bg: var(--page-paper); --surface: var(--page-panel); --raised: var(--page-subtle);
+  --ink: var(--page-ink); --muted: var(--page-muted); --accent: var(--page-accent);
+  --line: var(--page-rule); --ok: #136347; --warn: #784807; --bad: #a3203a;
+  color: var(--page-ink); background: var(--page-paper); color-scheme: light;
+  border-block-end: 1px solid var(--page-rule);
+}
+:root[data-theme='light'] main .record-head.dark-chapter :focus-visible { outline-color: var(--page-accent); }

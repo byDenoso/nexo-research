@@ -44,7 +44,7 @@ for (const locale of ['pt', 'en'] as const) {
     }
     await expect(page.locator('.site-footer .brand-signature')).toHaveText(signature);
     await expect(page.locator('.inst-prose')).toContainText(signature);
-    for (const term of ['Nature', 'Exploration', 'Origins']) await expect(page.locator('.inst-prose strong').filter({hasText: new RegExp('^' + term + '$')})).toHaveCount(1);
+    await expect(page.locator('.inst-prose strong').filter({hasText: signature})).toHaveCount(1);
     await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute('content', 'NEXO Research Institute — ' + signature);
     const html = await (await request.get('/' + locale)).text();
     expect(html).toContain('Nature, Exploration &amp; Origins');

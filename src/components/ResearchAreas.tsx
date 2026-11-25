@@ -15,7 +15,7 @@ export function ResearchAreas({locale,areas,figure,output}: {locale:Locale;areas
     <label>{pt?'Evidência no catálogo':'Catalogue evidence'}<select aria-label={pt?'Evidência no catálogo':'Catalogue evidence'} value={evidence} onChange={e=>setEvidence(e.target.value)}><option value="all">{pt?'Todos os estados':'All statuses'}</option>{(Object.keys(D.status) as Status[]).map(s=><option key={s} value={s}>{tr(D.status[s].n,locale)}</option>)}</select></label></div>
     <ul role="list">{visible.map(({line})=><li key={line}><a href={'#'+line}>{tr(D.lines.items[line].n,locale)} ↓</a></li>)}</ul>
     <a className="text-link" href="#scenario-comparison">{pt?'Comparar cenários':'Compare scenarios'}</a></nav>
-    <div className="research-content">{figure}<p className="kicker" role="status">{visible.length} {pt?'linhas no recorte':'matching research areas'}</p>{visible.map(a=><div key={a.line}>{a.content}</div>)}
+    <div className="research-content">{figure}<p className="kicker" role="status">{visible.length} {pt?'linhas de pesquisa':'research areas'}</p>{visible.map(a=><div key={a.line}>{a.content}</div>)}
     {!visible.length && <p>{pt?'Nenhuma linha tem registros com estes critérios.':'No area has records matching these criteria.'}</p>}
     {output}<details id="scenario-comparison" className="research-projects"><summary>{pt?'Comparar cenários de expansão':'Compare expansion scenarios'}</summary><LiveResult locale={locale}/></details></div>
     </div>;

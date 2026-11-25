@@ -1,0 +1,45 @@
+/* NEXO premium editorial system: local variable font; scientific series keep their own palette. */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+  src: url('@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2') format('woff2');
+}
+:root {
+  --editorial-serif: 'Source Serif 4', Georgia, serif;
+  --brand: #003087;
+  --brand-hover: #0041ad;
+  --on-brand: #fff;
+  --section-space: clamp(3rem, 6vw, 6rem);
+  --gutter: clamp(1rem, 4.2vw, 4rem);
+  --radius: .25rem;
+  --control-radius: .25rem;
+  --shadow: 0 8px 30px #00000014;
+}
+:root[data-theme="light"] {
+  --bg: #fff; --surface: #fff; --raised: #f5f7fa;
+  --line: #ccd5e2; --control-line: #69788d;
+  --ink: #101828; --muted: #49586b;
+  --accent: #003087; --accent-hover: #0041ad; --accent-ink: #fff;
+  --brand: #003087; --brand-hover: #0041ad; --on-brand: #fff; --brand-outline: #003087;
+}
+:root[data-theme="light"] body:not(:has(main .external-references, main .bibliography)) {
+  --bg: #fff; --raised: #f5f7fa;
+}
+:root[data-theme="dark"] {
+  --bg: #05070d; --surface: #0b1018; --raised: #151e2b;
+  --line: #344255; --control-line: #8290a4;
+  --ink: #f3f6fc; --muted: #b8c5d6;
+  --accent: #82acff; --accent-hover: #b6ceff; --accent-ink: #081328;
+  --brand: #003087; --brand-hover: #1249aa; --on-brand: #fff; --brand-outline: #82acff;
+}
+:root[data-theme="dark"] .section-intro, :root[data-theme="dark"] .record-head {
+  --accent: #82acff; --accent-hover: #b6ceff; --accent-ink: #081328;
+  --ink: #f3f6fc; --muted: #b8c5d6; --surface: #0b1018; --raised: #151e2b;
+  background-color: #0b1018;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}

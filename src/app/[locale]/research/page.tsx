@@ -11,12 +11,12 @@ import {href, pageMeta} from '@/lib/seo';
 
 const questions = {
   expansion: ['O que está acelerando a expansão do Universo?', 'What is accelerating cosmic expansion?'],
-  models: ['Uma nova teoria explica a expansão e as estruturas?', 'Can one new theory explain expansion and structure?'],
-  probes: ['Diferentes medidas contam a mesma história cósmica?', 'Do different measurements tell the same cosmic story?'],
-  galaxies: ['O que a luz das primeiras galáxias revela?', 'What does light from the earliest galaxies reveal?'],
+  models: ['Quais modelos descrevem a expansão e o crescimento de estruturas?', 'Which models describe cosmic expansion and the growth of structure?'],
+  probes: ['As sondas cosmológicas produzem resultados compatíveis?', 'Are results from different cosmological probes consistent?'],
+  galaxies: ['Quais observações identificam as primeiras galáxias?', 'Which observations identify the earliest galaxies?'],
   'local-group': ['Como a Via Láctea e Andrômeda se movem?', 'How do the Milky Way and Andromeda move?'],
   anomalies: ['O que explica uma fonte incomum?', 'What explains an unusual source?'],
-  reproducibility: ['Outra pessoa consegue chegar à mesma conclusão?', 'Can someone else reach the same conclusion?'],
+  reproducibility: ['Os resultados podem ser reproduzidos?', 'Can the results be reproduced?'],
 };
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
@@ -36,8 +36,8 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
     <>
       <PageHead
         kicker={pt ? 'Pesquisa' : 'Research'}
-        title={pt ? 'Onde os modelos encontram o céu' : 'Where models meet the sky'}
-        lead={pt ? 'Da expansão cósmica à luz das primeiras galáxias: cada linha conecta uma pergunta física aos projetos e aos testes registrados.' : 'From cosmic expansion to the light of the earliest galaxies, each research area connects a physical question to projects and documented tests.'}
+        title={pt ? 'Linhas de pesquisa' : 'Research areas'}
+        lead={pt ? 'A pesquisa abrange cosmologia observacional, modelos de energia escura, primeiras galáxias e astrofísica extragaláctica.' : 'Research covers observational cosmology, dark energy models, the earliest galaxies and extragalactic astrophysics.'}
       />
       <ResearchAreas locale={locale} figure={<ResearchObservation locale={locale}/>} areas={LINES.map(line=>{
             const count = results.filter(item => item.lines.includes(line)).length;
@@ -50,7 +50,7 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
                   <p>{tr(D.lines.items[line].d, locale)}</p>
                   {count > 0 ? (
                     <Link className="text-link arrow-link" href={href(locale, '/results') + '?line=' + line}>
-                      {pt ? 'Consultar os testes no catálogo' : 'Find tests in the catalogue'}
+                      {pt ? 'Consultar os resultados' : 'Browse the results'}
                       <span className="sr-only"> · {tr(D.lines.items[line].n, locale)}</span>
                     </Link>
                   ) : <p className="research-empty">{pt ? 'Ainda sem registros no catálogo público.' : 'No records in the public catalogue yet.'}</p>}
@@ -69,10 +69,10 @@ export default async function ResearchPage({params}: {params: Promise<{locale: s
             )};
           })} output={
           <section id="scientific-output" className="research-question">
-            <h2>{pt ? 'Produção científica pública' : 'Public scientific output'}</h2>
+            <h2>{pt ? 'Publicações' : 'Publications'}</h2>
             {publications.length > 0 ? (
               <ul>{publications.map(pub => <li key={pub.id}><Link className="text-link" href={href(locale, '/publications') + '#' + pub.id}>{pub.title}</Link></li>)}</ul>
-            ) : <p>{pt ? 'Os registros do catálogo dão acesso aos testes e às fontes. Manuscritos liberados para divulgação aparecem na página de publicações.' : 'The catalogue records give access to tests and sources. Manuscripts cleared for disclosure appear on the publications page.'}</p>}
+            ) : <p>{pt ? 'Os testes e as fontes estão disponíveis no catálogo. Os manuscritos autorizados para divulgação são listados em Publicações.' : 'Tests and sources are available in the catalogue. Manuscripts authorised for public release are listed under Publications.'}</p>}
             <Link className="text-link arrow-link" href={href(locale, '/methods')}>{pt ? 'Como avaliamos a evidência' : 'How we assess evidence'}</Link>
           </section>}/>
     </>

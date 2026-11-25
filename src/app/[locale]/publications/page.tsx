@@ -55,7 +55,7 @@ export default async function PublicationsPage({params}: {params: Promise<{local
             ))}
           </ul>
         )}
-        {references.size > 0 && <section className="external-references"><header><h2>{pt ? 'Referências dos dados' : 'Data references'}</h2><p>{pt ? 'Trabalhos externos citados nos dossiês de reprodução.' : 'External papers cited in the reproducibility dossiers.'}</p></header><ul>{Array.from(references, ([url, label]) => <li key={url}><a href={url}>{label} <span aria-hidden="true">↗</span></a></li>)}</ul></section>}
+        {references.size > 0 && <section className="external-references"><header><h2>{pt ? 'Referências dos dados' : 'Data references'}</h2><p>{pt ? 'Trabalhos externos citados como referências nos registros de reprodução.' : 'External papers cited in the reproducibility records.'}</p></header><ul>{Array.from(references, ([url, label]) => <li key={url}><a href={url}>{label} <span aria-hidden="true">↗</span></a></li>)}</ul></section>}
       </div>
       {jsonLd.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} />}
     </>

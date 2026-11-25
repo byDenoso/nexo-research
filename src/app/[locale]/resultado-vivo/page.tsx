@@ -9,12 +9,12 @@ import {pageMeta} from '@/lib/seo';
 const copy: Record<Locale, {title:string; lead:string; section:string}> = {
   pt: {
     title:'Resultado vivo',
-    lead:'O que muda quando você troca uma hipótese sobre a expansão do Universo? Compare o Planck, as distâncias do DESI, as supernovas e a escada de distâncias no mesmo plano.',
+    lead:'Compare, no mesmo plano de parâmetros cosmológicos, as medidas do Planck, do DESI, das supernovas e da escada de distâncias. Os cenários mostram o efeito de diferentes hipóteses.',
     section:'Expansão do Universo',
   },
   en: {
     title:'Living result',
-    lead:'What changes when you switch an assumption about cosmic expansion? Compare Planck, DESI distances, supernovae and the distance ladder on the same plane.',
+    lead:'Compare measurements from Planck, DESI, supernovae and the distance ladder on a common cosmological parameter plane. The scenarios illustrate the effects of different assumptions.',
     section:'Cosmic expansion',
   },
 };

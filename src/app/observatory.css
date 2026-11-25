@@ -140,10 +140,9 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
 :root[data-theme="dark"] .nx-home .nx-status { color: var(--warn); }
 :root[data-theme="dark"] .status-badge {
   color: var(--status-tone, var(--warn));
-  border: 1px solid currentColor;
-  padding: .15rem .42rem;
-  border-radius: .15rem;
-  background: var(--surface);
+  border: 0;
+  padding: 0;
+  background: none;
 }
 :root[data-theme="dark"] .status-badge[data-status="CANDIDATE"] { --status-tone: var(--warn); }
 :root[data-theme="dark"] .outcome-tag { color: var(--warn); border-color: #a17c47; }
@@ -163,12 +162,12 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
   background-image: repeating-linear-gradient(135deg,#f0c47c 0 1.5px,transparent 1.5px 4px);
 }
 :root[data-theme="dark"] .nexo-editorial { --figure-solid: #79d3e8; --figure-stripe: #f0c47c; }
-:root[data-theme="dark"] .journal-stories { gap: .75rem; }
+:root[data-theme="dark"] .journal-stories { gap: 1.1rem; }
 :root[data-theme="dark"] .journal-stories article {
-  border: 1px solid var(--line);
-  border-block-start-color: #536f83;
-  background: var(--surface);
-  padding: clamp(.9rem,1.8vw,1.35rem);
+  border: 0;
+  border-block-start: 1px solid #536f83;
+  background: none;
+  padding: 1rem 0 0;
   min-inline-size: 0;
 }
 :root[data-theme="dark"] .nx-observation > figure { border: 1px solid var(--line); background: var(--surface); }
@@ -197,8 +196,7 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
   --accent-hover: #b3e9f5;
   --accent-ink: #08141c;
   background-color: #080d17;
-  background-image: linear-gradient(#6b9ab00a 1px,transparent 1px),linear-gradient(90deg,#6b9ab00a 1px,transparent 1px);
-  background-size: 36px 36px;
+  background-image: none;
   border-block-end: 1px solid var(--line);
 }
 :root[data-theme="dark"] .record-head .record-deck { color: var(--ink); }
@@ -294,18 +292,17 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
 }
 
 .institute-cover[data-observatory] {
-  background: radial-gradient(ellipse at 31% 15%, #112332 0, transparent 47%),
-    radial-gradient(ellipse at 91% 73%, #10212a 0, transparent 48%), #05070d;
+  background: #05070d;
 }
-.institute-cover[data-observatory]::before { opacity: .5; }
+.institute-cover[data-observatory]::before { background-image: none; }
 [data-observatory] .cover-grid { gap: clamp(1.3rem, 3vw, 3.25rem); align-items: start; }
 [data-observatory] .cover-copy { align-self: center; }
 [data-observatory] .cover-copy h1 {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(2.65rem, 5.25vw, 5.6rem);
-  line-height: .98;
-  letter-spacing: -.057em;
+  font-size: clamp(2.4rem, 4.2vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -.037em;
   text-wrap: balance;
 }
 [data-observatory] .cover-actions a { transition: background-color 180ms, translate 220ms cubic-bezier(.2,.85,.32,1.3); }
@@ -364,7 +361,7 @@ html[data-js] .plate-modes { border-color: #536f83; border-radius: .2rem; }
   transition: background-color 160ms, box-shadow 160ms;
 }
 html:not([data-js]) .desi-activate { display: none; }
-.desi-stage-status .desi-activate:hover { background: #153047; box-shadow: 0 0 1rem #6edeff25; }
+.desi-stage-status .desi-activate:hover { background: #153047; }
 .desi-loading { display: flex; align-items: center; gap: .5rem; }
 .desi-console { display: grid; gap: .35rem; margin-block: .45rem .3rem; }
 .desi-layers { display: grid; grid-template-columns: 1fr 1fr; gap: .35rem; }
@@ -378,7 +375,7 @@ html:not([data-js]) .desi-activate { display: none; }
   padding: .3rem clamp(.35rem,1vw,.75rem);
   border: 1px solid var(--desi-line);
   border-radius: .35rem;
-  background: linear-gradient(135deg,#1934447a,#0b1724b3);
+  background: #102132;
   font-size: .82rem;
   font-weight: 600;
   line-height: 1.16;
@@ -386,7 +383,7 @@ html:not([data-js]) .desi-activate { display: none; }
 }
 .desi-layer[data-catalog="0"] { --layer-color: var(--desi-cyan); }
 .desi-layer[data-catalog="1"] { --layer-color: var(--desi-amber); }
-.desi-layer:has(input:enabled):hover, .desi-layer:focus-within { border-color: #6594a8; box-shadow: 0 4px 20px #0005; }
+.desi-layer:has(input:enabled):hover, .desi-layer:focus-within { border-color: #8eb7c9; }
 .desi-layer:has(input:enabled) { cursor: pointer; }
 .desi-layer input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: inherit; }
 .desi-layer:has(input:focus-visible) { outline: 2px solid var(--desi-cyan); outline-offset: 2px; }

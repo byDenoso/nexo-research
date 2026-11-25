@@ -115,6 +115,8 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
     let lastCounts: Counts = [-1, -1], lastCountTime = -Infinity;
     let playing = false, visible = false, running = false, stopped = false;
     let frame = 0, pendingDraw = 0, lastFrameTime = -Infinity, dpr = 1;
+    let quality = 1, frameInterval = 33;
+    let slowFrames = 0, fastFrames = 0, lastTick = -Infinity;
     const [cx, cy, cz] = manifest.camera_center_Mpc as [number, number, number];
 
     function draw(time: number) {
@@ -130,7 +132,7 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
       gl!.uniform2f(uniforms.scale, sx, sy);
       gl!.uniform2f(uniforms.range, low, high);
 
-      const recount = time - lastCountTime >= 180;
+      const recount = time - lastCountTime >= 500;
       const counts: Counts = [0, 0];
       for (const [i, buffer] of buffers.entries()) {
         if (!selection.layers[i]) continue;
@@ -138,7 +140,7 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
         gl!.vertexAttribPointer(point, 4, gl!.FLOAT, false, 16, 0);
         gl!.uniform3fv(uniforms.tint, colors[i]!);
         gl!.uniform1f(uniforms.weight, i === 0 ? 0.48 : 0.95);
-        gl!.uniform1f(uniforms.size, (i === 0 ? 1.9 : 4.7) * dpr);
+        gl!.uniform1f(uniforms.size, Math.max(1, (i === 0 ? 1.9 : 4.7) * dpr));
         gl!.drawArrays(gl!.POINTS, 0, totals[i]!);
         if (!recount) continue;
 
@@ -178,10 +180,29 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
     }
 
     function animate(time: number) {
-      if (time - lastFrameTime >= (host.clientWidth < 500 ? 29 : 16)) {
-        yaw += Math.min(time - lastFrameTime, 50) * 0.000115;
+      if (!running) return;
+      const elapsed = time - lastFrameTime;
+      const tickInterval = time - lastTick;
+      lastTick = time;
+      if (elapsed >= frameInterval - 1) {
+        yaw += Math.min(elapsed, 150) * 0.000075;
         lastFrameTime = time;
+        const before = performance.now();
         draw(time);
+        const slow = performance.now() - before > frameInterval * 0.75 || elapsed > frameInterval * 1.8;
+        if (slow) { slowFrames++; fastFrames = 0; }
+        else if (tickInterval < 25) { fastFrames++; slowFrames = Math.max(0, slowFrames - 1); }
+        if (slowFrames >= 4) {
+          quality = Math.max(0.45, quality * 0.8);
+          frameInterval = Math.min(125, Math.ceil(frameInterval * 1.45));
+          slowFrames = 0;
+          resize();
+        } else if (fastFrames >= 180 && quality < 1) {
+          quality = Math.min(1, quality + 0.1);
+          frameInterval = Math.max(33, frameInterval - 5);
+          fastFrames = 0;
+          resize();
+        }
       }
       frame = requestAnimationFrame(animate);
     }
@@ -196,12 +217,13 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
         return;
       }
       lastFrameTime = performance.now();
+      lastTick = lastFrameTime;
       frame = requestAnimationFrame(animate);
     }
 
     function resize() {
       const width = Math.max(1, host.clientWidth), height = Math.max(1, host.clientHeight);
-      dpr = Math.min(window.devicePixelRatio || 1, width < 500 ? 1.25 : 1.65, Math.sqrt(900_000 / (width * height)));
+      dpr = Math.min(window.devicePixelRatio || 1, width < 500 ? 1.25 : 1.65, Math.sqrt(900_000 / (width * height))) * quality;
       const w = Math.max(1, Math.round(width * dpr)), h = Math.max(1, Math.round(height * dpr));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;

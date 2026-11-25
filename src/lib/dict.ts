@@ -9,8 +9,8 @@ export const D = {
   site: t(BRAND_NAME, BRAND_NAME),
   tagline: t(`${BRAND_SIGNATURE}. Pesquisa independente sobre as leis da natureza, o setor escuro e as origens cósmicas, com dados observacionais e testes computacionais.`, `${BRAND_SIGNATURE}. Independent research on the laws of nature, the dark sector and cosmic origins, using observational data and computational tests.`),
   mission: t(
-    'O NEXO testa modelos cosmológicos contra dados públicos, com hipóteses, critérios e limites registrados antes do resultado. Esta página reúne o que já foi calculado, o que ainda é candidato e o que falta verificar.',
-    'NEXO tests cosmological models against public data, with hypotheses, criteria and limits recorded before the result. This site collects what has been computed, what is still a candidate and what remains to be verified.'
+    'O NEXO testa modelos cosmológicos com dados públicos. Hipóteses, critérios e limites são registrados antes do cálculo; os resultados são classificados de acordo com o estágio de verificação.',
+    'NEXO tests cosmological models against public data. Hypotheses, criteria and limits are recorded before the calculation; results are classified according to their stage of verification.'
   ),
   skip: t('Ir para o conteúdo', 'Skip to content'),
   nav: {
@@ -25,9 +25,9 @@ export const D = {
   language: t('Idioma', 'Language'),
   cta: {results: t('Ver resultados', 'View results'), research: t('Explorar a pesquisa', 'Explore the research'), all: t('Ver todos', 'See all')},
   hero: {
-    kicker: t('Portal científico', 'Scientific portal'),
-    headline: t('O Universo sob teste', 'Putting the universe to the test'),
-    caption: t('Resumos públicos que citam cada conjunto de dados, contados por menção no texto. Fonte: manifesto público da Tower.', 'Public summaries naming each data set, counted by textual mention. Source: Tower public manifest.'),
+    kicker: t('Cosmologia', 'Cosmology'),
+    headline: t('Testes observacionais de modelos cosmológicos', 'Observational tests of cosmological models'),
+    caption: t('Número de resumos públicos que mencionam cada conjunto de dados. Fonte: catálogo público do NEXO (Tower).', 'Number of public summaries mentioning each dataset. Source: NEXO public catalogue (Tower).'),
     chartTitle: t('Conjuntos de dados nos resultados públicos', 'Data sets in the public results'),
     viewData: t('Ver dados', 'View data'),
     unit: t('resumos', 'summaries')
@@ -37,13 +37,13 @@ export const D = {
     families: t('Perguntas e famílias científicas', 'Scientific questions and families'),
     executions: t('Registros de execução', 'Execution records'),
     lines: t('Linhas com registros públicos', 'Research lines with records'),
-    explore: t('Da hipótese aos dados', 'From hypothesis to data'),
-    research: t('Explore as frentes científicas e os projetos em andamento.', 'Explore research areas and ongoing projects.'),
-    methods: t('Veja como cada hipótese é testada, revisada e documentada.', 'See how each hypothesis is tested, reviewed and documented.'),
-    data: t('Consulte as fontes, o manifesto público e suas versões.', 'Consult the sources, the public manifest and its versions.')
+    explore: t('Áreas de pesquisa e métodos', 'Research areas and methods'),
+    research: t('Linhas de pesquisa e projetos em andamento.', 'Research areas and ongoing projects.'),
+    methods: t('Critérios de teste, revisão e documentação.', 'Criteria for testing, review and documentation.'),
+    data: t('Fontes dos dados e versões do catálogo público.', 'Data sources and public catalogue versions.')
   },
   who: {
-    kicker: t('Quem desenvolve', 'Who develops it'),
+    kicker: t('Pesquisador responsável', 'Research lead'),
     role: t('Direção científica', 'Scientific direction'),
     affiliation: t('Universidade Federal do Rio de Janeiro', 'Federal University of Rio de Janeiro'),
     orcid: t('ORCID', 'ORCID'), profile: t('Perfil científico', 'Scientific profile'), contact: t('Contato profissional', 'Professional contact'),
@@ -51,7 +51,7 @@ export const D = {
   },
   how: {
     title: t('Como a pesquisa é feita', 'How the research is done'),
-    lead: t('Cada resultado percorre as mesmas etapas. Abra uma etapa para ver o critério e onde encontrar a evidência.', 'Every result goes through the same stages. Open a stage to see its criterion and where to find the evidence.'),
+    lead: t('O protocolo define os critérios de teste, a documentação dos dados e a revisão dos resultados.', 'The protocol specifies test criteria, data documentation and review of results.'),
     steps: [
       {k: 'hypothesis', n: t('Hipótese', 'Hypothesis'), d: t('A pergunta é escrita antes do cálculo, com o resultado que a refutaria.', 'The question is written before the calculation, together with the outcome that would refute it.')},
       {k: 'data', n: t('Dados', 'Data'), d: t('Conjuntos públicos, com versão e seleção registradas.', 'Public data sets, with version and selection recorded.')},
@@ -65,7 +65,7 @@ export const D = {
   },
   lines: {
     title: t('Linhas de pesquisa', 'Research lines'),
-    lead: t('Programas ativos. Cada cartão leva aos resultados públicos associados.', 'Active programmes. Each card leads to the associated public results.'),
+    lead: t('Áreas em investigação e respectivos resultados públicos.', 'Active research areas and associated public results.'),
     items: {
       expansion: {n: t('Expansão e energia escura', 'Expansion and dark energy'), d: t('Energia escura, história da expansão e tensão de H₀.', 'Dark energy, the expansion history and the H₀ tension.')},
       models: {n: t('Modelos e perturbações', 'Models and perturbations'), d: t('Modelos cosmológicos alternativos e a evolução de suas perturbações.', 'Alternative cosmological models and the evolution of their perturbations.')},
@@ -80,7 +80,7 @@ export const D = {
   },
   results: {
     title: t('Resultados científicos', 'Scientific results'),
-    lead: t('Perguntas científicas agrupadas por método e hipótese. Cada família preserva suas execuções, condições e estados originais.', 'Scientific questions grouped by method and hypothesis. Each family preserves its original runs, conditions and statuses.'),
+    lead: t('Os resultados são agrupados por hipótese e método, com as condições de cada teste e o respectivo estado científico.', 'Results are grouped by hypothesis and method, with the conditions of each test and its scientific status.'),
     selected: t('Perguntas em investigação', 'Questions under investigation'),
     question: t('Pergunta investigada', 'Question investigated'), answer: t('Interpretação física', 'Physical interpretation'),
     method: t('Condições do teste', 'Test conditions'), result: t('Resultado', 'Result'), limits: t('Limitações específicas', 'Specific limitations'),
@@ -104,33 +104,33 @@ export const D = {
   pubState: {INTERNAL: t('Interno', 'Internal'), PREPRINT: t('Preprint', 'Preprint'), SUBMITTED: t('Submetido', 'Submitted'), ACCEPTED: t('Aceito', 'Accepted'), PUBLISHED: t('Publicado', 'Published')},
   pubs: {
     title: t('Publicações', 'Publications'),
-    lead: t('Artigos, notas e preprints cuja divulgação foi autorizada. O estado editorial é o real; nenhum DOI é gerado aqui.', 'Papers, notes and preprints cleared for public release. The editorial state is the real one; no DOI is generated here.'),
+    lead: t('Artigos, notas e preprints autorizados para divulgação, com estado editorial e DOI quando disponível.', 'Papers, notes and preprints cleared for public release, with editorial status and DOI where available.'),
     empty: t('Nenhuma publicação foi autorizada para exibição pública até agora. Manuscritos em preparação ou em avaliação permanecem privados.', 'No publication has been cleared for public display so far. Manuscripts in preparation or under review remain private.'),
     bibtex: t('Copiar BibTeX', 'Copy BibTeX'), copied: t('BibTeX copiado', 'BibTeX copied'), pdf: t('PDF', 'PDF'), related: t('Resultados relacionados', 'Related results'),
     authors: t('Autores', 'Authors'), topic: t('Tema', 'Topic'), year: t('Ano', 'Year'), type: t('Estado', 'State')
   },
-  projects: {title: t('Projetos', 'Projects'), lead: t('Programas de pesquisa, descritos pela pergunta que cada um procura responder e pelos registros que já têm no catálogo.', 'Research programmes, described by the question each one tries to answer and by the records they already have in the catalogue.'), state: {active: t('Em andamento', 'Active'), planned: t('Em preparação', 'In preparation'), paused: t('Pausado', 'Paused')}},
-  research: {title: t('Pesquisa', 'Research'), lead: t('Consulte os testes de expansão, as comparações entre sondas e as buscas em catálogos de galáxias. Cada linha leva aos registros associados.', 'Find expansion tests, comparisons across probes and searches in galaxy catalogues. Each research area links to its records.')},
+  projects: {title: t('Projetos', 'Projects'), lead: t('Projetos organizados pela pergunta investigada, com os resultados disponíveis no catálogo.', 'Projects organised by research question, with available results from the catalogue.'), state: {active: t('Em andamento', 'Active'), planned: t('Em preparação', 'In preparation'), paused: t('Pausado', 'Paused')}},
+  research: {title: t('Pesquisa', 'Research'), lead: t('Testes da expansão cósmica, comparações entre sondas e buscas em catálogos de galáxias.', 'Tests of cosmic expansion, comparisons across probes and searches in galaxy catalogues.')},
   filters: {search: t('Buscar', 'Search'), line: t('Linha', 'Line'), status: t('Estado', 'Status'), all: t('Todas', 'All'), year: t('Ano', 'Year'), more: t('Mostrar mais', 'Show more'), records: t('Registros exibidos', 'Displayed records'), shown: t('exibidos', 'shown'), of: t('de', 'of'), none: t('Nenhum registro encontrado.', 'No records found.'), reset: t('Limpar filtros', 'Clear filters')},
   updates: {title: t('Atualizações', 'Updates'), lead: t('Mudanças no catálogo, no software e no site, da mais recente para a mais antiga.', 'Changes to the catalogue, the software and the site, most recent first.'), latest: t('Última atualização do manifesto', 'Latest manifest update')},
   methods: {
-    title: t('Da hipótese ao teste reproduzível', 'From hypothesis to reproducible test'),
-    lead: t('Veja como os testes comparam modelos ao ΛCDM, quais critérios entram antes do ajuste e como o resultado é revisado.', 'See how tests compare models with ΛCDM, which criteria are set before fitting and how results are reviewed.'),
+    title: t('Métodos de análise', 'Methods of analysis'),
+    lead: t('Comparação de modelos com ΛCDM, critérios definidos antes do ajuste e revisão dos resultados.', 'Model comparisons with ΛCDM, criteria set before fitting and review of the results.'),
     contents: t('Nesta página', 'On this page'),
     equation: t('Equação', 'Equation')
   },
   data: {
     title: t('Dados e fontes', 'Data and sources'),
-    lead: t('Os números deste site vêm de um único arquivo público, o snapshot do catálogo. Esta página mostra a versão em uso, como baixá-la, como citá-la e quais conjuntos de dados aparecem nos resumos.', 'The numbers on this site come from one public file, the catalogue snapshot. This page shows the version in use, how to download it, how to cite it and which data sets appear in the summaries.'),
-    snapshot: t('Snapshot público em uso', 'Public snapshot in use'), contract: t('Contrato', 'Contract'), tests: t('Testes', 'Tests'), visuals: t('Figuras', 'Figures'), sha: t('SHA-256 do snapshot', 'Snapshot SHA-256'),
+    lead: t('Os resultados públicos provêm de uma versão identificada do catálogo. Estão disponíveis o arquivo para download, sua referência bibliográfica e os conjuntos de dados citados nos resumos.', 'The public results come from an identified release of the catalogue. The file is available for download, together with its citation and the datasets mentioned in the summaries.'),
+    snapshot: t('Versão do catálogo público', 'Public catalogue release'), contract: t('Contrato', 'Contract'), tests: t('Testes', 'Tests'), visuals: t('Figuras', 'Figures'), sha: t('SHA-256 do snapshot', 'Snapshot SHA-256'),
     mentioned: t('Conjuntos de dados citados nos resumos', 'Data sets named in the summaries'), count: t('resumos', 'summaries'),
-    note: t('Contagem por menção textual nos resumos públicos; não indica uso exclusivo nem versão.', 'Counted by textual mention in the public summaries; it does not indicate exclusive use or version.'),
-    private: t('Registros internos da Tower permanecem privados e não são lidos por este site.', 'Internal Tower records remain private and are not read by this site.')
+    note: t('A contagem considera menções nos resumos. Não identifica uso exclusivo nem a versão de cada conjunto.', 'Counts are based on mentions in the summaries. They do not establish exclusive use or the version of each dataset.'),
+    private: t('O catálogo público não contém registros privados da base de pesquisa (Tower).', 'The public catalogue excludes private records from the research database (Tower).')
   },
-  code: {title: t('Código', 'Code'), lead: t('Software público do instituto. As regras de validação e o código deste site estão abertos para leitura e teste.', 'The public software of the institute. The validation rules and the source of this site are open to read and test.'), site: t('Código-fonte deste site', 'Source code of this site'), partial: t('O código das análises é publicado registro a registro, depois de reexecutado. Quando um resultado tem código ou artefatos, o link aparece no próprio registro.', 'Analysis code is published record by record, after it has been run again. When a result has code or artefacts, the link appears on its record.'), none: t('Código de análise ainda não publicado. Cada resultado indica quando há código ou artefatos associados.', 'Analysis code is not yet published. Each result states when associated code or artefacts exist.')},
+  code: {title: t('Código', 'Code'), lead: t('Código público do NEXO, incluindo as regras de validação e o código-fonte do site.', 'NEXO’s public software, including validation rules and the website source code.'), site: t('Código-fonte deste site', 'Source code of this site'), partial: t('O código de análise é liberado após reexecução. Cada resultado indica o material correspondente, quando disponível.', 'Analysis code is released after it has been rerun. Each result links to the corresponding material where available.'), none: t('Código de análise ainda não publicado. Cada resultado indica quando há código ou artefatos associados.', 'Analysis code is not yet published. Each result states when associated code or artefacts exist.')},
   about: {title: t('O instituto', 'The institute'), lead: t(`${BRAND_SIGNATURE}. Investigação independente do setor escuro e da evolução cósmica, dirigida por Dener Pereira. Os testes são publicados com suas condições e limites.`, `${BRAND_SIGNATURE}. Independent investigation of the dark sector and cosmic evolution, directed by Dener Pereira. Tests are published with their conditions and limits.`)},
   contact: {title: t('Contato e colaboração', 'Contact and collaboration'), lead: t('Para propor uma verificação independente, indique o registro do catálogo e a análise que pretende repetir.', 'To propose an independent check, identify the catalogue record and the analysis you would repeat.'), none: t('O canal de contato público será divulgado aqui pelo pesquisador.', 'The public contact channel will be published here by the researcher.')},
-  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('Leis da natureza, exploração observacional e origens cósmicas. O catálogo reúne os testes autorizados para divulgação.', 'Laws of nature, observational exploration and cosmic origins. The catalogue contains the tests cleared for public release.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados: manifesto público da Tower', 'Data: public Tower manifest')},
+  footer: {navigation: t('Navegação do rodapé', 'Footer navigation'), line: t('Pesquisa independente em cosmologia com dados observacionais e testes computacionais.', 'Independent cosmology research using observational data and computational tests.'), source: t('Código-fonte', 'Source code'), private: t('Área privada', 'Private area'), data: t('Dados: manifesto público da Tower', 'Data: public Tower manifest')},
   notFound: {title: t('Página não encontrada', 'Page not found'), back: t('Voltar ao início', 'Back to home')}
 } as const;
 

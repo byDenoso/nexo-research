@@ -151,7 +151,7 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
             </select>
           </label>
         )}
-        <label>{locale === 'pt' ? 'Tipo de leitura' : 'Reading type'}<select value={outcome} onChange={event => change(setOutcome)(event.target.value)}><option value="all">{locale === 'pt' ? 'Todos os resultados' : 'All results'}</option><option value="negative">{locale === 'pt' ? 'Resultado negativo em destaque' : 'Featured negative result'}</option></select></label>
+        <label>{locale === 'pt' ? 'Desfecho' : 'Outcome'}<select value={outcome} onChange={event => change(setOutcome)(event.target.value)}><option value="all">{locale === 'pt' ? 'Todos os resultados' : 'All results'}</option><option value="negative">{locale === 'pt' ? 'Resultado negativo em destaque' : 'Featured negative result'}</option></select></label>
         {years.length > 1 && (
           <label>{tr(f.year, locale)}
             <select value={year} onChange={event => change(setYear)(event.target.value)}>
@@ -164,11 +164,11 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
           <option value="editorial">{locale==='pt'?'Ordem editorial':'Editorial order'}</option><option value="latest">{locale==='pt'?'Mais recentes':'Most recent'}</option><option value="title">A–Z</option><option value="runs">{locale==='pt'?'Mais execuções':'Most runs'}</option></select></label>
       </form>
       <p className="filter-precision-note">{locale === 'pt'
-        ? 'O filtro de levantamento usa as menções no texto dos resumos.'
-        : 'The survey filter uses mentions in the text of the summaries.'}</p>
+        ? 'Levantamentos são identificados pelas menções nos resumos.'
+        : 'Surveys are identified from mentions in the summaries.'}</p>
       <h2 className="nx-index-title">{locale === 'pt' ? 'Perguntas científicas' : 'Research questions'}</h2>
       <p className="results-count" role="status" aria-live="polite" aria-atomic="true">
-        {shown.length} {tr(f.of, locale)} {filtered.length} {locale === 'pt' ? 'perguntas/famílias exibidas' : 'questions/families shown'} · {executionCount} {locale === 'pt' ? 'registros de execução' : 'execution records'}
+        {shown.length} {tr(f.of, locale)} {filtered.length} {locale === 'pt' ? 'questões exibidas' : 'questions shown'} · {executionCount} {locale === 'pt' ? 'registros de testes' : 'test records'}
       </p>
       {filtered.length === 0 ? (
         <EmptyState message={tr(f.none, locale)} action={<button type="button" onClick={reset} className="btn">{tr(f.reset, locale)}</button>} />

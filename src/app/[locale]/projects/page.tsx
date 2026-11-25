@@ -39,15 +39,15 @@ export default async function ProjectsPage({params}: {params: Promise<{locale: s
                 <div><dt>{pt ? 'Responsável' : 'Lead'}</dt><dd>{lead}</dd></div>
                 <div><dt>{pt ? 'Registros no catálogo' : 'Records in the catalogue'}</dt><dd>{count > 0
                   ? <Link className="text-link" href={href(locale, '/results') + '?line=' + project.line}>{count}</Link>
-                  : (pt ? 'Nenhum até agora' : 'None so far')}</dd></div>
+                  : (pt ? 'Sem registro público' : 'No public record')}</dd></div>
                 {updated && <div><dt>{pt ? 'Último registro' : 'Latest record'}</dt><dd><time dateTime={updated}>{fmtDate(updated, locale)}</time></dd></div>}
               </dl>
             </li>
           ))}
         </ul>
         <p className="inst-note">{pt
-          ? 'A contagem considera os registros da linha de pesquisa cuja pergunta trata do tema do projeto. Um projeto em preparação ainda não tem registro público.'
-          : 'Counts include the records of the research line whose question addresses the project topic. A project in preparation has no public record yet.'}</p>
+          ? 'A contagem inclui registros da linha de pesquisa relacionados ao tema do projeto. Projetos em preparação ainda não têm registros públicos.'
+          : 'Counts include records from the research area that relate to the project topic. Projects in preparation have no public records yet.'}</p>
       </div>
     </>
   );

@@ -136,7 +136,7 @@ main:not(:has(.external-references,.bibliography)) > .section-intro {
 main:not(:has(.external-references,.bibliography)) .section-intro .page-head-inner {padding-block: clamp(1.75rem,3.8vw,3.5rem)}
 main:not(:has(.external-references,.bibliography)) .section-intro h1,
 .nx-catalogue .nx-catalogue-head h1, .nx-record .nx-record-header h1, .record-head .record-head-inner h1 {
-  font: 600 clamp(2.8rem,5.2vw,5rem)/.98 var(--heading); letter-spacing: -.032em; text-wrap: balance; overflow-wrap: anywhere;
+  font: 600 clamp(2.05rem,4vw,3.6rem)/1.08 var(--heading); letter-spacing: -.032em; text-wrap: balance; overflow-wrap: anywhere;
 }
 main:not(:has(.external-references,.bibliography)) .section-intro .kicker {color: #cbddff; font: 500 .77rem var(--font-mono)}
 main:not(:has(.external-references,.bibliography)) .section-intro .page-lead {color: #ebf2ff; font-size: clamp(1rem,1.42vw,1.18rem); line-height: 1.52}

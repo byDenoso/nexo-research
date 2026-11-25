@@ -52,7 +52,7 @@ test('results page filters, paginates and links to a detail page', async ({page}
   await expect(page.getByRole('status').filter({hasText: 'exibidas'})).toContainText('35 de 35');
   await page.getByLabel('Buscar').fill('DESI');
   const shown = page.getByRole('status').filter({hasText: 'exibidas'});
-  await expect(shown).toContainText('registros de execução');
+  await expect(shown).toContainText('registros de testes');
   await page.getByLabel('Buscar').fill('zzzz-no-match');
   await expect(page.getByText('Nenhum registro encontrado.')).toBeVisible();
   await page.getByRole('button', {name: 'Limpar filtros'}).click();
@@ -148,7 +148,7 @@ test('institute, projects, data and updates carry the institutional content', as
   await expect(page.locator('.inst-projects > li').filter({hasText: 'Grupo Local'})).toContainText('Em preparação');
   await page.goto('/en/data');
   await expect(page.locator('#cite')).toContainText('NEXO Research Institute (2026). Public catalogue of cosmological tests');
-  await expect(page.getByRole('link', {name: 'Download the snapshot (JSON)'})).toHaveAttribute('href', '/atlas-public.json');
+  await expect(page.getByRole('link', {name: 'Download the catalogue (JSON)'})).toHaveAttribute('href', '/atlas-public.json');
   await page.goto('/pt/updates');
   await expect(page.locator('.inst-log > li')).toHaveCount(6);
   const feed = await request.get('/feed.xml');
@@ -221,7 +221,7 @@ test('home separates catalogue and editorial dates without implying current rese
   await page.goto('/pt');
   const facts = page.locator('.inst-facts > div');
   const version = facts.filter({hasText: 'Versão do catálogo'});
-  const revision = facts.filter({hasText: 'Última revisão editorial da home'});
+  const revision = facts.filter({hasText: 'Revisão desta página'});
   await expect(version.locator('a')).toHaveAttribute('href', '/pt/data#snap');
   await expect(version.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
   await expect(revision.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/);

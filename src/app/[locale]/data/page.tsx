@@ -51,10 +51,10 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
         </section>
         <DataSequence locale={locale} />
         <section className="source-access-section motion-reveal" aria-labelledby="public-sources">
-          <div><p className="kicker">{locale === 'pt' ? 'Arquivos científicos' : 'Scientific archives'}</p><h2 id="public-sources">{locale === 'pt' ? 'Fontes de dados e software' : 'Data sources and software'}</h2><p>{locale === 'pt' ? 'Acesse os arquivos originais das colaborações e o código público do NEXO. Uma menção no manifesto não constitui prova de utilização de um release específico.' : 'Access original collaboration archives and NEXO public code. A mention in the manifest is not proof that a particular release was used.'}</p></div>
+          <div><p className="kicker">{locale === 'pt' ? 'Arquivos científicos' : 'Scientific archives'}</p><h2 id="public-sources">{locale === 'pt' ? 'Fontes de dados e software' : 'Data sources and software'}</h2><p>{locale === 'pt' ? 'Os links dão acesso aos arquivos das colaborações e ao código público do NEXO. A presença de um conjunto no manifesto não comprova qual versão foi usada.' : 'These links provide access to collaboration archives and NEXO public code. Listing a dataset in the manifest does not establish which release was used.'}</p></div>
           <ul>
             <li><a href="https://data.desi.lbl.gov/doc/releases/" target="_blank" rel="noopener noreferrer">DESI · {locale === 'pt' ? 'Dados e documentação' : 'Data and documentation'} ↗</a></li>
-            <li><a href="https://github.com/PantheonPlusSH0ES/DataRelease" target="_blank" rel="noopener noreferrer">Pantheon+ · {locale === 'pt' ? 'Release público' : 'Public release'} ↗</a></li>
+            <li><a href="https://github.com/PantheonPlusSH0ES/DataRelease" target="_blank" rel="noopener noreferrer">Pantheon+ · {locale === 'pt' ? 'Dados publicados' : 'Public data release'} ↗</a></li>
             <li><a href="https://archive.stsci.edu/" target="_blank" rel="noopener noreferrer">MAST · {locale === 'pt' ? 'Arquivo espacial' : 'Space telescope archive'} ↗</a></li>
             <li><Link href={href(locale, '/code')}>NEXO Research Institute · {locale === 'pt' ? 'Validador e código do site' : 'Validator and site source'}</Link></li>
           </ul>
@@ -66,10 +66,10 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
             <dt className="text-muted">{tr(d.tests, locale)}</dt><dd className="font-mono">{source.tests}</dd>
             <dt className="text-muted">{tr(d.visuals, locale)}</dt><dd className="font-mono">{source.visuals}</dd>
             <dt className="text-muted">{pt ? 'Versão do catálogo (data do último registro)' : 'Catalogue version (date of latest record)'}</dt><dd className="font-mono"><time dateTime={source.latestUpdate}>{fmtDate(source.latestUpdate, locale)}</time></dd>
-            <dt className="text-muted">{pt ? 'Última revisão editorial desta página' : 'Last editorial revision of this page'}</dt><dd className="font-mono"><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd>
+            <dt className="text-muted">{pt ? 'Revisão desta página' : 'Page revision'}</dt><dd className="font-mono"><time dateTime={editorialDate}>{fmtDate(editorialDate, locale)}</time></dd>
             <dt className="text-muted">{tr(d.sha, locale)}</dt><dd className="break-all font-mono text-xs">{source.snapshotSha256}</dd>
           </dl>
-          <p className="mt-4"><a className="text-link" href="/atlas-public.json" download>{pt ? 'Baixar o snapshot (JSON)' : 'Download the snapshot (JSON)'}</a></p>
+          <p className="mt-4"><a className="text-link" href="/atlas-public.json" download>{pt ? 'Baixar o catálogo (JSON)' : 'Download the catalogue (JSON)'}</a></p>
           <p className="mt-4 text-sm text-muted">{tr(d.private, locale)}</p>
         </section>
         <section id="cite" aria-labelledby="cite-h" className="card p-6 inst-cite">
@@ -82,7 +82,7 @@ export default async function DataPage({params}: {params: Promise<{locale: strin
           <h2 id="mentioned" className="motion-reveal text-xl font-semibold">{tr(d.mentioned, locale)}</h2>
           <table className="card mt-4 w-full text-left text-sm">
             <caption className="sr-only">{tr(d.mentioned, locale)}</caption>
-            <thead><tr className="border-b border-line"><th scope="col" className="p-3 font-medium">Dataset</th><th scope="col" className="p-3 font-medium">{tr(d.count, locale)}</th></tr></thead>
+            <thead><tr className="border-b border-line"><th scope="col" className="p-3 font-medium">{pt ? 'Conjunto de dados' : 'Dataset'}</th><th scope="col" className="p-3 font-medium">{tr(d.count, locale)}</th></tr></thead>
             <tbody>{mentions.map(entry => (
               <tr key={entry.name} id={datasetMentionId(entry.name)} tabIndex={-1} className="data-mention border-t border-line">
                 <th scope="row" className="p-3 font-normal"><span className="data-mention-name">{entry.name}</span></th>

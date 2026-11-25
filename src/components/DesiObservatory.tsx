@@ -88,6 +88,9 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     const abort = new AbortController();
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let started = false;
+    let paintFrame = 0;
+    let loadFrame = 0;
+    let idleTimer = 0;
 
     const fail = () => {
       observer.current = null;
@@ -121,9 +124,27 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     };
 
     start.current = begin;
+    const schedule = () => {
+      if (motion.matches || started || document.hidden || paintFrame || loadFrame || idleTimer || document.readyState !== 'complete') return;
+      paintFrame = requestAnimationFrame(() => {
+        paintFrame = 0;
+        loadFrame = requestAnimationFrame(() => {
+          loadFrame = 0;
+          // Keep initial content responsive while the browser finishes its startup work.
+          idleTimer = window.setTimeout(() => {
+            idleTimer = 0;
+            if (!motion.matches && !document.hidden) void begin();
+          }, 350);
+        });
+      });
+    };
     const onMotion = () => {
       if (motion.matches) setPlaying(false);
+      else schedule();
     };
+    schedule();
+    document.addEventListener('visibilitychange', schedule);
+    window.addEventListener('load', schedule, {once: true});
     const onFullscreen = () => setExpanded(document.fullscreenElement === frame);
     motion.addEventListener('change', onMotion);
     document.addEventListener('fullscreenchange', onFullscreen);
@@ -135,6 +156,11 @@ export function DesiObservatory({locale}: {locale: Locale}) {
     host.addEventListener('wheel', wheel, {passive: false});
     return () => {
       abort.abort();
+      cancelAnimationFrame(paintFrame);
+      cancelAnimationFrame(loadFrame);
+      clearTimeout(idleTimer);
+      window.removeEventListener('load', schedule);
+      document.removeEventListener('visibilitychange', schedule);
       motion.removeEventListener('change', onMotion);
       document.removeEventListener('fullscreenchange', onFullscreen);
       host.removeEventListener('wheel', wheel);
