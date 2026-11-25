@@ -334,5 +334,16 @@ test('public editorial summaries remain distinct from the Tower snapshot', async
   await expect(source).toContainText('Resumo editorial de uma fonte pública');
   await expect(source.getByRole('link', {name: /Zenodo/}).first()).toHaveAttribute('href', 'https://doi.org/10.5281/zenodo.24455170');
   await expect(source).not.toContainText('atlas-public.json');
-  await expect(page.locator('.record-meta')).toContainText('Candidato');
+  await expect(page.locator('.evidence-explained')).toContainText('Análise ainda sem validação independente confirmada.');
+  await expect(page.locator('.status-badge, .outcome-tag')).toHaveCount(0);
+});
+
+test('public pages use prose instead of decorative scientific status tags', async ({page}) => {
+  for (const lang of ['pt', 'en']) {
+    for (const route of ['', '/results', '/results/page/2', '/results/families/redshift-exclusion', '/results/t-f468ceab845d', '/results/t-05ae703af393']) {
+      await page.goto('/' + lang + route);
+      await expect(page.locator('.status-badge, .outcome-tag, .family-tag')).toHaveCount(0);
+    }
+    await expect(page.locator('.nx-status')).toContainText(lang === 'pt' ? 'validação independente' : 'independent validation');
+  }
 });

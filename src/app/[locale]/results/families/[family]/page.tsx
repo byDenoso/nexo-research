@@ -4,7 +4,7 @@ import {CatalogueHeading} from '@/components/CatalogueHeading';
 import {CatalogueTitle} from '@/components/CatalogueTitle';
 import {desiTracerAnchor, desiTracerId} from '@/components/DossierFitComparisons';
 import {FamilyFigure} from '@/components/FamilyFigure';
-import {StatusBadge} from '@/components/ui';
+import {D, tr} from '@/lib/dict';
 import {familyQuestion, familyEntry, readResult} from '@/lib/editorial';
 import {getResults} from '@/lib/data';
 import {getFamilies, getFamily} from '@/lib/families';
@@ -46,7 +46,7 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
         <p className="card family-method-note">{locale === 'pt' ?
           'Os testes respondem à mesma pergunta, mas podem adotar dados, priors ou métodos distintos. Cada registro conserva o identificador, os priors, o método, o resultado e o estado originais. Os valores não foram combinados. Um sinal em uma execução não prova significância global.' :
           'Tests address the same question but may use different data, priors or methods. Each record preserves its original identifier, priors, method, result and status. Values have not been combined. A signal in a single run does not establish global significance.'}</p>
-        <section className="family-entry"><div><p className="kicker">{pt ? 'Resultado selecionado' : 'Selected result'}</p><h2>{reading.finding}</h2><p>{reading.why}</p><Link className="journal-button" href={href(locale, '/results/'+entry.slug)}>{pt ? 'Consultar análise' : 'Read the analysis'} →</Link></div><div className="visible-limit"><strong>{pt ? 'Limite desta execução' : 'Limit of this run'}</strong><p>{reading.limit}</p><StatusBadge status={entry.status} locale={locale}/></div></section>
+        <section className="family-entry"><div><p className="kicker">{pt ? 'Resultado selecionado' : 'Selected result'}</p><h2>{reading.finding}</h2><p>{reading.why}</p><Link className="journal-button" href={href(locale, '/results/'+entry.slug)}>{pt ? 'Consultar análise' : 'Read the analysis'} →</Link></div><div className="visible-limit"><strong>{pt ? 'Limite desta execução' : 'Limit of this run'}</strong><p>{reading.limit}</p><p className="evidence-explained">{tr(D.status[entry.status].d, locale)}</p></div></section>
         <nav className="reading-jumps" aria-label={pt ? 'Nesta família' : 'In this family'}><a href="#family-figure">{pt ? 'Compare os valores' : 'Compare the values'} ↓</a><a href="#variants-heading">{pt ? 'Todas as execuções' : 'All runs'} ↓</a></nav>
         {family.slug === 'bao-tracer-exclusion' && (
           <p><Link className="text-link arrow-link" href={href(locale, '/results/' + desiTracerId.toLowerCase()) + '#' + desiTracerAnchor}>{pt ? 'Comparar o Δχ² após retirar cada traçador do DESI DR2' : 'Compare Δχ² after removing each DESI DR2 tracer'}</Link></p>
@@ -57,7 +57,7 @@ export default async function FamilyPage({params}: {params: Promise<{locale: str
           <ol className="family-records">
             {family.records.map(item => (
               <li className="card family-record" key={item.id}>
-                <div className="family-record-meta"><span className="font-mono">{item.id}</span><StatusBadge status={item.status} locale={locale} /></div>
+                <div className="family-record-meta"><span className="font-mono">{item.id}</span></div>
                 <h3>{pick(item.question, locale)}</h3>
                 <p className="family-record-result">{pick(item.result, locale)}</p>
                 <div className="family-record-foot">

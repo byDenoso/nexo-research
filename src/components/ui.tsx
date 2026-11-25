@@ -15,14 +15,6 @@ export type ResultCardData = {
   updated: string;
 };
 
-export function StatusBadge({status, locale}: {status: Status; locale: Locale}) {
-  return (
-    <span className="status-badge" data-status={status} title={tr(D.status[status].d, locale)}>
-      {tr(D.status[status].n, locale)}
-    </span>
-  );
-}
-
 export function PageHead({kicker, title, lead}: {kicker?: string; title: string; lead?: string}) {
   return (
     <header className="page-head section-intro">
@@ -63,7 +55,6 @@ export function ResultCard({item, locale}: {item: ResultCardData; locale: Locale
   return (
     <article className="card result-card">
       <div className="result-card-meta">
-        <StatusBadge status={item.status} locale={locale} />
         <span>{item.id}</span>
       </div>
       <h3>
@@ -79,8 +70,6 @@ export function FamilyCard({item, locale}: {item: {slug: string; title: string; 
   return (
     <article className="card result-card family-card">
       <div className="result-card-meta">
-        {item.statuses?.map(status => <StatusBadge key={status} status={status} locale={locale} />)}
-        <span className="family-tag">{item.recordCount > 1 ? (locale === 'pt' ? 'Família de testes' : 'Test family') : (locale === 'pt' ? 'Teste' : 'Test')}</span>
         <span>{item.recordCount} {locale === 'pt' ? (item.recordCount === 1 ? 'registro' : 'registros') : (item.recordCount === 1 ? 'record' : 'records')}</span>
       </div>
       <h3>
@@ -90,7 +79,6 @@ export function FamilyCard({item, locale}: {item: {slug: string; title: string; 
       </h3>
       <p className="family-context">{item.description}</p>
       {item.finding && <p className="family-finding"><strong>{locale === 'pt' ? 'Uma execução documentada' : 'One documented run'}</strong>{item.finding}</p>}
-      {item.negative && <span className="outcome-tag">{locale === 'pt' ? 'Resultado negativo' : 'Negative result'}</span>}
       <p className="result-card-date">{locale === 'pt' ? 'Último registro' : 'Latest record'}: {item.updated}</p>
     </article>
   );

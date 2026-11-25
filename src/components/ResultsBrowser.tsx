@@ -7,7 +7,7 @@ import type {Locale} from '@/lib/i18n';
 import type {Line, Status} from '@/lib/schemas';
 import {PAGE_SIZE as PAGE, matches} from '@/lib/search';
 import {href} from '@/lib/seo';
-import {EmptyState, StatusBadge} from './ui';
+import {EmptyState} from './ui';
 
 export type FamilyRow = {
   slug: string;
@@ -187,10 +187,6 @@ export function ResultsBrowser({rows, locale}: {rows: FamilyRow[]; locale: Local
                     aria-label={(locale === 'pt' ? 'Ler uma execução de ' : 'Read a run for ') + row.title}>
                     {locale === 'pt' ? 'Ler uma execução' : 'Read a run'}
                   </Link>
-                  <div className="nx-question-status">
-                    {row.statuses.map(status => <StatusBadge key={status} status={status} locale={locale} />)}
-                    {row.negative && <span className="outcome-tag">{locale === 'pt' ? 'Resultado negativo' : 'Negative result'}</span>}
-                  </div>
                 </div>
               </article>
             </li>

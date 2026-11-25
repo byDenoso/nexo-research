@@ -8,7 +8,6 @@ import {href} from '@/lib/seo';
 import type {Dossier, Result} from '@/lib/schemas';
 import {NonPhantomProfile} from './DossierFitComparisons';
 import {RedshiftFigure, RedshiftFinding, RedshiftLimit} from './RedshiftFigure';
-import {StatusBadge} from './ui';
 
 export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: Dossier; locale: Locale}) {
   const pt = locale === 'pt';
@@ -30,7 +29,7 @@ export function RedshiftRecord({item, dossier, locale}: {item: Result; dossier: 
         <div className="nx-lead nx-record-lead">
           <div className="nx-lead-copy" id="result">
             <p className="nx-deck"><RedshiftFinding locale={locale} precise /></p>
-            <p className="nx-status"><StatusBadge status={item.status} locale={locale} /> {tr(D.status[item.status].d, locale)}</p>
+            <p className="nx-status">{tr(D.status[item.status].d, locale)}</p>
             <RedshiftLimit locale={locale} />
             <nav className="nx-jumps" aria-label={pt ? 'Seções do teste' : 'Sections of the test'}>
               <a className="text-link" href="#method">{pt ? 'Condições e método' : 'Conditions and method'} <span aria-hidden="true">↓</span></a>

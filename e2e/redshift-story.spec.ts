@@ -14,7 +14,7 @@ for (const locale of ['pt', 'en']) {
     await expect(page.locator('#result')).toContainText(pt ? '94,2%' : '94.2%');
     await expect(page.locator('#result')).toContainText(pt ? '54,0%' : '54.0%');
     await expect(page.locator('#limits')).toContainText(pt ? 'significância estatística' : 'statistical significance');
-    await expect(page.locator('article')).toContainText(pt ? 'Candidato' : 'Candidate');
+    await expect(page.locator('article')).toContainText(pt ? 'Análise ainda sem validação independente confirmada.' : 'Analysis without confirmed independent validation.');
     const method = page.locator('.nx-jumps a[href="#method"]');
     await method.focus();
     await page.keyboard.press('Enter');

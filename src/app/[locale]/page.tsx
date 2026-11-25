@@ -5,10 +5,9 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {ErositaFigure, erositaId} from '@/components/ErositaFigure';
 import {RedshiftFigure, RedshiftFinding, RedshiftLimit, redshiftSlug} from '@/components/RedshiftFigure';
-import {StatusBadge} from '@/components/ui';
 import {getManifest, getPageDates, getResult, getResults, getPublications} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
-import {readResult, selectedIds, isNegative} from '@/lib/editorial';
+import {readResult, selectedIds} from '@/lib/editorial';
 import {fmtDate, isLocale} from '@/lib/i18n';
 import {goodsSouth} from '@/lib/observations';
 import {href} from '@/lib/seo';
@@ -48,7 +47,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         <div className="nx-lead-copy">
           <p className="nx-eyebrow">{pt ? 'Cosmologia observacional / Supernovas Ia' : 'Observational cosmology / Type Ia supernovae'}</p>
           <h2 id="cover-title">{pt ? 'Influência das supernovas próximas no ajuste da energia escura' : 'The influence of nearby supernovae on dark energy fits'}</h2>
-          {lead && <p className="nx-status"><StatusBadge status={lead.status} locale={locale} /> {pt ? 'Validação independente pendente' : 'Independent validation pending'}</p>}
+          {lead && <p className="nx-status">{pt ? 'Validação independente pendente' : 'Independent validation pending'}</p>}
           <p className="nx-deck"><RedshiftFinding locale={locale} /></p>
           <RedshiftLimit locale={locale} />
           <div className="nx-actions">
@@ -83,10 +82,6 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
             const isErosita = item.id === erositaId;
             return (
               <article key={item.id} className={isErosita ? 'journal-erosita' : undefined}>
-                <div className="showcase-meta">
-                  <StatusBadge status={item.status} locale={locale} />
-                  {isNegative(item.id) && <span className="outcome-tag">{pt ? 'Resultado negativo' : 'Negative result'}</span>}
-                </div>
                 <h3><Link prefetch={false} href={href(locale, '/results/' + item.slug)}>{story.question}</Link></h3>
                 <p>{story.finding}</p>
                 {isErosita && <ErositaFigure item={item} locale={locale} />}

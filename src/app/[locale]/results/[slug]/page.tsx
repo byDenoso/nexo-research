@@ -5,7 +5,6 @@ import {LOCALES, fmtDate, isLocale, pick, type Locale} from '@/lib/i18n';
 import {DesiTracerComparison, NonPhantomProfile, desiTracerAnchor, desiTracerId} from '@/components/DossierFitComparisons';
 import {PairChart, pairOf} from '@/components/PairChart';
 import {SensitivityChart} from '@/components/SensitivityChart';
-import {StatusBadge} from '@/components/ui';
 import {redshiftId} from '@/components/RedshiftFigure';
 import {RedshiftRecord} from '@/components/RedshiftRecord';
 import {DATASETS, getDossier, getManifest, getResult, getResults, lastDossierCorrection} from '@/lib/data';
@@ -14,7 +13,7 @@ import {scientificText, sameText} from '@/lib/format';
 import {D, tr} from '@/lib/dict';
 import {href, pageMeta} from '@/lib/seo';
 import {compilations, sensitivityPoints, sensitivityRows} from '@/lib/sensitivity';
-import {readResult, isNegative, redshiftQuestion} from '@/lib/editorial';
+import {readResult, redshiftQuestion} from '@/lib/editorial';
 import type {Result} from '@/lib/schemas';
 
 export const dynamicParams = false;
@@ -101,7 +100,6 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
         <div className="wrap record-head-inner">
           <Link href={href(locale, family ? '/results/families/' + family.slug : '/results')} prefetch={false} className="text-link record-back">← {locale === 'pt' ? 'Voltar à pergunta científica' : 'Back to research question'}</Link>
           <div className="record-meta">
-            <StatusBadge status={item.status} locale={locale} />
             <span>{item.id}</span>
           </div>
           <h1>{reading.question}</h1>
@@ -112,7 +110,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
       </header>
       <section className="wrap brief-reading" aria-label={pt ? 'Contexto da análise' : 'Analysis context'}>
         <div><h2>{pt ? 'Contexto científico' : 'Scientific context'}</h2><p>{reading.why}</p></div>
-        <div className="visible-limit"><strong>{pt ? 'O limite da conclusão' : 'Scope of the conclusion'}</strong><p>{reading.limit}</p>{isNegative(item.id) && <span className="outcome-tag">{pt ? 'Resultado negativo' : 'Negative result'}</span>}<p className="evidence-explained"><StatusBadge status={item.status} locale={locale}/> {tr(D.status[item.status].d, locale)}</p></div>
+        <div className="visible-limit"><strong>{pt ? 'O limite da conclusão' : 'Scope of the conclusion'}</strong><p>{reading.limit}</p><p className="evidence-explained">{tr(D.status[item.status].d, locale)}</p></div>
         <nav className="reading-jumps" aria-label={pt ? 'Aprofundar este resultado' : 'Explore this result'}><a href="#result">{pt ? 'O resultado' : 'The result'} ↓</a><a href="#method">{pt ? 'Como foi testado' : 'How it was tested'} ↓</a><a href="#record-provenance-title">{pt ? 'Dados, código e fontes' : 'Data, code and sources'} ↓</a></nav>
       </section>
       <div className="wrap page-body record-layout">
