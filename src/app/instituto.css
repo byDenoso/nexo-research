@@ -151,3 +151,176 @@ a, button { transition: color 150ms ease, border-color 150ms ease, opacity 150ms
 .nx-lead-copy .star-value { font-size: clamp(1.5rem, 2.6vw, 2.1rem); white-space: nowrap; }
 .des-offset-figure svg text { font-size: 15px; }
 .des-offset-figure svg text.small { font-size: 13px; }
+
+/* ───────── Vidro líquido (26/11) ─────────
+ * Material translúcido sobre um céu real (campo GOODS-Sul, JWST/JADES), com:
+ *  - desfoque forte e saturação do que está atrás (o vidro "recolhe" a cor do céu);
+ *  - reflexo especular na borda superior esquerda e sombra de volume na inferior direita;
+ *  - borda em gradiente (luz → transparente → luz fraca), como aresta de vidro espesso;
+ *  - cantos de cápsula e navegação flutuante, solta das bordas da janela.
+ * Sem neon e sem bolhas coloridas: toda cor vem do céu atrás. Quem pede menos
+ * transparência recebe o mesmo desenho com vidro quase opaco. */
+:root {
+  --lg-tint: 12 17 27;
+  --lg-alpha: .42;
+  --lg-alpha-strong: .62;
+  --lg-blur: 22px;
+  --lg-sat: 165%;
+  --lg-rim: 255 255 255;
+  --lg-rim-top: .30;
+  --lg-rim-low: .07;
+  --lg-radius: 22px;
+  --lg-radius-sm: 14px;
+  --lg-depth: 0 18px 40px -18px rgb(0 0 0 / .65), 0 2px 6px -2px rgb(0 0 0 / .4);
+  --sky-opacity: .26;
+}
+:root[data-theme="light"] {
+  --lg-tint: 251 251 249;
+  --lg-alpha: .50;
+  --lg-alpha-strong: .72;
+  --lg-rim-top: .95;
+  --lg-rim-low: .35;
+  --lg-depth: 0 18px 40px -20px rgb(20 26 36 / .28), 0 2px 6px -2px rgb(20 26 36 / .12);
+  --sky-opacity: .08;
+}
+
+body { position: relative; }
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background: url('/images/jades-goods-south.jpg') center / cover no-repeat;
+  opacity: var(--sky-opacity);
+  filter: saturate(.7) brightness(.85);
+}
+body::after {
+  content: "";
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(100rem 70rem at 65% -15%, transparent 0%, rgb(from var(--bg) r g b / .72) 72%);
+}
+:root[data-theme="dark"] body, :root[data-theme="light"] body { background: var(--bg); }
+:root:is([data-theme="dark"], [data-theme="light"]) body :is(.institute-cover, .catalogue-chapter, .site-footer, main, .nexo-editorial, .section-intro, .record-head) { background: transparent !important; }
+
+/* O material. */
+.site-header,
+.nx-paper-figure,
+.journal-stories article,
+.nx-limit,
+.telemetry,
+.catalogue-note,
+.nx-observation > figure,
+.publication-strip,
+.desi-observatory,
+.site-menu-panel,
+.chapter-nav {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(155deg, rgb(var(--lg-rim) / .10) 0%, rgb(var(--lg-rim) / .02) 32%, rgb(var(--lg-rim) / 0) 60%, rgb(var(--lg-rim) / .04) 100%),
+    rgb(var(--lg-tint) / var(--lg-alpha)) !important;
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(1.04);
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(1.04);
+  border: 0 !important;
+  border-radius: var(--lg-radius) !important;
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgb(var(--lg-rim) / var(--lg-rim-top)),
+    inset -1px -1px 0 0 rgb(var(--lg-rim) / var(--lg-rim-low)),
+    inset 0 0 22px 0 rgb(var(--lg-rim) / .035),
+    var(--lg-depth) !important;
+}
+/* Aresta: borda de 1 px em gradiente, desenhada por máscara para não pesar no layout. */
+:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav)::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgb(var(--lg-rim) / .38), rgb(var(--lg-rim) / .06) 38%, rgb(var(--lg-rim) / .02) 62%, rgb(var(--lg-rim) / .16));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* Navegação flutuante em cápsula. */
+.site-header {
+  position: sticky !important;
+  inset-block-start: 10px !important;
+  width: min(var(--frame), 100% - 2 * var(--gutter));
+  margin: 10px auto 0;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(170deg, rgb(var(--lg-rim) / .12), rgb(var(--lg-rim) / .02) 55%),
+    rgb(var(--lg-tint) / var(--lg-alpha-strong)) !important;
+}
+.site-header > * { padding-inline: clamp(.75rem, 2vw, 1.5rem); }
+.site-header .wrap { width: 100%; }
+.site-menu-panel { border-radius: var(--lg-radius) !important; background: rgb(var(--lg-tint) / .86) !important; }
+
+/* Botões em cápsula de vidro. */
+:is(.nx-primary, .cover-actions a, .header-living, .desi-activate, .desi-tool, .desi-layer) {
+  border-radius: 999px !important;
+  border: 0 !important;
+  background: linear-gradient(160deg, rgb(var(--lg-rim) / .14), rgb(var(--lg-rim) / .03)) , rgb(var(--lg-tint) / .35) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(150%);
+  box-shadow: inset 1px 1px 0 -0.25px rgb(var(--lg-rim) / .35), inset -1px -1px 0 rgb(var(--lg-rim) / .08), 0 6px 16px -8px rgb(0 0 0 / .6) !important;
+  color: var(--ink) !important;
+}
+:is(.nx-primary, .cover-actions a, .header-living, .desi-activate, .desi-tool, .desi-layer):is(:hover, :focus-visible) {
+  background: linear-gradient(160deg, rgb(var(--lg-rim) / .22), rgb(var(--lg-rim) / .05)), rgb(var(--lg-tint) / .35) !important;
+  translate: none !important;
+}
+:is(.nx-primary, .cover-actions a) { padding-inline: 1.25rem !important; }
+
+/* Ajustes de cada painel. */
+.nx-paper-figure { padding: var(--panel-pad); }
+.journal-stories article { padding: var(--panel-pad) !important; }
+.telemetry { padding-inline: var(--space-6); margin-block-start: var(--space-6); border-block: 0; }
+.telemetry > span { border-color: rgb(var(--lg-rim) / .10); }
+.desi-observatory { padding: var(--space-4); --desi-cyan: #b4c5dd; --desi-amber: #e0bd8a; --desi-line: rgb(var(--lg-rim) / .10); }
+.desi-stage { background: rgb(5 7 12 / .78) !important; border-radius: var(--lg-radius-sm); overflow: hidden; }
+.desi-stage img { filter: saturate(.35) hue-rotate(-8deg) brightness(.95); }
+.desi-mobile-poster { filter: saturate(.35) hue-rotate(-8deg) brightness(.95); }
+.nx-limit { padding: var(--space-4) var(--space-5); }
+.nx-limit h2 { margin-block-start: 0; }
+.chapter-nav { padding-inline: var(--space-5) !important; margin-block-start: var(--space-6); border-bottom: 0 !important; }
+.nx-values table { background: transparent; }
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --lg-alpha: .92; --lg-alpha-strong: .96; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --lg-alpha: .80; --lg-alpha-strong: .90; --lg-blur: 12px; --sky-opacity: .18; }
+  :root[data-theme="light"] { --lg-alpha: .88; --lg-alpha-strong: .94; --sky-opacity: .05; }
+}
+@media (max-width: 40rem) {
+  :root { --lg-blur: 14px; --lg-radius: 18px; }
+  .site-header { inset-block-start: 6px !important; margin-block-start: 6px; width: calc(100% - 12px); }
+  .telemetry { padding-inline: var(--space-4); }
+}
+
+/* A barra de leitura do cabeçalho passa para dentro da cápsula, fina e sem azul vivo. */
+html body .site-header::after {
+  inset: auto 28px 4px !important;
+  block-size: 1.5px !important;
+  border-radius: 2px;
+  background: rgb(var(--lg-rim) / .45) !important;
+}
+
+/* Menu numa linha só dentro da cápsula; faixa de telemetria sem quebra torta. */
+.site-header .primary-nav a { white-space: nowrap; }
+@media (min-width: 48rem) and (max-width: 72rem) {
+  .site-header .primary-nav { gap: clamp(.6rem, 1.4vw, 1.25rem) !important; }
+  .site-header .primary-nav a { font-size: .875rem; }
+  .site-header .brand-signature { display: none; }
+}
+.telemetry > span { white-space: nowrap; }
+.telemetry > span:last-child { flex: 1 1 auto; text-align: end; color: var(--muted); }
+@media (max-width: 40rem) {
+  .telemetry > span, .telemetry > span:last-child { white-space: normal; text-align: start; }
+}
+
+/* O observatório é um instrumento: vidro escuro nos dois temas. */
+:root[data-theme="light"] .desi-observatory {
+  --lg-tint: 12 17 27; --lg-alpha: .86; --lg-rim: 255 255 255; --lg-rim-top: .30; --lg-rim-low: .07;
+  --ink: #e8ebf0; --muted: #a3adbd;
+  color: #e8ebf0;
+}

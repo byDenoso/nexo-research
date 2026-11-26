@@ -8,7 +8,7 @@ const yawStart = manifest.initial_yaw_rad;
 const totals: Counts = [manifest.counts.DESI, manifest.counts.eROSITA];
 const endianness = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 const tolerance = 0.0000001;
-const colors = [[0.34, 0.85, 1], [1, 0.72, 0.32]] as const;
+const colors = [[0.66, 0.77, 0.92], [0.88, 0.74, 0.54]] as const;
 
 const vertex = `#version 300 es
 in vec4 point;
