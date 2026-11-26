@@ -427,7 +427,7 @@ body h1 { font-weight: 400; letter-spacing: -.03em; }
 @media (min-width: 40rem) and (max-width: 63.99rem) { .home-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: start; } }
 
 @media (prefers-reduced-transparency: reduce) {
-  :root[data-theme="light"] { --lg-alpha: .62; --lg-alpha-strong: .78; }
+  :root[data-theme="light"] { --lg-alpha: .38; --lg-alpha-strong: .52; }
 }
 
 /* Assinatura do NEXO sempre visível: Nature, Exploration & Origins, iniciais N, Ex, O em destaque. */
