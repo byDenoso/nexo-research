@@ -445,3 +445,39 @@ body h1 { font-weight: 400; letter-spacing: -.03em; }
 
 /* Com o 3D ligado, a imagem estática sai de baixo do canvas. */
 .desi-stage :is(img, .desi-mobile-poster)[aria-hidden="true"] { opacity: 0; }
+
+/* ───────── Vidro claro de verdade (26/11, 2ª volta) ─────────
+ * O vidro só parece vidro se houver algo atrás. Atrás dele fica o campo GOODS-Sul do JWST,
+ * invertido para galáxias azuis sobre papel claro, e as faixas de luz. O painel deixa passar
+ * quase tudo: pouca tinta, desfoque moderado, aresta branca forte. */
+:root[data-theme="light"] {
+  --lg-alpha: .14;
+  --lg-alpha-strong: .30;
+  --lg-blur: 12px;
+  --lg-sat: 190%;
+}
+:root[data-theme="light"] body::after {
+  background: url('/images/jades-goods-south.jpg') center / cover no-repeat;
+  filter: grayscale(1) invert(1) contrast(1.35) sepia(1) hue-rotate(188deg) saturate(4) brightness(1.02);
+  mix-blend-mode: multiply;
+  opacity: .30;
+}
+:root[data-theme="light"] body::before {
+  background:
+    linear-gradient(112deg, transparent 22%, rgb(255 255 255 / .85) 26%, rgb(198 216 255 / .55) 28.5%, transparent 33%),
+    linear-gradient(112deg, transparent 54%, rgb(255 244 232 / .7) 57%, rgb(214 204 255 / .55) 59%, rgb(196 232 255 / .45) 61%, transparent 65%),
+    linear-gradient(112deg, transparent 80%, rgb(255 255 255 / .7) 83%, rgb(206 222 255 / .4) 85%, transparent 89%),
+    radial-gradient(56rem 34rem at 10% 8%, rgb(255 255 255 / .95), transparent 62%),
+    radial-gradient(50rem 32rem at 92% 4%, rgb(196 214 255 / .9), transparent 62%),
+    radial-gradient(44rem 30rem at 82% 92%, rgb(226 214 255 / .75), transparent 66%),
+    #e9eef9;
+}
+/* Partes internas que pintavam fundo próprio passam a deixar a luz passar. */
+:root[data-theme="light"] :is(.nx-values, .nx-values table, .desi-console, .desi-ranges, .nx-limit, .telemetry span) { background: transparent !important; }
+:root[data-theme="light"] .desi-stage { background: rgb(255 255 255 / .10) !important; }
+:root[data-theme="light"] .site-menu-panel { background: rgb(255 255 255 / .72) !important; }
+/* Texto continua legível sobre o vidro fino. */
+:root[data-theme="light"] :is(.home-card p, .nx-lead-copy p, .cover-copy p) { color: #2c3a5e; }
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-theme="light"] { --lg-alpha: .20; --lg-alpha-strong: .36; --lg-blur: 14px; }
+}
