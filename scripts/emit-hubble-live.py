@@ -10,9 +10,10 @@ Também ajusta o offset do DES livre, para marcar o valor medido.
 Convenção: o core_dde subtrai δ do módulo de distância do DES. δ = 0 são os dados publicados;
 δ negativo torna o DES mais fraco (corrige um DES brilhante demais).
 
-Uso: python scripts/emit-hubble-live.py
+Uso: NEXO_CORE_DDE=<pasta do core_dde> python scripts/emit-hubble-live.py
 """
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -20,7 +21,7 @@ from pathlib import Path
 import numpy as np
 from scipy.integrate import cumulative_trapezoid
 
-CORE = Path(r'C:\ft\noite_ciencia\core_dde')
+CORE = Path(os.environ['NEXO_CORE_DDE'])
 OUT = Path(__file__).resolve().parent.parent / 'data' / 'curated' / 'hubble-live.json'
 if not hasattr(np, 'trapezoid'):  # numpy < 2 no ambiente compartilhado
     np.trapezoid = np.trapz

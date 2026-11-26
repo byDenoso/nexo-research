@@ -9,7 +9,7 @@ e data/curated/cmb.json com a escala de temperatura e os créditos.
 O cinza codifica ΔT linearmente entre −LIM e +LIM µK; a cor é aplicada no navegador.
 HEALPix ang2pix implementado aqui (RING e NESTED), sem healpy.
 
-Uso: python -I scripts/emit-cmb-texture.py D:/ft/planck_cmb/COM_CMB_IQU-smica_1024_R2.02_full.fits
+Uso: python -I scripts/emit-cmb-texture.py <caminho>/COM_CMB_IQU-smica_1024_R2.02_full.fits
 """
 import json
 import sys

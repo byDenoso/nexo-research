@@ -6,16 +6,17 @@
 3. Contornos w0–wa: perfil de verossimilhança da combinação BAO DESI DR2 + CMB + Pantheon+ (Hoyt),
    níveis Δχ² = 2,30 e 6,18 (68% e 95% para dois parâmetros).
 
-Uso: python scripts/emit-home-figures.py  (precisa de C:\\ft\\noite_ciencia\\core_dde)
+Uso: NEXO_CORE_DDE=<pasta do core_dde> NEXO_SPEC_NEXUS5819=<espectro combinado .txt> python scripts/emit-home-figures.py
 """
 import json
+import os
 import sys
 from pathlib import Path
 
 import numpy as np
 
-CORE = Path(r'C:\ft\noite_ciencia\core_dde')
-SPEC = Path(r'C:\ft\noite_ciencia\descoberta\censo_espectral\exoticos\caracterizacao_nexus5819\espectro_combinado.txt')
+CORE = Path(os.environ['NEXO_CORE_DDE'])
+SPEC = Path(os.environ['NEXO_SPEC_NEXUS5819'])
 GRID = CORE / 'profile_likelihood' / 'out' / 'grid_C2.json'
 OUT = Path(__file__).resolve().parent.parent / 'data' / 'curated' / 'home-figures.json'
 
