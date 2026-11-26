@@ -14,7 +14,7 @@ import {getProfile} from '@/lib/data';
 
 export const dynamicParams = false;
 export const generateStaticParams = () => LOCALES.map(locale => ({locale}));
-export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#05070d'}, {media: '(prefers-color-scheme: light)', color: '#05070d'}]};
+export const viewport: Viewport = {themeColor: [{media: '(prefers-color-scheme: dark)', color: '#05070d'}, {media: '(prefers-color-scheme: light)', color: '#eef2fa'}]};
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
@@ -22,7 +22,7 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
   return {metadataBase: new URL(SITE_URL), ...pageMeta(locale, '', BRAND_FULL_NAME, tr(D.tagline, locale)), title: {default: BRAND_FULL_NAME, template: `%s · ${BRAND_NAME}`}};
 }
 
-const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s==='dark'||s==='light'?s:'dark';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}`;
+const themeScript = `document.documentElement.dataset.js='';try{var s=localStorage.getItem('nexo-theme');var t=s==='dark'||s==='light'?s:'light';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='light'}`;
 
 export default async function LocaleLayout({children, params}: {children: ReactNode; params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -36,7 +36,7 @@ export default async function LocaleLayout({children, params}: {children: ReactN
     ]
   };
   return (
-    <html lang={HTML_LANG[locale]} suppressHydrationWarning data-theme="dark">
+    <html lang={HTML_LANG[locale]} suppressHydrationWarning data-theme="light">
       <head>
         <script dangerouslySetInnerHTML={{__html: themeScript}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(jsonLd)}} />

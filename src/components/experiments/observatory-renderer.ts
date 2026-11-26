@@ -8,7 +8,11 @@ const yawStart = manifest.initial_yaw_rad;
 const totals: Counts = [manifest.counts.DESI, manifest.counts.eROSITA];
 const endianness = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 const tolerance = 0.0000001;
+// Night theme: light points added over a dark field. Light theme: royal-blue and amber points laid over
+// a transparent canvas, so the glass panel shows through. Same data, same geometry.
 const colors = [[0.66, 0.77, 0.92], [0.88, 0.74, 0.54]] as const;
+const lightColors = [[0.10, 0.28, 0.86], [0.80, 0.52, 0.14]] as const;
+const isLight = () => typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light';
 
 const vertex = `#version 300 es
 in vec4 point;
@@ -33,7 +37,7 @@ out vec4 color;
 void main() {
   float r = length(gl_PointCoord * 2.0 - 1.0);
   float alpha = (1.0 - smoothstep(0.08, 1.0, r)) * weight * mix(0.72, 1.0, depth);
-  color = vec4(tint, alpha);
+  color = vec4(tint * alpha, alpha);
 }`;
 
 function createProgram(gl: WebGL2RenderingContext) {
@@ -94,7 +98,7 @@ async function readLayer(parts: string[], count: number, hash: string, signal: A
 export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, signal: AbortSignal) {
   const canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
-  const gl = canvas.getContext('webgl2', {alpha: false, antialias: false, depth: false, powerPreference: 'low-power'});
+  const gl = canvas.getContext('webgl2', {alpha: true, premultipliedAlpha: true, antialias: false, depth: false, powerPreference: 'low-power'});
   if (!gl) throw Error('WebGL 2 unavailable');
 
   const program = createProgram(gl);
@@ -116,9 +120,15 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
     const names = ['center', 'right', 'up', 'forward', 'scale', 'range', 'size', 'tint', 'weight'] as const;
     const uniforms = Object.fromEntries(names.map(name => [name, gl.getUniformLocation(program, name)])) as Record<typeof names[number], WebGLUniformLocation | null>;
     gl.uniform3fv(uniforms.center, manifest.camera_center_Mpc);
-    gl.clearColor(5 / 255, 7 / 255, 13 / 255, 1);
     gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+    let light = !isLight();
+    const applyTheme = () => {
+      if (light === isLight()) return;
+      light = isLight();
+      if (light) { gl.clearColor(0, 0, 0, 0); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); }
+      else { gl.clearColor(5 / 255, 7 / 255, 13 / 255, 1); gl.blendFunc(gl.ONE, gl.ONE); }
+    };
+    applyTheme();
 
     let yaw = yawStart, pitch = pitchStart, zoom = 1;
     let selection: Selection = {min: 0.1, max: 0.4, layers: [true, true]};
@@ -135,6 +145,7 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
       const fit = Math.min(width * 0.94 / manifest.display_half_extents_Mpc[0]!, height * 0.92 / manifest.display_half_extents_Mpc[1]!) * zoom;
       const sx = fit / width, sy = fit / height;
       const low = selection.min - tolerance, high = selection.max + tolerance;
+      applyTheme();
       gl!.clear(gl!.COLOR_BUFFER_BIT);
       gl!.uniform3f(uniforms.right, cyaw, syaw, 0);
       gl!.uniform3f(uniforms.up, -cp * syaw, cp * cyaw, sp);
@@ -148,8 +159,8 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
         if (!selection.layers[i]) continue;
         gl!.bindBuffer(gl!.ARRAY_BUFFER, buffer);
         gl!.vertexAttribPointer(point, 4, gl!.FLOAT, false, 16, 0);
-        gl!.uniform3fv(uniforms.tint, colors[i]!);
-        gl!.uniform1f(uniforms.weight, i === 0 ? 0.48 : 0.95);
+        gl!.uniform3fv(uniforms.tint, (light ? lightColors : colors)[i]!);
+        gl!.uniform1f(uniforms.weight, i === 0 ? (light ? 0.30 : 0.48) : 0.95);
         gl!.uniform1f(uniforms.size, Math.max(1, (i === 0 ? 1.9 : 4.7) * dpr));
         gl!.drawArrays(gl!.POINTS, 0, totals[i]!);
         if (!recount) continue;

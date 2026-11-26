@@ -1,5 +1,6 @@
 import {DesiObservatory} from '@/components/DesiObservatory';
 import {DesOffsetFigure, DesOffsetLead} from '@/components/DesOffset';
+import {HomeFigures} from '@/components/HomeFigures';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -50,6 +51,7 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           </p>
         </div>
       </section>
+      <HomeFigures locale={locale} />
       <ChapterNav locale={locale}/>
       <section id="em-foco" className="wrap nx-lead" aria-labelledby="cover-title">
         <div className="nx-lead-copy">

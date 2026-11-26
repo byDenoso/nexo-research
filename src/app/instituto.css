@@ -211,7 +211,8 @@ body::after {
 .publication-strip,
 .desi-observatory,
 .site-menu-panel,
-.chapter-nav {
+.chapter-nav,
+.home-card {
   position: relative;
   isolation: isolate;
   background:
@@ -228,7 +229,7 @@ body::after {
     var(--lg-depth) !important;
 }
 /* Aresta: borda de 1 px em gradiente, desenhada por máscara para não pesar no layout. */
-:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav)::after {
+:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav, .home-card)::after {
   content: "";
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   border-radius: inherit;
@@ -310,7 +311,6 @@ html body .site-header::after {
 @media (min-width: 48rem) and (max-width: 72rem) {
   .site-header .primary-nav { gap: clamp(.6rem, 1.4vw, 1.25rem) !important; }
   .site-header .primary-nav a { font-size: .875rem; }
-  .site-header .brand-signature { display: none; }
 }
 .telemetry > span { white-space: nowrap; }
 .telemetry > span:last-child { flex: 1 1 auto; text-align: end; color: var(--muted); }
@@ -318,9 +318,130 @@ html body .site-header::after {
   .telemetry > span, .telemetry > span:last-child { white-space: normal; text-align: start; }
 }
 
-/* O observatório é um instrumento: vidro escuro nos dois temas. */
-:root[data-theme="light"] .desi-observatory {
-  --lg-tint: 12 17 27; --lg-alpha: .86; --lg-rim: 255 255 255; --lg-rim-top: .30; --lg-rim-low: .07;
-  --ink: #e8ebf0; --muted: #a3adbd;
-  color: #e8ebf0;
+
+
+/* ───────── Tema claro transparente (26/11, referência do Dener) ─────────
+ * Papel azul-gelo, luz refratada passando pelo vidro, vidro quase transparente com aresta branca,
+ * títulos serifados em azul-marinho, um azul só para a ação principal. */
+:root[data-theme="light"] {
+  --bg: #eef2fa; --surface: #f7f9fd; --raised: #e8edf8;
+  --line: #d2dbee; --control-line: #8a97b4;
+  --ink: #0d1733; --muted: #4a5678;
+  --accent: #1f4fe0; --accent-hover: #163fc0; --accent-ink: #fff;
+  --brand: #1f4fe0; --brand-hover: #163fc0; --on-brand: #fff; --brand-outline: #1f4fe0;
+  --nx-star: #1f4fe0;
+  --lg-tint: 255 255 255;
+  --lg-alpha: .30;
+  --lg-alpha-strong: .46;
+  --lg-blur: 26px;
+  --lg-sat: 180%;
+  --lg-rim: 255 255 255;
+  --lg-rim-top: 1;
+  --lg-rim-low: .55;
+  --lg-depth: 0 24px 48px -28px rgb(31 60 150 / .28), 0 2px 8px -4px rgb(31 60 150 / .10);
+  --editorial-serif: var(--nx-display);
+  --page-serif: var(--nx-display);
 }
+:root[data-theme="light"] body {
+  --premium-brand: #1f4fe0; --premium-hover: #163fc0; --premium-on-brand: #fff;
+  --premium-shell: #eef2fa; --premium-panel: #e8edf8; --premium-line: #d2dbee;
+  --premium-ink: #0d1733; --premium-muted: #4a5678;
+  background: #eef2fa;
+}
+/* Luz refratada: faixas largas e suaves, sem cor saturada. */
+:root[data-theme="light"] body::before {
+  background:
+    radial-gradient(60rem 38rem at 8% 12%, rgb(255 255 255 / .9), transparent 60%),
+    radial-gradient(48rem 30rem at 92% 6%, rgb(206 222 255 / .85), transparent 62%),
+    radial-gradient(40rem 28rem at 78% 88%, rgb(232 222 255 / .6), transparent 65%),
+    radial-gradient(36rem 24rem at 14% 92%, rgb(255 236 224 / .45), transparent 65%),
+    linear-gradient(118deg, transparent 38%, rgb(255 255 255 / .55) 41%, rgb(214 228 255 / .35) 43%, transparent 47%),
+    linear-gradient(118deg, transparent 63%, rgb(255 246 236 / .45) 65%, rgb(222 214 255 / .35) 66.5%, transparent 69%),
+    #eef2fa;
+  opacity: 1;
+  filter: none;
+}
+:root[data-theme="light"] body::after { background: none; }
+
+/* Títulos sem serifa (Space Grotesk) nos dois temas. */
+body :is(h1, h2, h3, .record-title, .page-title) { font-family: var(--nx-display); font-weight: 400; letter-spacing: -.02em; }
+body h1 { font-weight: 400; letter-spacing: -.03em; }
+:root[data-theme="light"] body :is(h1, h2, h3) { color: #0b1640; }
+
+/* Ação principal em vidro azul; as demais em vidro branco. */
+:root[data-theme="light"] :is(.nx-primary, .cover-actions a:first-child) {
+  background: linear-gradient(180deg, #4a76ff 0%, #2453ea 55%, #1d44cf 100%) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .55), inset 0 -1px 0 rgb(0 0 0 / .12), 0 10px 22px -10px rgb(31 79 224 / .7) !important;
+}
+:root[data-theme="light"] :is(.cover-actions a:not(:first-child), .header-living, .desi-tool, .desi-layer, .desi-activate, .home-card-go) {
+  background: linear-gradient(180deg, rgb(255 255 255 / .75), rgb(255 255 255 / .35)) !important;
+  color: #0d1733 !important;
+  box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgb(255 255 255 / .8), 0 8px 18px -12px rgb(31 60 150 / .35) !important;
+}
+:root[data-theme="light"] .site-header .primary-nav a[aria-current] {
+  background: linear-gradient(180deg, #4a76ff, #1f4fe0);
+  color: #fff !important;
+  border-radius: 999px;
+  padding-inline: .9rem;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .5), 0 6px 14px -8px rgb(31 79 224 / .7);
+}
+:root[data-theme="light"] .site-header .primary-nav a[aria-current]::after { display: none; }
+
+/* Observatório no claro: o mesmo render, invertido para pontos azuis sobre o vidro. */
+:root[data-theme="light"] .desi-observatory { --desi-cyan: #1f4fe0; --desi-amber: #c98a2c; --desi-ink: #0d1733; --desi-muted: #4a5678; --desi-line: rgb(31 60 150 / .12); color: #0d1733; }
+:root[data-theme="light"] .desi-stage { background: linear-gradient(180deg, rgb(255 255 255 / .62), rgb(240 245 255 / .45)) !important; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .9); }
+:root[data-theme="light"] .desi-stage img { filter: invert(1) hue-rotate(205deg) saturate(3) brightness(.82) contrast(1.25); mix-blend-mode: multiply; }
+:root[data-theme="light"] .desi-mobile-poster { filter: invert(1) hue-rotate(180deg) saturate(2.4); mix-blend-mode: multiply; }
+:root[data-theme="light"] .desi-stage-status > * { background: rgb(255 255 255 / .7); color: #0d1733; }
+
+/* Cartões de pesquisa com mini-figuras. */
+.home-cards { display: grid; gap: clamp(1rem, 2vw, 1.5rem); margin-block: var(--space-8) var(--space-4); }
+@media (min-width: 64rem) { .home-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.home-card { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-5); }
+.home-card-copy { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; height: 100%; }
+.home-card h2 { font-size: clamp(1.35rem, 1.9vw, 1.7rem); margin: 0; line-height: 1.15; }
+.home-card p { font-size: .9rem; line-height: 1.5; margin: 0; color: var(--muted); }
+.home-card-go { margin-top: auto; display: inline-grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 999px; color: var(--ink); text-decoration: none; }
+.home-card-fig { margin: 0; min-width: 0; }
+.home-card-fig svg { width: 100%; height: auto; display: block; overflow: visible; }
+.mini-axes rect { stroke: rgb(var(--lg-rim) / .0); }
+.mini-axes rect, .mini-axes line { stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: .8; fill: none; }
+.mini-axes text { font: 400 7.5px/1 var(--font-plex-mono, ui-monospace), monospace; fill: var(--muted); }
+.mini-axes .mini-label { font: 400 8px/1 var(--font-plex-sans, system-ui), sans-serif; fill: var(--ink); }
+.mini-model { fill: none; stroke: var(--accent); stroke-width: 1.3; }
+.mini-point line { stroke: var(--accent); stroke-width: .9; }
+.mini-point circle { fill: var(--accent); }
+.mini-spectrum { fill: none; stroke: var(--accent); stroke-width: .9; stroke-linejoin: round; }
+.mini-line line { stroke: color-mix(in srgb, var(--ink) 25%, transparent); stroke-dasharray: 2 2; stroke-width: .7; }
+.mini-line text { font: 400 6.5px/1 var(--font-plex-mono, ui-monospace), monospace; fill: var(--muted); }
+.mini-c95 { fill: color-mix(in srgb, var(--accent) 22%, transparent); stroke: var(--accent); stroke-width: .7; }
+.mini-c68 { fill: color-mix(in srgb, var(--accent) 50%, transparent); stroke: var(--accent); stroke-width: .9; }
+.mini-best { fill: #fff; stroke: var(--accent); stroke-width: 1; }
+.mini-ref { stroke: color-mix(in srgb, var(--ink) 22%, transparent); stroke-dasharray: 3 3; stroke-width: .7; }
+.mini-lcdm circle { fill: none; stroke: var(--ink); stroke-width: 1; }
+.mini-lcdm text { font: 400 7px/1 var(--font-plex-mono, ui-monospace), monospace; fill: var(--ink); }
+:root[data-theme="dark"] .mini-model, :root[data-theme="dark"] .mini-spectrum { stroke: #9fb7ff; }
+:root[data-theme="dark"] :is(.mini-point line, .mini-c68, .mini-c95) { stroke: #9fb7ff; }
+:root[data-theme="dark"] .mini-point circle { fill: #9fb7ff; }
+@media (min-width: 40rem) and (max-width: 63.99rem) { .home-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: start; } }
+
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-theme="light"] { --lg-alpha: .62; --lg-alpha-strong: .78; }
+}
+
+/* Assinatura do NEXO sempre visível: Nature, Exploration & Origins, iniciais N, Ex, O em destaque. */
+.site-header .brand-signature { display: block !important; font-size: .7rem; letter-spacing: .01em; white-space: nowrap; }
+.site-header .brand-signature strong { font-weight: 700; color: var(--accent); }
+:root[data-theme="light"] .site-header .brand-signature { color: #4a5678; }
+:root[data-theme="light"] .site-header .brand-signature strong { color: #1f4fe0; }
+:root[data-theme="dark"] .site-header .brand-signature strong { color: #8fb0ff; }
+:root[data-theme="light"] .site-header .brand-nexo { color: #0b1640; }
+@media (min-width: 48rem) and (max-width: 72rem) {
+  .site-header .brand-institute { display: none; }
+  .site-header .primary-nav a { font-size: .8125rem; }
+  .site-header .header-living { padding-inline: .7rem !important; font-size: .8125rem; }
+}
+
+/* Com o 3D ligado, a imagem estática sai de baixo do canvas. */
+.desi-stage :is(img, .desi-mobile-poster)[aria-hidden="true"] { opacity: 0; }
