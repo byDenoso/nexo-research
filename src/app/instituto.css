@@ -1,0 +1,153 @@
+/* NEXO · identidade de instituto (26/11/2026).
+ * Noite azul profunda, linhas de 1 px, um acento prata-azulado e um âmbar de estrela K
+ * reservado aos números. A luz vem dos dados; a interface não brilha.
+ * Camada final: só redefine tokens e alguns componentes, sem tocar nas séries científicas. */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  --nx-display: 'Space Grotesk', var(--font-plex-sans), system-ui, sans-serif;
+  --editorial-serif: var(--nx-display);
+  --page-serif: var(--nx-display);
+  --nx-data: var(--font-plex-mono), ui-monospace, 'Cascadia Mono', monospace;
+  --nx-star: #d8b98a;
+  --nx-reticle: color-mix(in srgb, var(--ink) 5%, transparent);
+  --radius: 0;
+  --control-radius: 2px;
+  --shadow: none;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #05070c; --surface: #0c111b; --raised: #121927;
+  --line: #1f2736; --control-line: #5d6779;
+  --ink: #e8ebf0; --muted: #8d97a8;
+  --accent: #a9bcd6; --accent-hover: #c9d6e8; --accent-ink: #05070c;
+  --brand: #a9bcd6; --brand-hover: #c9d6e8; --on-brand: #05070c; --brand-outline: #a9bcd6;
+  --ok: #9cbfa6; --warn: #cdb07a; --bad: #c99a9a;
+  --nx-star: #d8b98a;
+  --hero-field: #05070c;
+}
+:root[data-theme="dark"] body {
+  --premium-brand: #a9bcd6; --premium-hover: #c9d6e8; --premium-on-brand: #05070c;
+  --premium-shell: #05070c; --premium-panel: #0c111b; --premium-line: #1f2736;
+  --premium-ink: #e8ebf0; --premium-muted: #8d97a8;
+  background: radial-gradient(120% 60rem at 50% -10rem, #0a0f1a 0%, #05070c 60%) fixed, #05070c;
+}
+:root[data-theme="dark"] .section-intro, :root[data-theme="dark"] .record-head {
+  --accent: #a9bcd6; --accent-hover: #c9d6e8; --accent-ink: #05070c;
+  --ink: #e8ebf0; --muted: #8d97a8; --surface: #0c111b; --raised: #121927;
+  background-color: #0c111b;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f5f2; --surface: #fbfbf9; --raised: #eceee9;
+  --line: #d3d6d0; --control-line: #6a717c;
+  --ink: #141a24; --muted: #4d5563;
+  --accent: #2c4a72; --accent-hover: #1d3557; --accent-ink: #fff;
+  --brand: #2c4a72; --brand-hover: #1d3557; --on-brand: #fff; --brand-outline: #2c4a72;
+  --ok: #3f6b4c; --warn: #7a5a1e; --bad: #8a3e3e;
+  --nx-star: #8a6428;
+}
+:root[data-theme="light"] body {
+  --premium-brand: #2c4a72; --premium-hover: #1d3557; --premium-on-brand: #fff;
+  --premium-shell: #f4f5f2; --premium-panel: #eceee9; --premium-line: #d3d6d0;
+  --premium-ink: #141a24; --premium-muted: #4d5563;
+  background: #f4f5f2;
+}
+:root[data-theme="light"] body:not(:has(main .external-references, main .bibliography)) { --bg: #f4f5f2; --raised: #eceee9; }
+
+/* Tipografia: grotesca fina nos títulos, mono em toda grandeza. */
+body :is(h1, h2, h3, .record-title, .page-title) {
+  font-family: var(--nx-display);
+  font-weight: 350;
+  letter-spacing: -.018em;
+  text-wrap: balance;
+}
+h1 { font-weight: 300; letter-spacing: -.028em; }
+:is(.nx-eyebrow, .cover-label, .kicker, .inst-label, .nx-chapter) {
+  font-family: var(--nx-data);
+  font-size: var(--label-size);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+:is(.nx-figure-value, .nx-number, .inst-facts dd, .telemetry b, time, .num) {
+  font-family: var(--nx-data);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sem brilho: hover só muda linha e opacidade. */
+a, button { transition: color 150ms ease, border-color 150ms ease, opacity 150ms ease; }
+:is(.nx-primary, .cover-actions a) {
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+  border-radius: var(--control-radius);
+}
+:is(.nx-primary, .cover-actions a):is(:hover, :focus-visible) { border-color: var(--accent) !important; }
+
+/* Retícula no topo: guias de 12 colunas quase invisíveis. */
+.institute-cover { position: relative; isolation: isolate; }
+.institute-cover::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: repeating-linear-gradient(90deg, var(--nx-reticle) 0 1px, transparent 1px calc((min(var(--frame), 100vw) - 2 * var(--gutter)) / 12));
+  background-position: center top;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+}
+
+/* Faixa de telemetria. */
+.telemetry {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border-block: 1px solid var(--line);
+  margin-block: var(--space-8) 0;
+  font-family: var(--nx-data); font-size: var(--meta-size); color: var(--muted);
+}
+.telemetry > span { padding: var(--space-3) var(--space-5); border-inline-end: 1px solid var(--line); min-width: 0; }
+.telemetry > span:first-child { padding-inline-start: 0; }
+.telemetry > span:last-child { border-inline-end: 0; }
+.telemetry b { color: var(--ink); font-weight: 500; }
+
+/* Cartão com cantos de mira. */
+.reticle-card { position: relative; padding: var(--panel-pad); }
+.reticle-card::before, .reticle-card::after {
+  content: ""; position: absolute; width: .9rem; height: .9rem; pointer-events: none;
+  border-color: var(--control-line); border-style: solid;
+}
+.reticle-card::before { inset-block-start: 0; inset-inline-start: 0; border-width: 1px 0 0 1px; }
+.reticle-card::after { inset-block-end: 0; inset-inline-end: 0; border-width: 0 1px 1px 0; }
+.star-value { font-family: var(--nx-data); font-weight: 400; font-size: clamp(1.75rem, 3.4vw, 2.75rem); line-height: 1.05; color: var(--nx-star); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.star-value small { font-size: .45em; color: var(--muted); margin-inline-start: .35em; letter-spacing: .04em; }
+
+/* Rodapé de estado do catálogo. */
+.catalogue-state { font-family: var(--nx-data); font-size: var(--meta-size); color: var(--muted); border-block-start: 1px solid var(--line); padding-block: var(--space-4); }
+.catalogue-state b { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 40rem) {
+  .telemetry > span { flex: 1 1 50%; padding-inline: 0 var(--space-3); border-inline-end: 0; border-block-end: 1px solid var(--line); }
+}
+
+/* Capa: destaque do offset do DES. */
+.nx-lead-copy { display: flex; flex-direction: column; gap: var(--space-4); }
+.nx-lead-copy > p { margin: 0; max-width: 38rem; }
+.nx-lead-copy .star-value { font-size: clamp(1.5rem, 2.6vw, 2.1rem); white-space: nowrap; }
+.des-offset-figure svg text { font-size: 15px; }
+.des-offset-figure svg text.small { font-size: 13px; }

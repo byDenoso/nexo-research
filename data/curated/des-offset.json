@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-26",
+  "model": "ΛCDM plano + BAO DESI DR2, Ωm livre, magnitude absoluta e offsets marginalizados",
+  "offsets": [
+    {"compilation": "Pantheon+", "note": {"pt-BR": "DES menos o restante", "en": "DES minus the rest"}, "value": -0.035, "error": 0.012, "dchi2": 8.7},
+    {"compilation": "DES-SN5YR", "note": {"pt-BR": "DES menos baixo z", "en": "DES minus low z"}, "value": -0.044, "error": 0.012, "dchi2": 12.6},
+    {"compilation": "DES-Dovekie", "note": {"pt-BR": "DES menos baixo z", "en": "DES minus low z"}, "value": -0.037, "error": 0.012, "dchi2": 8.5}
+  ],
+  "reference": {
+    "pt-BR": "Com SDSS, SNLS, PS1 e HST como referência de alto z, o DES fica em −0,033 ± 0,012 mag e o baixo z agrupado em +0,010 ± 0,011 mag.",
+    "en": "With SDSS, SNLS, PS1 and HST as the high-redshift reference, DES sits at −0.033 ± 0.012 mag and the pooled low-redshift sample at +0.010 ± 0.011 mag."
+  },
+  "independent": [
+    {"label": "Ormondroyd et al. (2026)", "arxiv": "2509.13220", "value": "0,038 ± 0,013"},
+    {"label": "Nájera, Banik & Desmond (2026)", "arxiv": "2610.23657", "value": "0,065 ± 0,039"},
+    {"label": "Watkins, Trueax & Feldman (2026)", "arxiv": "2606.18374", "value": "≈ 0,05"}
+  ]
+}

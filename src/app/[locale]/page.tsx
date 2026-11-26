@@ -1,11 +1,12 @@
 import {DesiObservatory} from '@/components/DesiObservatory';
+import {DesOffsetFigure, DesOffsetLead} from '@/components/DesOffset';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {ErositaFigure, erositaId} from '@/components/ErositaFigure';
-import {RedshiftFigure, RedshiftFinding, RedshiftLimit, redshiftSlug} from '@/components/RedshiftFigure';
-import {getManifest, getPageDates, getResult, getResults, getPublications} from '@/lib/data';
+import {redshiftSlug} from '@/components/RedshiftFigure';
+import {getManifest, getPageDates, getResults, getPublications} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
 import {readResult, selectedIds} from '@/lib/editorial';
 import {fmtDate, isLocale} from '@/lib/i18n';
@@ -20,7 +21,6 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
   const publications = getPublications();
   const snapshot = getManifest().catalogue;
   const editorialDate = getPageDates()['']!;
-  const lead = getResult(redshiftSlug);
   const stories = selectedIds.slice(1).flatMap(id => {
     const item = results.find(result => result.id === id);
     return item ? [item] : [];
@@ -41,21 +41,25 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           </div>
           <DesiObservatory locale={locale} />
         </div>
+        <div className="wrap">
+          <p className="telemetry" aria-label={pt ? 'Estado do catálogo' : 'Catalogue state'}>
+            <span><b>{results.length}</b> {pt ? 'registros' : 'records'}</span>
+            <span><b>{getFamilies(results).length}</b> {pt ? 'perguntas' : 'questions'}</span>
+            <span>{pt ? 'atualizado em' : 'updated'} <b><time dateTime={snapshot.latestUpdate}>{fmtDate(snapshot.latestUpdate, locale)}</time></b></span>
+            <span>DESI DR2 · DES-SN5YR · Pantheon+ · Euclid · JWST</span>
+          </p>
+        </div>
       </section>
       <ChapterNav locale={locale}/>
       <section id="em-foco" className="wrap nx-lead" aria-labelledby="cover-title">
         <div className="nx-lead-copy">
-          <p className="nx-eyebrow">{pt ? 'Cosmologia observacional / Supernovas Ia' : 'Observational cosmology / Type Ia supernovae'}</p>
-          <h2 id="cover-title">{pt ? 'Influência das supernovas próximas no ajuste da energia escura' : 'The influence of nearby supernovae on dark energy fits'}</h2>
-          {lead && <p className="nx-status">{pt ? 'Validação independente pendente' : 'Independent validation pending'}</p>}
-          <p className="nx-deck"><RedshiftFinding locale={locale} /></p>
-          <RedshiftLimit locale={locale} />
+          <DesOffsetLead locale={locale} />
           <div className="nx-actions">
-            <Link prefetch={false} className="nx-primary" href={href(locale, '/results/' + redshiftSlug)}>{pt ? 'Comparar os cortes de redshift' : 'Compare the redshift cuts'} <span aria-hidden="true">→</span></Link>
+            <Link prefetch={false} className="nx-primary" href={href(locale, '/results/' + redshiftSlug)}>{pt ? 'Ver o corte de baixo z' : 'See the low-redshift cut'} <span aria-hidden="true">→</span></Link>
             <Link prefetch={false} className="text-link arrow-link" href={href(locale, '/results')}>{pt ? 'Consultar o catálogo' : 'Browse the catalogue'}</Link>
           </div>
         </div>
-        <RedshiftFigure locale={locale} />
+        <DesOffsetFigure locale={locale} />
       </section>
 
       <section id="galaxias" className="wrap nx-observation" aria-labelledby="galaxies-title">
