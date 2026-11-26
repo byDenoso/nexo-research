@@ -1,0 +1,21 @@
+{
+ "map": "SMICA",
+ "release": "Planck 2015 (PR2)",
+ "nside": 1024,
+ "ordering": "NESTED",
+ "unit_source": "K_CMB",
+ "limit_uK": 300.0,
+ "rms_uK": 101.8,
+ "coords": "galácticas",
+ "projection": "equirretangular, l = 180° a −180°",
+ "credit": "ESA and the Planck Collaboration",
+ "source_url": "https://irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/",
+ "reference": {
+  "label": "Planck Collaboration (2016), A&A 594, A9",
+  "url": "https://arxiv.org/abs/1502.05956"
+ },
+ "textures": {
+  "2048": 1435215,
+  "1024": 415837
+ }
+}

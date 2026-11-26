@@ -1,6 +1,7 @@
 import {DesiObservatory} from '@/components/DesiObservatory';
 import {DesOffsetFigure, DesOffsetLead} from '@/components/DesOffset';
 import {HomeFigures} from '@/components/HomeFigures';
+import {CmbSphere} from '@/components/CmbSphere';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -52,6 +53,17 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         </div>
       </section>
       <HomeFigures locale={locale} />
+      <section className="wrap cmb-section" aria-labelledby="cmb-title">
+        <div className="cmb-copy">
+          <p className="nx-eyebrow">{pt ? 'Observatório · radiação cósmica de fundo' : 'Observatory · cosmic microwave background'}</p>
+          <h2 id="cmb-title">{pt ? 'O céu de 380 mil anos depois do Big Bang' : 'The sky 380,000 years after the Big Bang'}</h2>
+          <p>{pt
+            ? 'Cada mancha é uma região do plasma primordial um pouco mais quente ou mais fria que a média, por algumas partes em cem mil. O tamanho típico dessas manchas, cerca de um grau, é a mesma régua acústica que o DESI mede nas galáxias bilhões de anos depois.'
+            : 'Each patch is a region of the primordial plasma slightly warmer or colder than average, by a few parts in a hundred thousand. Their typical size, about one degree, is the same acoustic ruler that DESI measures in galaxies billions of years later.'}</p>
+          <p className="cmb-hint">{pt ? 'Arraste para girar; setas e +/− pelo teclado.' : 'Drag to rotate; arrows and +/− on the keyboard.'}</p>
+        </div>
+        <CmbSphere locale={locale} />
+      </section>
       <ChapterNav locale={locale}/>
       <section id="em-foco" className="wrap nx-lead" aria-labelledby="cover-title">
         <div className="nx-lead-copy">
