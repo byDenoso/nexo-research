@@ -2,6 +2,7 @@ import {DesiObservatory} from '@/components/DesiObservatory';
 import {DesOffsetFigure, DesOffsetLead} from '@/components/DesOffset';
 import {HomeFigures} from '@/components/HomeFigures';
 import {CmbSphere} from '@/components/CmbSphere';
+import {HubbleLive} from '@/components/HubbleLive';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -74,6 +75,17 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           </div>
         </div>
         <DesOffsetFigure locale={locale} />
+      </section>
+
+      <section className="wrap hl-section" aria-labelledby="hl-title">
+        <div className="hl-head">
+          <p className="nx-eyebrow">{pt ? 'Observatório · diagrama de Hubble' : 'Observatory · Hubble diagram'}</p>
+          <h2 id="hl-title">{pt ? 'Mova o ponto zero do DES e veja a energia escura responder' : 'Move the DES zero point and watch dark energy respond'}</h2>
+          <p>{pt
+            ? 'Cada posição do controle é um ajuste completo de ΛCDM e de w0wa às supernovas do Pantheon+, ao BAO do DESI e à radiação cósmica de fundo, com as supernovas do DES deslocadas pelo valor escolhido. Os pontos são médias por faixa de redshift, em relação ao ΛCDM do mesmo ajuste.'
+            : 'Every position of the control is a full fit of ΛCDM and w0wa to the Pantheon+ supernovae, DESI BAO and the cosmic microwave background, with the DES supernovae shifted by the chosen value. Points are averages per redshift range, relative to the ΛCDM of the same fit.'}</p>
+        </div>
+        <HubbleLive locale={locale} />
       </section>
 
       <section id="galaxias" className="wrap nx-observation" aria-labelledby="galaxies-title">

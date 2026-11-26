@@ -213,7 +213,8 @@ body::after {
 .site-menu-panel,
 .chapter-nav,
 .home-card,
-.cmb-section {
+.cmb-section,
+.hl-section {
   position: relative;
   isolation: isolate;
   background:
@@ -230,7 +231,7 @@ body::after {
     var(--lg-depth) !important;
 }
 /* Aresta: borda de 1 px em gradiente, desenhada por máscara para não pesar no layout. */
-:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav, .home-card, .cmb-section)::after {
+:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav, .home-card, .cmb-section, .hl-section)::after {
   content: "";
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   border-radius: inherit;
@@ -409,7 +410,7 @@ body h1 { font-weight: 400; letter-spacing: -.03em; }
 .mini-axes rect { stroke: rgb(var(--lg-rim) / .0); }
 .mini-axes rect, .mini-axes line { stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-width: .8; fill: none; }
 .mini-axes text { font: 400 7.5px/1 var(--font-plex-mono, ui-monospace), monospace; fill: var(--muted); }
-.mini-axes .mini-label { font: 400 8px/1 var(--font-plex-sans, system-ui), sans-serif; fill: var(--ink); }
+.mini-axes .mini-label { font: 400 8px/1 'IBM Plex Sans', var(--font-sans); fill: var(--ink); }
 .mini-model { fill: none; stroke: var(--accent); stroke-width: 1.3; }
 .mini-point line { stroke: var(--accent); stroke-width: .9; }
 .mini-point circle { fill: var(--accent); }
@@ -499,3 +500,47 @@ body h1 { font-weight: 400; letter-spacing: -.03em; }
 .cmb-scale { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--space-3); align-items: center; font: 400 var(--meta-size)/1 var(--nx-data); color: var(--muted); max-width: 26rem; margin-inline: auto; width: 100%; }
 .cmb-scale i { height: 6px; border-radius: 3px; background: linear-gradient(90deg, rgb(23 41 133), rgb(64 115 255), rgb(242 245 250), rgb(245 158 69), rgb(178 41 31)); box-shadow: inset 0 0 0 1px rgb(var(--lg-rim) / .5); }
 .cmb-sphere figcaption { font-size: var(--meta-size); line-height: 1.5; color: var(--muted); max-width: 40rem; margin-inline: auto; }
+
+/* Diagrama de Hubble interativo. */
+.hl-section { display: grid; gap: var(--space-6); margin-block: var(--space-10); padding: clamp(1rem, 2.5vw, 2rem); }
+.hl-head { display: flex; flex-direction: column; gap: var(--space-3); max-width: 52rem; }
+.hl-head h2 { margin: 0; font-size: clamp(1.5rem, 2.8vw, 2.2rem); line-height: 1.12; }
+.hl-head p { margin: 0; }
+.hubble-live { display: grid; gap: var(--space-6); align-items: start; }
+@media (min-width: 60rem) { .hubble-live { grid-template-columns: minmax(16rem, 0.7fr) minmax(0, 1.6fr); } }
+.hl-controls { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.hl-label { font: 500 var(--label-size)/1.3 var(--nx-data); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.hl-delta { font: 400 clamp(1.8rem, 3vw, 2.4rem)/1 var(--nx-data); color: var(--ink); font-variant-numeric: tabular-nums; }
+.hl-delta small { font-size: .45em; color: var(--muted); }
+.hl-range { position: relative; padding-block-end: 1.4rem; }
+.hl-range input { width: 100%; accent-color: var(--accent); height: 28px; }
+.hl-mark { position: absolute; inset-block-start: 30px; translate: -50% 0; font: 400 10px/1 var(--nx-data); color: var(--muted); white-space: nowrap; }
+.hl-mark::before { content: ""; display: block; width: 1px; height: 6px; background: currentColor; margin: 0 auto 3px; }
+.hl-mark-measured { color: var(--nx-star); }
+.hl-buttons { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.hl-buttons button { font: 500 .8125rem/1 'IBM Plex Sans', var(--font-sans); padding: .6rem .9rem; border-radius: 999px; border: 0; cursor: pointer; color: var(--ink);
+  background: linear-gradient(180deg, rgb(var(--lg-rim) / .55), rgb(var(--lg-rim) / .18)); box-shadow: inset 0 1px 0 rgb(var(--lg-rim) / .9), inset 0 0 0 1px rgb(var(--lg-rim) / .5), 0 6px 14px -10px rgb(31 60 150 / .45); }
+.hl-buttons button[aria-pressed="true"] { background: linear-gradient(180deg, #4a76ff, #1f4fe0); color: #fff; }
+.hl-readout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3) var(--space-4); margin: 0; }
+.hl-readout div { display: flex; flex-direction: column; gap: .2rem; }
+.hl-readout dt { font: 500 var(--label-size)/1.2 var(--nx-data); color: var(--muted); }
+.hl-readout dd { margin: 0; font: 400 1.25rem/1.1 var(--nx-data); font-variant-numeric: tabular-nums; color: var(--ink); }
+.hl-readout dd.star-value { font-size: 1.9rem; color: var(--accent); }
+.hl-figure { margin: 0; min-width: 0; }
+.hl-figure svg { width: 100%; height: auto; display: block; }
+.hl-figure .mini-axes text { font-size: 11px; }
+.hl-figure .mini-axes .mini-label { font-size: 12px; }
+.hl-zero { stroke: color-mix(in srgb, var(--ink) 35%, transparent); stroke-dasharray: 4 4; }
+.hl-curve { fill: none; stroke: var(--accent); stroke-width: 2; transition: d 180ms ease; }
+.hl-other line { stroke: var(--accent); stroke-width: 1.1; opacity: .75; }
+.hl-other circle { fill: var(--accent); }
+.hl-des line { stroke: #c98a2c; stroke-width: 1.1; opacity: .85; }
+.hl-des rect { fill: #e09a34; stroke: #fff; stroke-width: .8; }
+.hl-figure circle, .hl-figure rect:not(.mini-axes rect), .hl-figure line { transition: all 180ms ease; }
+.hl-figure figcaption { display: flex; flex-wrap: wrap; gap: var(--space-4); font: 400 var(--meta-size)/1.3 var(--nx-data); color: var(--muted); margin-block-start: var(--space-2); }
+.hl-key { display: inline-flex; align-items: center; gap: .4rem; }
+.hl-key i { display: inline-block; width: 10px; height: 10px; }
+.hl-key-other { border-radius: 50%; background: var(--accent); }
+.hl-key-des { background: #e09a34; rotate: 45deg; }
+.hl-key-curve { height: 2px !important; width: 16px !important; background: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .hl-curve, .hl-figure * { transition: none !important; } }

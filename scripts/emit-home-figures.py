@@ -19,6 +19,8 @@ SPEC = Path(r'C:\ft\noite_ciencia\descoberta\censo_espectral\exoticos\caracteriz
 GRID = CORE / 'profile_likelihood' / 'out' / 'grid_C2.json'
 OUT = Path(__file__).resolve().parent.parent / 'data' / 'curated' / 'home-figures.json'
 
+if not hasattr(np, 'trapezoid'):  # numpy < 2 no ambiente compartilhado
+    np.trapezoid = np.trapz
 sys.path.insert(0, str(CORE))
 import core_dde  # noqa: E402
 
