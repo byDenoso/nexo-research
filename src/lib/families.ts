@@ -94,6 +94,8 @@ const shortTitles: Record<string, Localized> = {
 
 export type Family = {
   slug: string;
+  // Hand-written URL per language, inherited by a record that stands alone.
+  slugs?: {pt: string; en: string};
   title: Localized;
   description: Localized;
   records: Result[];
@@ -111,6 +113,7 @@ export function getFamilies(results: Result[]): Family[] {
     if (!family) {
       family = {
         slug,
+        ...(!rule && item.slugs ? {slugs: item.slugs} : {}),
         title: rule?.title ?? shortTitles[item.id] ?? item.question,
         // A question that stands alone is described by its own result.
         description: rule?.description ?? item.result,
@@ -130,8 +133,14 @@ export function getFamilies(results: Result[]): Family[] {
 }
 
 export function getFamily(results: Result[], slug: string): Family | undefined {
-  return getFamilies(results).find(family => family.slug === slug);
+  return getFamilies(results).find(family => family.slug === slug || family.slugs?.pt === slug || family.slugs?.en === slug);
 }
+
+// URL segment of a record or a family in one language. Records without a hand-written slug keep
+// the same segment in both languages.
+export const pathSlug = (entry: {slug: string; slugs?: {pt: string; en: string}}, locale: 'pt' | 'en'): string => entry.slugs?.[locale] ?? entry.slug;
+// A record with a hand-written slug never shows its internal identifier.
+export const isNamed = (entry: {slugs?: unknown}): boolean => Boolean(entry.slugs);
 
 export function familyFor(results: Result[], item: Result): Family | undefined {
   return getFamilies(results).find(family => family.records.some(record => record.id === item.id));

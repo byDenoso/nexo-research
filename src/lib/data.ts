@@ -12,7 +12,7 @@ export function getManifest(): Manifest {
   return cached;
 }
 export const getResults = (): Result[] => getManifest().results;
-export const getResult = (slug: string): Result | undefined => getResults().find(item => item.slug === slug);
+export const getResult = (slug: string): Result | undefined => getResults().find(item => item.slug === slug || item.slugs?.pt === slug || item.slugs?.en === slug);
 export const getProjects = (): Project[] => projectsSchema.parse(json('curated/projects.json'));
 export const getPublications = (): Publication[] => publicationsSchema.parse(json('curated/publications.json')).sort((a, b) => b.date.localeCompare(a.date));
 
@@ -57,12 +57,17 @@ export function getUpdates(): Update[] {
     title: {'pt-BR': 'Snapshot público da Tower', en: 'Public Tower snapshot'},
     body: {'pt-BR': `O snapshot em uso reúne ${source.tests} registros de testes. Esta é a data do registro mais recente.`, en: `The snapshot in use holds ${source.tests} test records. This is the date of the most recent record.`}
   };
-  const supplement: Update = {
-    date: catalogue.latestUpdate.slice(0, 10), kind: 'catalogue',
+  // One derived entry per date on which summaries were added, unless a written entry already
+  // describes that date.
+  const written = new Set(curated.filter(entry => entry.kind === 'catalogue').map(entry => entry.date));
+  const added = new Map<string, number>();
+  for (const item of getResults()) if (item.publicSource) added.set(item.updatedAt.slice(0, 10), (added.get(item.updatedAt.slice(0, 10)) ?? 0) + 1);
+  const supplements: Update[] = catalogue.supplements ? [...added].filter(([date]) => !written.has(date)).map(([date, count]) => ({
+    date, kind: 'catalogue',
     title: {'pt-BR': 'Resumos de fontes públicas adicionados', en: 'Public-source summaries added'},
-    body: {'pt-BR': `${catalogue.supplements} resumos editoriais foram acrescentados ao catálogo sem atualizar o snapshot da Tower nem promover o estado científico.`, en: `${catalogue.supplements} editorial summaries were added to the catalogue without updating the Tower snapshot or promoting scientific status.`}
-  };
-  return [...curated, snapshot, ...(catalogue.supplements ? [supplement] : [])].sort((a, b) => b.date.localeCompare(a.date));
+    body: {'pt-BR': `${count} resumos editoriais foram acrescentados ao catálogo sem atualizar o snapshot da Tower nem promover o estado científico.`, en: `${count} editorial summaries were added to the catalogue without updating the Tower snapshot or promoting scientific status.`}
+  })) : [];
+  return [...curated, snapshot, ...supplements].sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nexoresearch.org';

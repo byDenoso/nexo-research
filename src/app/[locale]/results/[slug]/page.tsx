@@ -8,7 +8,7 @@ import {SensitivityChart} from '@/components/SensitivityChart';
 import {redshiftId} from '@/components/RedshiftFigure';
 import {RedshiftRecord} from '@/components/RedshiftRecord';
 import {DATASETS, getDossier, getManifest, getResult, getResults, lastDossierCorrection} from '@/lib/data';
-import {familyFor} from '@/lib/families';
+import {familyFor, isNamed, pathSlug} from '@/lib/families';
 import {scientificText, sameText} from '@/lib/format';
 import {D, tr} from '@/lib/dict';
 import {href, pageMeta} from '@/lib/seo';
@@ -17,13 +17,14 @@ import {readResult, redshiftQuestion} from '@/lib/editorial';
 import type {Result} from '@/lib/schemas';
 
 export const dynamicParams = false;
-export const generateStaticParams = () => LOCALES.flatMap(locale => getResults().map(item => ({locale, slug: item.slug})));
+export const generateStaticParams = () => LOCALES.flatMap(locale => getResults().map(item => ({locale, slug: pathSlug(item, locale)})));
 
 export async function generateMetadata({params}: {params: Promise<{locale: string; slug: string}>}) {
   const {locale, slug} = await params;
   const item = getResult(slug);
   if (!isLocale(locale) || !item) return {};
-  return pageMeta(locale, `/results/${slug}`, pick(item.id === redshiftId ? redshiftQuestion : item.title, locale), pick(item.result, locale).slice(0, 200));
+  const paths = item.slugs ? {pt: `/results/${item.slugs.pt}`, en: `/results/${item.slugs.en}`} : undefined;
+  return pageMeta(locale, `/results/${slug}`, pick(item.id === redshiftId ? redshiftQuestion : item.title, locale), pick(item.result, locale).slice(0, 200), paths);
 }
 
 function Block({id, title, children, className = ''}: {id?: string; title: string; children: React.ReactNode; className?: string}) {
@@ -69,6 +70,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
   const {locale, slug} = await params;
   const item = getResult(slug);
   if (!isLocale(locale) || !item) notFound();
+  const named = isNamed(item);
   const dossier = getDossier(item.id);
   if (item.id === redshiftId && dossier) return <RedshiftRecord item={item} dossier={dossier} locale={locale} />;
   const reading = readResult(item, locale);
@@ -98,13 +100,13 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
     <article>
       <header className="record-head dark-chapter">
         <div className="wrap record-head-inner">
-          <Link href={href(locale, family ? '/results/families/' + family.slug : '/results')} prefetch={false} className="text-link record-back">← {locale === 'pt' ? 'Voltar à pergunta científica' : 'Back to research question'}</Link>
-          <div className="record-meta">
+          <Link href={href(locale, family ? '/results/families/' + pathSlug(family, locale) : '/results')} prefetch={false} className="text-link record-back">← {locale === 'pt' ? 'Voltar à pergunta científica' : 'Back to research question'}</Link>
+          {named ? <div className="record-meta"><span>{pt ? 'Resultado preliminar' : 'Preliminary result'} · <time dateTime={item.updatedAt}>{fmtDate(item.updatedAt, locale)}</time></span></div> : <div className="record-meta">
             <span>{item.id}</span>
-          </div>
+          </div>}
           <h1>{reading.question}</h1>
           <p className="record-deck">{reading.finding}</p>
-          {family && family.records.length > 1 && <p className="family-subhead">{locale === 'pt' ? 'Execução individual' : 'Individual run'} · {item.id}</p>}
+          {family && family.records.length > 1 && <p className="family-subhead">{locale === 'pt' ? 'Execução individual' : 'Individual run'}{named ? '' : ` · ${item.id}`}</p>}
           {item.statusSource !== 'default' && <p className="record-status-note">{approval?.statusNote ? pick(approval.statusNote, locale) : tr(D.status[item.status].d, locale)}</p>}
         </div>
       </header>
@@ -187,7 +189,10 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
             </div>
             <div>
               <dt>{pt ? 'Origem do registro' : 'Record origin'}</dt>
-              <dd>{item.publicSource ? <>
+              <dd>{item.publicSource && named ? <>
+                {pt ? 'Análise do NEXO sobre dados públicos, de' : 'NEXO analysis of public data, run on'} <time dateTime={item.publicSource.sourceDate}>{fmtDate(item.publicSource.sourceDate, locale)}</time>.
+                <span className="dossier-note">{pick(item.publicSource.review, locale)}</span>
+              </> : item.publicSource ? <>
                 {pt ? 'Resumo editorial de uma fonte pública, independente do snapshot da Tower.' : 'Editorial summary of a public source, separate from the Tower snapshot.'}
                 <span className="dossier-note"><a className="text-link" href={item.publicSource.source.url} target="_blank" rel="noopener noreferrer">{pick(item.publicSource.source.label, locale)} ↗</a> · <time dateTime={item.publicSource.sourceDate}>{fmtDate(item.publicSource.sourceDate, locale)}</time></span>
                 <span className="dossier-note">{pick(item.publicSource.review, locale)}</span>
@@ -199,7 +204,7 @@ export default async function ResultPage({params}: {params: Promise<{locale: str
             <div>
               <dt>{tr(R.code, locale)}</dt>
               <dd>
-                {item.publicSource ? <a className="text-link" href={item.publicSource.source.url} target="_blank" rel="noopener noreferrer">{pick(item.publicSource.source.label, locale)} ↗</a> : dossier?.code?.length || dossier?.artefacts?.length ? (
+                {item.publicSource && !named ? <a className="text-link" href={item.publicSource.source.url} target="_blank" rel="noopener noreferrer">{pick(item.publicSource.source.label, locale)} ↗</a> : dossier?.code?.length || dossier?.artefacts?.length ? (
                   <ul role="list" className="dossier-data">
                     {[...(dossier.code ?? []), ...(dossier.artefacts ?? [])].map(entry => <li key={entry.url}><a className="text-link" href={entry.url} target="_blank" rel="noopener noreferrer">{entry.label} ↗</a></li>)}
                   </ul>

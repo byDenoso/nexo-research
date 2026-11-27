@@ -1,6 +1,119 @@
 [
   {
     "question": {
+      "pt-BR": "A preferência por energia escura dinâmica vem de um sistemático do Planck em alto ℓ?",
+      "en": "Does the preference for dynamical dark energy come from a high-ℓ Planck systematic?"
+    },
+    "answer": {
+      "pt-BR": "Cerca de dois terços do ganho vêm de dados que não passam pelo alto ℓ do Planck.",
+      "en": "About two thirds of the improvement come from data that do not involve high-ℓ Planck."
+    },
+    "method": {
+      "pt-BR": "Ajuste de ΛCDM plano e de w0–wa às BAO do DESI DR2, às supernovas Pantheon+ na calibração de Hoyt et al. e ao CMB do Planck PR4 (CamSpec), comparados pelo Δχ². Quatro variações isolam o alto ℓ: retirar a parte do Planck acima de ℓ = 800, deixar livre a amplitude de lenteamento, usar só o lenteamento do CMB e substituir o alto ℓ do Planck pelo ACT DR6.",
+      "en": "Flat ΛCDM and w0–wa fits to DESI DR2 BAO, Pantheon+ supernovae in the Hoyt et al. calibration and Planck PR4 CMB (CamSpec), compared through Δχ². Four variations isolate high ℓ: removing the Planck data above ℓ = 800, freeing the lensing amplitude, using CMB lensing alone, and replacing high-ℓ Planck with ACT DR6."
+    },
+    "result": {
+      "pt-BR": "A parte do Planck acima de ℓ = 800 carrega 37% do ganho do ajuste w0–wa. Com a amplitude de lenteamento livre, 74% do ganho permanece, e o lenteamento sozinho favorece ΛCDM. Com o ACT DR6 no lugar do alto ℓ do Planck, 90% do ganho permanece: o Δχ² total fica em 10,42, contra 11,25 na referência.",
+      "en": "The Planck data above ℓ = 800 carry 37% of the w0–wa fit improvement. With the lensing amplitude free, 74% of the improvement remains, and lensing alone favours ΛCDM. With ACT DR6 in place of high-ℓ Planck, 90% of the improvement remains: the total Δχ² is 10.42, against 11.25 in the reference."
+    },
+    "lines": [
+      "expansion",
+      "probes"
+    ],
+    "updatedAt": "2026-11-27",
+    "provenance": {
+      "publicAuthorized": true,
+      "sourceDate": "2026-11-27",
+      "source": {
+        "label": {
+          "pt-BR": "Planck PR4 com CamSpec (Rosenberg et al. 2022)",
+          "en": "Planck PR4 with CamSpec (Rosenberg et al. 2022)"
+        },
+        "url": "https://doi.org/10.1093/mnras/stac2744"
+      },
+      "review": {
+        "pt-BR": "Números da execução de 27/11/2026. O código ainda não foi publicado.",
+        "en": "Numbers from the 27 November 2026 run. The code has not been published yet."
+      }
+    }
+  },
+  {
+    "question": {
+      "pt-BR": "A preferência por w0–wa muda quando o CMB do Planck é trocado por CMB medido do solo?",
+      "en": "Does the w0–wa preference change when Planck CMB is replaced by ground-based CMB?"
+    },
+    "answer": {
+      "pt-BR": "Os três experimentos de CMB levam à mesma preferência. O ganho se move com a calibração das supernovas e com a âncora de H0.",
+      "en": "The three CMB experiments lead to the same preference. The improvement moves with the supernova calibration and with the H0 anchor."
+    },
+    "method": {
+      "pt-BR": "Ajuste de ΛCDM plano e de w0–wa às BAO do DESI DR2 e às supernovas, com quatro versões do CMB: Planck PR4, Planck combinado com ACT (P-ACT), SPT-3G D1, e ACT DR6 com SPT-3G sem o Planck primário. Duas variações testam a calibração: o ponto zero das supernovas do DES fica livre, ou H0 é ancorado pelo SH0ES ou pela TRGB de Freedman et al. (2025).",
+      "en": "Flat ΛCDM and w0–wa fits to DESI DR2 BAO and supernovae, with four versions of the CMB: Planck PR4, Planck combined with ACT (P-ACT), SPT-3G D1, and ACT DR6 with SPT-3G without primary Planck. Two variations test the calibration: the zero point of the DES supernovae is left free, or H0 is anchored by SH0ES or by the Freedman et al. (2025) TRGB."
+    },
+    "result": {
+      "pt-BR": "Δχ² = 12,81 (3,15σ) com Planck PR4, 12,43 (3,09σ) com P-ACT, 12,33 (3,08σ) com SPT-3G e 12,70 (3,13σ) com ACT+SPT sem o Planck primário. Com o ponto zero das supernovas do DES livre, o ganho cai para 8,29 com ACT+SPT: o deslocamento de calibração explica a fração 0,35 do ganho, a mesma do Planck (0,34). Ancorar H0 leva o ganho a 10,93 com o SH0ES e a 11,77 com a TRGB de Freedman et al. (2025).",
+      "en": "Δχ² = 12.81 (3.15σ) with Planck PR4, 12.43 (3.09σ) with P-ACT, 12.33 (3.08σ) with SPT-3G and 12.70 (3.13σ) with ACT+SPT without primary Planck. With the DES supernova zero point free, the improvement drops to 8.29 with ACT+SPT: the calibration shift accounts for a fraction 0.35 of the improvement, the same as with Planck (0.34). Anchoring H0 brings the improvement to 10.93 with SH0ES and to 11.77 with the Freedman et al. (2025) TRGB."
+    },
+    "lines": [
+      "expansion",
+      "probes"
+    ],
+    "updatedAt": "2026-11-27",
+    "provenance": {
+      "publicAuthorized": true,
+      "sourceDate": "2026-11-27",
+      "source": {
+        "label": {
+          "pt-BR": "ACT DR6 (Louis et al. 2025)",
+          "en": "ACT DR6 (Louis et al. 2025)"
+        },
+        "url": "https://arxiv.org/abs/2503.14452"
+      },
+      "review": {
+        "pt-BR": "Números da execução de 27/11/2026. O código ainda não foi publicado.",
+        "en": "Numbers from the 27 November 2026 run. The code has not been published yet."
+      }
+    }
+  },
+  {
+    "question": {
+      "pt-BR": "As galáxias formadoras de estrelas pobres em metais do DESI DR1 emitem He II nebular?",
+      "en": "Do metal-poor star-forming galaxies in DESI DR1 emit nebular He II?"
+    },
+    "answer": {
+      "pt-BR": "Há fótons acima de 54 eV nessas galáxias, em quantidade menor que nas análogas extremas.",
+      "en": "These galaxies contain photons above 54 eV, in smaller amounts than the extreme analogues."
+    },
+    "method": {
+      "pt-BR": "Empilhamento dos espectros de 69 galáxias formadoras de estrelas do DESI DR1 com 12+log(O/H) < 8,0 na calibração N2, a partir das medidas do FastSpecFit v4.0. A razão He II/Hβ é medida no espectro empilhado, com janelas de controle fora da linha e com a amostra dividida em duas metades independentes.",
+      "en": "Stack of the spectra of 69 star-forming galaxies in DESI DR1 with 12+log(O/H) < 8.0 in the N2 calibration, built from FastSpecFit v4.0 measurements. The He II/Hβ ratio is measured in the stacked spectrum, with control windows away from the line and with the sample split into two independent halves."
+    },
+    "result": {
+      "pt-BR": "He II/Hβ = 0,0057, com intervalo de 95% de 0,0045–0,0071. As janelas de controle são compatíveis com zero, e as duas metades independentes dão 0,0060 e 0,0048. O valor é cerca de metade do medido nas análogas extremas (~0,012). Acima de 12+log(O/H) = 8,0, o bump de Wolf-Rayet contamina a região da linha e não há medida limpa.",
+      "en": "He II/Hβ = 0.0057, with a 95% interval of 0.0045–0.0071. The control windows are consistent with zero, and the two independent halves give 0.0060 and 0.0048. The value is about half of that measured in extreme analogues (~0.012). Above 12+log(O/H) = 8.0, the Wolf-Rayet bump contaminates the line region and there is no clean measurement."
+    },
+    "lines": [
+      "galaxies"
+    ],
+    "updatedAt": "2026-11-27",
+    "provenance": {
+      "publicAuthorized": true,
+      "sourceDate": "2026-11-27",
+      "source": {
+        "label": {
+          "pt-BR": "DESI DR1 (DESI Collaboration 2025)",
+          "en": "DESI DR1 (DESI Collaboration 2025)"
+        },
+        "url": "https://arxiv.org/abs/2503.14745"
+      },
+      "review": {
+        "pt-BR": "Números da execução de 27/11/2026. O código ainda não foi publicado.",
+        "en": "Numbers from the 27 November 2026 run. The code has not been published yet."
+      }
+    }
+  },
+  {
+    "question": {
       "pt-BR": "A implementação rígida altera a previsão de aproximações entre a Via Láctea e Andrômeda?",
       "en": "Does rigid-model implementation alter Milky Way–Andromeda close-encounter forecasts?"
     },

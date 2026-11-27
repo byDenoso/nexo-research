@@ -1,5 +1,100 @@
 [
   {
+    "id": "T-e24e3635d606",
+    "datasets": [
+      {
+        "name": "DESI DR2 BAO",
+        "role": {"pt-BR": "Distâncias de BAO de todos os traçadores, com a covariância publicada.", "en": "BAO distances from all tracers, with the published covariance."},
+        "release": "DR2 (2025)",
+        "reference": {"label": "DESI Collaboration (2025), Phys. Rev. D 112, 083515 · doi:10.1103/tr6y-kpc6", "url": "https://doi.org/10.1103/tr6y-kpc6", "doi": "10.1103/tr6y-kpc6"}
+      },
+      {
+        "name": "Pantheon+",
+        "role": {"pt-BR": "Supernovas Ia, na calibração de Hoyt et al.", "en": "Type Ia supernovae, in the Hoyt et al. calibration."},
+        "release": "Pantheon+ (2022)",
+        "reference": {"label": "Brout et al. (2022), ApJ 938, 110 · doi:10.3847/1538-4357/ac8e04", "url": "https://doi.org/10.3847/1538-4357/ac8e04", "doi": "10.3847/1538-4357/ac8e04"}
+      },
+      {
+        "name": "Planck PR4",
+        "role": {"pt-BR": "Espectros do CMB com a likelihood CamSpec; a parte acima de ℓ = 800 é retirada ou substituída nas variações.", "en": "CMB spectra with the CamSpec likelihood; the part above ℓ = 800 is removed or replaced in the variations."},
+        "release": "PR4 (NPIPE), CamSpec",
+        "reference": {"label": "Rosenberg et al. (2022), MNRAS 517, 4620 · doi:10.1093/mnras/stac2744", "url": "https://doi.org/10.1093/mnras/stac2744", "doi": "10.1093/mnras/stac2744"}
+      },
+      {
+        "name": "ACT DR6",
+        "role": {"pt-BR": "Espectros do CMB em alto ℓ, no lugar do alto ℓ do Planck.", "en": "High-ℓ CMB spectra, in place of high-ℓ Planck."},
+        "release": "DR6 (2025)",
+        "reference": {"label": "Louis et al. (2025), arXiv:2503.14452", "url": "https://arxiv.org/abs/2503.14452", "arxiv": "2503.14452"}
+      }
+    ],
+    "analysisDate": "2026-11-27"
+  },
+  {
+    "id": "T-ce70afbc7d0f",
+    "datasets": [
+      {
+        "name": "DESI DR2 BAO",
+        "role": {"pt-BR": "Distâncias de BAO de todos os traçadores, com a covariância publicada.", "en": "BAO distances from all tracers, with the published covariance."},
+        "release": "DR2 (2025)",
+        "reference": {"label": "DESI Collaboration (2025), Phys. Rev. D 112, 083515 · doi:10.1103/tr6y-kpc6", "url": "https://doi.org/10.1103/tr6y-kpc6", "doi": "10.1103/tr6y-kpc6"}
+      },
+      {
+        "name": "Pantheon+",
+        "role": {"pt-BR": "Supernovas Ia; numa das variações, o ponto zero das supernovas do DES fica livre.", "en": "Type Ia supernovae; in one variation the zero point of the DES supernovae is left free."},
+        "release": "Pantheon+ (2022)",
+        "reference": {"label": "Brout et al. (2022), ApJ 938, 110 · doi:10.3847/1538-4357/ac8e04", "url": "https://doi.org/10.3847/1538-4357/ac8e04", "doi": "10.3847/1538-4357/ac8e04"}
+      },
+      {
+        "name": "Planck PR4",
+        "role": {"pt-BR": "CMB de referência, com a likelihood CamSpec.", "en": "Reference CMB, with the CamSpec likelihood."},
+        "release": "PR4 (NPIPE), CamSpec",
+        "reference": {"label": "Rosenberg et al. (2022), MNRAS 517, 4620 · doi:10.1093/mnras/stac2744", "url": "https://doi.org/10.1093/mnras/stac2744", "doi": "10.1093/mnras/stac2744"}
+      },
+      {
+        "name": "ACT DR6",
+        "role": {"pt-BR": "CMB medido do solo, sozinho com o SPT-3G ou combinado com o Planck (P-ACT).", "en": "Ground-based CMB, alone with SPT-3G or combined with Planck (P-ACT)."},
+        "release": "DR6 (2025)",
+        "reference": {"label": "Louis et al. (2025), arXiv:2503.14452", "url": "https://arxiv.org/abs/2503.14452", "arxiv": "2503.14452"}
+      },
+      {
+        "name": "SPT-3G D1",
+        "role": {"pt-BR": "CMB medido do solo, sozinho ou com o ACT DR6.", "en": "Ground-based CMB, alone or with ACT DR6."},
+        "release": "D1 (2025)",
+        "reference": {"label": "Camphuis et al. (2025) · doi:10.1103/7wt3-9v2y", "url": "https://doi.org/10.1103/7wt3-9v2y", "doi": "10.1103/7wt3-9v2y"}
+      },
+      {
+        "name": "SH0ES",
+        "role": {"pt-BR": "Âncora de H0 por cefeidas, numa das variações.", "en": "Cepheid H0 anchor, in one variation."},
+        "release": "Riess et al. (2022)",
+        "reference": {"label": "Riess et al. (2022), ApJL 934, L7 · doi:10.3847/2041-8213/ac5c5b", "url": "https://doi.org/10.3847/2041-8213/ac5c5b", "doi": "10.3847/2041-8213/ac5c5b"}
+      },
+      {
+        "name": "TRGB (CCHP)",
+        "role": {"pt-BR": "Âncora de H0 pela ponta do ramo das gigantes vermelhas, numa das variações.", "en": "Tip-of-the-red-giant-branch H0 anchor, in one variation."},
+        "release": "Freedman et al. (2025)",
+        "reference": {"label": "Freedman et al. (2025), arXiv:2408.06153", "url": "https://arxiv.org/abs/2408.06153", "arxiv": "2408.06153"}
+      }
+    ],
+    "analysisDate": "2026-11-27"
+  },
+  {
+    "id": "T-f9a449cdf10f",
+    "datasets": [
+      {
+        "name": "DESI DR1",
+        "role": {"pt-BR": "Espectros das galáxias formadoras de estrelas empilhadas.", "en": "Spectra of the stacked star-forming galaxies."},
+        "release": "DR1 (2025)",
+        "reference": {"label": "DESI Collaboration (2025), arXiv:2503.14745", "url": "https://arxiv.org/abs/2503.14745", "arxiv": "2503.14745"}
+      },
+      {
+        "name": "FastSpecFit",
+        "role": {"pt-BR": "Fluxos de linhas usados na seleção por metalicidade (calibração N2).", "en": "Line fluxes used in the metallicity selection (N2 calibration)."},
+        "release": "v4.0 (DR1 VAC)"
+      }
+    ],
+    "analysisDate": "2026-11-27"
+  },
+  {
     "id": "T-05ae703af393",
     "datasets": [
       {

@@ -54,9 +54,9 @@ export function EmptyState({message, action}: {message: string; action?: ReactNo
 export function ResultCard({item, locale}: {item: ResultCardData; locale: Locale}) {
   return (
     <article className="card result-card">
-      <div className="result-card-meta">
+      {item.id && <div className="result-card-meta">
         <span>{item.id}</span>
-      </div>
+      </div>}
       <h3>
         <Link href={href(locale, `/results/${item.slug}`)} prefetch={false}>{item.title}</Link>
       </h3>

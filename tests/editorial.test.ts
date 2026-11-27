@@ -4,7 +4,7 @@ import {buildManifest} from '../src/lib/build.ts';
 import {getFamilies} from '../src/lib/families.ts';
 import {ROUTES} from '../src/lib/i18n.ts';
 import {toFamilyRows} from '../src/lib/rows.ts';
-import {dossier, dossiers, towerPublic} from '../src/lib/schemas.ts';
+import {dossier, dossiers, publicTestSummaries, towerPublic} from '../src/lib/schemas.ts';
 import {fold, matches} from '../src/lib/search.ts';
 import {compilations, sensitivityPoints, sensitivityRows} from '../src/lib/sensitivity.ts';
 
@@ -56,7 +56,9 @@ describe('redshift-sensitivity figure', () => {
 describe('curated editorial files', () => {
   it('dossiers point at existing records and never carry an unconfirmed release', () => {
     const entries = dossiers.parse(JSON.parse(readFileSync('data/curated/dossiers.json', 'utf8')));
-    const ids = new Set(manifest.results.map(item => item.id));
+    // Same set the build checks against: Tower records plus the public-source summaries.
+    const summaries = publicTestSummaries.parse(JSON.parse(readFileSync('data/curated/public-test-summaries.json', 'utf8')));
+    const ids = new Set(buildManifest(towerPublic.parse(JSON.parse(bytes.toString())), [], bytes, summaries).results.map(item => item.id));
     expect(entries.every(entry => ids.has(entry.id))).toBe(true);
     expect(new Set(entries.map(entry => entry.id)).size).toBe(entries.length);
   });

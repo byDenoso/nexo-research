@@ -156,6 +156,7 @@ export type Project = z.infer<typeof project>;
 export const result = z.object({
   id: z.string().regex(/^T-[0-9a-f]{12}$/),
   slug: z.string(),
+  slugs: z.object({pt: z.string(), en: z.string()}).optional(),
   title: localized,
   question: localized,
   answer: localized,

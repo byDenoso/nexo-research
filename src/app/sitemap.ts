@@ -1,7 +1,7 @@
 import type {MetadataRoute} from 'next';
 import {getManifest, getPageDates, getResults} from '@/lib/data';
-import {getFamilies} from '@/lib/families';
-import {LOCALES, ROUTES} from '@/lib/i18n';
+import {getFamilies, pathSlug} from '@/lib/families';
+import {LOCALES, ROUTES, type Locale} from '@/lib/i18n';
 import {SITE_URL} from '@/lib/seo';
 
 // Routes whose content also changes when the scientific snapshot changes.
@@ -17,9 +17,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const revised = `${editorial[path]}T00:00:00.000Z`;
     return {path, lastModified: DATA_DRIVEN.has(path) ? later(revised, snapshot) : revised};
   });
-  const families = getFamilies(getResults()).map(family => ({path: '/results/families/' + family.slug, lastModified: family.updatedAt}));
-  return LOCALES.flatMap(locale => [...pages, ...families].map(({path, lastModified}) => ({
-    url: `${SITE_URL}/${locale}${path}`, lastModified: new Date(lastModified),
-    alternates: {languages: Object.fromEntries(LOCALES.map(code => [code === 'pt' ? 'pt-BR' : 'en', `${SITE_URL}/${code}${path}`]))}
+  // A family with a hand-written slug has a different path in each language.
+  const families = getFamilies(getResults()).map(family => ({path: (code: Locale) => '/results/families/' + pathSlug(family, code), lastModified: family.updatedAt}));
+  const entries = [...pages.map(page => ({...page, path: () => page.path})), ...families];
+  return LOCALES.flatMap(locale => entries.map(({path, lastModified}) => ({
+    url: `${SITE_URL}/${locale}${path(locale)}`, lastModified: new Date(lastModified),
+    alternates: {languages: Object.fromEntries(LOCALES.map(code => [code === 'pt' ? 'pt-BR' : 'en', `${SITE_URL}/${code}${path(code)}`]))}
   })));
 }

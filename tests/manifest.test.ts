@@ -82,12 +82,22 @@ describe('explicitly public editorial summaries', () => {
   const entries = publicTestSummaries.parse(JSON.parse(readFileSync('data/curated/public-test-summaries.json', 'utf8')));
   const baseline = buildManifest(tower, [], bytes);
   const combined = buildManifest(tower, [], bytes, entries);
-  it('adds two independent records while leaving the Tower evidence and counts unchanged', () => {
+  it('adds five independent records while leaving the Tower evidence and counts unchanged', () => {
     expect(combined.generatedFrom).toEqual(baseline.generatedFrom);
     expect(combined.results.filter(item => !item.publicSource)).toEqual(baseline.results);
-    expect(combined.catalogue).toEqual({tests: 171, supplements: 2, latestUpdate: '2026-11-25'});
-    expect(getFamilies(combined.results)).toHaveLength(37);
+    expect(combined.catalogue).toEqual({tests: 174, supplements: 5, latestUpdate: '2026-11-27'});
+    expect(getFamilies(combined.results)).toHaveLength(40);
     expect(combined.results.filter(item => item.publicSource).every(item => item.status === 'CANDIDATE' && item.publishedAt === null)).toBe(true);
+  });
+  it('uses hand-written slugs per language and refuses unknown or hash-like ones', () => {
+    const id = idOf(entries[0]!.question);
+    const named = buildManifest(tower, [], bytes, entries, {[id]: {pt: 'nome-legivel', en: 'readable-name'}});
+    const item = named.results.find(result => result.id === id)!;
+    expect(item.slug).toBe('readable-name');
+    expect(item.slugs).toEqual({pt: 'nome-legivel', en: 'readable-name'});
+    expect(named.results.filter(result => result.id !== id).every(result => result.slug === result.id.toLowerCase() && !result.slugs)).toBe(true);
+    expect(() => buildManifest(tower, [], bytes, entries, {'T-000000000000': {pt: 'a', en: 'b'}})).toThrow(/matches no record/);
+    expect(() => buildManifest(tower, [], bytes, entries, {[id]: {pt: 'registro-05ae703af393', en: 'ok'}})).toThrow(/not a readable slug/);
   });
   it('rejects unauthorized, insecure, duplicated or promoted summaries', () => {
     const entry = entries[0]!;

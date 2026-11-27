@@ -14,7 +14,9 @@ const shorten = (text: string): string => (text.length > 130 ? `${text.slice(0, 
 /**
  * Builds the public manifest. The only way a result leaves CANDIDATE is an approval record.
  */
-export function buildManifest(tower: Tower, approvals: Approval[], snapshotBytes: Uint8Array, supplements: Supplement[] = []): Manifest {
+export function buildManifest(tower: Tower, approvals: Approval[], snapshotBytes: Uint8Array, supplements: Supplement[] = [], slugs: Record<string, {pt: string; en: string}> = {}): Manifest {
+  // A hand-written slug replaces the identifier in the URL; records without one keep the old path.
+  const pathOf = (id: string) => (slugs[id] ? {slug: slugs[id].en, slugs: slugs[id]} : {slug: id.toLowerCase()});
   const byId = new Map(approvals.map(entry => [entry.id, entry]));
   if (byId.size !== approvals.length) throw new Error('duplicate approval id');
   const figures = new Map(tower.visuals.map(visual => [visual.subject.question.en, visual]));
@@ -28,7 +30,7 @@ export function buildManifest(tower: Tower, approvals: Approval[], snapshotBytes
     const visual = figures.get(test.question.en);
     const {id: _id, status, lines, ...rest} = found ?? ({} as Partial<Approval>);
     return {
-      id, slug: id.toLowerCase(),
+      id, ...pathOf(id),
       title: {'pt-BR': shorten(test.question['pt-BR']), en: shorten(test.question.en)},
       question: test.question, answer: test.answers, method: test.method, result: test.result,
       publishedAt: test.published_at, updatedAt: test.updated_at,
@@ -45,11 +47,21 @@ export function buildManifest(tower: Tower, approvals: Approval[], snapshotBytes
     const id = idOf(entry.question);
     if (seen.has(id)) throw new Error(`duplicate test id ${id}`);
     seen.add(id);
-    results.push({id, slug: id.toLowerCase(), title: entry.question, question: entry.question,
+    results.push({id, ...pathOf(id), title: entry.question, question: entry.question,
       answer: entry.answer, method: entry.method, result: entry.result, publishedAt: null,
       updatedAt: entry.updatedAt, lines: entry.lines, status: 'CANDIDATE', statusSource: 'default', publicSource: entry.provenance});
   }
   results.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt) || a.id.localeCompare(b.id));
+  const paths = new Set(results.map(item => item.slug));
+  if (paths.size !== results.length) throw new Error('two records share a slug');
+  for (const [id, entry] of Object.entries(slugs)) {
+    if (!seen.has(id)) throw new Error(`slug for ${id} matches no record`);
+    for (const value of [entry.pt, entry.en]) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) || /[0-9a-f]{10,}/.test(value)) throw new Error(`slug ${value} is not a readable slug`);
+      if (value !== entry.en && paths.has(value)) throw new Error(`slug ${value} is used twice`);
+      paths.add(value);
+    }
+  }
 
   return manifestSchema.parse({
     contract: 'NEXO_RESEARCH_MANIFEST_V1',

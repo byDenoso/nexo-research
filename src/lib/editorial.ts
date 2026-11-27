@@ -73,10 +73,26 @@ const standalone: Record<string, [string, string, string]> = {
  'T-1367215bcab5':['redshift-concentration','Quais supernovas mais influenciam a resposta?','Which supernovae most influence the answer?']
 };
 const individualBao = new Set(['T-2666d450a769','T-28160180cded','T-44aff9f2cbb1','T-6b374d4280fa','T-8de9463d750d','T-9149c53edf29','T-d9c9e3fb1f2f','T-dcb222351488']);
+// Readings of records that are listed in the catalogue but not featured on the home page.
+const readings: Record<string, {pt: Reading; en: Reading}> = {
+  'T-e24e3635d606': {
+    pt: {question: 'A preferência por energia escura dinâmica vem do alto ℓ do Planck?', finding: 'Trocar o alto ℓ do Planck pelo ACT DR6 mantém 90% do ganho do ajuste w0–wa.', why: 'É no alto ℓ que o Planck mostra o excesso de suavização por lenteamento e que os primeiros planos pesam mais. Se a preferência por w0–wa nascesse ali, ela cairia ao retirar ou trocar essa faixa do espectro.', limit: 'Uma execução por variante, sem reexecução independente. Os Δχ² são locais e não levam em conta as quatro variantes testadas.'},
+    en: {question: 'Does the preference for dynamical dark energy come from high-ℓ Planck?', finding: 'Replacing high-ℓ Planck with ACT DR6 keeps 90% of the w0–wa fit improvement.', why: 'High ℓ is where Planck shows its excess lensing smoothing and where foregrounds weigh most. If the w0–wa preference came from there, it would drop when that part of the spectrum is removed or replaced.', limit: 'One run per variation, not independently rerun. The Δχ² values are local and do not account for the four variations tested.'}
+  },
+  'T-ce70afbc7d0f': {
+    pt: {question: 'A preferência por w0–wa depende do CMB do Planck?', finding: 'Com Planck, P-ACT, SPT-3G ou ACT+SPT, o Δχ² com BAO e supernovas fica entre 12,33 e 12,81.', why: 'Planck, ACT e SPT observam o CMB com instrumentos, céus e sistemáticos diferentes. Se a preferência dependesse de um deles, o Δχ² mudaria ao trocá-lo.', limit: 'Significâncias locais, para dois parâmetros extras, de uma execução por combinação. A calibração das supernovas do DES responde por cerca de um terço do ganho, tanto com o Planck quanto com ACT+SPT.'},
+    en: {question: 'Does the w0–wa preference depend on Planck CMB?', finding: 'With Planck, P-ACT, SPT-3G or ACT+SPT, Δχ² with BAO and supernovae stays between 12.33 and 12.81.', why: 'Planck, ACT and SPT observe the CMB with different instruments, skies and systematics. If the preference depended on one of them, Δχ² would change when it is swapped.', limit: 'Local significances, for two extra parameters, from one run per combination. The DES supernova calibration accounts for about a third of the improvement, with Planck and with ACT+SPT alike.'}
+  },
+  'T-f9a449cdf10f': {
+    pt: {question: 'Galáxias pobres em metais do DESI emitem He II nebular?', finding: 'No empilhamento de 69 galáxias com 12+log(O/H) < 8,0, He II/Hβ = 0,0057 (95%: 0,0045–0,0071).', why: 'He II nebular exige fótons acima de 54 eV, que estrelas comuns produzem pouco. A razão He II/Hβ mede quanta radiação desse tipo existe em galáxias com poucos metais, onde as estrelas massivas são mais quentes.', limit: 'Uma execução, sem reexecução independente, sobre 69 galáxias selecionadas pela calibração N2, que também depende da razão N/O e do grau de ionização.'},
+    en: {question: 'Do metal-poor DESI galaxies emit nebular He II?', finding: 'In the stack of 69 galaxies with 12+log(O/H) < 8.0, He II/Hβ = 0.0057 (95%: 0.0045–0.0071).', why: 'Nebular He II requires photons above 54 eV, which ordinary stars produce in small numbers. The He II/Hβ ratio measures how much of this radiation exists in galaxies with few metals, where massive stars run hotter.', limit: 'One run, not independently rerun, on 69 galaxies selected with the N2 calibration, which also depends on the N/O ratio and the ionization state.'}
+  }
+};
 export const selectedIds = Object.keys(stories);
 export const isNegative = (id: string) => id === 'T-979f49b40eea' || id === 'T-6b4cb4922cd0';
 export function readResult(item: Result, locale: Locale): Reading {
   if (stories[item.id]) return stories[item.id]![locale];
+  if (readings[item.id]) return readings[item.id]![locale];
   const family = getFamilies([item])[0]!.slug;
   const entry = standalone[item.id];
   const key = entry?.[0] ?? (individualBao.has(item.id) ? 'bao-tracer-exclusion' : family);
