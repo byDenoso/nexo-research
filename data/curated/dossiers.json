@@ -9,20 +9,14 @@
         "reference": {"label": "DESI Collaboration (2025), Phys. Rev. D 112, 083515 · doi:10.1103/tr6y-kpc6", "url": "https://doi.org/10.1103/tr6y-kpc6", "doi": "10.1103/tr6y-kpc6"}
       },
       {
-        "name": "Pantheon+",
-        "role": {"pt-BR": "Supernovas Ia, na calibração de Hoyt et al.", "en": "Type Ia supernovae, in the Hoyt et al. calibration."},
-        "release": "Pantheon+ (2022)",
-        "reference": {"label": "Brout et al. (2022), ApJ 938, 110 · doi:10.3847/1538-4357/ac8e04", "url": "https://doi.org/10.3847/1538-4357/ac8e04", "doi": "10.3847/1538-4357/ac8e04"}
-      },
-      {
         "name": "Planck PR4",
-        "role": {"pt-BR": "Espectros do CMB com a likelihood CamSpec; a parte acima de ℓ = 800 é retirada ou substituída nas variações.", "en": "CMB spectra with the CamSpec likelihood; the part above ℓ = 800 is removed or replaced in the variations."},
+        "role": {"pt-BR": "CMB com a likelihood CamSpec, baixo ℓ e lenteamento; a parte acima de ℓ = 800 é retirada num teste, e TT e TE acima de ℓ = 1000 são trocados pelo ACT DR6 em outro.", "en": "CMB with the CamSpec likelihood, low ℓ and lensing; the part above ℓ = 800 is removed in one test, and TT and TE above ℓ = 1000 are replaced with ACT DR6 in another."},
         "release": "PR4 (NPIPE), CamSpec",
         "reference": {"label": "Rosenberg et al. (2022), MNRAS 517, 4620 · doi:10.1093/mnras/stac2744", "url": "https://doi.org/10.1093/mnras/stac2744", "doi": "10.1093/mnras/stac2744"}
       },
       {
         "name": "ACT DR6",
-        "role": {"pt-BR": "Espectros do CMB em alto ℓ, no lugar do alto ℓ do Planck.", "en": "High-ℓ CMB spectra, in place of high-ℓ Planck."},
+        "role": {"pt-BR": "TT e TE acima de ℓ = 1000, no lugar dos do Planck.", "en": "TT and TE above ℓ = 1000, in place of Planck's."},
         "release": "DR6 (2025)",
         "reference": {"label": "Louis et al. (2025), arXiv:2503.14452", "url": "https://arxiv.org/abs/2503.14452", "arxiv": "2503.14452"}
       }

@@ -5,16 +5,16 @@
       "en": "Does the preference for dynamical dark energy come from a high-ℓ Planck systematic?"
     },
     "answer": {
-      "pt-BR": "Cerca de dois terços do ganho vêm de dados que não passam pelo alto ℓ do Planck.",
-      "en": "About two thirds of the improvement come from data that do not involve high-ℓ Planck."
+      "pt-BR": "A maior parte do ganho do CMB vem de fora do alto ℓ do Planck, e o ACT DR6 reproduz a parte que vem de lá.",
+      "en": "Most of the CMB improvement comes from outside high-ℓ Planck, and ACT DR6 reproduces the part that comes from there."
     },
     "method": {
-      "pt-BR": "Ajuste de ΛCDM plano e de w0–wa às BAO do DESI DR2, às supernovas Pantheon+ na calibração de Hoyt et al. e ao CMB do Planck PR4 (CamSpec), comparados pelo Δχ². Quatro variações isolam o alto ℓ: retirar a parte do Planck acima de ℓ = 800, deixar livre a amplitude de lenteamento, usar só o lenteamento do CMB e substituir o alto ℓ do Planck pelo ACT DR6.",
-      "en": "Flat ΛCDM and w0–wa fits to DESI DR2 BAO, Pantheon+ supernovae in the Hoyt et al. calibration and Planck PR4 CMB (CamSpec), compared through Δχ². Four variations isolate high ℓ: removing the Planck data above ℓ = 800, freeing the lensing amplitude, using CMB lensing alone, and replacing high-ℓ Planck with ACT DR6."
+      "pt-BR": "Ajuste de ΛCDM plano e de w0–wa às BAO do DESI DR2 e ao CMB do Planck PR4 (CamSpec, baixo ℓ e lenteamento), sem supernovas, comparados pelo Δχ². Na referência, o w0–wa ganha Δχ² = 11,25, dos quais 5,47 vêm do CMB e 5,78 das BAO. Quatro testes sobre esse ajuste: retirar o Planck acima de ℓ = 800 por χ² condicional; deixar livre a amplitude de lenteamento A_lens; ajustar as BAO só com o lenteamento do CMB; e trocar TT e TE do CamSpec acima de ℓ = 1000 pelo ACT DR6, mantendo o Planck abaixo de ℓ = 1000 e em EE.",
+      "en": "Flat ΛCDM and w0–wa fits to DESI DR2 BAO and Planck PR4 CMB (CamSpec, low ℓ and lensing), without supernovae, compared through Δχ². In the reference fit w0–wa gains Δχ² = 11.25, of which 5.47 come from the CMB and 5.78 from BAO. Four tests on this fit: removing Planck above ℓ = 800 through a conditional χ²; freeing the lensing amplitude A_lens; fitting BAO with CMB lensing alone; and replacing CamSpec TT and TE above ℓ = 1000 with ACT DR6, keeping Planck below ℓ = 1000 and in EE."
     },
     "result": {
-      "pt-BR": "A parte do Planck acima de ℓ = 800 carrega 37% do ganho do ajuste w0–wa. Com a amplitude de lenteamento livre, 74% do ganho permanece, e o lenteamento sozinho favorece ΛCDM. Com o ACT DR6 no lugar do alto ℓ do Planck, a parte do CMB mantém 90% do seu ganho (4,93 contra 5,47), e o Δχ² total passa de 11,25 para 10,42 (93%).",
-      "en": "The Planck data above ℓ = 800 carry 37% of the w0–wa fit improvement. With the lensing amplitude free, 74% of the improvement remains, and lensing alone favours ΛCDM. With ACT DR6 in place of high-ℓ Planck, the CMB part keeps 90% of its improvement (4.93 against 5.47), and the total Δχ² goes from 11.25 to 10.42 (93%)."
+      "pt-BR": "A parte do Planck acima de ℓ = 800 carrega 2,03 dos 5,47 de Δχ² do CMB (37%). Com A_lens livre, o ganho do CMB vai de 5,47 a 4,06 (74% fica) e o total, de 11,25 a 9,25. Com as BAO e só o lenteamento, o w0–wa ganha 3,47, todo vindo das BAO; o lenteamento contribui −0,12 e favorece ΛCDM. Com o ACT DR6 no lugar de TT e TE do Planck acima de ℓ = 1000, a parte do CMB mantém 90% do seu ganho (4,93 contra 5,47), e o Δχ² total passa de 11,25 para 10,42 (93%).",
+      "en": "The Planck data above ℓ = 800 carry 2.03 of the 5.47 CMB Δχ² (37%). With A_lens free, the CMB improvement goes from 5.47 to 4.06 (74% remains) and the total from 11.25 to 9.25. With BAO and lensing alone, w0–wa gains 3.47, all of it from BAO; lensing contributes −0.12 and favours ΛCDM. With ACT DR6 in place of Planck TT and TE above ℓ = 1000, the CMB part keeps 90% of its improvement (4.93 against 5.47), and the total Δχ² goes from 11.25 to 10.42 (93%)."
     },
     "lines": [
       "expansion",
@@ -47,12 +47,12 @@
       "en": "The three CMB experiments lead to the same preference. The improvement moves with the supernova calibration and with the H0 anchor."
     },
     "method": {
-      "pt-BR": "Ajuste de ΛCDM plano e de w0–wa às BAO do DESI DR2 e às supernovas, com quatro versões do CMB: Planck PR4, Planck combinado com ACT (P-ACT), SPT-3G D1, e ACT DR6 com SPT-3G sem o Planck primário. Duas variações testam a calibração: o ponto zero das supernovas do DES fica livre, ou H0 é ancorado pelo SH0ES ou pela TRGB de Freedman et al. (2025).",
-      "en": "Flat ΛCDM and w0–wa fits to DESI DR2 BAO and supernovae, with four versions of the CMB: Planck PR4, Planck combined with ACT (P-ACT), SPT-3G D1, and ACT DR6 with SPT-3G without primary Planck. Two variations test the calibration: the zero point of the DES supernovae is left free, or H0 is anchored by SH0ES or by the Freedman et al. (2025) TRGB."
+      "pt-BR": "Ajuste de ΛCDM plano e de w0–wa às BAO do DESI DR2 e às supernovas, com quatro versões do CMB: Planck PR4, Planck combinado com ACT (P-ACT), SPT-3G D1, e ACT DR6 com SPT-3G sem o Planck primário. Duas variações testam a calibração: o ponto zero das supernovas do DES fica livre, ou, com o Planck PR4, H0 é ancorado pelo SH0ES ou pela TRGB de Freedman et al. (2025).",
+      "en": "Flat ΛCDM and w0–wa fits to DESI DR2 BAO and supernovae, with four versions of the CMB: Planck PR4, Planck combined with ACT (P-ACT), SPT-3G D1, and ACT DR6 with SPT-3G without primary Planck. Two variations test the calibration: the zero point of the DES supernovae is left free, or, with Planck PR4, H0 is anchored by SH0ES or by the Freedman et al. (2025) TRGB."
     },
     "result": {
-      "pt-BR": "Δχ² = 12,81 (3,15σ) com Planck PR4, 12,43 (3,09σ) com P-ACT, 12,33 (3,08σ) com SPT-3G e 12,70 (3,13σ) com ACT+SPT sem o Planck primário. Com o ponto zero das supernovas do DES livre, o ganho cai para 8,29 com ACT+SPT: o deslocamento de calibração explica a fração 0,35 do ganho, a mesma do Planck (0,34). Ancorar H0 leva o ganho a 10,93 com o SH0ES e a 11,77 com a TRGB de Freedman et al. (2025).",
-      "en": "Δχ² = 12.81 (3.15σ) with Planck PR4, 12.43 (3.09σ) with P-ACT, 12.33 (3.08σ) with SPT-3G and 12.70 (3.13σ) with ACT+SPT without primary Planck. With the DES supernova zero point free, the improvement drops to 8.29 with ACT+SPT: the calibration shift accounts for a fraction 0.35 of the improvement, the same as with Planck (0.34). Anchoring H0 brings the improvement to 10.93 with SH0ES and to 11.77 with the Freedman et al. (2025) TRGB."
+      "pt-BR": "Δχ² = 12,81 (3,15σ) com Planck PR4, 12,43 (3,09σ) com P-ACT, 12,33 (3,08σ) com SPT-3G e 12,70 (3,13σ) com ACT+SPT sem o Planck primário. Com o ponto zero das supernovas do DES livre, o ganho cai para 8,29 com ACT+SPT: o deslocamento de calibração explica a fração 0,35 do ganho, a mesma do Planck (0,34). Com o Planck PR4, ancorar H0 leva o ganho de 12,81 para 10,93 com o SH0ES e para 11,77 com a TRGB de Freedman et al. (2025).",
+      "en": "Δχ² = 12.81 (3.15σ) with Planck PR4, 12.43 (3.09σ) with P-ACT, 12.33 (3.08σ) with SPT-3G and 12.70 (3.13σ) with ACT+SPT without primary Planck. With the DES supernova zero point free, the improvement drops to 8.29 with ACT+SPT: the calibration shift accounts for a fraction 0.35 of the improvement, the same as with Planck (0.34). With Planck PR4, anchoring H0 takes the improvement from 12.81 to 10.93 with SH0ES and to 11.77 with the Freedman et al. (2025) TRGB."
     },
     "lines": [
       "expansion",
@@ -89,8 +89,8 @@
       "en": "Stack of the spectra of 69 star-forming galaxies in DESI DR1 with 12+log(O/H) < 8.0 in the N2 calibration, built from FastSpecFit v4.0 measurements. The He II/Hβ ratio is measured in the stacked spectrum, with control windows away from the line and with the sample split into two independent halves."
     },
     "result": {
-      "pt-BR": "He II/Hβ = 0,0057, com intervalo de 95% de 0,0045–0,0071. As janelas de controle são compatíveis com zero, e as duas metades independentes dão 0,0060 e 0,0048. O valor é cerca de metade do medido nas análogas extremas (~0,012). Acima de 12+log(O/H) = 8,0, o bump de Wolf-Rayet contamina a região da linha e não há medida limpa.",
-      "en": "He II/Hβ = 0.0057, with a 95% interval of 0.0045–0.0071. The control windows are consistent with zero, and the two independent halves give 0.0060 and 0.0048. The value is about half of that measured in extreme analogues (~0.012). Above 12+log(O/H) = 8.0, the Wolf-Rayet bump contaminates the line region and there is no clean measurement."
+      "pt-BR": "He II/Hβ = 0,0057, com intervalo de 95% de 0,0045–0,0071. As janelas de controle são compatíveis com zero, e as duas metades independentes dão 0,0060 e 0,0048. O valor é cerca de metade do medido nas análogas extremas (~0,012). Nas faixas acima de 12+log(O/H) = 8,0, o controle em 5100 Å fica abaixo de zero e as medidas contam como sistemáticas; em 8,2–8,6, o He II estreito fica sobre o bump largo de Wolf-Rayet, que contamina a medida.",
+      "en": "He II/Hβ = 0.0057, with a 95% interval of 0.0045–0.0071. The control windows are consistent with zero, and the two independent halves give 0.0060 and 0.0048. The value is about half of that measured in extreme analogues (~0.012). In the bins above 12+log(O/H) = 8.0, the 5100 Å control falls below zero and the measurements count as systematics; at 8.2–8.6, the narrow He II sits on the broad Wolf-Rayet bump, which contaminates the measurement."
     },
     "lines": [
       "galaxies"
