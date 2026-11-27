@@ -81,16 +81,16 @@
       "en": "Do metal-poor star-forming galaxies in DESI DR1 emit nebular He II?"
     },
     "answer": {
-      "pt-BR": "Há fótons acima de 54 eV nessas galáxias, em quantidade menor que nas análogas extremas.",
-      "en": "These galaxies contain photons above 54 eV, in smaller amounts than the extreme analogues."
+      "pt-BR": "Há fótons acima de 54 eV nessas galáxias, no mesmo nível das análogas extremas de mesma metalicidade.",
+      "en": "These galaxies contain photons above 54 eV, at the same level as extreme analogues of the same metallicity."
     },
     "method": {
       "pt-BR": "Empilhamento dos espectros de 69 galáxias formadoras de estrelas do DESI DR1 com 12+log(O/H) < 8,0 na calibração N2, a partir das medidas do FastSpecFit v4.0. A razão He II/Hβ é medida no espectro empilhado, com janelas de controle fora da linha e com a amostra dividida em duas metades independentes.",
       "en": "Stack of the spectra of 69 star-forming galaxies in DESI DR1 with 12+log(O/H) < 8.0 in the N2 calibration, built from FastSpecFit v4.0 measurements. The He II/Hβ ratio is measured in the stacked spectrum, with control windows away from the line and with the sample split into two independent halves."
     },
     "result": {
-      "pt-BR": "He II/Hβ = 0,0057, com intervalo de 95% de 0,0045–0,0071. As janelas de controle são compatíveis com zero, e as duas metades independentes dão 0,0060 e 0,0048. O valor é cerca de metade do medido nas análogas extremas (~0,012). Nas faixas acima de 12+log(O/H) = 8,0, o controle em 5100 Å fica abaixo de zero e as medidas contam como sistemáticas; em 8,2–8,6, o He II estreito fica sobre o bump largo de Wolf-Rayet, que contamina a medida.",
-      "en": "He II/Hβ = 0.0057, with a 95% interval of 0.0045–0.0071. The control windows are consistent with zero, and the two independent halves give 0.0060 and 0.0048. The value is about half of that measured in extreme analogues (~0.012). In the bins above 12+log(O/H) = 8.0, the 5100 Å control falls below zero and the measurements count as systematics; at 8.2–8.6, the narrow He II sits on the broad Wolf-Rayet bump, which contaminates the measurement."
+      "pt-BR": "He II/Hβ = 0,0089, com intervalo de 95% de 0,0068–0,0113. As janelas de controle são compatíveis com zero, e as duas metades independentes dão 0,0091 e 0,0082. A relação das análogas com [O III] forte (EW > 1000 Å) prevê 0,0094 na metalicidade mediana da amostra (7,93), e estas galáxias, com [O III] cerca de dez vezes mais fraco, caem sobre ela. Nas faixas acima de 12+log(O/H) = 8,0, o controle em 5100 Å fica abaixo de zero e as medidas contam como sistemáticas; em 8,2–8,6, o He II estreito fica sobre o bump largo de Wolf-Rayet, que contamina a medida.",
+      "en": "He II/Hβ = 0.0089, with a 95% interval of 0.0068–0.0113. The control windows are consistent with zero, and the two independent halves give 0.0091 and 0.0082. The relation of analogues with strong [O III] (EW > 1000 Å) predicts 0.0094 at the median metallicity of the sample (7.93), and these galaxies, with [O III] about ten times weaker, fall on it. In the bins above 12+log(O/H) = 8.0, the 5100 Å control falls below zero and the measurements count as systematics; at 8.2–8.6, the narrow He II sits on the broad Wolf-Rayet bump, which contaminates the measurement."
     },
     "lines": [
       "galaxies"
