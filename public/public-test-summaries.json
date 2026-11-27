@@ -13,8 +13,8 @@
       "en": "Flat ΛCDM and w0–wa fits to DESI DR2 BAO, Pantheon+ supernovae in the Hoyt et al. calibration and Planck PR4 CMB (CamSpec), compared through Δχ². Four variations isolate high ℓ: removing the Planck data above ℓ = 800, freeing the lensing amplitude, using CMB lensing alone, and replacing high-ℓ Planck with ACT DR6."
     },
     "result": {
-      "pt-BR": "A parte do Planck acima de ℓ = 800 carrega 37% do ganho do ajuste w0–wa. Com a amplitude de lenteamento livre, 74% do ganho permanece, e o lenteamento sozinho favorece ΛCDM. Com o ACT DR6 no lugar do alto ℓ do Planck, 90% do ganho permanece: o Δχ² total fica em 10,42, contra 11,25 na referência.",
-      "en": "The Planck data above ℓ = 800 carry 37% of the w0–wa fit improvement. With the lensing amplitude free, 74% of the improvement remains, and lensing alone favours ΛCDM. With ACT DR6 in place of high-ℓ Planck, 90% of the improvement remains: the total Δχ² is 10.42, against 11.25 in the reference."
+      "pt-BR": "A parte do Planck acima de ℓ = 800 carrega 37% do ganho do ajuste w0–wa. Com a amplitude de lenteamento livre, 74% do ganho permanece, e o lenteamento sozinho favorece ΛCDM. Com o ACT DR6 no lugar do alto ℓ do Planck, a parte do CMB mantém 90% do seu ganho (4,93 contra 5,47), e o Δχ² total passa de 11,25 para 10,42 (93%).",
+      "en": "The Planck data above ℓ = 800 carry 37% of the w0–wa fit improvement. With the lensing amplitude free, 74% of the improvement remains, and lensing alone favours ΛCDM. With ACT DR6 in place of high-ℓ Planck, the CMB part keeps 90% of its improvement (4.93 against 5.47), and the total Δχ² goes from 11.25 to 10.42 (93%)."
     },
     "lines": [
       "expansion",
