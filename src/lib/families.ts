@@ -136,6 +136,10 @@ export function getFamily(results: Result[], slug: string): Family | undefined {
   return getFamilies(results).find(family => family.slug === slug || family.slugs?.pt === slug || family.slugs?.en === slug);
 }
 
+// Catalogue order: most recent entry date first; families with the same date keep the editorial
+// order of getFamilies (stable sort).
+export const byLatest = (families: Family[]): Family[] => [...families].sort((a, b) => b.updatedAt.slice(0, 10).localeCompare(a.updatedAt.slice(0, 10)));
+
 // URL segment of a record or a family in one language. Records without a hand-written slug keep
 // the same segment in both languages.
 export const pathSlug = (entry: {slug: string; slugs?: {pt: string; en: string}}, locale: 'pt' | 'en'): string => entry.slugs?.[locale] ?? entry.slug;

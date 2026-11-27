@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {ResultsBrowser} from '@/components/ResultsBrowser';
 import {getResults, getManifest, getPageDates} from '@/lib/data';
-import {getFamilies} from '@/lib/families';
+import {byLatest, getFamilies} from '@/lib/families';
 import {D, tr} from '@/lib/dict';
 import {fmtDate, isLocale} from '@/lib/i18n';
 import {toFamilyRows} from '@/lib/rows';
@@ -19,7 +19,7 @@ export default async function ResultsPage({params}: {params: Promise<{locale: st
   if (!isLocale(locale)) notFound();
   const pt = locale === 'pt';
   const results = getResults();
-  const rows = toFamilyRows(getFamilies(results), locale);
+  const rows = toFamilyRows(byLatest(getFamilies(results)), locale);
   const snapshot = getManifest().catalogue;
   const editorialDate = getPageDates()['/results']!;
 

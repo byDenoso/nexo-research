@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {FamilyCard, PageHead} from '@/components/ui';
 import {getResults} from '@/lib/data';
-import {getFamilies} from '@/lib/families';
+import {byLatest, getFamilies} from '@/lib/families';
 import {D, tr} from '@/lib/dict';
 import {LOCALES, isLocale} from '@/lib/i18n';
 import {toFamilyRows} from '@/lib/rows';
@@ -30,7 +30,7 @@ export default async function ResultsPageN({params}: {params: Promise<{locale: s
   const number = Number(page);
   const total = pageCount();
   if (!isLocale(locale) || !Number.isInteger(number) || number < 2 || number > total) notFound();
-  const rows = toFamilyRows(getFamilies(getResults()), locale);
+  const rows = toFamilyRows(byLatest(getFamilies(getResults())), locale);
   const shown = rows.slice((number - 1) * PAGE, number * PAGE);
   const target = (value: number) => href(locale, value === 1 ? '/results' : `/results/page/${value}`);
   return (
