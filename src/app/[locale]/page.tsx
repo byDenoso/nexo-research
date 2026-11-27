@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {ErositaFigure, erositaId} from '@/components/ErositaFigure';
-import {redshiftSlug} from '@/components/RedshiftFigure';
+import {RedshiftFigure, RedshiftFinding, RedshiftLimit, redshiftSlug} from '@/components/RedshiftFigure';
 import {getManifest, getPageDates, getResults, getPublications} from '@/lib/data';
 import {getFamilies} from '@/lib/families';
 import {readResult, selectedIds} from '@/lib/editorial';
@@ -75,6 +75,14 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           </div>
         </div>
         <DesOffsetFigure locale={locale} />
+        <div className="nx-lead-followup">
+          <div className="nx-lead-copy">
+            <p className="nx-eyebrow">{pt ? 'O corte de baixo z, lido de novo' : 'The low-redshift cut, read again'}</p>
+            <p className="nx-deck"><RedshiftFinding locale={locale} /></p>
+            <RedshiftLimit locale={locale} />
+          </div>
+          <RedshiftFigure locale={locale} />
+        </div>
       </section>
 
       <section className="wrap hl-section" aria-labelledby="hl-title">

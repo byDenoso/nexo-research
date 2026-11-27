@@ -477,7 +477,7 @@ body h1 { font-weight: 400; letter-spacing: -.03em; }
 /* Partes internas que pintavam fundo próprio passam a deixar a luz passar. */
 :root[data-theme="light"] :is(.nx-values, .nx-values table, .desi-console, .desi-ranges, .nx-limit, .telemetry span) { background: transparent !important; }
 :root[data-theme="light"] .desi-stage { background: rgb(255 255 255 / .10) !important; }
-:root[data-theme="light"] .site-menu-panel { background: rgb(255 255 255 / .72) !important; }
+:root[data-theme="light"] .site-menu-panel { background: rgb(251 251 249 / .95) !important; }
 /* Texto continua legível sobre o vidro fino. */
 :root[data-theme="light"] :is(.home-card p, .nx-lead-copy p, .cover-copy p) { color: #2c3a5e; }
 @media (prefers-reduced-transparency: reduce) {
@@ -544,3 +544,45 @@ body h1 { font-weight: 400; letter-spacing: -.03em; }
 .hl-key-des { background: #e09a34; rotate: 45deg; }
 .hl-key-curve { height: 2px !important; width: 16px !important; background: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .hl-curve, .hl-figure * { transition: none !important; } }
+
+/* Segunda parte do destaque: o corte de baixo z lido com o offset. */
+.nx-lead-followup { grid-column: 1 / -1; display: grid; gap: clamp(1rem, 3vw, 2.5rem); align-items: start; margin-block-start: var(--space-8); padding-block-start: var(--space-6); border-block-start: 1px solid rgb(var(--lg-rim) / .35); }
+@media (min-width: 56rem) { .nx-lead-followup { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); } }
+
+/* O vidro do cabeçalho mora num ::before. Um backdrop-filter no próprio <header> o tornaria o bloco
+ * de contenção do menu (position: fixed), que encolheria dentro da cápsula. */
+html body .site-header {
+  background: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+html body .site-header::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(170deg, rgb(var(--lg-rim) / .12), rgb(var(--lg-rim) / .02) 55%),
+    rgb(var(--lg-tint) / var(--lg-alpha-strong));
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(1.04);
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(1.04);
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgb(var(--lg-rim) / var(--lg-rim-top)),
+    inset -1px -1px 0 0 rgb(var(--lg-rim) / var(--lg-rim-low)),
+    inset 0 0 0 1px rgb(var(--lg-rim) / .35),
+    var(--lg-depth);
+}
+
+/* Telas estreitas: o número do destaque quebra antes da unidade; tabelas de valores rolam dentro do painel. */
+.nx-lead-copy .star-value { white-space: normal; }
+.nx-lead-copy .star-value small { white-space: nowrap; display: inline-block; }
+.nx-values { max-width: 100%; overflow-x: auto; }
+.nx-values table { min-width: 0; }
+
+/* Menu aberto: vidro quase opaco, para a lista ser lida sem o conteúdo da página atrás. */
+html body .site-header .site-menu-panel {
+  background: rgb(var(--lg-tint) / .95) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+}
+:root[data-theme="dark"] body .site-header .site-menu-panel { background: rgb(12 17 27 / .96) !important; }

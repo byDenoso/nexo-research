@@ -13,7 +13,8 @@ for (const locale of ['pt', 'en'] as const) {
       await page.setViewportSize({width: isMobile ? 390 : 1440, height: isMobile ? 844 : 1000});
       await page.goto('/' + locale + route);
       await page.evaluate(() => document.fonts.ready);
-      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+      // The institute opens in the light glass theme whatever the system scheme; dark is a persisted choice.
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
       await expect(page.getByRole('heading', {level: 1})).toHaveCount(1);
       if (label === 'home') await expect(page.getByRole('heading', {level: 1})).toHaveText(locale === 'pt' ? 'Expansão cósmica e formação de estruturas' : 'Cosmic expansion and structure formation');
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);

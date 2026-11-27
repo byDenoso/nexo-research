@@ -79,11 +79,11 @@ test('reads in both themes and survives browsers without GPU support', async ({p
   await expect(page.getByRole('img',{name:/vista superior/})).toBeVisible();
   await page.getByText('Valores, faixas e comparações',{exact:true}).click();
   await page.getByText('Fontes e estado da evidência',{exact:true}).click();
-  for (const theme of ['dark','light']) {
+  for (const theme of ['light','dark']) {
     await expect(page.locator('html')).toHaveAttribute('data-theme',theme);
     const findings = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze();
     expect(findings.violations.map(item=>({id:item.id, targets:item.nodes.map(node=>node.target)})), theme).toEqual([]);
-    if (theme==='dark') await page.locator('button.theme-toggle').click();
+    if (theme==='light') await page.locator('button.theme-toggle').click();
   }
   await page.getByRole('link',{name:'Idioma: EN'}).click();
   await expect(page).toHaveURL(/\/en\/resultado-vivo$/);

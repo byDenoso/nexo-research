@@ -52,10 +52,13 @@ export function CmbSphere({locale}: {locale: Locale}) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [state, setState] = useState<'idle' | 'loading' | 'live' | 'failed'>('idle');
   const view = useRef({yaw: 2.6, pitch: 0.35, zoom: 0.92, drag: null as null | {x: number; y: number; yaw: number; pitch: number}, spin: true});
+  // The canvas exists only in the browser: the served HTML carries the caption and the scale, no empty canvas.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const el = canvas.current;
-    if (!el) return;
+    if (!mounted || !el) return;
     let stop = false, raf = 0;
     const io = new IntersectionObserver(entries => {
       if (!entries.some(e => e.isIntersecting) || state !== 'idle') return;
@@ -113,7 +116,7 @@ export function CmbSphere({locale}: {locale: Locale}) {
     }
     return () => { stop = true; cancelAnimationFrame(raf); io.disconnect(); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mounted]);
 
   const down = (e: React.PointerEvent) => { const v = view.current; v.drag = {x: e.clientX, y: e.clientY, yaw: v.yaw, pitch: v.pitch}; v.spin = false; (e.target as Element).setPointerCapture(e.pointerId); };
   const move = (e: React.PointerEvent) => { const v = view.current; if (!v.drag) return; const k = 3.2 / (canvas.current?.clientHeight || 400); v.yaw = v.drag.yaw - (e.clientX - v.drag.x) * k; v.pitch = Math.max(-1.45, Math.min(1.45, v.drag.pitch + (e.clientY - v.drag.y) * k)); };
@@ -124,10 +127,13 @@ export function CmbSphere({locale}: {locale: Locale}) {
   return (
     <figure className="cmb-sphere">
       <div className="cmb-stage">
-        <canvas ref={canvas} tabIndex={0} role="img"
+        {mounted && <canvas ref={canvas} tabIndex={0} role="img"
           aria-label={pt ? `Mapa de temperatura da radiação cósmica de fundo do Planck numa esfera, em coordenadas galácticas. Arraste ou use as setas para girar.` : `Planck cosmic microwave background temperature map on a sphere, in galactic coordinates. Drag or use the arrow keys to rotate.`}
-          onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onKeyDown={key} />
-        {state !== 'live' && <p className="cmb-status" role="status">{state === 'failed' ? (pt ? 'Seu navegador não abriu o WebGL; o mapa plano está abaixo.' : 'Your browser could not open WebGL; the flat map is below.') : (pt ? 'Carregando o mapa do Planck…' : 'Loading the Planck map…')}</p>}
+          onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onKeyDown={key} />}
+        {state !== 'live' && <p className="cmb-status" role="status">{!mounted
+          ? (pt ? 'A esfera do Planck precisa de JavaScript para girar.' : 'The Planck sphere needs JavaScript to rotate.')
+          : state === 'failed' ? (pt ? 'Seu navegador não abriu o WebGL, que a esfera usa.' : 'Your browser could not open WebGL, which the sphere uses.')
+          : (pt ? 'Carregando o mapa do Planck…' : 'Loading the Planck map…')}</p>}
       </div>
       <div className="cmb-scale" aria-hidden="true"><span>−{lim} µK</span><i /><span>+{lim} µK</span></div>
       <figcaption>{pt

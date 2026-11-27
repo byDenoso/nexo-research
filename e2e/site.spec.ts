@@ -244,10 +244,11 @@ test.describe('theme', () => {
   test('theme toggle switches and persists', async ({page}) => {
   await page.goto('/pt');
   await page.waitForLoadState('networkidle');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await page.getByRole('button', {name: 'Alternar tema'}).click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   });
 });
 

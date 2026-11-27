@@ -57,6 +57,7 @@ export function DesOffsetLead({locale}: {locale: Locale}) {
   return <>
     <p className="nx-eyebrow">{pt ? '01 · Expansão / supernovas Ia' : '01 · Expansion / Type Ia supernovae'}</p>
     <h2 id="cover-title">{pt ? 'As supernovas do DES estão 0,035 mag mais brilhantes que as demais' : 'The DES supernovae are 0.035 mag brighter than the rest'}</h2>
+    <p className="nx-status">{pt ? 'Validação independente pendente' : 'Independent validation pending'}</p>
     <p className="star-value">−0,035 ± 0,012 <small>mag · Pantheon+</small></p>
     <p className="nx-deck">{pt
       ? 'O deslocamento aparece igual em Pantheon+, DES-SN5YR e DES-Dovekie. Ele não muda com massa da galáxia hospedeira, cor, forma da curva de luz, poeira, época, campo ou redshift, e uma constante descreve os dados melhor que um gradiente. Esse é o comportamento esperado de um ponto zero fotométrico da amostra inteira.'
@@ -64,7 +65,7 @@ export function DesOffsetLead({locale}: {locale: Locale}) {
     <p>{pt
       ? 'A leitura mais simples também explica um resultado antigo deste catálogo: retirar as supernovas de z < 0,15 apagava quase todo o ganho do modelo com energia escura variável. Sem a amostra de baixo z, o ponto zero do DES deixa de ter âncora, e o deslocamento passa a ser absorvido pela cosmologia.'
       : 'The simplest reading also accounts for an older result in this catalogue: removing the supernovae at z < 0.15 erased most of the gain of the evolving dark-energy model. Without the low-redshift sample, the DES zero point loses its anchor and the shift is absorbed by the cosmology.'}</p>
-    <div className="nx-limit" id="limits">
+    <div className="nx-limit" id="scope">
       <h2>{pt ? 'Alcance' : 'Scope'}</h2>
       <p>{pt
         ? `Significância de 2,7 a 3,3σ conforme a compilação; o teste de dependência enxerga diferenças a partir de cerca de 0,02 mag. O tamanho concorda com ${data.independent.map(i => i.label).join(', ')}, que leem o mesmo efeito como erro do baixo z.`

@@ -6,7 +6,7 @@ for (const locale of ['pt', 'en']) {
   test(`${locale}: the question leads to the result, limits, method and public sources`, async ({page}) => {
     const pt = locale === 'pt';
     await page.goto('/' + locale);
-    const compare = page.getByRole('link', {name: pt ? 'Comparar os cortes de redshift' : 'Compare the redshift cuts'});
+    const compare = page.getByRole('link', {name: pt ? 'Ver o corte de baixo z' : 'See the low-redshift cut'});
     await expect(compare).toBeVisible();
     await compare.focus();
     await page.keyboard.press('Enter');

@@ -78,7 +78,7 @@ export function HomeFigures({locale}: {locale: Locale}) {
         <p>{c.text}</p>
       </div>
       <figure className="home-card-fig">{c.fig}</figure>
-      <Link prefetch={false} href={c.to} className="home-card-go" aria-label={c.title}><span aria-hidden="true">→</span></Link>
+      <Link prefetch={false} href={c.to} className="home-card-go"><span className="sr-only">{(pt ? 'Ver: ' : 'Open: ') + c.title}</span><span aria-hidden="true">→</span></Link>
     </article>)}
   </section>;
 }
