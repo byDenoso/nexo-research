@@ -1,8 +1,6 @@
 import {DesiObservatory} from '@/components/DesiObservatory';
 import {DesOffsetFigure, DesOffsetLead} from '@/components/DesOffset';
 import {HomeFigures} from '@/components/HomeFigures';
-import {CmbSphere} from '@/components/CmbSphere';
-import {HubbleLive} from '@/components/HubbleLive';
 import {ChapterNav} from '@/components/ChapterNav';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -54,16 +52,15 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
         </div>
       </section>
       <HomeFigures locale={locale} />
-      <section className="wrap cmb-section" aria-labelledby="cmb-title">
-        <div className="cmb-copy">
-          <p className="nx-eyebrow">{pt ? 'Observatório · radiação cósmica de fundo' : 'Observatory · cosmic microwave background'}</p>
-          <h2 id="cmb-title">{pt ? 'O céu de 380 mil anos depois do Big Bang' : 'The sky 380,000 years after the Big Bang'}</h2>
-          <p>{pt
-            ? 'Cada mancha é uma região do plasma primordial um pouco mais quente ou mais fria que a média, por algumas partes em cem mil. O tamanho típico dessas manchas, cerca de um grau, é a mesma régua acústica que o DESI mede nas galáxias bilhões de anos depois.'
-            : 'Each patch is a region of the primordial plasma slightly warmer or colder than average, by a few parts in a hundred thousand. Their typical size, about one degree, is the same acoustic ruler that DESI measures in galaxies billions of years later.'}</p>
-          <p className="cmb-hint">{pt ? 'Arraste para girar; setas e +/− pelo teclado.' : 'Drag to rotate; arrows and +/− on the keyboard.'}</p>
+      <section className="wrap observatory-call" aria-labelledby="obs-call-title">
+        <div>
+          <p className="nx-eyebrow">{pt ? 'Observatórios' : 'Observatories'}</p>
+          <h2 id="obs-call-title">{pt ? 'Gire o céu do Planck e mova o ponto zero do DES' : 'Rotate the Planck sky and move the DES zero point'}</h2>
         </div>
-        <CmbSphere locale={locale} />
+        <ul role="list">
+          <li><Link prefetch={false} href={href(locale, '/observatorio') + '#cmb'}><strong>{pt ? 'Céu de micro-ondas' : 'Microwave sky'}</strong><span>{pt ? 'O mapa SMICA do Planck numa esfera, em coordenadas galácticas.' : 'The Planck SMICA map on a sphere, in galactic coordinates.'}</span></Link></li>
+          <li><Link prefetch={false} href={href(locale, '/observatorio') + '#hubble'}><strong>{pt ? 'Diagrama de Hubble' : 'Hubble diagram'}</strong><span>{pt ? '19 ajustes completos de ΛCDM e w0wa, um para cada correção do DES.' : '19 full ΛCDM and w0wa fits, one for each DES correction.'}</span></Link></li>
+        </ul>
       </section>
       <ChapterNav locale={locale}/>
       <section id="em-foco" className="wrap nx-lead" aria-labelledby="cover-title">
@@ -83,17 +80,6 @@ export default async function Home({params}: {params: Promise<{locale: string}>}
           </div>
           <RedshiftFigure locale={locale} />
         </div>
-      </section>
-
-      <section className="wrap hl-section" aria-labelledby="hl-title">
-        <div className="hl-head">
-          <p className="nx-eyebrow">{pt ? 'Observatório · diagrama de Hubble' : 'Observatory · Hubble diagram'}</p>
-          <h2 id="hl-title">{pt ? 'Mova o ponto zero do DES e veja a energia escura responder' : 'Move the DES zero point and watch dark energy respond'}</h2>
-          <p>{pt
-            ? 'Cada posição do controle é um ajuste completo de ΛCDM e de w0wa às supernovas do Pantheon+, ao BAO do DESI e à radiação cósmica de fundo, com as supernovas do DES deslocadas pelo valor escolhido. Os pontos são médias por faixa de redshift, em relação ao ΛCDM do mesmo ajuste.'
-            : 'Every position of the control is a full fit of ΛCDM and w0wa to the Pantheon+ supernovae, DESI BAO and the cosmic microwave background, with the DES supernovae shifted by the chosen value. Points are averages per redshift range, relative to the ΛCDM of the same fit.'}</p>
-        </div>
-        <HubbleLive locale={locale} />
       </section>
 
       <section id="galaxias" className="wrap nx-observation" aria-labelledby="galaxies-title">

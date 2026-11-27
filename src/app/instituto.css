@@ -6,7 +6,7 @@
   font-family: 'Space Grotesk';
   font-weight: 300 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
   src: url('@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
@@ -14,7 +14,7 @@
   font-family: 'Space Grotesk';
   font-weight: 300 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
   src: url('@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
@@ -214,7 +214,8 @@ body::after {
 .chapter-nav,
 .home-card,
 .cmb-section,
-.hl-section {
+.hl-section,
+.observatory-call {
   position: relative;
   isolation: isolate;
   background:
@@ -231,7 +232,7 @@ body::after {
     var(--lg-depth) !important;
 }
 /* Aresta: borda de 1 px em gradiente, desenhada por máscara para não pesar no layout. */
-:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav, .home-card, .cmb-section, .hl-section)::after {
+:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav, .home-card, .cmb-section, .hl-section, .observatory-call)::after {
   content: "";
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   border-radius: inherit;
@@ -393,7 +394,7 @@ body h1 { font-weight: 400; letter-spacing: -.03em; }
 /* Observatório no claro: o mesmo render, invertido para pontos azuis sobre o vidro. */
 :root[data-theme="light"] .desi-observatory { --desi-cyan: #1f4fe0; --desi-amber: #c98a2c; --desi-ink: #0d1733; --desi-muted: #4a5678; --desi-line: rgb(31 60 150 / .12); color: #0d1733; }
 :root[data-theme="light"] .desi-stage { background: linear-gradient(180deg, rgb(255 255 255 / .62), rgb(240 245 255 / .45)) !important; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .9); }
-:root[data-theme="light"] .desi-stage img { filter: invert(1) hue-rotate(205deg) saturate(3) brightness(.82) contrast(1.25); mix-blend-mode: multiply; }
+:root[data-theme="light"] .desi-stage img { filter: invert(1) hue-rotate(205deg) saturate(3) brightness(.82) contrast(1.25); }
 :root[data-theme="light"] .desi-mobile-poster { filter: invert(1) hue-rotate(180deg) saturate(2.4); mix-blend-mode: multiply; }
 :root[data-theme="light"] .desi-stage-status > * { background: rgb(255 255 255 / .7); color: #0d1733; }
 
@@ -586,3 +587,175 @@ html body .site-header .site-menu-panel {
   backdrop-filter: blur(28px) saturate(160%);
 }
 :root[data-theme="dark"] body .site-header .site-menu-panel { background: rgb(12 17 27 / .96) !important; }
+
+/* ───────── Desempenho (26/11): nada de filtro ou mistura calculados a cada quadro ─────────
+ * O céu atrás do vidro vem pré-processado (scripts/emit-glass-assets.py). No celular, os painéis
+ * trocam o desfoque ao vivo por um vidro mais denso: o desenho é o mesmo, o custo de pintura cai. */
+:root[data-theme="dark"] body::before { background: url('/images/sky-dark-1600.webp') center / cover no-repeat, #05070c; opacity: 1; filter: none; }
+:root[data-theme="light"] body::after { background: url('/images/sky-light-1600.webp') center / cover no-repeat; filter: none; mix-blend-mode: normal; opacity: 1; }
+@media (max-width: 40rem) {
+  :root[data-theme="dark"] body::before { background-image: url('/images/sky-dark-900.webp'); }
+  :root[data-theme="light"] body::after { background-image: url('/images/sky-light-900.webp'); }
+  .nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure,
+  .publication-strip, .desi-observatory, .chapter-nav, .home-card, .cmb-section, .hl-section, .observatory-call,
+  .nx-primary, .cover-actions a, .header-living, .desi-activate, .desi-tool, .desi-layer, html body .site-header::before {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  :root[data-theme="light"] { --lg-alpha: .62; --lg-alpha-strong: .86; }
+  :root[data-theme="dark"] { --lg-alpha: .82; --lg-alpha-strong: .92; }
+}
+
+/* Seções abaixo da dobra: layout e pintura só quando se aproximam da tela. */
+.nx-home :is(.home-cards, .cmb-section, #em-foco, .hl-section, .nx-observation, .nx-more-research, .publication-strip, .catalogue-chapter) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+/* Celular: o raster é o gargalo da primeira pintura. Sombras sem desfoque (só as arestas de luz)
+ * e um fundo com um gradiente e uma faixa de luz, em vez de seis. */
+@media (max-width: 40rem) {
+  .nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure,
+  .publication-strip, .desi-observatory, .chapter-nav, .home-card, .cmb-section, .hl-section, html body .site-header::before {
+    box-shadow: inset 1px 1px 0 rgb(var(--lg-rim) / var(--lg-rim-top)), inset -1px -1px 0 rgb(var(--lg-rim) / var(--lg-rim-low)) !important;
+  }
+  :is(.nx-primary, .cover-actions a, .header-living, .desi-activate, .desi-tool, .desi-layer, .home-card-go, .hl-buttons button) {
+    box-shadow: inset 0 1px 0 rgb(var(--lg-rim) / .6) !important;
+  }
+  :root[data-theme="light"] body::before {
+    background:
+      linear-gradient(112deg, transparent 50%, rgb(255 246 236 / .6) 56%, rgb(214 204 255 / .45) 59%, transparent 64%),
+      linear-gradient(180deg, #f4f7fd 0%, #e6ecf8 100%);
+  }
+  :root[data-theme="dark"] body::after { background: none; }
+}
+.hl-readout[data-pending] { opacity: .55; transition: opacity 150ms ease; }
+
+/* Celular: o céu vai direto no <body>, sem camadas fixas extras para rasterizar. */
+@media (max-width: 40rem) {
+  html body::before, html body::after { display: none !important; }
+  :root[data-theme="light"] body { background: url('/images/sky-light-900.webp') center top / 100% auto repeat-y, linear-gradient(180deg, #f4f7fd, #e6ecf8) !important; }
+  :root[data-theme="dark"] body { background: url('/images/sky-dark-900.webp') center top / 100% auto repeat-y, #05070c !important; }
+}
+.hl-other .hl-err { stroke: var(--accent); stroke-width: 1.1; opacity: .75; fill: none; }
+.hl-other .hl-mark-pts { fill: var(--accent); }
+.hl-des .hl-err { stroke: #c98a2c; stroke-width: 1.1; opacity: .85; fill: none; }
+.hl-des .hl-mark-pts { fill: #e09a34; stroke: #fff; stroke-width: .8; }
+.hl-figure path { transition: d 180ms ease; }
+.mini-point .mini-err { stroke: var(--accent); stroke-width: .9; fill: none; }
+.mini-point .mini-dots { fill: var(--accent); }
+:root[data-theme="dark"] .mini-point .mini-err { stroke: #9fb7ff; }
+:root[data-theme="dark"] .mini-point .mini-dots { fill: #9fb7ff; }
+@media (prefers-reduced-motion: reduce) { .hl-figure path { transition: none; } }
+
+/* Chamada para a sala de observatórios na capa. */
+.observatory-call { display: grid; gap: var(--space-4); align-items: center; margin-block: var(--space-6); padding: clamp(1rem, 2.5vw, 1.75rem); }
+@media (min-width: 56rem) { .observatory-call { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); } }
+.observatory-call h2 { margin: .3rem 0 0; font-size: clamp(1.35rem, 2.4vw, 1.9rem); line-height: 1.15; }
+.observatory-call ul { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 40rem) { .observatory-call ul { grid-template-columns: 1fr 1fr; } }
+.observatory-call a { display: flex; flex-direction: column; gap: .3rem; padding: var(--space-4); border-radius: var(--lg-radius-sm); text-decoration: none; color: var(--ink);
+  background: linear-gradient(160deg, rgb(var(--lg-rim) / .35), rgb(var(--lg-rim) / .08)); box-shadow: inset 0 1px 0 rgb(var(--lg-rim) / .8), inset 0 0 0 1px rgb(var(--lg-rim) / .35); }
+.observatory-call a:is(:hover, :focus-visible) { box-shadow: inset 0 1px 0 rgb(var(--lg-rim) / .9), inset 0 0 0 1px var(--accent); }
+.observatory-call strong { font: 500 1.05rem/1.2 var(--nx-display); }
+.observatory-call span { font-size: .875rem; color: var(--muted); }
+.observatory-room { padding-block-end: var(--space-10); }
+
+/* ───────── Celeste e noite de vidro (26/11, 3ª volta) ─────────
+ * Claro: o azul passa a celeste (sem puxar para o verde) e o que é decorativo fica mais transparente.
+ * Escuro: azul-noite, nunca preto; os painéis são vidro sobre o campo profundo do JWST, que se afasta
+ * devagar, como galáxias no fluxo de Hubble. */
+:root[data-theme="light"] {
+  --accent: #1769c0; --accent-hover: #11569e; --accent-ink: #fff;
+  --brand: #1769c0; --brand-hover: #11569e; --brand-outline: #1769c0;
+  --nx-star: #1769c0;
+}
+:root[data-theme="light"] body { --premium-brand: #1769c0; --premium-hover: #11569e; }
+:root[data-theme="light"] :is(.nx-primary, .cover-actions a:first-child),
+:root[data-theme="light"] .site-header .primary-nav a[aria-current],
+.hl-buttons button[aria-pressed="true"] {
+  background: linear-gradient(180deg, #62b6f8 0%, #2c86dc 48%, #1b72d0 100%) !important;
+  color: #fff !important;
+}
+:root[data-theme="light"] .desi-observatory { --desi-cyan: #1769c0; --desi-amber: #b87a22; }
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a1024; --surface: #111b36; --raised: #17223f;
+  --line: rgb(190 214 255 / .16); --control-line: #7f90b0;
+  --ink: #eaf1fb; --muted: #a9b7cf;
+  --accent: #8fc4ff; --accent-hover: #b5d8ff; --accent-ink: #0a1024;
+  --brand: #8fc4ff; --brand-hover: #b5d8ff; --on-brand: #0a1024; --brand-outline: #8fc4ff;
+  --nx-star: #e8c891;
+  --lg-tint: 20 32 64;
+  --lg-alpha: .32;
+  --lg-alpha-strong: .5;
+  --lg-blur: 18px;
+  --lg-sat: 150%;
+  --lg-rim: 205 226 255;
+  --lg-rim-top: .34;
+  --lg-rim-low: .08;
+  --lg-depth: 0 22px 44px -24px rgb(2 6 20 / .7), 0 2px 8px -4px rgb(2 6 20 / .5);
+}
+:root[data-theme="dark"] body {
+  --premium-brand: #8fc4ff; --premium-hover: #b5d8ff; --premium-on-brand: #0a1024;
+  --premium-shell: #0a1024; --premium-panel: #111b36; --premium-line: rgb(190 214 255 / .16);
+  --premium-ink: #eaf1fb; --premium-muted: #a9b7cf;
+  background: #0a1024;
+}
+:root[data-theme="dark"] body::before,
+:root[data-theme="dark"] body::after {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 42%, transparent 45%, rgb(8 13 30 / .6) 100%),
+    url('/images/sky-dark-1600.webp') center / cover no-repeat;
+  opacity: 1; filter: none; mix-blend-mode: normal;
+  transform-origin: 50% 45%;
+}
+:root[data-theme="dark"] body::before { z-index: -2; }
+:root[data-theme="dark"] body::after { z-index: -1; opacity: 0; }
+@keyframes nx-hubble-flow {
+  0% { transform: scale(1); opacity: 0; }
+  14% { opacity: 1; }
+  86% { opacity: 1; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+/* Única animação do site: o globals.css desliga todas (*::before { animation: none !important });
+ * este seletor, mais específico, reabre só o fundo do tema escuro. */
+@media (min-width: 40.01rem) and (prefers-reduced-motion: no-preference) {
+  html:root[data-theme="dark"] body::before,
+  html:root[data-theme="dark"] body::after { animation: nx-hubble-flow 120s linear infinite !important; will-change: transform, opacity; }
+  html:root[data-theme="dark"] body::after { animation-delay: -60s !important; }
+}
+:root[data-theme="dark"] .desi-stage { background: rgb(10 16 36 / .35) !important; }
+:root[data-theme="dark"] .desi-observatory { --desi-cyan: #8fc4ff; --desi-amber: #e8c891; --desi-line: rgb(205 226 255 / .14); }
+:root[data-theme="dark"] .site-menu-panel,
+:root[data-theme="dark"] body .site-header .site-menu-panel { background: rgb(14 22 46 / .95) !important; }
+:root[data-theme="dark"] :is(.nx-primary, .cover-actions a:first-child) {
+  background: linear-gradient(180deg, rgb(143 196 255 / .95), rgb(98 168 240 / .9)) !important;
+  color: #0a1024 !important;
+}
+@media (max-width: 40rem) {
+  :root[data-theme="dark"] body { background: url('/images/sky-dark-900.webp') center top / 100% auto repeat-y, #0a1024 !important; }
+  :root[data-theme="dark"] { --lg-alpha: .55; --lg-alpha-strong: .72; }
+}
+
+/* Transparência +50% (26/11): a tinta do vidro cai à metade nos dois temas; as arestas de luz ficam. */
+:root[data-theme="light"] { --lg-alpha: .07; --lg-alpha-strong: .15; }
+:root[data-theme="dark"] { --lg-alpha: .16; --lg-alpha-strong: .25; }
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-theme="light"] { --lg-alpha: .10; --lg-alpha-strong: .18; }
+}
+@media (max-width: 40rem) {
+  :root[data-theme="light"] { --lg-alpha: .31; --lg-alpha-strong: .43; }
+  :root[data-theme="dark"] { --lg-alpha: .28; --lg-alpha-strong: .36; }
+}
+.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure,
+.publication-strip, .desi-observatory, .chapter-nav, .home-card, .cmb-section, .hl-section, .observatory-call {
+  background:
+    linear-gradient(155deg, rgb(var(--lg-rim) / .05) 0%, rgb(var(--lg-rim) / .01) 32%, rgb(var(--lg-rim) / 0) 60%, rgb(var(--lg-rim) / .02) 100%),
+    rgb(var(--lg-tint) / var(--lg-alpha)) !important;
+}
+:root[data-theme="light"] .desi-stage { background: linear-gradient(180deg, rgb(255 255 255 / .31), rgb(240 245 255 / .22)) !important; }
+:root[data-theme="dark"] .desi-stage { background: rgb(10 16 36 / .18) !important; }

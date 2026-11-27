@@ -27,7 +27,10 @@ function Hubble({pt}: {pt: boolean}) {
   return <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={pt ? `Diagrama de Hubble de ${h.n_sn} supernovas do Pantheon+ com a curva de ΛCDM` : `Hubble diagram of ${h.n_sn} Pantheon+ supernovae with the ΛCDM curve`}>
     {axes([0.01, 0.1, 1].map(v => ({v, label: f(v)})), [14, 18, 22, 26].map(v => ({v, label: String(v)})), x, y, 'z', <>m<tspan baselineShift="sub" fontSize="6">B</tspan> (mag)</>)}
     <path d={curve} className="mini-model" />
-    {h.bins.map(b => <g key={b.z} className="mini-point"><line x1={x(b.z)} x2={x(b.z)} y1={y(b.m - b.err * 3)} y2={y(b.m + b.err * 3)} /><circle cx={x(b.z)} cy={y(b.m)} r="2.6" /></g>)}
+    <g className="mini-point">
+      <path className="mini-err" d={h.bins.map(b => `M${x(b.z).toFixed(1)},${y(b.m - b.err * 3).toFixed(1)}V${y(b.m + b.err * 3).toFixed(1)}`).join('')} />
+      <path className="mini-dots" d={h.bins.map(b => `M${(x(b.z) - 2.6).toFixed(1)},${y(b.m).toFixed(1)}a2.6,2.6 0 1,0 5.2,0a2.6,2.6 0 1,0 -5.2,0`).join('')} />
+    </g>
   </svg>;
 }
 
@@ -36,7 +39,10 @@ function Spectrum({pt}: {pt: boolean}) {
   const fmax = 2.2, fmin = -0.3;
   const x = (u: number) => L + ((u - 0.7) / (5.3 - 0.7)) * (W - L - R);
   const y = (f: number) => T + ((fmax - Math.min(Math.max(f, fmin), fmax)) / (fmax - fmin)) * (H - T - B);
-  const path = s.points.map((p, i) => `${i ? 'L' : 'M'}${x(p.um).toFixed(1)},${y(p.f).toFixed(1)}`).join('');
+  // ~160 vertices at whole-pixel precision: the card is about 230 px wide, so the drawn shape is unchanged.
+  const step = Math.max(1, Math.ceil(s.points.length / 160));
+  const kept = s.points.filter((_, i) => i % step === 0 || s.lines.some(l => Math.abs(l.um - s.points[i]!.um) < 0.02));
+  const path = kept.map((p, i) => `${i ? 'L' : 'M'}${Math.round(x(p.um))},${Math.round(y(p.f))}`).join('');
   const show = s.lines.filter(l => ['N IV]', '[O III]', 'Hα'].includes(l.name));
   return <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={pt ? `Espectro do ${s.object} em z = ${String(s.z).replace('.', ',')} com N IV], [O III] e Hα` : `Spectrum of ${s.object} at z = ${s.z} with N IV], [O III] and Hα`}>
     {axes([1, 2, 3, 4, 5].map(v => ({v, label: String(v)})), [0, 1, 2].map(v => ({v, label: String(v)})), x, y, pt ? 'λ observado (µm)' : 'observed λ (µm)', <>f<tspan baselineShift="sub" fontSize="6">ν</tspan> (µJy)</>)}

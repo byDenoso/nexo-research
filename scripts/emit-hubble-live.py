@@ -23,6 +23,7 @@ from scipy.integrate import cumulative_trapezoid
 
 CORE = Path(os.environ['NEXO_CORE_DDE'])
 OUT = Path(__file__).resolve().parent.parent / 'data' / 'curated' / 'hubble-live.json'
+PUBLIC = Path(__file__).resolve().parent.parent / 'public' / 'observatory' / 'hubble-live.json'
 if not hasattr(np, 'trapezoid'):  # numpy < 2 no ambiente compartilhado
     np.trapezoid = np.trapz
 sys.path.insert(0, str(CORE))
@@ -101,6 +102,7 @@ def main():
         'measured': measured, 'frames': frames,
     }
     OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    PUBLIC.write_text(json.dumps({'frames': out['frames']}, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')  # carregado sob demanda
     print('ok', OUT, len(frames), 'quadros', '%.0fs' % (time.time() - t0))
 
 

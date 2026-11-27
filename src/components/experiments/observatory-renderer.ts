@@ -11,7 +11,7 @@ const tolerance = 0.0000001;
 // Night theme: light points added over a dark field. Light theme: royal-blue and amber points laid over
 // a transparent canvas, so the glass panel shows through. Same data, same geometry.
 const colors = [[0.66, 0.77, 0.92], [0.88, 0.74, 0.54]] as const;
-const lightColors = [[0.10, 0.28, 0.86], [0.80, 0.52, 0.14]] as const;
+const lightColors = [[0.29, 0.63, 0.94], [0.84, 0.59, 0.24]] as const;   // celeste e âmbar
 const isLight = () => typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light';
 
 const vertex = `#version 300 es
@@ -126,7 +126,7 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
       if (light === isLight()) return;
       light = isLight();
       if (light) { gl.clearColor(0, 0, 0, 0); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); }
-      else { gl.clearColor(5 / 255, 7 / 255, 13 / 255, 1); gl.blendFunc(gl.ONE, gl.ONE); }
+      else { gl.clearColor(0, 0, 0, 0); gl.blendFunc(gl.ONE, gl.ONE); }   // fundo transparente: o vidro e as galáxias aparecem atrás
     };
     applyTheme();
 
@@ -160,7 +160,7 @@ export async function mountObservatory(host: HTMLElement, callbacks: Callbacks, 
         gl!.bindBuffer(gl!.ARRAY_BUFFER, buffer);
         gl!.vertexAttribPointer(point, 4, gl!.FLOAT, false, 16, 0);
         gl!.uniform3fv(uniforms.tint, (light ? lightColors : colors)[i]!);
-        gl!.uniform1f(uniforms.weight, i === 0 ? (light ? 0.30 : 0.48) : 0.95);
+        gl!.uniform1f(uniforms.weight, i === 0 ? (light ? 0.24 : 0.48) : 0.95);
         gl!.uniform1f(uniforms.size, Math.max(1, (i === 0 ? 1.9 : 4.7) * dpr));
         gl!.drawArrays(gl!.POINTS, 0, totals[i]!);
         if (!recount) continue;

@@ -24,6 +24,7 @@ export function Header({locale}: {locale: Locale}) {
     ...NAV_ROUTES.map(route => ({href: href(locale, '/' + route), label: label(route, locale)})),
   ];
   const shortcuts = [
+    {href: href(locale, '/observatorio'), label: pt ? 'Observatórios' : 'Observatories'},
     {href: href(locale, '/resultado-vivo#expansao-em-etapas'), label: pt ? 'Experimento de expansão' : 'Expansion experiment'},
     {href: href(locale, '/data#atlas'), label: pt ? 'Atlas de supernovas' : 'Supernova atlas'},
     {href: 'https://cosmos-do-zero.vercel.app/', label: 'Cosmos do Zero'},
