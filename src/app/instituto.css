@@ -759,3 +759,10 @@ html body .site-header .site-menu-panel {
 }
 :root[data-theme="light"] .desi-stage { background: linear-gradient(180deg, rgb(255 255 255 / .31), rgb(240 245 255 / .22)) !important; }
 :root[data-theme="dark"] .desi-stage { background: rgb(10 16 36 / .18) !important; }
+
+/* Desempenho sem mudar o desenho: o contorno de luz (::after) é pintado abaixo do conteúdo do painel e
+ * acima do fundo dele (z-index -1 dentro do painel isolado). Por cima do canvas do observatório, ele virava
+ * camada composta, e os contornos seguintes se fundiam a ela numa camada da altura da página. */
+:is(.nx-paper-figure, .journal-stories article, .nx-limit, .telemetry, .catalogue-note, .nx-observation > figure, .publication-strip, .desi-observatory, .site-menu-panel, .chapter-nav, .home-card, .cmb-section, .hl-section, .observatory-call)::after {
+  z-index: -1 !important;
+}

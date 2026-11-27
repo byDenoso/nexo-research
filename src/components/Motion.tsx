@@ -57,18 +57,30 @@ export function MotionObserver() {
         return;
       }
       if (!main || !('IntersectionObserver' in window)) return;
+      // The first callback reports every observed element asynchronously. Elements already on screen or
+      // above it are settled without an entrance; only those that arrive later from below animate.
+      // This replaces a getBoundingClientRect() per element at mount, which forced a synchronous layout of
+      // the whole page, including sections that content-visibility would otherwise skip.
+      const settled = new Set<Element>();
       observer = new IntersectionObserver(entries => {
         let stagger = 0;
         for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
           const element = entry.target as HTMLElement;
+          if (!settled.has(element)) {
+            settled.add(element);
+            if (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight) {
+              observer?.unobserve(element);
+              continue;
+            }
+          }
+          if (!entry.isIntersecting) continue;
           observer?.unobserve(element);
           visited.add(element);
           element.dataset.scrollEnter = String(Math.min(stagger++, 2));
         }
       }, {threshold: 0, rootMargin: '0px 0px -3% 0px'});
       for (const element of main.querySelectorAll<HTMLElement>(selector)) {
-        if (!visited.has(element) && element.getBoundingClientRect().top >= window.innerHeight) observer.observe(element);
+        if (!visited.has(element)) observer.observe(element);
       }
     }
 
